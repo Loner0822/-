@@ -3,7 +3,6 @@
 #ifndef TreeUnitH
 #define TreeUnitH
 //---------------------------------------------------------------------------
-#include <map>
 
 template <class T>
 class TNode {

@@ -8,6 +8,7 @@ template <class T>
 class TNode {
 public:
     T Data;
+    int fa;
     int Head;
     TNode() {}
     ~TNode() {}

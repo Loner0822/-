@@ -97,6 +97,7 @@ void TForm1::ReadData(TADOQuery *AdoQuery) {
     node.Length ++;
     node[node.High].Data = tmpdata;
     node[node.High].Head = -1;
+    node[node.High].fa = node.High;  
 }
 
 void TForm1::AddEdge(int x, int y) {
@@ -104,6 +105,7 @@ void TForm1::AddEdge(int x, int y) {
     edge[edge.High].to = y;
     edge[edge.High].next = node[x].Head;
     node[x].Head = edge.High;
+    node[y].fa = x;
 }
 
 /*void TForm1::FindSon(TTreeNode* node, String uid) {
@@ -174,6 +176,7 @@ void __fastcall TForm1::TreeViewChange(TObject *Sender, TTreeNode *Node)
     GroupBox2 -> Width = AdvStringGrid -> ColWidths[0] + AdvStringGrid -> ColWidths[1] + 8;
     //ShowMessage(GroupBox2 -> Width);
     AdvStringGridClickCell(AdvStringGrid, 1, 0);
+    AdvStringGrid1 -> Options << goEditing;
 }
 
 void __fastcall TForm1::FormCreate(TObject *Sender)
