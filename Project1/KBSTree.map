@@ -738,16 +738,16 @@ Detailed map of segments
  0001:0000CB80       _STL
  0001:0000CBDC       _STL
  0001:0000CCBC       _STL
- 0001:0000CCE7       _CatchCleanup
- 0001:0000CCE8       System.TObject.Dispatch
- 0001:0000CCE9       Db.TDataSet.Next
- 0001:0000CCEA       Adodb.TADOBlobStream
- 0001:0000CCEB       VariantClear
- 0001:0000CCEC       DebugBreak
- 0001:0000CCED       InvalidateRect
- 0001:0000CCEE       Graphics.TBitmap.GetCanvas
- 0001:0000CCEF       _STL
- 0001:0000CCF0       BitBlt
+ 0001:0000CCFF       _CatchCleanup
+ 0001:0000CD00       System.TObject.Dispatch
+ 0001:0000CD01       Db.TDataSet.Next
+ 0001:0000CD02       Adodb.TADOBlobStream
+ 0001:0000CD03       VariantClear
+ 0001:0000CD04       DebugBreak
+ 0001:0000CD05       InvalidateRect
+ 0001:0000CD06       Graphics.TBitmap.GetCanvas
+ 0001:0000CD07       _STL
+ 0001:0000CD08       BitBlt
  0001:0000CDF8       _STL
  0001:0000CF70       _STL
  0001:0000DC20       _STL

@@ -686,7 +686,7 @@ void __fastcall TForm1::SigViewer1MouseDown(TObject *Sender,
     SigViewer1->WindowToView(X, Y, &tx0, &ty0);
     for (iter = Map_Node.begin(); iter != Map_Node.end(); ++ iter) {
         int tx = iter -> first, ty = iter -> second;
-        if ((tx - tx0) * (tx - tx0) + (ty - ty0) * (ty - ty0) <= 25) {
+        if ((tx - tx0) * (tx - tx0) + (ty - ty0) * (ty - ty0) <= 36) {
             tx0 = tx, ty0 = ty;
             break;
         }
@@ -950,5 +950,6 @@ void __fastcall TForm1::TimerTimer(TObject *Sender)
     ::InvalidateRect((HWND)this->SigViewer1->DrawingWindow, NULL, TRUE);
 }
 //---------------------------------------------------------------------------
+
 
 

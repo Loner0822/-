@@ -45,8 +45,15 @@ __published:	// IDE-managed Components
     TSplitter *Splitter2;
     TGroupBox *GroupBox3;
     TSigViewer *SigViewer1;
-    TPanel *Panel;
     TTimer *Timer;
+    TGroupBox *GroupBox4;
+    TSplitter *Splitter3;
+    TGroupBox *GroupBox5;
+    TSplitter *Splitter4;
+    TGroupBox *GroupBox6;
+    TPanel *Panel;
+    TAdvStringGrid *AdvStringGrid1;
+    TAdvStringGrid *AdvStringGrid2;
     void __fastcall GetDataButtonClick(TObject *Sender);
     void __fastcall TreeViewChange(TObject *Sender, TTreeNode *Node);
     void __fastcall FormCreate(TObject *Sender);
