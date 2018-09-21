@@ -21,10 +21,12 @@ class TExtraForm : public TForm
 __published:	// IDE-managed Components
     TAdvStringGrid *AdvStringGridExtra;
     TPanel *PanelExtra;
-    void __fastcall AdvStringGridExtraClickCell(TObject *Sender, int ARow,
-          int ACol);
+    TButton *ButtonExtra;
+    void __fastcall ButtonExtraClick(TObject *Sender);
 private:	// User declarations
 public:		// User declarations
+    int Move_num;
+    vector<int> Delete_num;
     __fastcall TExtraForm(TComponent* Owner);
     void __fastcall FormCreate(TObject *Sender);
     void Move_Pen(const vector<set<Pen>::iterator> &L);

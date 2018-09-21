@@ -475,7 +475,7 @@ void __fastcall TForm1::SigViewer1Paint(TObject *Sender, long DC)
             bmp_width = bm->Width;
             bmp_height = bm->Height;
             bm->Canvas->Font->Color = clRed;
-            bm->Canvas->TextOutA(dx[1] - 10, dy[1] - 22, IntToStr(used_red_pen));
+            bm->Canvas->TextOutA(dx[1] - 10, dy[1] - 22, IntToStr(using_red));
             bm->Canvas->Pen->Color = clGreen;
             bm->Canvas->Rectangle(1,1,3,3);
             bm->Canvas->Rectangle(1,12,3,14);
@@ -499,7 +499,7 @@ void __fastcall TForm1::SigViewer1Paint(TObject *Sender, long DC)
             bmp_width = bm->Width;
             bmp_height = bm->Height;
             bm->Canvas->Font->Color = clBlack;
-            bm->Canvas->TextOutA(dx[2], dy[2] - 22, IntToStr(used_black_pen));
+            bm->Canvas->TextOutA(dx[2], dy[2] - 22, IntToStr(using_black));
             bm->Canvas->Pen->Color = clGreen;
             bm->Canvas->Rectangle(1,1,3,3);
             bm->Canvas->Rectangle(1,12,3,14);
@@ -523,7 +523,7 @@ void __fastcall TForm1::SigViewer1Paint(TObject *Sender, long DC)
             bmp_width = bm->Width;
             bmp_height = bm->Height;
             bm->Canvas->Font->Color = clBlue;
-            bm->Canvas->TextOutA(dx[3], dy[3] - 22, IntToStr(used_clamp_pen));
+            bm->Canvas->TextOutA(dx[3], dy[3] - 22, IntToStr(using_clamp));
             bm->Canvas->Pen->Color = clGreen;
             bm->Canvas->Rectangle(1,1,3,3);
             bm->Canvas->Rectangle(1,13,3,15);
@@ -902,16 +902,47 @@ void TForm1::Choose_Move_Pen(const vector<set<Pen>::iterator> &L) {
     ExtraForm->Caption = "请选择所要移动的表笔";
     ExtraForm->Move_Pen(L);
     ExtraForm->ShowModal();
-
+    set<Pen>::iterator it;
+    //ShowMessage(ExtraForm->Move_num);
+    it = L[ExtraForm->Move_num];
+    ClickDown = 1;
+    if (it -> type == 1)
+        using_red = it -> id;
+    if (it -> type == 2)
+        using_black = it -> id;
+    if (it -> type == 3)
+        using_clamp = it -> id;
+    Partner = it -> partner;
+    Pen_Node.erase(it);
 }
 
 void TForm1::Choose_Delete_Pen(const vector<set<Pen>::iterator> &L) {
     ExtraForm->Caption = "请选择所要删除的表笔";
     ExtraForm->Delete_Pen(L);
     ExtraForm->ShowModal();
-
-
-
+    set<Pen>::iterator it;
+    //ShowMessage(ExtraForm->Delete_num.size());
+    vector<int> v = ExtraForm->Delete_num;
+    for (int i = 0; i < v.size(); ++ i) {
+        int pos = v[i];
+        if (L[pos] -> partner == 0) {
+            if (L[pos] -> type == 1)
+                -- used_red_pen;
+            if (L[pos] -> type == 2)
+                -- used_black_pen;
+            Pen_Node.erase(L[pos]);
+        }
+        else {
+            int PTR = L[pos] -> partner;
+            for (it = Pen_Node.begin(); it != Pen_Node.end();) {
+                if (it -> partner == PTR && it -> type != 3) {
+                    Pen_Node.erase(it++);
+                }
+                else
+                    ++ it;
+            }
+        }
+    }
 }
 
 void __fastcall TForm1::TimerTimer(TObject *Sender)

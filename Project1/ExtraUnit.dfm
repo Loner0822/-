@@ -1,7 +1,7 @@
 object ExtraForm: TExtraForm
-  Left = 453
-  Top = 216
-  Width = 258
+  Left = 510
+  Top = 211
+  Width = 205
   Height = 257
   Caption = 'ExtraForm'
   Color = clBtnFace
@@ -16,7 +16,7 @@ object ExtraForm: TExtraForm
   object AdvStringGridExtra: TAdvStringGrid
     Left = 0
     Top = 0
-    Width = 250
+    Width = 197
     Height = 185
     Cursor = crDefault
     Align = alClient
@@ -31,7 +31,6 @@ object ExtraForm: TExtraForm
     ParentFont = False
     ScrollBars = ssBoth
     TabOrder = 0
-    OnClickCell = AdvStringGridExtraClickCell
     ActiveCellFont.Charset = DEFAULT_CHARSET
     ActiveCellFont.Color = clWindowText
     ActiveCellFont.Height = -11
@@ -105,10 +104,19 @@ object ExtraForm: TExtraForm
   object PanelExtra: TPanel
     Left = 0
     Top = 185
-    Width = 250
+    Width = 197
     Height = 41
     Align = alBottom
-    Caption = 'PanelExtra'
     TabOrder = 1
+    object ButtonExtra: TButton
+      Left = 56
+      Top = 8
+      Width = 75
+      Height = 25
+      Caption = #30830#35748
+      ModalResult = 1
+      TabOrder = 0
+      OnClick = ButtonExtraClick
+    end
   end
 end

@@ -475,7 +475,7 @@ void __fastcall TForm1::SigViewer1Paint(TObject *Sender, long DC)
             bmp_width = bm->Width;
             bmp_height = bm->Height;
             bm->Canvas->Font->Color = clRed;
-            bm->Canvas->TextOutA(dx[1] - 10, dy[1] - 22, IntToStr(used_red_pen));
+            bm->Canvas->TextOutA(dx[1] - 10, dy[1] - 22, IntToStr(using_red));
             bm->Canvas->Pen->Color = clGreen;
             bm->Canvas->Rectangle(1,1,3,3);
             bm->Canvas->Rectangle(1,12,3,14);
@@ -499,7 +499,7 @@ void __fastcall TForm1::SigViewer1Paint(TObject *Sender, long DC)
             bmp_width = bm->Width;
             bmp_height = bm->Height;
             bm->Canvas->Font->Color = clBlack;
-            bm->Canvas->TextOutA(dx[2], dy[2] - 22, IntToStr(used_black_pen));
+            bm->Canvas->TextOutA(dx[2], dy[2] - 22, IntToStr(using_black));
             bm->Canvas->Pen->Color = clGreen;
             bm->Canvas->Rectangle(1,1,3,3);
             bm->Canvas->Rectangle(1,12,3,14);
@@ -523,7 +523,7 @@ void __fastcall TForm1::SigViewer1Paint(TObject *Sender, long DC)
             bmp_width = bm->Width;
             bmp_height = bm->Height;
             bm->Canvas->Font->Color = clBlue;
-            bm->Canvas->TextOutA(dx[3], dy[3] - 22, IntToStr(used_clamp_pen));
+            bm->Canvas->TextOutA(dx[3], dy[3] - 22, IntToStr(using_clamp));
             bm->Canvas->Pen->Color = clGreen;
             bm->Canvas->Rectangle(1,1,3,3);
             bm->Canvas->Rectangle(1,13,3,15);
@@ -721,8 +721,10 @@ void __fastcall TForm1::SigViewer1MouseDown(TObject *Sender,
                     }
                     break;
                 case 1:
-                    if (used_red_pen > used_black_pen)
+                    if (used_red_pen > used_black_pen) {
+                        ShowMessage("尚有未配对的红表笔");
                         break;
+                    }
                     else {
                         ClickDown = 1;
                         ++ used_red_pen;
@@ -731,8 +733,10 @@ void __fastcall TForm1::SigViewer1MouseDown(TObject *Sender,
                     }
                     break;
                 case 2:
-                    if (used_black_pen > used_red_pen)
+                    if (used_black_pen > used_red_pen) {
+                        ShowMessage("尚有未配对的黑表笔");
                         break;
+                    }
                     else {
                         ClickDown = 1;
                         ++ used_black_pen;
@@ -899,15 +903,37 @@ void TForm1::Choose_Move_Pen(const vector<set<Pen>::iterator> &L) {
     ExtraForm->Move_Pen(L);
     ExtraForm->ShowModal();
 
+    //ShowMessage(ExtraForm->Move_num);
+
 }
 
 void TForm1::Choose_Delete_Pen(const vector<set<Pen>::iterator> &L) {
     ExtraForm->Caption = "请选择所要删除的表笔";
     ExtraForm->Delete_Pen(L);
     ExtraForm->ShowModal();
-
-
-
+    set<Pen>::iterator it;
+    //ShowMessage(ExtraForm->Delete_num.size());
+    vector<int> v = ExtraForm->Delete_num;
+    for (int i = 0; i < v.size(); ++ i) {
+        int pos = v[i];
+        if (L[pos] -> partner == 0) {
+            if (L[pos] -> type == 1)
+                -- used_red_pen;
+            if (L[pos] -> type == 2)
+                -- used_black_pen;
+            Pen_Node.erase(L[pos]);
+        }
+        else {
+            int PTR = L[pos] -> partner;
+            for (it = Pen_Node.begin(); it != Pen_Node.end();) {
+                if (it -> partner == PTR && it -> type != 3) {
+                    Pen_Node.erase(it++);
+                }
+                else
+                    ++ it;
+            }
+        }
+    }
 }
 
 void __fastcall TForm1::TimerTimer(TObject *Sender)
