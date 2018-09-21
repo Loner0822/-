@@ -1,6 +1,6 @@
 object Form1: TForm1
-  Left = 210
-  Top = 190
+  Left = 154
+  Top = 218
   Width = 834
   Height = 428
   Caption = 'Form1'
@@ -226,7 +226,7 @@ object Form1: TForm1
   object Timer: TTimer
     Interval = 100
     OnTimer = TimerTimer
-    Left = 496
-    Top = 24
+    Left = 552
+    Top = 72
   end
 end

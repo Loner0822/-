@@ -4,12 +4,14 @@
   <MACROS>
     <VERSION value="BCB.06.00"/>
     <PROJECT value="KBSTree.exe"/>
-    <OBJFILES value="KBSTree.obj MainUnit.obj DModUnit.obj DataUnit.obj TreeUnit.obj &quot;C:\Program Files (x86)\EurekaLog 6\CBuilder6\ExceptionLog.obj&quot;"/>
+    <OBJFILES value="KBSTree.obj MainUnit.obj DModUnit.obj DataUnit.obj TreeUnit.obj 
+      &quot;C:\Program Files (x86)\EurekaLog 6\CBuilder6\ExceptionLog.obj&quot; 
+      PenUnit.obj ExtraUnit.obj"/>
     <RESFILES value="KBSTree.res"/>
     <IDLFILES value=""/>
     <IDLGENFILES value=""/>
     <DEFFILE value=""/>
-    <RESDEPEN value="$(RESFILES) MainUnit.dfm DModUnit.dfm"/>
+    <RESDEPEN value="$(RESFILES) MainUnit.dfm DModUnit.dfm ExtraUnit.dfm"/>
     <LIBFILES value=""/>
     <LIBRARIES value="tmsxlsc6.lib tmsexc6.lib dclusr.lib VclSmp.lib tmsc6.lib"/>
     <SPARELIBS value="vcl.lib rtl.lib dbrtl.lib adortl.lib tmsc6.lib vclx.lib vcldb.lib 
@@ -69,6 +71,8 @@
       <FILE FILENAME="DataUnit.cpp" FORMNAME="" UNITNAME="DataUnit" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="TreeUnit.cpp" FORMNAME="" UNITNAME="TreeUnit" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="C:\Program Files (x86)\EurekaLog 6\CBuilder6\ExceptionLog.pas" FORMNAME="" UNITNAME="ExceptionLog" CONTAINERID="PascalCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="PenUnit.cpp" FORMNAME="" UNITNAME="PenUnit" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="ExtraUnit.cpp" FORMNAME="ExtraForm" UNITNAME="ExtraUnit" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
   </FILELIST>
   <BUILDTOOLS>
   </BUILDTOOLS>
@@ -102,23 +106,26 @@ ProductVersion=1.0.0.0
 Comments=
 
 [HistoryLists\hlIncludePath]
-Count=3
-Item0=C:\Program Files (x86)\Borland\CBuilder6\Projects;C:\Users\loner\Desktop\工作\集中监测标准知识库树状图;$(BCB)\include;$(BCB)\include\vcl;C:\Program Files (x86)\Borland\ControlUnit\TMS Component pack 5.5.4.1
-Item1=C:\Program Files (x86)\Borland\CBuilder6\Projects;C:\Users\loner\Desktop\工作\集中监测标准知识库树状图;$(BCB)\include;$(BCB)\include\vcl;C:\Program Files (x86)\Borland\ControlUnit
-Item2=C:\Program Files (x86)\Borland\CBuilder6\Projects;C:\Users\loner\Desktop\工作\集中监测标准知识库树状图;$(BCB)\include;$(BCB)\include\vcl
+Count=4
+Item0=C:\Program Files (x86)\EurekaLog 6\CBuilder6;$(BCB)\Imports;C:\Program Files (x86)\Borland\CBuilder6\Projects;C:\Users\loner\Desktop\工作\集中监测标准知识库树状图;$(BCB)\include;$(BCB)\include\vcl;C:\Program Files (x86)\Borland\ControlUnit\TMS Component pack 5.5.4.1
+Item1=C:\Program Files (x86)\Borland\CBuilder6\Projects;C:\Users\loner\Desktop\工作\集中监测标准知识库树状图;$(BCB)\include;$(BCB)\include\vcl;C:\Program Files (x86)\Borland\ControlUnit\TMS Component pack 5.5.4.1
+Item2=C:\Program Files (x86)\Borland\CBuilder6\Projects;C:\Users\loner\Desktop\工作\集中监测标准知识库树状图;$(BCB)\include;$(BCB)\include\vcl;C:\Program Files (x86)\Borland\ControlUnit
+Item3=C:\Program Files (x86)\Borland\CBuilder6\Projects;C:\Users\loner\Desktop\工作\集中监测标准知识库树状图;$(BCB)\include;$(BCB)\include\vcl
 
 [HistoryLists\hlLibraryPath]
-Count=2
-Item0=$(BCB)\Projects\Lib;C:\Program Files (x86)\Borland\CBuilder6\Projects;C:\Users\loner\Desktop\工作\集中监测标准知识库树状图;$(BCB)\lib\obj;$(BCB)\lib;C:\Program Files (x86)\Borland\ControlUnit\TMS Component pack 5.5.4.1
-Item1=$(BCB)\Projects\Lib;C:\Program Files (x86)\Borland\CBuilder6\Projects;C:\Users\loner\Desktop\工作\集中监测标准知识库树状图;$(BCB)\lib\obj;$(BCB)\lib
+Count=3
+Item0=C:\Program Files (x86)\EurekaLog 6\CBuilder6;$(BCB)\Imports;$(BCB)\Projects\Lib;C:\Program Files (x86)\Borland\CBuilder6\Projects;C:\Users\loner\Desktop\工作\集中监测标准知识库树状图;$(BCB)\lib\obj;$(BCB)\lib;C:\Program Files (x86)\Borland\ControlUnit\TMS Component pack 5.5.4.1
+Item1=$(BCB)\Projects\Lib;C:\Program Files (x86)\Borland\CBuilder6\Projects;C:\Users\loner\Desktop\工作\集中监测标准知识库树状图;$(BCB)\lib\obj;$(BCB)\lib;C:\Program Files (x86)\Borland\ControlUnit\TMS Component pack 5.5.4.1
+Item2=$(BCB)\Projects\Lib;C:\Program Files (x86)\Borland\CBuilder6\Projects;C:\Users\loner\Desktop\工作\集中监测标准知识库树状图;$(BCB)\lib\obj;$(BCB)\lib
 
 [HistoryLists\hlDebugSourcePath]
 Count=1
 Item0=$(BCB)\source\vcl
 
 [HistoryLists\hlConditionals]
-Count=1
-Item0=_DEBUG
+Count=2
+Item0=_DEBUG;EUREKALOG;EUREKALOG_VER6
+Item1=_DEBUG
 
 [Debugging]
 DebugSourceDirs=$(BCB)\source\vcl
