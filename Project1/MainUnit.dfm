@@ -16,23 +16,23 @@ object Form1: TForm1
   TextHeight = 13
   object Splitter2: TSplitter
     Left = 345
-    Top = 0
+    Top = 29
     Width = 3
-    Height = 397
+    Height = 368
     Cursor = crHSplit
   end
   object Splitter1: TSplitter
     Left = 169
-    Top = 0
+    Top = 29
     Width = 3
-    Height = 397
+    Height = 368
     Cursor = crHSplit
   end
   object GroupBox1: TGroupBox
     Left = 0
-    Top = 0
+    Top = 29
     Width = 169
-    Height = 397
+    Height = 368
     Align = alLeft
     Caption = #22270#32440#20998#31867
     TabOrder = 0
@@ -40,7 +40,7 @@ object Form1: TForm1
       Left = 2
       Top = 15
       Width = 165
-      Height = 380
+      Height = 351
       Align = alClient
       Ctl3D = False
       Indent = 19
@@ -51,9 +51,9 @@ object Form1: TForm1
   end
   object GroupBox2: TGroupBox
     Left = 172
-    Top = 0
+    Top = 29
     Width = 173
-    Height = 397
+    Height = 368
     Align = alLeft
     Caption = #22270#32440#21015#34920
     TabOrder = 1
@@ -61,7 +61,7 @@ object Form1: TForm1
       Left = 2
       Top = 15
       Width = 169
-      Height = 380
+      Height = 351
       Cursor = crDefault
       Align = alClient
       ColCount = 2
@@ -184,15 +184,15 @@ object Form1: TForm1
   end
   object GroupBox3: TGroupBox
     Left = 348
-    Top = 0
+    Top = 29
     Width = 478
-    Height = 397
+    Height = 368
     Align = alClient
     Caption = #37197#32447#26631#20934
     TabOrder = 2
     object Splitter3: TSplitter
       Left = 2
-      Top = 197
+      Top = 168
       Width = 474
       Height = 3
       Cursor = crVSplit
@@ -202,12 +202,12 @@ object Form1: TForm1
       Left = 209
       Top = 15
       Width = 3
-      Height = 182
+      Height = 153
       Cursor = crHSplit
     end
     object GroupBox4: TGroupBox
       Left = 2
-      Top = 200
+      Top = 171
       Width = 474
       Height = 195
       Align = alBottom
@@ -252,7 +252,7 @@ object Form1: TForm1
       Left = 2
       Top = 15
       Width = 207
-      Height = 182
+      Height = 153
       Align = alLeft
       Caption = #23646#24615#21015#34920
       TabOrder = 1
@@ -260,7 +260,7 @@ object Form1: TForm1
         Left = 2
         Top = 15
         Width = 203
-        Height = 165
+        Height = 136
         Cursor = crDefault
         Align = alClient
         FixedRows = 0
@@ -347,7 +347,7 @@ object Form1: TForm1
       Left = 212
       Top = 15
       Width = 264
-      Height = 182
+      Height = 153
       Align = alClient
       Caption = #23646#24615#23450#20041
       TabOrder = 2
@@ -355,9 +355,10 @@ object Form1: TForm1
         Left = 2
         Top = 15
         Width = 260
-        Height = 165
+        Height = 136
         Cursor = crDefault
         Align = alClient
+        ColCount = 2
         FixedRows = 0
         Font.Charset = DEFAULT_CHARSET
         Font.Color = clWindowText
@@ -448,6 +449,38 @@ object Form1: TForm1
           22
           22)
       end
+    end
+  end
+  object ToolBar1: TToolBar
+    Left = 0
+    Top = 0
+    Width = 826
+    Height = 29
+    Caption = 'ToolBar1'
+    TabOrder = 3
+    object Button1: TButton
+      Left = 0
+      Top = 2
+      Width = 75
+      Height = 22
+      Caption = 'Button1'
+      TabOrder = 0
+    end
+    object Button2: TButton
+      Left = 75
+      Top = 2
+      Width = 75
+      Height = 22
+      Caption = 'Button2'
+      TabOrder = 1
+    end
+    object Button3: TButton
+      Left = 150
+      Top = 2
+      Width = 75
+      Height = 22
+      Caption = 'Button3'
+      TabOrder = 2
     end
   end
   object Timer: TTimer

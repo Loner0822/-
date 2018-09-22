@@ -6,12 +6,12 @@
     <PROJECT value="KBSTree.exe"/>
     <OBJFILES value="KBSTree.obj MainUnit.obj DModUnit.obj DataUnit.obj TreeUnit.obj 
       &quot;C:\Program Files (x86)\EurekaLog 6\CBuilder6\ExceptionLog.obj&quot; 
-      PenUnit.obj ExtraUnit.obj"/>
+      PenUnit.obj ExtraUnit.obj SystemUnit.obj"/>
     <RESFILES value="KBSTree.res"/>
     <IDLFILES value=""/>
     <IDLGENFILES value=""/>
     <DEFFILE value=""/>
-    <RESDEPEN value="$(RESFILES) MainUnit.dfm DModUnit.dfm ExtraUnit.dfm"/>
+    <RESDEPEN value="$(RESFILES) MainUnit.dfm DModUnit.dfm ExtraUnit.dfm SystemUnit.dfm"/>
     <LIBFILES value=""/>
     <LIBRARIES value="tmsxlsc6.lib tmsexc6.lib dclusr.lib VclSmp.lib tmsc6.lib"/>
     <SPARELIBS value="vcl.lib rtl.lib dbrtl.lib adortl.lib tmsc6.lib vclx.lib vcldb.lib 
@@ -73,6 +73,7 @@
       <FILE FILENAME="C:\Program Files (x86)\EurekaLog 6\CBuilder6\ExceptionLog.pas" FORMNAME="" UNITNAME="ExceptionLog" CONTAINERID="PascalCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="PenUnit.cpp" FORMNAME="" UNITNAME="PenUnit" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="ExtraUnit.cpp" FORMNAME="ExtraForm" UNITNAME="ExtraUnit" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="SystemUnit.cpp" FORMNAME="Form2" UNITNAME="SystemUnit" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
   </FILELIST>
   <BUILDTOOLS>
   </BUILDTOOLS>

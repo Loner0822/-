@@ -956,6 +956,3 @@ void __fastcall TForm1::TimerTimer(TObject *Sender)
 
 
 
-
-
-

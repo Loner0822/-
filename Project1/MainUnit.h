@@ -12,6 +12,7 @@
 #include <Grids.hpp>
 #include <OleCtrls.hpp>
 #include <StdCtrls.hpp>
+#include <ToolWin.hpp>
 //---------------------------------------------------------------------------
 #include <set>
 #include <Classes.hpp>
@@ -54,6 +55,10 @@ __published:	// IDE-managed Components
     TPanel *Panel;
     TAdvStringGrid *AdvStringGrid1;
     TAdvStringGrid *AdvStringGrid2;
+    TToolBar *ToolBar1;
+    TButton *Button1;
+    TButton *Button2;
+    TButton *Button3;
     void __fastcall GetDataButtonClick(TObject *Sender);
     void __fastcall TreeViewChange(TObject *Sender, TTreeNode *Node);
     void __fastcall FormCreate(TObject *Sender);
