@@ -72,6 +72,10 @@ __published:	// IDE-managed Components
     void __fastcall SigViewer1MouseUp(TObject *Sender,
           TxMouseButton Button, long X, long Y, long *Cancel);
     void __fastcall TimerTimer(TObject *Sender);
+    void __fastcall AdvStringGrid1EditCellDone(TObject *Sender, int ACol,
+          int ARow);
+    void __fastcall AdvStringGrid1CellValidate(TObject *Sender, int ACol,
+          int ARow, AnsiString &Value, bool &Valid);
 private:	// User declarations
 public:		// User declarations
     __fastcall TForm1(TComponent* Owner);
@@ -86,6 +90,7 @@ public:		// User declarations
     void ExplainLinkPoint( TStream* pStream );
     void Choose_Move_Pen(const vector<set<Pen>::iterator> &L);
     void Choose_Delete_Pen(const vector<set<Pen>::iterator> &L);
+    void FindFather(TTreeNode *tnode, int &level);
 };
 //---------------------------------------------------------------------------
 extern PACKAGE TForm1 *Form1;

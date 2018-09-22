@@ -21,7 +21,6 @@ object DMod: TDMod
     Mode = cmShareDenyNone
     Provider = 'Microsoft.Jet.OLEDB.4.0'
     Left = 32
-    Top = 32
   end
   object ADOConnection2: TADOConnection
     Connected = True
@@ -30,7 +29,14 @@ object DMod: TDMod
       'top\'#24037#20316'\'#38598#20013#30417#27979#26631#20934#30693#35782#24211#26641#29366#22270'\data\'#24212#24613#25351#25381#32467#32447#22270'.mdb;Persist Security Info=False'
     Mode = cmShareDenyNone
     Provider = 'Microsoft.Jet.OLEDB.4.0'
-    Left = 88
-    Top = 32
+    Left = 32
+    Top = 48
+  end
+  object ADOConnection3: TADOConnection
+    Left = 120
+  end
+  object ADOConnection4: TADOConnection
+    Left = 120
+    Top = 48
   end
 end

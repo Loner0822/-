@@ -15,6 +15,8 @@ class TDMod : public TDataModule
 __published:	// IDE-managed Components
     TADOConnection *ADOConnection1;
     TADOConnection *ADOConnection2;
+    TADOConnection *ADOConnection3;
+    TADOConnection *ADOConnection4;
     void __fastcall DataModuleCreate(TObject *Sender);
 private:	// User declarations
     void CreateTable();

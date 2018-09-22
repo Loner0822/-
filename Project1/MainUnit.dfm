@@ -1,6 +1,6 @@
 object Form1: TForm1
-  Left = 260
-  Top = 210
+  Left = 198
+  Top = 150
   Width = 834
   Height = 428
   Caption = 'Form1'
@@ -272,6 +272,8 @@ object Form1: TForm1
         ParentFont = False
         ScrollBars = ssBoth
         TabOrder = 0
+        OnCellValidate = AdvStringGrid1CellValidate
+        OnEditCellDone = AdvStringGrid1EditCellDone
         ActiveCellFont.Charset = DEFAULT_CHARSET
         ActiveCellFont.Color = clWindowText
         ActiveCellFont.Height = -11
@@ -340,6 +342,7 @@ object Form1: TForm1
         SearchFooter.HintFindPrev = 'Find previous occurence'
         SearchFooter.HintHighlight = 'Highlight occurences'
         SearchFooter.MatchCaseCaption = 'Match case'
+        ShowDesignHelper = False
         Version = '5.0.6.0'
       end
     end
@@ -436,6 +439,7 @@ object Form1: TForm1
         SearchFooter.HintFindPrev = 'Find previous occurence'
         SearchFooter.HintHighlight = 'Highlight occurences'
         SearchFooter.MatchCaseCaption = 'Match case'
+        ShowDesignHelper = False
         Version = '5.0.6.0'
         RowHeights = (
           22
