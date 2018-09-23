@@ -164,7 +164,8 @@ void __fastcall TForm1::AdvStringGrid1CellValidate(TObject *Sender,
     }
     else {
         if (Value == "") {
-            String sql = "delete * from Nature where 属性 = '" + Now_Nature + "'";
+            String sql = "delete * from Nature where 属性 = '" + Now_Nature + "' and UPGUID = '" + node[Now_Node].Data.PGUID + "'";
+            //ShowMessage(sql);
             DMod -> ExecSql(sql, tempQuery);
             Value = AdvStringGrid1->Cells[ACol][ARow + 1];
             AdvStringGrid1->RemoveRows(ARow, 1);
@@ -172,7 +173,7 @@ void __fastcall TForm1::AdvStringGrid1CellValidate(TObject *Sender,
                 AdvStringGrid1->Cells[0][i] = i;
         }
         else {
-            String sql = "update Nature set 属性 = '" + Value + "' where 属性 = '" + Now_Nature + "'";
+            String sql = "update Nature set 属性 = '" + Value + "' where 属性 = '" + Now_Nature + "' and UPGUID = '" + node[Now_Node].Data.PGUID + "'";
             DMod -> ExecSql(sql, tempQuery);
         }
     }
@@ -185,9 +186,15 @@ void __fastcall TForm1::AdvStringGrid1CanEditCell(TObject *Sender,
       int ARow, int ACol, bool &CanEdit)
 {
     // 编辑前可触发
-    if (ACol == 1)
+    if (ACol == 1) {
         CanEdit = false;
-    Now_Nature = AdvStringGrid1->Cells[ACol][ARow];
+        return;
+    }
+    if (AdvStringGrid1->Cells[1][ARow] != node[Now_Node].Data.JdText) {
+        CanEdit = false;
+        return;
+    }
+    Now_Nature = AdvStringGrid1->Cells[2][ARow];
 }
 //---------------------------------------------------------------------------
 void __fastcall TForm1::AdvStringGrid1RowMove(TObject *Sender, int ARow,
@@ -202,9 +209,15 @@ void __fastcall TForm1::AdvStringGrid1RowMove(TObject *Sender, int ARow,
 void __fastcall TForm1::AdvStringGrid1RowMoved(TObject *Sender,
       int FromIndex, int ToIndex)
 {
-    //
-    for (int i = 1; i < AdvStringGrid1->RowCount - 1; ++ i)
-        AdvStringGrid1->Cells[0][i] = i;   
+    TADOQuery *tempQuery = new TADOQuery(NULL);
+    tempQuery -> Connection = DMod -> ADOConnection3;
+    for (int i = 1; i < AdvStringGrid1->RowCount - 1; ++ i) {
+        String sql = "update Nature set Index_ = " + IntToStr(i) + " where 属性 = '" + Now_Nature + "' and UPGUID = '" + node[Now_Node].Data.PGUID + "'";
+        ShowMessage(sql);
+        DMod-> ExecSql(sql, tempQuery);
+        AdvStringGrid1->Cells[0][i] = i;
+    }
+    delete tempQuery;
 }
 //---------------------------------------------------------------------------
 
@@ -212,7 +225,7 @@ void __fastcall TForm1::AdvStringGrid1RowMoving(TObject *Sender, int ARow,
       bool &Allow)
 {
     //
-    if (AdvStringGrid1->Cells[1][ARow] == node[Now_Node].Data.JdText)
+    if (AdvStringGrid1->Cells[1][ARow] == node[Now_Node].Data.JdText && AdvStringGrid1->Cells[2][ARow] != "")
         Allow = 1;
     else
         Allow = 0;
@@ -227,7 +240,7 @@ void TForm1::FindFather(TTreeNode *tnode, int &level) {
     String pguid = node[u].Data.PGUID;
     TADOQuery *tempQuery = new TADOQuery(NULL);
     tempQuery -> Connection = DMod -> ADOConnection3;
-    String sql = "select * from Nature where UPGUID = '" + pguid + "'";
+    String sql = "select * from Nature where UPGUID = '" + pguid + "' order by Index_";
     DMod -> OpenSql(sql, tempQuery);
     if (tempQuery -> Eof) {
         delete tempQuery;
@@ -1080,5 +1093,6 @@ void __fastcall TForm1::TimerTimer(TObject *Sender)
     ::InvalidateRect((HWND)this->SigViewer1->DrawingWindow, NULL, TRUE);
 }
 //---------------------------------------------------------------------------
+
 
 
