@@ -28,8 +28,8 @@ multimap<String, TData2> Find_Map;
 DynamicArray<String> Map_PGUID;
 DynamicArray< TNode<TData> > node;
 DynamicArray<TEdge> edge;
-int Now_Node;
 int num_of_pic = 0;
+
 int used_red_pen, used_black_pen, used_clamp_pen;
 int using_red, using_black, using_clamp;
 bool ClickDown;
@@ -39,6 +39,11 @@ const long dx[4] = {0, 35, 3, 6};
 const long dy[4] = {0, 23, 22, 20};
 set<pair<long, long> > Map_Node;    // x, y
 set<Pen> Pen_Node;    				// 表笔编号, 表笔类型, x, y
+
+int Now_Node;
+String Now_Nature;
+
+
 //---------------------------------------------------------------------------
 __fastcall TForm1::TForm1(TComponent* Owner)
     : TForm(Owner)
@@ -53,9 +58,7 @@ void __fastcall TForm1::GetDataButtonClick(TObject *Sender) {
     //TTreeNode* root = NULL;
     //FindSon(root, "");
 }
-
 //---------------------------------------------------------------------------
-
 void TForm1::BuildTree() {
     for (int i = node.Low; i <= node.High; ++ i) {
          //ShowMessage(node[i].Data.UPGUID);
@@ -78,7 +81,7 @@ void TForm1::BuildTree() {
     //node.Length = 0;
     //edge.Length = 0;
 }
-
+//---------------------------------------------------------------------------
 void TForm1::ReadData(TADOQuery *AdoQuery) {
     TData tmpdata;
     tmpdata.ID = AdoQuery -> FieldByName("ID") -> AsInteger;
@@ -100,7 +103,7 @@ void TForm1::ReadData(TADOQuery *AdoQuery) {
     node[node.High].Head = -1;
     node[node.High].fa = node.High;
 }
-
+//---------------------------------------------------------------------------
 void TForm1::AddEdge(int x, int y) {
     edge.Length++;
     edge[edge.High].to = y;
@@ -108,7 +111,7 @@ void TForm1::AddEdge(int x, int y) {
     node[x].Head = edge.High;
     node[y].fa = x;
 }
-
+//---------------------------------------------------------------------------
 /*void TForm1::FindSon(TTreeNode* node, String uid) {
     String sql = "";
     sql = "select * from YJZH_MapFenLei where ISDELETE = 0 and UPGUID = '" + uid + "'";
@@ -128,7 +131,7 @@ void TForm1::AddEdge(int x, int y) {
     }
     delete TempADOQuery;
 }*/
-
+//---------------------------------------------------------------------------
 void TForm1::FindSon(int u, TTreeNode* tnode) {
     tnode -> Data = (void *)u;
     for (int i = node[u].Head; i != -1; i = edge[i].next) {
@@ -144,43 +147,105 @@ void __fastcall TForm1::AdvStringGrid1EditCellDone(TObject *Sender,
 {
     // 退出触发
 }
+//---------------------------------------------------------------------------
 void __fastcall TForm1::AdvStringGrid1CellValidate(TObject *Sender,
       int ACol, int ARow, AnsiString &Value, bool &Valid)
 {
     TADOQuery *tempQuery = new TADOQuery(NULL);
     tempQuery -> Connection = DMod -> ADOConnection3;
-    String sql = "update Nature set 属性 = '" + AdvStringGrid1->Cells[ACol][ARow] + "' where PGUID = '" + node[Now_Node].Data.PGUID + "'";
-    DMod -> ExecSql(sql, tempQuery);
+    if (ARow == AdvStringGrid1 -> RowCount - 1) {
+        if (Value == "")
+            return;
+        String sql = "insert into Nature (属性, UPGUID) values('"+ Value + "', '" + node[Now_Node].Data.PGUID + "')";
+        DMod -> ExecSql(sql, tempQuery);
+        AdvStringGrid1->AddRow();
+        AdvStringGrid1 -> Cells[0][ARow] = ARow;
+        AdvStringGrid1 -> Cells[1][ARow + 1] = node[Now_Node].Data.JdText;
+    }
+    else {
+        if (Value == "") {
+            String sql = "delete * from Nature where 属性 = '" + Now_Nature + "'";
+            DMod -> ExecSql(sql, tempQuery);
+            Value = AdvStringGrid1->Cells[ACol][ARow + 1];
+            AdvStringGrid1->RemoveRows(ARow, 1);
+            for (int i = 1; i < AdvStringGrid1->RowCount - 1; ++ i)
+                AdvStringGrid1->Cells[0][i] = i;
+        }
+        else {
+            String sql = "update Nature set 属性 = '" + Value + "' where 属性 = '" + Now_Nature + "'";
+            DMod -> ExecSql(sql, tempQuery);
+        }
+    }
+    //ShowMessage(Value);
+    //ShowMessage(AdvStringGrid1->Cells[ACol][ARow]);
     delete tempQuery;
 }
 //---------------------------------------------------------------------------
+void __fastcall TForm1::AdvStringGrid1CanEditCell(TObject *Sender,
+      int ARow, int ACol, bool &CanEdit)
+{
+    // 编辑前可触发
+    if (ACol == 1)
+        CanEdit = false;
+    Now_Nature = AdvStringGrid1->Cells[ACol][ARow];
+}
+//---------------------------------------------------------------------------
+void __fastcall TForm1::AdvStringGrid1RowMove(TObject *Sender, int ARow,
+      bool &Allow)
+{
+    //
+    if (AdvStringGrid1->Cells[1][ARow] != node[Now_Node].Data.JdText)
+        Allow = 0;
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TForm1::AdvStringGrid1RowMoved(TObject *Sender,
+      int FromIndex, int ToIndex)
+{
+    //
+    for (int i = 1; i < AdvStringGrid1->RowCount - 1; ++ i)
+                AdvStringGrid1->Cells[0][i] = i;   
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TForm1::AdvStringGrid1RowMoving(TObject *Sender, int ARow,
+      bool &Allow)
+{
+    //
+    if (AdvStringGrid1->Cells[1][ARow] == node[Now_Node].Data.JdText)
+        Allow = 1;
+    else
+        Allow = 0;
+
+}
 //---------------------------------------------------------------------------
 void TForm1::FindFather(TTreeNode *tnode, int &level) {
     int u = (int)tnode->Data;
     TTreeNode* pa = tnode->Parent;
-    if (node[u].fa != u) {
+    if (node[u].fa != u)
         FindFather(pa, level);
-        ++ level;
-    }
-    else
-        level = 1;
-    AdvStringGrid1 -> RowCount = level + 1;
     String pguid = node[u].Data.PGUID;
     TADOQuery *tempQuery = new TADOQuery(NULL);
     tempQuery -> Connection = DMod -> ADOConnection3;
-    String sql = "select * from Nature where PGUID = '" + pguid + "'";
+    String sql = "select * from Nature where UPGUID = '" + pguid + "'";
     DMod -> OpenSql(sql, tempQuery);
-    int cnt = 0;
-    AdvStringGrid1 -> Cells[0][level] = node[u].Data.JdText;
-    while (!tempQuery -> Eof) {
-        ++ cnt;
-        AdvStringGrid1 -> ColCount = max(AdvStringGrid1 -> ColCount, cnt + 1);
-        AdvStringGrid1 -> Cells[cnt][level]  = tempQuery -> FieldByName("属性") -> AsString;
-        tempQuery -> Next();
+    if (tempQuery -> Eof) {
+        delete tempQuery;
+        return;
     }
+    int cnt = 0;
+    while (!tempQuery -> Eof) {
+        AdvStringGrid1 -> Cells[0][level + cnt] = level + cnt;
+        AdvStringGrid1 -> Cells[1][level + cnt] = node[u].Data.JdText;
+        AdvStringGrid1 -> Cells[2][level + cnt]  = tempQuery -> FieldByName("属性") -> AsString;
+        tempQuery -> Next();
+        ++ cnt;
+        AdvStringGrid1->AddRow();
+    }
+    level += cnt;
     delete tempQuery;
 }
-
+//---------------------------------------------------------------------------
 void __fastcall TForm1::TreeViewChange(TObject *Sender, TTreeNode *Node)
 {
     Now_Node = (int)Node -> Data;
@@ -224,26 +289,31 @@ void __fastcall TForm1::TreeViewChange(TObject *Sender, TTreeNode *Node)
     AdvStringGrid1 -> Clear();
     AdvStringGrid1 -> Options << goEditing;
     AdvStringGrid1 -> Options << goColSizing;
-    AdvStringGrid1 -> Options << goRowSizing;
+    AdvStringGrid1 -> Options >> goRowSizing;
     AdvStringGrid1 -> RowCount = 2;
-    AdvStringGrid1 -> ColCount = 2;
+    AdvStringGrid1 -> ColCount = 3;
     AdvStringGrid1 -> FixedRows = 1;
-    AdvStringGrid1 -> FixedCols = 0;
-    AdvStringGrid1 -> Cells[0][0] = "结点名称";
-
+    AdvStringGrid1 -> FixedCols = 1;
+    AdvStringGrid1 -> Cells[0][0] = "序号";
+    AdvStringGrid1 -> Cells[1][0] = "结点名称";
+    AdvStringGrid1 -> Cells[2][0] = "所带属性";
     /*
     TADOQuery *tempQuery = new TADOQuery(NULL);
     tempQuery -> Connection = DMod -> ADOConnection3;
     String sql = "delete * from Nature";
     DMod -> ExecSql(sql, tempQuery);
     */
-    FindFather(Node, 0);
+    FindFather(Node, 1);
+    //AdvStringGrid1 -> Cells[0][AdvStringGrid1 -> RowCount - 1] = AdvStringGrid1 -> RowCount - 1;
+    AdvStringGrid1 -> Cells[1][AdvStringGrid1 -> RowCount - 1] = node[tindex].Data.JdText;
+    AdvStringGrid1->Options << goRowMoving;
+    //ShowMessage(AdvStringGrid1 -> RowCount);
     //AdvStringGrid1->ColCount = 3;
-    AdvStringGrid1->MergeCells(1, 0, AdvStringGrid1->ColCount - 1, 1);
-    AdvStringGrid1 -> Cells[1][0] = "所带属性";
+    //AdvStringGrid1->MergeCells(1, 0, AdvStringGrid1->ColCount - 1, 1);
+
     //AdvStringGrid1 -> AutoSizeColumns(True, 4);
 }
-
+//---------------------------------------------------------------------------
 void __fastcall TForm1::FormCreate(TObject *Sender)
 {
     // SigViewer 初始化
@@ -292,7 +362,6 @@ void __fastcall TForm1::FormCreate(TObject *Sender)
     delete AdoQ;
 }
 //---------------------------------------------------------------------------
-
 void TForm1::ReadData2(TADOQuery *AdoQuery) {
     TData2 tmpdata;
     tmpdata.ID = AdoQuery -> FieldByName("ID") -> AsInteger;
@@ -309,7 +378,7 @@ void TForm1::ReadData2(TADOQuery *AdoQuery) {
     //multimap<String, TData2>::iterator it;
     Find_Map.insert(pair<String, TData2>(tmpdata.UPGUID, tmpdata));
 }
-
+//---------------------------------------------------------------------------
 void TForm1::emf_Analysis() {
     /*
         储存上一张图的数据
@@ -343,7 +412,6 @@ void TForm1::emf_Analysis() {
 
     ExplainLinkPoint( stream );
 }
-
 //---------------------------------------------------------------------------
 void TForm1::ExplainLinkPoint( TStream* pStream )
 {
@@ -422,7 +490,7 @@ void TForm1::ExplainLinkPoint( TStream* pStream )
         }
     }
 }
-
+//---------------------------------------------------------------------------
 void __fastcall TForm1::AdvStringGridClickCell(TObject *Sender, int ARow,
       int ACol)
 {
@@ -452,7 +520,6 @@ void __fastcall TForm1::AdvStringGridClickCell(TObject *Sender, int ARow,
     emf_Analysis();
 }
 //---------------------------------------------------------------------------
-
 void __fastcall TForm1::SigViewer1Paint(TObject *Sender, long DC)
 {
     HDC hdc = (HDC)DC;
@@ -720,9 +787,7 @@ void TForm1::DrawPicture(HDC hdcDest, int Orign[4], HDC hdcSrc, int nXOriginSrc,
 	DeleteObject(hImageBMP);
 	DeleteObject(hMaskBMP);
 }
-
 //---------------------------------------------------------------------------
-
 int Check_Pen(long x, long y) {
     if (Form1->SigViewer1->Width - 200 <= x && x <= Form1->SigViewer1->Width - 162
         && 20 <= y && y <= 20 + 25)
@@ -735,7 +800,7 @@ int Check_Pen(long x, long y) {
         return 3;
     return 0;
 }
-
+//---------------------------------------------------------------------------
 bool Check_Point(long x, long y) {
     set<pair<long, long> >::iterator it;
     it = Map_Node.find(make_pair(x, y));
@@ -744,7 +809,7 @@ bool Check_Point(long x, long y) {
     else
         return 1;
 }
-
+//---------------------------------------------------------------------------
 void __fastcall TForm1::SigViewer1MouseDown(TObject *Sender,
       TxMouseButton Button, long X, long Y, long *Cancel)
 {
@@ -950,7 +1015,6 @@ void __fastcall TForm1::SigViewer1MouseDown(TObject *Sender,
     }
 }
 //---------------------------------------------------------------------------
-
 void __fastcall TForm1::SigViewer1MouseMove(TObject *Sender, long X, long Y, long *Cancel)
 {
 // 鼠标移动
@@ -958,14 +1022,12 @@ void __fastcall TForm1::SigViewer1MouseMove(TObject *Sender, long X, long Y, lon
     Coordinate.first = X, Coordinate.second = Y;
 }
 //---------------------------------------------------------------------------
-
 void __fastcall TForm1::SigViewer1MouseUp(TObject *Sender,
       TxMouseButton Button, long X, long Y, long *Cancel)
 {
 // 鼠标抬起
 }
 //---------------------------------------------------------------------------
-
 void TForm1::Choose_Move_Pen(const vector<set<Pen>::iterator> &L) {
     ExtraForm->Caption = "请选择所要移动的表笔";
     ExtraForm->Move_Pen(L);
@@ -983,7 +1045,7 @@ void TForm1::Choose_Move_Pen(const vector<set<Pen>::iterator> &L) {
     Partner = it -> partner;
     Pen_Node.erase(it);
 }
-
+//---------------------------------------------------------------------------
 void TForm1::Choose_Delete_Pen(const vector<set<Pen>::iterator> &L) {
     ExtraForm->Caption = "请选择所要删除的表笔";
     ExtraForm->Delete_Pen(L);
@@ -1012,18 +1074,11 @@ void TForm1::Choose_Delete_Pen(const vector<set<Pen>::iterator> &L) {
         }
     }
 }
-
+//---------------------------------------------------------------------------
 void __fastcall TForm1::TimerTimer(TObject *Sender)
 {
     ::InvalidateRect((HWND)this->SigViewer1->DrawingWindow, NULL, TRUE);
 }
 //---------------------------------------------------------------------------
-
-
-
-
-
-
-
 
 

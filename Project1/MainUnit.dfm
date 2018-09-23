@@ -199,7 +199,7 @@ object Form1: TForm1
       Align = alBottom
     end
     object Splitter4: TSplitter
-      Left = 209
+      Left = 219
       Top = 15
       Width = 3
       Height = 153
@@ -251,7 +251,7 @@ object Form1: TForm1
     object GroupBox5: TGroupBox
       Left = 2
       Top = 15
-      Width = 207
+      Width = 217
       Height = 153
       Align = alLeft
       Caption = #23646#24615#21015#34920
@@ -259,21 +259,27 @@ object Form1: TForm1
       object AdvStringGrid1: TAdvStringGrid
         Left = 2
         Top = 15
-        Width = 203
+        Width = 213
         Height = 136
         Cursor = crDefault
         Align = alClient
+        ColCount = 3
         FixedRows = 0
         Font.Charset = DEFAULT_CHARSET
         Font.Color = clWindowText
         Font.Height = -11
         Font.Name = 'Tahoma'
         Font.Style = []
+        Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goRowMoving]
         ParentFont = False
         ScrollBars = ssBoth
         TabOrder = 0
+        OnRowMoved = AdvStringGrid1RowMoved
+        OnCanEditCell = AdvStringGrid1CanEditCell
         OnCellValidate = AdvStringGrid1CellValidate
         OnEditCellDone = AdvStringGrid1EditCellDone
+        OnRowMove = AdvStringGrid1RowMove
+        OnRowMoving = AdvStringGrid1RowMoving
         ActiveCellFont.Charset = DEFAULT_CHARSET
         ActiveCellFont.Color = clWindowText
         ActiveCellFont.Height = -11
@@ -344,12 +350,23 @@ object Form1: TForm1
         SearchFooter.MatchCaseCaption = 'Match case'
         ShowDesignHelper = False
         Version = '5.0.6.0'
+        RowHeights = (
+          22
+          22
+          22
+          22
+          22
+          22
+          22
+          22
+          22
+          22)
       end
     end
     object GroupBox6: TGroupBox
-      Left = 212
+      Left = 222
       Top = 15
-      Width = 264
+      Width = 254
       Height = 153
       Align = alClient
       Caption = #23646#24615#23450#20041
@@ -357,7 +374,7 @@ object Form1: TForm1
       object AdvStringGrid2: TAdvStringGrid
         Left = 2
         Top = 15
-        Width = 260
+        Width = 250
         Height = 136
         Cursor = crDefault
         Align = alClient

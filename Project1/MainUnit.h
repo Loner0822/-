@@ -76,6 +76,14 @@ __published:	// IDE-managed Components
           int ARow);
     void __fastcall AdvStringGrid1CellValidate(TObject *Sender, int ACol,
           int ARow, AnsiString &Value, bool &Valid);
+    void __fastcall AdvStringGrid1CanEditCell(TObject *Sender, int ARow,
+          int ACol, bool &CanEdit);
+    void __fastcall AdvStringGrid1RowMove(TObject *Sender, int ARow,
+          bool &Allow);
+    void __fastcall AdvStringGrid1RowMoved(TObject *Sender, int FromIndex,
+          int ToIndex);
+    void __fastcall AdvStringGrid1RowMoving(TObject *Sender, int ARow,
+          bool &Allow);
 private:	// User declarations
 public:		// User declarations
     __fastcall TForm1(TComponent* Owner);
