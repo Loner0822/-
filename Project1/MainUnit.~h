@@ -13,6 +13,7 @@
 #include <OleCtrls.hpp>
 #include <StdCtrls.hpp>
 #include <ToolWin.hpp>
+#include <Menus.hpp>
 //---------------------------------------------------------------------------
 #include <set>
 #include <Classes.hpp>
@@ -59,6 +60,10 @@ __published:	// IDE-managed Components
     TButton *Button1;
     TButton *Button2;
     TButton *Button3;
+    TPopupMenu *PopupMenu;
+    TMenuItem *N1;
+    TMenuItem *N2;
+    TMenuItem *N3;
     void __fastcall GetDataButtonClick(TObject *Sender);
     void __fastcall TreeViewChange(TObject *Sender, TTreeNode *Node);
     void __fastcall FormCreate(TObject *Sender);
@@ -84,6 +89,8 @@ __published:	// IDE-managed Components
           int ToIndex);
     void __fastcall AdvStringGrid1RowMoving(TObject *Sender, int ARow,
           bool &Allow);
+    void __fastcall AdvStringGrid2MouseDown(TObject *Sender,
+          TMouseButton Button, TShiftState Shift, int X, int Y);
 private:	// User declarations
 public:		// User declarations
     __fastcall TForm1(TComponent* Owner);

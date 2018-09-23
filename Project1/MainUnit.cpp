@@ -325,6 +325,9 @@ void __fastcall TForm1::TreeViewChange(TObject *Sender, TTreeNode *Node)
     //AdvStringGrid1->MergeCells(1, 0, AdvStringGrid1->ColCount - 1, 1);
 
     //AdvStringGrid1 -> AutoSizeColumns(True, 4);
+
+    AdvStringGrid2->Col = 1;
+    AdvStringGrid2->Row = 1;
 }
 //---------------------------------------------------------------------------
 void __fastcall TForm1::FormCreate(TObject *Sender)
@@ -1095,4 +1098,17 @@ void __fastcall TForm1::TimerTimer(TObject *Sender)
 //---------------------------------------------------------------------------
 
 
+
+
+
+void __fastcall TForm1::AdvStringGrid2MouseDown(TObject *Sender,
+      TMouseButton Button, TShiftState Shift, int X, int Y)
+{
+    //
+    int row, col;
+    AdvStringGrid2->MouseToCell(X, Y, col, row);
+    AdvStringGrid2->Col = col;
+    AdvStringGrid2->Row = row;
+}
+//---------------------------------------------------------------------------
 

@@ -1,6 +1,6 @@
 object Form1: TForm1
-  Left = 198
-  Top = 150
+  Left = 175
+  Top = 158
   Width = 834
   Height = 428
   Caption = 'Form1'
@@ -386,8 +386,10 @@ object Form1: TForm1
         Font.Name = 'Tahoma'
         Font.Style = []
         ParentFont = False
+        PopupMenu = PopupMenu
         ScrollBars = ssBoth
         TabOrder = 0
+        OnMouseDown = AdvStringGrid2MouseDown
         ActiveCellFont.Charset = DEFAULT_CHARSET
         ActiveCellFont.Color = clWindowText
         ActiveCellFont.Height = -11
@@ -509,5 +511,17 @@ object Form1: TForm1
     OnTimer = TimerTimer
     Left = 288
     Top = 160
+  end
+  object PopupMenu: TPopupMenu
+    Left = 256
+    object N1: TMenuItem
+      Caption = #28155#21152
+    end
+    object N2: TMenuItem
+      Caption = #21024#38500
+    end
+    object N3: TMenuItem
+      Caption = #20462#25913
+    end
   end
 end
