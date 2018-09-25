@@ -32,6 +32,7 @@
 #include <Grids.hpp>
 #include <ExtCtrls.hpp>
 #include "SigViewerLib_OCX.h"
+#include "SystemUnit.h"
 #include <OleCtrls.hpp>
 #include <memory>
 using namespace std;
@@ -61,9 +62,8 @@ __published:	// IDE-managed Components
     TButton *Button2;
     TButton *Button3;
     TPopupMenu *PopupMenu;
-    TMenuItem *N1;
     TMenuItem *N2;
-    TMenuItem *N3;
+    TMenuItem *N1;
     void __fastcall GetDataButtonClick(TObject *Sender);
     void __fastcall TreeViewChange(TObject *Sender, TTreeNode *Node);
     void __fastcall FormCreate(TObject *Sender);
@@ -71,11 +71,11 @@ __published:	// IDE-managed Components
           int ACol);
     void __fastcall SigViewer1Paint(TObject *Sender, long DC);
     void __fastcall SigViewer1MouseDown(TObject *Sender,
-          TxMouseButton Button, long X, long Y, long *Cancel);
+          Sigviewerlib_tlb::TxMouseButton Button, long X, long Y, long *Cancel);
     void __fastcall SigViewer1MouseMove(TObject *Sender, long X, long Y,
           long *Cancel);
     void __fastcall SigViewer1MouseUp(TObject *Sender,
-          TxMouseButton Button, long X, long Y, long *Cancel);
+          Sigviewerlib_tlb::TxMouseButton Button, long X, long Y, long *Cancel);
     void __fastcall TimerTimer(TObject *Sender);
     void __fastcall AdvStringGrid1EditCellDone(TObject *Sender, int ACol,
           int ARow);
@@ -91,6 +91,12 @@ __published:	// IDE-managed Components
           bool &Allow);
     void __fastcall AdvStringGrid2MouseDown(TObject *Sender,
           TMouseButton Button, TShiftState Shift, int X, int Y);
+    void __fastcall N1Click(TObject *Sender);
+    void __fastcall AdvStringGrid2CanEditCell(TObject *Sender, int ARow,
+          int ACol, bool &CanEdit);
+    void __fastcall AdvStringGrid2EditCellDone(TObject *Sender, int ACol,
+          int ARow);
+    void __fastcall N2Click(TObject *Sender);
 private:	// User declarations
 public:		// User declarations
     __fastcall TForm1(TComponent* Owner);

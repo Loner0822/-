@@ -1,6 +1,6 @@
 object Form1: TForm1
-  Left = 175
-  Top = 158
+  Left = 206
+  Top = 164
   Width = 834
   Height = 428
   Caption = 'Form1'
@@ -220,8 +220,6 @@ object Form1: TForm1
         Height = 178
         Align = alClient
         TabOrder = 0
-        OnMouseDown = SigViewer1MouseDown
-        OnMouseUp = SigViewer1MouseUp
         OnMouseMove = SigViewer1MouseMove
         OnPaint = SigViewer1Paint
         ControlData = {
@@ -378,8 +376,7 @@ object Form1: TForm1
         Height = 136
         Cursor = crDefault
         Align = alClient
-        ColCount = 2
-        FixedRows = 0
+        ColCount = 3
         Font.Charset = DEFAULT_CHARSET
         Font.Color = clWindowText
         Font.Height = -11
@@ -390,6 +387,8 @@ object Form1: TForm1
         ScrollBars = ssBoth
         TabOrder = 0
         OnMouseDown = AdvStringGrid2MouseDown
+        OnCanEditCell = AdvStringGrid2CanEditCell
+        OnEditCellDone = AdvStringGrid2EditCellDone
         ActiveCellFont.Charset = DEFAULT_CHARSET
         ActiveCellFont.Color = clWindowText
         ActiveCellFont.Height = -11
@@ -515,13 +514,12 @@ object Form1: TForm1
   object PopupMenu: TPopupMenu
     Left = 256
     object N1: TMenuItem
-      Caption = #28155#21152
+      Caption = #20462#25913'(&U)'
+      OnClick = N1Click
     end
     object N2: TMenuItem
-      Caption = #21024#38500
-    end
-    object N3: TMenuItem
-      Caption = #20462#25913
+      Caption = #21024#38500'(&D)'
+      OnClick = N2Click
     end
   end
 end

@@ -5,6 +5,8 @@
 #include <set>
 #include <vector>
 #include <typeinfo>
+#include <objbase.h>
+#include <cstdio>
 #pragma hdrstop
 #include "DModUnit.h"
 #include "MainUnit.h"
@@ -12,6 +14,7 @@
 #include "TreeUnit.h"
 #include "PenUnit.h"
 #include "ExtraUnit.h"
+#include "SystemUnit.h"
 using namespace std;
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
@@ -43,6 +46,25 @@ set<Pen> Pen_Node;    				// 表笔编号, 表笔类型, x, y
 int Now_Node;
 String Now_Nature;
 
+const char* newGUID()
+{
+    static char buf[64] = {0};
+    GUID guid;
+    if (S_OK == ::CoCreateGuid(&guid))
+    {
+        _snprintf(buf, sizeof(buf),
+                  "{%08X-%04X-%04x-%02X%02X-%02X%02X%02X%02X%02X%02X}",
+                  guid.Data1,
+                  guid.Data2,
+                  guid.Data3,
+                  guid.Data4[0], guid.Data4[1],
+                  guid.Data4[2], guid.Data4[3],
+                  guid.Data4[4], guid.Data4[5],
+                  guid.Data4[6], guid.Data4[7]
+                    );
+    }
+    return (const char*)buf;
+}
 
 //---------------------------------------------------------------------------
 __fastcall TForm1::TForm1(TComponent* Owner)
@@ -156,6 +178,8 @@ void __fastcall TForm1::AdvStringGrid1CellValidate(TObject *Sender,
     if (ARow == AdvStringGrid1 -> RowCount - 1) {
         if (Value == "")
             return;
+        CoInitialize(NULL);
+        String pguid = newGUID();
         String sql = "insert into Nature (属性, UPGUID) values('"+ Value + "', '" + node[Now_Node].Data.PGUID + "')";
         DMod -> ExecSql(sql, tempQuery);
         AdvStringGrid1->AddRow();
@@ -213,14 +237,13 @@ void __fastcall TForm1::AdvStringGrid1RowMoved(TObject *Sender,
     tempQuery -> Connection = DMod -> ADOConnection3;
     for (int i = 1; i < AdvStringGrid1->RowCount - 1; ++ i) {
         String sql = "update Nature set Index_ = " + IntToStr(i) + " where 属性 = '" + AdvStringGrid1->Cells[2][i] + "' and UPGUID = '" + node[Now_Node].Data.PGUID + "'";
-        ShowMessage(sql);
+        //ShowMessage(sql);
         DMod-> ExecSql(sql, tempQuery);
         AdvStringGrid1->Cells[0][i] = i;
     }
     delete tempQuery;
 }
 //---------------------------------------------------------------------------
-
 void __fastcall TForm1::AdvStringGrid1RowMoving(TObject *Sender, int ARow,
       bool &Allow)
 {
@@ -297,8 +320,13 @@ void __fastcall TForm1::TreeViewChange(TObject *Sender, TTreeNode *Node)
     GroupBox2 -> Width = AdvStringGrid -> ColWidths[0] + AdvStringGrid -> ColWidths[1] + 8;
     //ShowMessage(GroupBox2 -> Width);
     AdvStringGridClickCell(AdvStringGrid, 1, 0);
-
     //初始化属性列表
+    /*
+    TADOQuery *tempQuery = new TADOQuery(NULL);
+    tempQuery -> Connection = DMod -> ADOConnection3;
+    String sql = "delete * from Nature";
+    DMod -> ExecSql(sql, tempQuery);
+    */
     AdvStringGrid1 -> Clear();
     AdvStringGrid1 -> Options << goEditing;
     AdvStringGrid1 -> Options << goColSizing;
@@ -307,27 +335,31 @@ void __fastcall TForm1::TreeViewChange(TObject *Sender, TTreeNode *Node)
     AdvStringGrid1 -> ColCount = 3;
     AdvStringGrid1 -> FixedRows = 1;
     AdvStringGrid1 -> FixedCols = 1;
+    AdvStringGrid1->ColWidths[0] = 32;
     AdvStringGrid1 -> Cells[0][0] = "序号";
     AdvStringGrid1 -> Cells[1][0] = "结点名称";
     AdvStringGrid1 -> Cells[2][0] = "所带属性";
-    /*
-    TADOQuery *tempQuery = new TADOQuery(NULL);
-    tempQuery -> Connection = DMod -> ADOConnection3;
-    String sql = "delete * from Nature";
-    DMod -> ExecSql(sql, tempQuery);
-    */
+
     FindFather(Node, 1);
-    //AdvStringGrid1 -> Cells[0][AdvStringGrid1 -> RowCount - 1] = AdvStringGrid1 -> RowCount - 1;
     AdvStringGrid1 -> Cells[1][AdvStringGrid1 -> RowCount - 1] = node[tindex].Data.JdText;
     AdvStringGrid1->Options << goRowMoving;
     //ShowMessage(AdvStringGrid1 -> RowCount);
     //AdvStringGrid1->ColCount = 3;
     //AdvStringGrid1->MergeCells(1, 0, AdvStringGrid1->ColCount - 1, 1);
-
     //AdvStringGrid1 -> AutoSizeColumns(True, 4);
 
-    AdvStringGrid2->Col = 1;
-    AdvStringGrid2->Row = 1;
+    AdvStringGrid2->Clear();
+    AdvStringGrid2 -> Options << goEditing;
+    AdvStringGrid2 -> Options << goColSizing;
+    AdvStringGrid2 -> Options >> goRowSizing;
+    AdvStringGrid2 -> RowCount = 2;
+    AdvStringGrid2 -> ColCount = 3;
+    AdvStringGrid2 -> FixedRows = 1;
+    AdvStringGrid2 -> FixedCols = 1;
+    AdvStringGrid2 -> ColWidths[0] = 32;
+    AdvStringGrid2 -> Cells[0][0] = "序号";
+    AdvStringGrid2 -> Cells[1][0] = "数据类型";
+    AdvStringGrid2 -> Cells[2][0] = "值";
 }
 //---------------------------------------------------------------------------
 void __fastcall TForm1::FormCreate(TObject *Sender)
@@ -827,7 +859,7 @@ bool Check_Point(long x, long y) {
 }
 //---------------------------------------------------------------------------
 void __fastcall TForm1::SigViewer1MouseDown(TObject *Sender,
-      TxMouseButton Button, long X, long Y, long *Cancel)
+      Sigviewerlib_tlb::TxMouseButton Button, long X, long Y, long *Cancel)
 {
 // 鼠标按下
     set<pair<long, long> >::iterator iter;
@@ -977,7 +1009,7 @@ void __fastcall TForm1::SigViewer1MouseDown(TObject *Sender,
             else if (iter_List.size() == 1){
                 if (iter_List[0] -> partner == 0) {
                     if (iter_List[0] -> type == 1)
-                        -- used_red_pen;
+                        -- used_red_pen;      
                     if (iter_List[0] -> type == 2)
                         -- used_black_pen;
                     Pen_Node.erase(iter_List[0]);
@@ -1039,7 +1071,7 @@ void __fastcall TForm1::SigViewer1MouseMove(TObject *Sender, long X, long Y, lon
 }
 //---------------------------------------------------------------------------
 void __fastcall TForm1::SigViewer1MouseUp(TObject *Sender,
-      TxMouseButton Button, long X, long Y, long *Cancel)
+      Sigviewerlib_tlb::TxMouseButton Button, long X, long Y, long *Cancel)
 {
 // 鼠标抬起
 }
@@ -1096,19 +1128,56 @@ void __fastcall TForm1::TimerTimer(TObject *Sender)
     ::InvalidateRect((HWND)this->SigViewer1->DrawingWindow, NULL, TRUE);
 }
 //---------------------------------------------------------------------------
-
-
-
-
-
 void __fastcall TForm1::AdvStringGrid2MouseDown(TObject *Sender,
-      TMouseButton Button, TShiftState Shift, int X, int Y)
+        TMouseButton Button, TShiftState Shift, int X, int Y)
 {
     //
     int row, col;
-    AdvStringGrid2->MouseToCell(X, Y, Col, Row);
+    AdvStringGrid2->MouseToCell(X, Y, col, row);
     AdvStringGrid2->Col = col;
-    AdvStringGrid2->row = row;
+    AdvStringGrid2->Row = row;
 }
 //---------------------------------------------------------------------------
+
+void __fastcall TForm1::N1Click(TObject *Sender)
+{
+    //
+    Form2->ShowModal();
+    //ShowMessage(AdvStringGrid2->ColWidths[0]);
+}
+
+void __fastcall TForm1::N2Click(TObject *Sender)
+{
+    //DBCOLUMNFLAGS_ISDEFAULTSTREAM;
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TForm1::AdvStringGrid2CanEditCell(TObject *Sender, int ARow,
+      int ACol, bool &CanEdit)
+{
+    //
+    if (ACol == 2) {
+        CanEdit = 0;
+        return;
+    }
+    if (AdvStringGrid2->Cells[ARow][0] == ARow) {
+        CanEdit = 0;
+        return;
+    }
+    CanEdit = 1;
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TForm1::AdvStringGrid2EditCellDone(TObject *Sender,
+      int ACol, int ARow)
+{
+    //
+    if (ACol == 1)
+        AdvStringGrid2->Cells[0][ARow] = ARow;
+    AdvStringGrid2->AddRow();
+    Form2->ShowModal();
+}
+//---------------------------------------------------------------------------
+
+
 
