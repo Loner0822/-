@@ -18,3 +18,12 @@ __fastcall TForm2::TForm2(TComponent* Owner)
 }
 //---------------------------------------------------------------------------
 
+void __fastcall TForm2::FormCreate(TObject *Sender)
+{
+    this->csDataTypeDef_ocx1->DataBaseType =  1  ;
+    this->csDataTypeDef_ocx1->DBFilePath = ExtractFilePath(Application->ExeName)+"data\\ZSK_H0000Z000K06.mdb";
+    this->csDataTypeDef_ocx1->DBtbqz = "H0000Z000K06";
+    this->csDataTypeDef_ocx1->InitShow(WideString(Form2->Edit->Text),WideString(""),true) ;
+}
+//---------------------------------------------------------------------------
+

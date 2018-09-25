@@ -16,12 +16,15 @@
 class TForm2 : public TForm
 {
 __published:	// IDE-managed Components
-    TcsDataTypeDef_ocx *csDataTypeDef_ocx1;
     TGroupBox *GroupBox1;
-    TGroupBox *GroupBox2;
+    TcsDataTypeDef_ocx *csDataTypeDef_ocx1;
+    TEdit *Edit;
+    void __fastcall FormCreate(TObject *Sender);
 private:	// User declarations
 public:		// User declarations
+    String PGUID;
     __fastcall TForm2(TComponent* Owner);
+
 };
 //---------------------------------------------------------------------------
 extern PACKAGE TForm2 *Form2;

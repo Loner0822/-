@@ -117,10 +117,10 @@ public:
     __property String TypeName = {read = GetTypeName, write = SetTypeName };
     __property String MapID = {read = GetMapID, write = SetMapID };
     __property String MapName = {read = GetMapName, write = SetMapName };
-    TData& operator = (const TData& rhs) {
+    TData2& operator = (const TData2& rhs) {
         SetID(rhs.ID);
         SetIsDelete(rhs.ISDELETE);
-        SetOrgID(rhs.orgid);
+        SetOrgID(rhs.OrgID);
         SetShowIndex(rhs.ShowIndex);
         SetPGUID(rhs.PGUID);
         SetUPGUID(rhs.UPGUID);
@@ -177,6 +177,59 @@ private:
     String mapname;
     void __fastcall SetMapName(String str);
     String __fastcall GetMapName();
+};
+
+class TData3 {
+public:
+    TData3();
+    ~TData3();
+    __property int ID = { read = GetID, write = SetID };
+    __property int Index_ = { read = GetIndex, write = SetIndex };
+    __property String PGUID = {read = GetPGUID, write = SetPGUID };
+    __property String UPGUID = {read = GetUPGUID, write = SetUPGUID };
+    __property String S_UDTIME = {read = GetS_UDTIME, write = SetS_UDTIME };
+    __property String ShuXing = {read = GetSYNC_TIME, write = SetSYNC_TIME };
+    TData2& operator = (const TData2& rhs) {
+        SetID(rhs.ID);
+        SetIsDelete(rhs.ISDELETE);
+        SetOrgID(rhs.OrgID);
+        SetShowIndex(rhs.ShowIndex);
+        SetPGUID(rhs.PGUID);
+        SetUPGUID(rhs.UPGUID);
+        SetS_UDTIME(rhs.S_UDTIME);
+        SetSYNC_TIME(rhs.SYNC_TIME);
+        SetTypeName(rhs.TypeName);
+        SetMapID(rhs.MapID);
+        SetMapName(rhs.MapName);
+        return *this;
+    }
+    
+
+private:
+    int Id;
+    void __fastcall SetID(int value);
+    int __fastcall GetID();
+
+    int index;
+    void __fastcall SetIndex(int value);
+    int __fastcall GetIndex();
+
+    String pguid;
+    void __fastcall SetPGUID(String str);
+    String __fastcall GetPGUID();
+
+    String upguid;
+    void __fastcall SetUPGUID(String str);
+    String __fastcall GetUPGUID();
+
+    String sudtime;
+    void __fastcall SetS_UDTIME(String str);
+    String __fastcall GetS_UDTIME();
+
+    String shuxing;
+    void __fastcall SetShuXing(String str);
+    String __fastcall GetShuXing();
+
 };
 
 #endif

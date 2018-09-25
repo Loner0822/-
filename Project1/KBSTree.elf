@@ -7,451 +7,6 @@ Application:
   1.3 Version Number  : 
   1.4 Parameters      : 
   1.5 Compilation Date: Wed, 19 Sep 2018 15:09:01 +0800
-  1.6 Up Time         : 2 seconds
-
-Exception:
--------------------------------------------------------------------------------------------------------------
-  2.1 Date          : Wed, 19 Sep 2018 15:10:06 +0800
-  2.2 Address       : 00407135
-  2.3 Module Name   : KBSTree.exe
-  2.4 Module Version: 
-  2.5 Type          : EAccessViolation
-  2.6 Message       : Access violation at address 00407135 in module 'KBSTree.exe'. Read of address 00000104.
-  2.7 ID            : 88B6
-  2.8 Count         : 1
-  2.9 Status        : New
-  2.10 Note         : 
-
-User:
--------------------------------------------------------
-  3.1 ID        : loner
-  3.2 Name      : loner0822@hotmail.com
-  3.3 Email     : 
-  3.4 Company   : 
-  3.5 Privileges: SeShutdownPrivilege             - OFF
-                  SeChangeNotifyPrivilege         - ON
-                  SeUndockPrivilege               - OFF
-                  SeIncreaseWorkingSetPrivilege   - OFF
-                  SeTimeZonePrivilege             - OFF
-
-Active Controls:
-------------------------------
-  4.1 Form Class   : TForm1
-  4.2 Form Text    : Form1
-  4.3 Control Class: TTreeView
-  4.4 Control Text : 
-
-Computer:
-------------------------------------------------------------------------------------
-  5.1 Name          : DESKTOP-32CLAD5
-  5.2 Total Memory  : 8089 Mb
-  5.3 Free Memory   : 4937 Mb
-  5.4 Total Disk    : 104.35 Gb
-  5.5 Free Disk     : 59.63 Gb
-  5.6 System Up Time: 7 hours, 24 minutes, 10 seconds
-  5.7 Processor     : Intel(R) Core(TM) i5-8250U CPU @ 1.60GHz
-  5.8 Display Mode  : 1280 x 720, 32 bit
-  5.9 Display DPI   : 96
-  5.10 Video Card   : Intel(R) UHD Graphics 620 (driver 23.20.16.4973 - RAM 1024 MB)
-  5.11 Printer      : HP Color LaserJet Pro MFP M277 PCL 6 (driver 10.0.17134.191)
-
-Operating System:
-------------------------------------------------
-  6.1 Type    : Microsoft Windows Vista (64 bit)
-  6.2 Build # : 9200
-  6.3 Update  : 
-  6.4 Language: Chinese (Simplified)
-  6.5 Charset : 134
-
-Network:
----------------------------------------------------------------------------------------------------------------------------------------------
-  7.1 IP Address: 000.000.000.000 - 000.000.000.000 - 000.000.000.000 - 000.000.000.000 - 192.168.005.138 - 000.000.000.000 - 000.000.000.000
-  7.2 Submask   : 000.000.000.000 - 000.000.000.000 - 000.000.000.000 - 000.000.000.000 - 255.255.255.000 - 000.000.000.000 - 000.000.000.000
-  7.3 Gateway   : 000.000.000.000 - 000.000.000.000 - 000.000.000.000 - 000.000.000.000 - 192.168.005.001 - 000.000.000.000 - 000.000.000.000
-  7.4 DNS 1     : 000.000.000.000 - 000.000.000.000 - 000.000.000.000 - 000.000.000.000 - 192.168.005.001 - 000.000.000.000 - 000.000.000.000
-  7.5 DNS 2     : 000.000.000.000 - 000.000.000.000 - 000.000.000.000 - 000.000.000.000 - 000.000.000.000 - 000.000.000.000 - 000.000.000.000
-  7.6 DHCP      : ON              - ON              - ON              - OFF             - ON              - ON              - ON             
-
-Call Stack Information:
-------------------------------------------------------------------------------------------------------
-|Address |Module       |Unit        |Class         |Procedure/Method                        |Line    |
-------------------------------------------------------------------------------------------------------
-|*Exception Thread: ID=1020; Priority=0; Class=; [Main]                                              |
-|----------------------------------------------------------------------------------------------------|
-|00407135|KBSTree.exe  |MainUnit.cpp|TForm1        |SigViewer1Paint                         |564[181]|
-|74A1C667|gdi32full.dll|            |              |CreateCompatibleBitmap                  |        |
-|74A1C679|gdi32full.dll|            |              |CreateCompatibleBitmap                  |        |
-|770E5BBE|GDI32.dll    |            |              |DeleteObject                            |        |
-|401710AE|vcl60.bpl    |Olectrls.pas|TOleControl   |InvokeEvent                             |        |
-|4016ED80|vcl60.bpl    |Olectrls.pas|TEventDispatch|Invoke                                  |        |
-|76D0313A|win32u.dll   |            |              |NtGdiGetAndSetDCDword                   |        |
-|770E41A0|GDI32.dll    |            |              |SetWindowOrgEx                          |        |
-|74A3F438|gdi32full.dll|            |              |MoveToExImpl                            |        |
-|770E4020|GDI32.dll    |            |              |MoveToEx                                |        |
-|76D02C6A|win32u.dll   |            |              |NtUserEndPaint                          |        |
-|77871357|ntdll.dll    |            |              |RtlDeactivateActivationContextUnsafeFast|        |
-|76AE8D94|user32.dll   |            |              |CallWindowProcA                         |        |
-|76AE7AF8|user32.dll   |            |              |CallWindowProcW                         |        |
-|73EAA062|COMCTL32.DLL |            |              |DefSubclassProc                         |        |
-|73EAA020|COMCTL32.DLL |            |              |DefSubclassProc                         |        |
-|40170C08|vcl60.bpl    |Olectrls.pas|TOleControl   |GetProperty                             |        |
-|4017064D|vcl60.bpl    |Olectrls.pas|TOleControl   |GetIntegerProp                          |        |
-|76D02B1A|win32u.dll   |            |              |NtUserInvalidateRect                    |        |
-|76B0CC50|user32.dll   |            |              |AttachThreadInput                       |        |
-|00407AC4|KBSTree.exe  |MainUnit.cpp|TForm1        |TimerTimer                              |735[2]  |
-|400D6037|vcl60.bpl    |Extctrls.pas|TTimer        |Timer                                   |        |
-|76D02E3A|win32u.dll   |            |              |NtUserDispatchMessage                   |        |
-|76AFCD2B|user32.dll   |            |              |DispatchMessageA                        |        |
-|76AFCD20|user32.dll   |            |              |DispatchMessageA                        |        |
-|400F57AC|vcl60.bpl    |Forms.pas   |TApplication  |ProcessMessage                          |        |
-|400F5866|vcl60.bpl    |Forms.pas   |TApplication  |HandleMessage                           |        |
-|400F585C|vcl60.bpl    |Forms.pas   |TApplication  |ProcessMessages                         |        |
-|400F59F0|vcl60.bpl    |Forms.pas   |TApplication  |Run                                     |        |
-|00401CEE|KBSTree.exe  |KBSTree.cpp |              |WinMain                                 |16[7]   |
-|750D8482|KERNEL32.DLL |            |              |BaseThreadInitThunk                     |        |
-------------------------------------------------------------------------------------------------------
-
-Modules Information:
-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-|Handle  |Name                  |Description                                                                      |Version            |Size    |Modified           |Path                                                                                                         |
-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-|00400000|KBSTree.exe           |                                                                                 |                   |2305536 |2018-09-19 15:09:02|C:\Users\loner\Desktop\工作\集中监测标准知识库树状图                                                         |
-|00BF0000|stlpmt45.dll          |                                                                                 |                   |618496  |2004-06-18 06:30:02|C:\Program Files (x86)\Borland\CBuilder6\Bin                                                                 |
-|01190000|borlndmm.dll          |Borland Memory Manager                                                           |6.0.10.157         |22016   |2004-06-18 06:30:02|C:\Program Files (x86)\Borland\CBuilder6\Bin                                                                 |
-|08490000|SigViewer.ocx         |                                                                                 |1.0.32.99          |5230080 |2016-08-11 18:27:28|C:\Users\loner\Desktop\工作\2018.09.15                                                                       |
-|0F9A0000|VBAJET32.DLL          |Visual Basic for Applications Development Environment - Expression Service Loader|6.0.1.9431         |30749   |2018-04-12 07:34:56|C:\Windows\SYSTEM32                                                                                          |
-|0F9C0000|expsrv.dll            |Visual Basic for Applications Runtime - Expression Service                       |6.0.72.9589        |380957  |2018-04-12 07:34:56|C:\Windows\SYSTEM32                                                                                          |
-|10000000|msadcer.dll           |OLE DB Cursor Engine Resources                                                   |6.2.17134.1        |2560    |2018-04-12 07:34:56|C:\Program Files (x86)\Common Files\System\msadc                                                             |
-|32600000|cc3260mt.dll          |Borland C++ Multi-thread RTL (WIN/VCL MT)                                        |6.0.1.0            |1500160 |2004-06-18 06:30:02|C:\Program Files (x86)\Borland\CBuilder6\Bin                                                                 |
-|40000000|rtl60.bpl             |Borland Component Package                                                        |6.0.6.240          |676352  |2004-06-18 06:30:02|C:\Windows\SYSTEM32                                                                                          |
-|400B0000|vcl60.bpl             |Borland Component Package                                                        |6.0.6.240          |1326080 |2004-06-18 06:30:02|C:\Windows\SYSTEM32                                                                                          |
-|40310000|dbrtl60.bpl           |Borland Database Component Package                                               |6.0.6.240          |254464  |2004-06-18 06:30:02|C:\Windows\SYSTEM32                                                                                          |
-|40640000|adortl60.bpl          |Borland ADO DB Component Package                                                 |6.0.6.240          |148992  |2004-06-18 06:30:02|C:\Windows\SYSTEM32                                                                                          |
-|60630000|mswstr10.dll          |Microsoft Jet Sort Library                                                       |4.0.9801.1         |640512  |2018-04-12 07:34:56|C:\Windows\System32                                                                                          |
-|606E0000|msjet40.dll           |Microsoft Jet Engine Library                                                     |4.0.9801.4         |1311744 |2018-08-14 10:14:58|C:\Windows\System32                                                                                          |
-|60870000|comsvcs.dll           |COM+ Services                                                                    |2001.12.10941.16384|1380864 |2018-04-28 21:12:52|C:\Windows\System32                                                                                          |
-|609D0000|msado15.dll           |ActiveX Data Objects                                                             |6.2.17134.1        |1082880 |2018-04-12 07:34:56|C:\Program Files (x86)\Common Files\System\ado                                                               |
-|62200000|oledb32.dll           |OLE DB Core Services                                                             |6.2.17134.1        |813568  |2018-04-12 07:34:56|C:\Program Files (x86)\Common Files\System\Ole DB                                                            |
-|62440000|RICHED32.DLL          |Wrapper Dll for Richedit 1.0                                                     |6.2.17134.1        |8192    |2018-04-12 07:35:00|C:\Windows\SYSTEM32                                                                                          |
-|62540000|OLEPRO32.DLL          |OLEPRO32.DLL                                                                     |6.2.17134.1        |89600   |2018-04-12 07:35:00|C:\Windows\SYSTEM32                                                                                          |
-|625D0000|msadce.dll            |OLE DB Cursor Engine                                                             |6.2.17134.1        |604672  |2018-04-12 07:34:56|C:\Program Files (x86)\Common Files\System\msadc                                                             |
-|6B200000|twinapi.appcore.dll   |twinapi.appcore                                                                  |6.2.17134.137      |1462824 |2018-06-15 13:04:58|C:\Windows\system32                                                                                          |
-|6B370000|dcomp.dll             |Microsoft DirectComposition Library                                              |6.2.17134.1        |1286624 |2018-04-12 07:34:52|C:\Windows\system32                                                                                          |
-|6B4B0000|dataexchange.dll      |Data exchange                                                                    |6.2.17134.1        |308736  |2018-04-12 07:34:46|C:\Windows\system32                                                                                          |
-|6B650000|RMCLIENT.dll          |Resource Manager Client                                                          |6.2.17134.81       |101288  |2018-05-20 19:33:22|C:\Windows\system32                                                                                          |
-|6B870000|CoreUIComponents.dll  |Microsoft Core UI Components Dll                                                 |6.2.17134.112      |2486992 |2018-06-08 17:09:42|C:\Windows\SYSTEM32                                                                                          |
-|6BAD0000|CoreMessaging.dll     |Microsoft CoreMessaging Dll                                                      |6.2.17134.285      |568568  |2018-08-31 11:28:22|C:\Windows\SYSTEM32                                                                                          |
-|6BB60000|TextInputFramework.dll|"TextInputFramework.DYNLINK"                                                     |6.2.17134.191      |506728  |2018-07-14 12:16:06|C:\Windows\SYSTEM32                                                                                          |
-|6BED0000|oledlg.dll            |OLE 用户界面支持                                                                 |6.2.17134.1        |150528  |2018-04-12 07:34:50|C:\Windows\SYSTEM32                                                                                          |
-|6C270000|WSOCK32.DLL           |Windows Socket 32-Bit DLL                                                        |6.2.17134.1        |16384   |2018-04-12 07:34:56|C:\Windows\SYSTEM32                                                                                          |
-|6C8A0000|npmproxy.dll          |Network List Manager Proxy                                                       |6.2.17134.1        |21504   |2018-04-12 07:34:58|C:\Windows\System32                                                                                          |
-|6C8B0000|msjetoledb40.dll      |                                                                                 |4.0.9801.0         |518144  |2018-04-12 07:34:56|C:\Windows\System32                                                                                          |
-|6CA80000|netprofm.dll          |Network List Manager                                                             |6.2.17134.1        |176128  |2018-04-12 07:34:58|C:\Windows\System32                                                                                          |
-|6CBA0000|sxs.dll               |Fusion 2.5                                                                       |6.2.17134.1        |542928  |2018-04-12 07:35:00|C:\Windows\SYSTEM32                                                                                          |
-|6E040000|msjtes40.dll          |Microsoft Jet Expression Service                                                 |4.0.9801.0         |290816  |2018-04-12 07:34:56|C:\Windows\System32                                                                                          |
-|6E090000|msjter40.dll          |Microsoft Jet Database Engine Error DLL                                          |4.0.9801.0         |83968   |2018-04-12 07:34:56|C:\Windows\System32                                                                                          |
-|6E0B0000|MSDART.DLL            |OLE DB Runtime Routines                                                          |6.2.17134.1        |123904  |2018-04-12 07:34:56|C:\Windows\SYSTEM32                                                                                          |
-|6EE70000|dxgi.dll              |DirectX Graphics Infrastructure                                                  |6.2.17134.112      |613144  |2018-06-08 18:35:54|C:\Windows\system32                                                                                          |
-|6EF10000|d3d11.dll             |Direct3D 11 Runtime                                                              |6.2.17134.112      |2417840 |2018-06-08 18:37:28|C:\Windows\system32                                                                                          |
-|6F690000|msls31.dll            |Microsoft Line Services library file                                             |3.10.349.0         |187904  |2018-04-12 07:35:00|C:\Windows\SYSTEM32                                                                                          |
-|6F6D0000|RICHED20.dll          |Rich Text Edit Control, v3.1                                                     |5.31.23.1231       |503296  |2018-04-12 07:35:00|C:\Windows\SYSTEM32                                                                                          |
-|6F750000|dwmapi.dll            |Microsoft 桌面窗口管理器 API                                                     |6.2.17134.1        |124824  |2018-04-12 07:34:52|C:\Windows\system32                                                                                          |
-|6F7C0000|USP10.dll             |Uniscribe Unicode script processor                                               |6.2.17134.1        |77824   |2018-04-12 07:34:52|C:\Windows\SYSTEM32                                                                                          |
-|70050000|DPAPI.dll             |Data Protection API                                                              |6.2.17134.1        |13312   |2018-04-12 07:34:52|C:\Windows\SYSTEM32                                                                                          |
-|704F0000|dhcpcsvc6.DLL         |DHCPv6 客户端                                                                    |6.2.17134.1        |57856   |2018-04-12 07:34:52|C:\Windows\SYSTEM32                                                                                          |
-|70FA0000|WINSPOOL.DRV          |Windows 后台处理程序驱动程序                                                     |6.2.17134.254      |423424  |2018-08-09 16:20:40|C:\Windows\SYSTEM32                                                                                          |
-|71010000|MSJINT40.DLL          |国际 Microsoft Jet 数据库引擎 DLL                                                |4.0.9801.1         |8704    |2018-04-12 07:34:56|C:\Windows\System32                                                                                          |
-|71030000|WINNSI.DLL            |Network Store Information RPC interface                                          |6.2.17134.1        |28448   |2018-04-12 07:34:24|C:\Windows\SYSTEM32                                                                                          |
-|71070000|Comctl32.dll          |用户体验控件库                                                                   |6.10.17134.285     |2099184 |2018-08-31 14:51:28|C:\Windows\WinSxS\x86_microsoft.windows.common-controls_6595b64144ccf1df_6.0.17134.285_none_42efceba44e1907b |
-|71280000|wintypes.dll          |Windows 基本类型 DLL                                                             |6.2.17134.112      |880152  |2018-06-08 17:10:34|C:\Windows\SYSTEM32                                                                                          |
-|71450000|PROPSYS.dll           |Microsoft 属性系统                                                               |7.0.17134.112      |1584128 |2018-06-08 17:09:58|C:\Windows\SYSTEM32                                                                                          |
-|71710000|uxtheme.dll           |Microsoft UxTheme 库                                                             |6.2.17134.1        |485888  |2018-04-12 07:35:02|C:\Windows\system32                                                                                          |
-|71930000|winmmbase.dll         |Base Multimedia Extension API DLL                                                |6.2.17134.1        |131776  |2018-04-12 07:34:46|C:\Windows\SYSTEM32                                                                                          |
-|71960000|WINMM.DLL             |MCI API DLL                                                                      |6.2.17134.1        |134920  |2018-04-12 07:34:46|C:\Windows\SYSTEM32                                                                                          |
-|71ED0000|GDIPLUS.DLL           |Microsoft GDI+                                                                   |6.2.17134.285      |1469952 |2018-08-31 14:36:06|C:\Windows\WinSxS\x86_microsoft.windows.gdiplus_6595b64144ccf1df_1.1.17134.285_none_73dac19f9f740a49         |
-|72650000|DNSAPI.dll            |DNS 客户端 API DLL                                                               |6.2.17134.165      |573904  |2018-07-06 15:14:16|C:\Windows\SYSTEM32                                                                                          |
-|72750000|mswsock.dll           |Microsoft Windows Sockets 2.0 服务提供程序                                       |6.2.17134.1        |341920  |2018-04-12 07:34:52|C:\Windows\SYSTEM32                                                                                          |
-|727D0000|mpr.dll               |多提供程序路由器 DLL                                                             |6.2.17134.1        |90464   |2018-04-12 07:34:52|C:\Windows\SYSTEM32                                                                                          |
-|73530000|dhcpcsvc.DLL          |DHCP 客户端服务                                                                  |6.2.17134.1        |62976   |2018-04-12 07:34:52|C:\Windows\SYSTEM32                                                                                          |
-|73810000|ntmarta.dll           |Windows NT MARTA 提供程序                                                        |6.2.17134.1        |154016  |2018-04-12 07:34:52|C:\Windows\SYSTEM32                                                                                          |
-|738E0000|bcrypt.dll            |Windows 加密基元库                                                               |6.2.17134.112      |97176   |2018-06-08 17:10:40|C:\Windows\SYSTEM32                                                                                          |
-|73E40000|IPHLPAPI.DLL          |IP 帮助程序 API                                                                  |6.2.17134.1        |190136  |2018-04-12 07:34:52|C:\Windows\SYSTEM32                                                                                          |
-|73E90000|COMCTL32.DLL          |公用控件库                                                                       |5.82.17134.48      |573848  |2018-04-28 21:28:40|C:\Windows\WinSxS\x86_microsoft.windows.common-controls_6595b64144ccf1df_5.82.17134.285_none_41037de2450e52da|
-|740D0000|VERSION.DLL           |Version Checking and File Installation Libraries                                 |6.2.17134.1        |27424   |2018-04-12 07:35:02|C:\Windows\SYSTEM32                                                                                          |
-|740E0000|CRYPTBASE.dll         |Base cryptographic API DLL                                                       |6.2.17134.1        |31592   |2018-04-12 07:35:02|C:\Windows\System32                                                                                          |
-|740F0000|SspiCli.dll           |Security Support Provider Interface                                              |6.2.17134.1        |123520  |2018-04-12 07:35:02|C:\Windows\System32                                                                                          |
-|74160000|shlwapi.dll           |外壳简易实用工具库                                                               |6.2.17134.1        |278960  |2018-04-12 07:35:00|C:\Windows\System32                                                                                          |
-|741B0000|clbcatq.dll           |COM+ Configuration Catalog                                                       |2001.12.10941.16384|526848  |2018-04-12 07:34:52|C:\Windows\System32                                                                                          |
-|74240000|WS2_32.dll            |Windows Socket 2.0 32 位 DLL                                                     |6.2.17134.1        |412792  |2018-04-12 07:35:04|C:\Windows\System32                                                                                          |
-|742B0000|windows.storage.dll   |Microsoft WinRT Storage API                                                      |6.2.17134.285      |6043680 |2018-08-31 11:28:46|C:\Windows\System32                                                                                          |
-|74870000|msvcrt.dll            |Windows NT CRT DLL                                                               |7.0.17134.1        |774288  |2018-04-12 07:35:02|C:\Windows\System32                                                                                          |
-|74990000|gdi32full.dll         |GDI Client DLL                                                                   |6.2.17134.285      |1455960 |2018-08-31 14:55:06|C:\Windows\System32                                                                                          |
-|74B00000|RPCRT4.dll            |远程过程调用运行时                                                               |6.2.17134.112      |786176  |2018-06-08 17:12:14|C:\Windows\System32                                                                                          |
-|74FF0000|cfgmgr32.dll          |Configuration Manager DLL                                                        |6.2.17134.1        |228864  |2018-04-12 07:34:52|C:\Windows\System32                                                                                          |
-|75030000|shcore.dll            |SHCORE                                                                           |6.2.17134.112      |553248  |2018-06-08 17:09:56|C:\Windows\System32                                                                                          |
-|750C0000|KERNEL32.DLL          |Windows NT 基本 API 客户端 DLL                                                   |6.2.17134.1        |607840  |2018-04-12 07:35:02|C:\Windows\System32                                                                                          |
-|751A0000|MSCTF.dll             |MSCTF 服务器 DLL                                                                 |6.2.17134.285      |1327504 |2018-08-31 14:53:28|C:\Windows\System32                                                                                          |
-|75350000|comdlg32.dll          |Common Dialogs DLL                                                               |6.2.17134.1        |847872  |2018-04-12 07:35:00|C:\Windows\System32                                                                                          |
-|755D0000|ADVAPI32.DLL          |高级 Windows 32 基本 API                                                         |6.2.17134.1        |481976  |2018-04-12 07:35:02|C:\Windows\System32                                                                                          |
-|75650000|SHELL32.DLL           |Windows Shell 公用 DLL                                                           |6.2.17134.228      |20383720|2018-08-03 15:43:36|C:\Windows\System32                                                                                          |
-|769C0000|IMM32.DLL             |Multi-User Windows IMM32 API Client DLL                                          |6.2.17134.1        |147288  |2018-04-12 07:34:52|C:\Windows\System32                                                                                          |
-|769F0000|sechost.dll           |Host for SCM/SDDL/LSA Lookup APIs                                                |6.2.17134.1        |269200  |2018-04-12 07:35:04|C:\Windows\System32                                                                                          |
-|76A40000|msvcp_win.dll         |Microsoft? C Runtime Library                                                     |6.2.17134.1        |504168  |2018-04-12 07:34:52|C:\Windows\System32                                                                                          |
-|76AC0000|kernel.appcore.dll    |AppModel API Host                                                                |6.2.17134.112      |50208   |2018-06-08 17:09:42|C:\Windows\System32                                                                                          |
-|76AD0000|user32.dll            |多用户 Windows 用户 API 客户端 DLL                                               |6.2.17134.1        |1626536 |2018-04-12 07:34:50|C:\Windows\System32                                                                                          |
-|76C60000|oleaut32.dll          |OLEAUT32.DLL                                                                     |6.2.17134.48       |606448  |2018-04-28 12:12:56|C:\Windows\System32                                                                                          |
-|76D00000|win32u.dll            |Win32u                                                                           |6.2.17134.1        |86840   |2018-04-12 07:34:50|C:\Windows\System32                                                                                          |
-|76D20000|FLTLIB.DLL            |筛选器库                                                                         |6.2.17134.1        |27936   |2018-04-12 07:34:52|C:\Windows\System32                                                                                          |
-|76D30000|KERNELBASE.dll        |Windows NT 基本 API 客户端 DLL                                                   |6.2.17134.165      |1981896 |2018-07-06 15:14:30|C:\Windows\System32                                                                                          |
-|76F20000|profapi.dll           |User Profile Basic API                                                           |6.2.17134.1        |89440   |2018-04-12 07:35:04|C:\Windows\System32                                                                                          |
-|76F40000|ucrtbase.dll          |Microsoft? C Runtime Library                                                     |6.2.17134.254      |1174552 |2018-08-09 12:29:38|C:\Windows\System32                                                                                          |
-|770E0000|GDI32.dll             |GDI Client DLL                                                                   |6.2.17134.285      |134936  |2018-08-31 11:28:44|C:\Windows\System32                                                                                          |
-|77110000|ole32.dll             |用于 Windows 的 Microsoft OLE                                                    |6.2.17134.137      |1026896 |2018-06-15 23:22:56|C:\Windows\System32                                                                                          |
-|77210000|PSAPI.DLL             |Process Status Helper                                                            |6.2.17134.1        |17104   |2018-04-12 07:34:52|C:\Windows\System32                                                                                          |
-|77420000|bcryptPrimitives.dll  |Windows Cryptographic Primitives Library                                         |6.2.17134.137      |356960  |2018-06-15 13:03:40|C:\Windows\System32                                                                                          |
-|77480000|powrprof.dll          |电源配置文件帮助程序 DLL                                                         |6.2.17134.1        |274352  |2018-04-12 07:34:52|C:\Windows\System32                                                                                          |
-|774D0000|NSI.dll               |NSI User-mode interface DLL                                                      |6.2.17134.1        |20216   |2018-04-12 07:34:24|C:\Windows\System32                                                                                          |
-|774E0000|combase.dll           |用于 Windows 的 Microsoft COM                                                    |6.2.17134.112      |2479272 |2018-06-08 17:10:36|C:\Windows\System32                                                                                          |
-|77830000|ntdll.dll             |NT 层 DLL                                                                        |6.2.17134.254      |1620880 |2018-08-09 12:29:52|C:\Windows\SYSTEM32                                                                                          |
-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-Processes Information:
------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-|ID   |Name                                                              |Description                                       |Version       |Memory|Priority    |Threads|Path                                                |
------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-|0    |[System Process]                                                  |                                                  |              |0     |            |8      |                                                    |
-|4    |System                                                            |                                                  |              |0     |Normal      |197    |                                                    |
-|120  |Registry                                                          |                                                  |              |0     |Normal      |3      |                                                    |
-|384  |smss.exe                                                          |                                                  |              |0     |Above-Normal|2      |                                                    |
-|420  |MicrosoftEdge.exe                                                 |                                                  |              |0     |Normal      |37     |                                                    |
-|444  |svchost.exe                                                       |Windows 服务主进程                                |10.0.17134.1  |0     |Normal      |15     |                                                    |
-|608  |csrss.exe                                                         |                                                  |              |0     |High        |12     |                                                    |
-|712  |wininit.exe                                                       |                                                  |              |0     |High        |1      |                                                    |
-|720  |csrss.exe                                                         |                                                  |              |0     |High        |14     |                                                    |
-|784  |WUDFHost.exe                                                      |                                                  |              |0     |Normal      |5      |                                                    |
-|788  |services.exe                                                      |                                                  |              |0     |Normal      |6      |                                                    |
-|808  |lsass.exe                                                         |                                                  |              |0     |Normal      |8      |                                                    |
-|876  |svchost.exe                                                       |Windows 服务主进程                                |10.0.17134.1  |0     |Normal      |5      |                                                    |
-|912  |svchost.exe                                                       |Windows 服务主进程                                |10.0.17134.1  |0     |Normal      |13     |                                                    |
-|920  |svchost.exe                                                       |Windows 服务主进程                                |10.0.17134.1  |0     |Normal      |4      |                                                    |
-|928  |svchost.exe                                                       |Windows 服务主进程                                |10.0.17134.1  |0     |Normal      |2      |                                                    |
-|940  |taskhostw.exe                                                     |                                                  |              |0     |Normal      |4      |                                                    |
-|960  |svchost.exe                                                       |Windows 服务主进程                                |10.0.17134.1  |0     |Normal      |23     |                                                    |
-|980  |fontdrvhost.exe                                                   |Usermode Font Driver Host                         |10.0.17134.228|0     |Normal      |5      |                                                    |
-|992  |WUDFHost.exe                                                      |                                                  |              |0     |High        |11     |                                                    |
-|1004 |DDVRulesProcessor.exe                                             |                                                  |              |0     |Normal      |6      |                                                    |
-|1116 |winlogon.exe                                                      |                                                  |              |0     |High        |2      |                                                    |
-|1180 |fontdrvhost.exe                                                   |Usermode Font Driver Host                         |10.0.17134.228|0     |Normal      |5      |                                                    |
-|1252 |ServiceShell.exe                                                  |                                                  |              |0     |Normal      |21     |                                                    |
-|1268 |dwm.exe                                                           |                                                  |              |0     |High        |12     |                                                    |
-|1288 |svchost.exe                                                       |Windows 服务主进程                                |10.0.17134.1  |0     |Normal      |8      |                                                    |
-|1296 |svchost.exe                                                       |Windows 服务主进程                                |10.0.17134.1  |0     |Normal      |4      |                                                    |
-|1456 |dllhost.exe                                                       |COM Surrogate                                     |10.0.17134.1  |0     |Normal      |4      |                                                    |
-|1468 |svchost.exe                                                       |Windows 服务主进程                                |10.0.17134.1  |0     |Normal      |2      |                                                    |
-|1480 |svchost.exe                                                       |Windows 服务主进程                                |10.0.17134.1  |0     |Normal      |3      |                                                    |
-|1508 |SgrmBroker.exe                                                    |                                                  |              |0     |Normal      |2      |                                                    |
-|1564 |svchost.exe                                                       |Windows 服务主进程                                |10.0.17134.1  |0     |Normal      |15     |                                                    |
-|1608 |svchost.exe                                                       |Windows 服务主进程                                |10.0.17134.1  |0     |Normal      |7      |                                                    |
-|1640 |svchost.exe                                                       |Windows 服务主进程                                |10.0.17134.1  |0     |Normal      |2      |                                                    |
-|1720 |svchost.exe                                                       |Windows 服务主进程                                |10.0.17134.1  |0     |Normal      |3      |                                                    |
-|1736 |svchost.exe                                                       |Windows 服务主进程                                |10.0.17134.1  |0     |Normal      |2      |                                                    |
-|1752 |svchost.exe                                                       |Windows 服务主进程                                |10.0.17134.1  |0     |Normal      |8      |                                                    |
-|1864 |svchost.exe                                                       |Windows 服务主进程                                |10.0.17134.1  |0     |Normal      |3      |                                                    |
-|1964 |svchost.exe                                                       |Windows 服务主进程                                |10.0.17134.1  |0     |Normal      |4      |                                                    |
-|1988 |svchost.exe                                                       |Windows 服务主进程                                |10.0.17134.1  |0     |Normal      |5      |                                                    |
-|2004 |svchost.exe                                                       |Windows 服务主进程                                |10.0.17134.1  |0     |Normal      |15     |                                                    |
-|2044 |svchost.exe                                                       |Windows 服务主进程                                |10.0.17134.1  |0     |Normal      |6      |                                                    |
-|2136 |svchost.exe                                                       |Windows 服务主进程                                |10.0.17134.1  |0     |Normal      |2      |                                                    |
-|2148 |dasHost.exe                                                       |                                                  |              |0     |Normal      |12     |                                                    |
-|2172 |svchost.exe                                                       |Windows 服务主进程                                |10.0.17134.1  |0     |Normal      |2      |                                                    |
-|2216 |svchost.exe                                                       |Windows 服务主进程                                |10.0.17134.1  |0     |Normal      |6      |                                                    |
-|2316 |svchost.exe                                                       |Windows 服务主进程                                |10.0.17134.1  |0     |Normal      |13     |                                                    |
-|2344 |svchost.exe                                                       |Windows 服务主进程                                |10.0.17134.1  |0     |Normal      |7      |                                                    |
-|2400 |svchost.exe                                                       |Windows 服务主进程                                |10.0.17134.1  |0     |Normal      |12     |                                                    |
-|2484 |igfxCUIService.exe                                                |                                                  |              |0     |Normal      |2      |                                                    |
-|2516 |NVDisplay.Container.exe                                           |                                                  |              |0     |Normal      |6      |                                                    |
-|2628 |QQPCRTP.exe                                                       |                                                  |              |0     |Normal      |107    |                                                    |
-|2676 |NVDisplay.Container.exe                                           |                                                  |              |0     |Normal      |20     |                                                    |
-|2884 |svchost.exe                                                       |Windows 服务主进程                                |10.0.17134.1  |0     |Normal      |4      |                                                    |
-|2896 |svchost.exe                                                       |Windows 服务主进程                                |10.0.17134.1  |0     |Normal      |3      |                                                    |
-|2904 |svchost.exe                                                       |Windows 服务主进程                                |10.0.17134.1  |0     |Normal      |6      |                                                    |
-|2912 |svchost.exe                                                       |Windows 服务主进程                                |10.0.17134.1  |0     |Normal      |5      |                                                    |
-|2992 |svchost.exe                                                       |Windows 服务主进程                                |10.0.17134.1  |0     |Normal      |12     |                                                    |
-|3052 |Memory Compression                                                |                                                  |              |0     |Normal      |50     |                                                    |
-|3188 |sihost.exe                                                        |                                                  |              |0     |Normal      |9      |                                                    |
-|3232 |svchost.exe                                                       |Windows 服务主进程                                |10.0.17134.1  |0     |Normal      |11     |                                                    |
-|3372 |RtkAudioService64.exe                                             |                                                  |              |0     |Normal      |3      |                                                    |
-|3432 |svchost.exe                                                       |Windows 服务主进程                                |10.0.17134.1  |0     |Normal      |6      |                                                    |
-|3576 |svchost.exe                                                       |Windows 服务主进程                                |10.0.17134.1  |0     |Normal      |11     |                                                    |
-|3592 |dllhost.exe                                                       |COM Surrogate                                     |10.0.17134.1  |0     |Normal      |2      |                                                    |
-|3624 |Microsoft.Photos.exe                                              |                                                  |              |0     |Normal      |17     |                                                    |
-|3652 |svchost.exe                                                       |Windows 服务主进程                                |10.0.17134.1  |0     |Normal      |5      |                                                    |
-|3660 |svchost.exe                                                       |Windows 服务主进程                                |10.0.17134.1  |0     |Normal      |12     |                                                    |
-|3752 |svchost.exe                                                       |Windows 服务主进程                                |10.0.17134.1  |0     |Normal      |6      |                                                    |
-|3760 |svchost.exe                                                       |Windows 服务主进程                                |10.0.17134.1  |0     |Normal      |2      |                                                    |
-|3824 |svchost.exe                                                       |Windows 服务主进程                                |10.0.17134.1  |0     |Normal      |12     |                                                    |
-|3888 |svchost.exe                                                       |Windows 服务主进程                                |10.0.17134.1  |0     |Normal      |7      |                                                    |
-|3940 |spoolsv.exe                                                       |                                                  |              |0     |Normal      |11     |                                                    |
-|3964 |RAVBg64.exe                                                       |                                                  |              |0     |Normal      |4      |                                                    |
-|4020 |svchost.exe                                                       |Windows 服务主进程                                |10.0.17134.1  |0     |Normal      |6      |                                                    |
-|4132 |svchost.exe                                                       |Windows 服务主进程                                |10.0.17134.1  |0     |Normal      |3      |                                                    |
-|4260 |AdminService.exe                                                  |                                                  |              |0     |Normal      |5      |                                                    |
-|4276 |WavesSysSvc64.exe                                                 |                                                  |              |0     |Normal      |2      |                                                    |
-|4284 |svchost.exe                                                       |Windows 服务主进程                                |10.0.17134.1  |0     |Normal      |8      |                                                    |
-|4292 |svchost.exe                                                       |Windows 服务主进程                                |10.0.17134.1  |0     |Normal      |9      |                                                    |
-|4300 |svchost.exe                                                       |Windows 服务主进程                                |10.0.17134.1  |0     |Normal      |2      |                                                    |
-|4328 |svchost.exe                                                       |Windows 服务主进程                                |10.0.17134.1  |0     |Normal      |16     |                                                    |
-|4336 |svchost.exe                                                       |Windows 服务主进程                                |10.0.17134.1  |0     |Normal      |2      |                                                    |
-|4344 |svchost.exe                                                       |Windows 服务主进程                                |10.0.17134.1  |0     |Normal      |8      |                                                    |
-|4360 |esif_uf.exe                                                       |                                                  |              |0     |High        |3      |                                                    |
-|4368 |svchost.exe                                                       |Windows 服务主进程                                |10.0.17134.1  |0     |Normal      |5      |                                                    |
-|4384 |svchost.exe                                                       |Windows 服务主进程                                |10.0.17134.1  |0     |Normal      |6      |                                                    |
-|4392 |QQProtect.exe                                                     |                                                  |              |0     |Normal      |19     |                                                    |
-|4404 |svchost.exe                                                       |Windows 服务主进程                                |10.0.17134.1  |0     |Normal      |18     |                                                    |
-|4452 |SmartByteNetworkService.exe                                       |                                                  |              |0     |Normal      |14     |                                                    |
-|4460 |splwow64.exe                                                      |Print driver host for applications                |10.0.17134.1  |0     |Normal      |6      |                                                    |
-|4492 |SecurityHealthService.exe                                         |                                                  |              |0     |Normal      |7      |                                                    |
-|4688 |svchost.exe                                                       |Windows 服务主进程                                |10.0.17134.1  |0     |Normal      |14     |                                                    |
-|4940 |svchost.exe                                                       |Windows 服务主进程                                |10.0.17134.1  |0     |Normal      |5      |                                                    |
-|4996 |bcb.exe                                                           |C++ Builder Development Environment               |6.0.10.166    |0     |Normal      |18     |                                                    |
-|5112 |svchost.exe                                                       |Windows 服务主进程                                |10.0.17134.1  |0     |Normal      |6      |                                                    |
-|5172 |RuntimeBroker.exe                                                 |                                                  |              |0     |Normal      |5      |                                                    |
-|5436 |svchost.exe                                                       |Windows 服务主进程                                |10.0.17134.1  |0     |Normal      |16     |                                                    |
-|5996 |MicrosoftEdgeCP.exe                                               |                                                  |              |0     |Normal      |16     |                                                    |
-|6024 |dptf_helper.exe                                                   |                                                  |              |0     |Normal      |3      |                                                    |
-|6104 |PresentationFontCache.exe                                         |                                                  |              |0     |Normal      |4      |                                                    |
-|6184 |ChsIME.exe                                                        |                                                  |              |0     |Normal      |15     |                                                    |
-|6228 |taskhostw.exe                                                     |                                                  |              |0     |Normal      |8      |                                                    |
-|6276 |svchost.exe                                                       |Windows 服务主进程                                |10.0.17134.1  |0     |Normal      |8      |                                                    |
-|6460 |svchost.exe                                                       |Windows 服务主进程                                |10.0.17134.1  |0     |Normal      |3      |                                                    |
-|6520 |ctfmon.exe                                                        |CTF 加载程序                                      |10.0.17134.1  |0     |High        |14     |                                                    |
-|6772 |igfxEM.exe                                                        |                                                  |              |0     |Normal      |5      |                                                    |
-|6980 |svchost.exe                                                       |Windows 服务主进程                                |10.0.17134.1  |0     |Normal      |5      |                                                    |
-|7016 |explorer.exe                                                      |Windows 资源管理器                                |10.0.17134.165|0     |Normal      |147    |                                                    |
-|7024 |RuntimeBroker.exe                                                 |                                                  |              |0     |Normal      |1      |                                                    |
-|7128 |svchost.exe                                                       |Windows 服务主进程                                |10.0.17134.1  |0     |Normal      |4      |                                                    |
-|7152 |svchost.exe                                                       |Windows 服务主进程                                |10.0.17134.1  |0     |Normal      |2      |                                                    |
-|7356 |dllhost.exe                                                       |COM Surrogate                                     |10.0.17134.1  |0     |Normal      |6      |                                                    |
-|7416 |ShellExperienceHost.exe                                           |                                                  |              |0     |Normal      |34     |                                                    |
-|7612 |TIM.exe                                                           |TIM                                               |2.2.8.20935   |0     |Normal      |72     |D:\Program Files (x86)\Tencent\TIM\Bin              |
-|7632 |SearchUI.exe                                                      |                                                  |              |0     |Normal      |43     |                                                    |
-|7708 |RuntimeBroker.exe                                                 |                                                  |              |0     |Normal      |3      |                                                    |
-|7896 |RuntimeBroker.exe                                                 |                                                  |              |0     |Normal      |11     |                                                    |
-|8096 |WavesSvc64.exe                                                    |                                                  |              |0     |Normal      |9      |                                                    |
-|8148 |SearchIndexer.exe                                                 |Microsoft Windows Search 索引器                   |7.0.17134.285 |0     |Normal      |16     |                                                    |
-|8188 |svchost.exe                                                       |Windows 服务主进程                                |10.0.17134.1  |0     |Normal      |2      |                                                    |
-|8292 |RuntimeBroker.exe                                                 |                                                  |              |0     |Normal      |4      |                                                    |
-|8396 |SettingSyncHost.exe                                               |Host Process for Setting Synchronization          |10.0.17134.1  |0     |Below-Normal|6      |                                                    |
-|8696 |LockApp.exe                                                       |                                                  |              |0     |Normal      |13     |                                                    |
-|8780 |dllhost.exe                                                       |COM Surrogate                                     |10.0.17134.1  |0     |Normal      |10     |                                                    |
-|9132 |RuntimeBroker.exe                                                 |                                                  |              |0     |Normal      |5      |                                                    |
-|9308 |svchost.exe                                                       |Windows 服务主进程                                |10.0.17134.1  |0     |Normal      |16     |                                                    |
-|9664 |OfficeClickToRun.exe                                              |                                                  |              |0     |Normal      |18     |                                                    |
-|9728 |svchost.exe                                                       |Windows 服务主进程                                |10.0.17134.1  |0     |Normal      |5      |                                                    |
-|9784 |KBSTree.exe                                                       |                                                  |              |0     |Normal      |14     |C:\Users\loner\Desktop\工作\集中监测标准知识库树状图|
-|9788 |svchost.exe                                                       |Windows 服务主进程                                |10.0.17134.1  |0     |Normal      |3      |                                                    |
-|9856 |SmartByteTelemetry.exe                                            |                                                  |              |0     |Below-Normal|9      |                                                    |
-|9944 |browser_broker.exe                                                |                                                  |              |0     |Normal      |2      |                                                    |
-|10500|WinStore.App.exe                                                  |                                                  |              |0     |Normal      |16     |                                                    |
-|10520|svchost.exe                                                       |Windows 服务主进程                                |10.0.17134.1  |0     |Normal      |12     |                                                    |
-|10572|audiodg.exe                                                       |                                                  |              |0     |Normal      |5      |                                                    |
-|10624|RuntimeBroker.exe                                                 |                                                  |              |0     |Normal      |2      |                                                    |
-|10724|svchost.exe                                                       |Windows 服务主进程                                |10.0.17134.1  |0     |Normal      |9      |                                                    |
-|10744|svchost.exe                                                       |Windows 服务主进程                                |10.0.17134.1  |0     |Normal      |4      |                                                    |
-|10860|ApplicationFrameHost.exe                                          |                                                  |              |0     |Normal      |4      |                                                    |
-|10900|SearchProtocolHost.exe                                            |Microsoft Windows Search Protocol Host            |7.0.17134.285 |0     |Low         |6      |                                                    |
-|10932|OfficeHubTaskHost.exe                                             |                                                  |              |0     |Normal      |9      |                                                    |
-|10984|WindowsInternal.ComposableShell.Experiences.TextInput.InputApp.exe|                                                  |              |0     |Normal      |25     |                                                    |
-|11220|msdtc.exe                                                         |                                                  |              |0     |Normal      |9      |                                                    |
-|11268|SearchFilterHost.exe                                              |Microsoft Windows Search Filter Host              |7.0.17134.1   |0     |Low         |7      |                                                    |
-|11908|QQPCTray.exe                                                      |                                                  |              |0     |Normal      |170    |                                                    |
-|12108|RtkNGUI64.exe                                                     |                                                  |              |0     |Normal      |7      |                                                    |
-|12284|RAVBg64.exe                                                       |                                                  |              |0     |Normal      |4      |                                                    |
-|12344|Baacloud.exe                                                      |                                                  |              |0     |Normal      |24     |                                                    |
-|12684|RuntimeBroker.exe                                                 |                                                  |              |0     |Normal      |2      |                                                    |
-|12852|TXPlatform.exe                                                    |TIM多客户端管理服务                               |2.2.8.20935   |0     |Normal      |2      |d:\Program Files (x86)\Tencent\TIM\Bin              |
-|12948|SogouCloud.exe                                                    |搜狗输入法 云计算代理                             |9.1.0.2589    |0     |Normal      |16     |D:\Program Files (x86)\SogouInput\9.1.0.2589        |
-|12972|svchost.exe                                                       |Windows 服务主进程                                |10.0.17134.1  |0     |Normal      |2      |                                                    |
-|13080|jhi_service.exe                                                   |Intel(R) Dynamic Application Loader Host Interface|11.7.0.1054   |0     |Normal      |2      |                                                    |
-|13092|QQPCRealTimeSpeedup.exe                                           |                                                  |              |0     |Normal      |31     |                                                    |
-|13264|QMDL.exe                                                          |                                                  |              |0     |Normal      |39     |                                                    |
-|13356|SystemSettings.exe                                                |                                                  |              |0     |Normal      |43     |                                                    |
-|13884|svchost.exe                                                       |Windows 服务主进程                                |10.0.17134.1  |0     |Normal      |5      |                                                    |
-|14016|MicrosoftEdgeCP.exe                                               |                                                  |              |0     |Normal      |17     |                                                    |
-|14024|svchost.exe                                                       |Windows 服务主进程                                |10.0.17134.1  |0     |Normal      |13     |                                                    |
-|14068|nvapiw.exe                                                        |                                                  |              |0     |Normal      |1      |                                                    |
-|14324|svchost.exe                                                       |Windows 服务主进程                                |10.0.17134.1  |0     |Normal      |6      |                                                    |
------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-Assembler Information:
------------------------------------------------------------------------------
-; MainUnit.TForm1.SigViewer1Paint (Line=561 - Offset=178)
-; -------------------------------------------------------
-00407114  mov     al, $D0
-00407116  DB      $FF, $FF  //      
-00407118  add     esp, +$08
-0040711B  test    al, al
-0040711D  jnz     MainUnit.TForm1.SigViewer1Paint (Line=516)
-;
-; Line=564 - Offset=181
-; ---------------------
-00407123  mov     eax, [ebp+$FFFFFF00]
-00407129  mov     [ebp-$80], eax
-0040712C  cmp     dword ptr [ebp-$80], +$00
-00407130  jz      MainUnit.TForm1.SigViewer1Paint (Line=565)
-00407132  mov     edx, [ebp-$80]
-00407135  mov     ecx, [edx]                                  ; <-- EXCEPTION
-00407137  mov     [ebp-$7C], ecx
-0040713A  mov     word ptr [ebp+$FFFFFF6C], $00F8
-00407143  mov     edx, $00000003                              ; ''...
-00407148  mov     eax, [ebp-$80]
-0040714B  mov     ecx, [eax]
-0040714D  call    dword ptr [ecx-$04]
-00407150  mov     word ptr [ebp+$FFFFFF6C], $00EC
-;
-; Line=565 - Offset=182
-; ---------------------
-00407159  dec     dword ptr [ebp+$FFFFFF78]
-0040715F  lea     eax, [ebp-$04]
-00407162  mov     edx, $00000002                              ; ''...
-
-Registers:
------------------------------
-EAX: 00000104   EDI: 02642B50
-EBX: 00000000   ESI: 0019F3B4
-ECX: 0019F19C   ESP: 0019F188
-EDX: 00000104   EIP: 00407135
-
-Stack:               Memory Dump:
-------------------   ---------------------------------------------------------------------------
-0019F188: 00000000   00407135: 8B 0A 89 4D 84 66 C7 85 6C FF FF FF F8 00 BA 03  ...M.f..l.......
-0019F18C: 0000016A   00407145: 00 00 00 8B 45 80 8B 08 FF 51 FC 66 C7 85 6C FF  ....E....Q.f..l.
-0019F190: 00000014   00407155: FF FF EC 00 FF 8D 78 FF FF FF 8D 45 FC BA 02 00  ......x....E....
-0019F194: 00000025   00407165: 00 00 E8 70 AD 13 00 8B 8D 5C FF FF FF 64 89 0D  ...p.....\...d..
-0019F198: 0000001B   00407175: 00 00 00 00 8B E5 5D C3 00 00 00 2C 65 19 E2 58  ......]....,e..X
-0019F19C: 025F3EE0   00407185: 17 B7 D1 F1 3F 00 00 00 00 00 00 00 00 A0 40 00  ....?.........@.
-0019F1A0: 025F3EE0   00407195: 00 40 40 55 8B EC 83 C4 DC B8 44 C6 58 00 E8 08  .@@U......D.X...
-0019F1A4: 025F3EE0   004071A5: AC 13 00 8B 55 08 33 C9 89 0A 8B 45 DC 64 A3 00  ....U.3....E.d..
-0019F1A8: 00000104   004071B5: 00 00 00 8B 45 08 8B E5 5D C3 90 55 8B EC FF 75  ....E...]..U...u
-0019F1AC: 00000000   004071C5: 0C FF 75 08 E8 F6 12 00 00 83 C4 08 8B 45 08 5D  ..u..........E.]
-0019F1B0: 00000000   004071D5: C3 90 90 55 8B EC FF 75 0C FF 75 08 E8 FE 12 00  ...U...u..u.....
-0019F1B4: 00000000   004071E5: 00 83 C4 08 8B 45 08 5D C3 90 90 55 8B EC 8B 45  .....E.]...U...E
-0019F1B8: 00000014   004071F5: 08 FF 30 E8 A5 30 18 00 59 8B 55 08 89 02 8B 45  ..0..0..Y.U....E
-0019F1BC: 0000016A   00407205: 08 5D C3 55 8B EC FF 75 08 E8 ED 12 00 00 59 5D  .].U...u......Y]
-0019F1C0: 0318CFCC   00407215: C3 90 90 08 00 00 00 00 04 10 00 28 CF 40 00 02  ...........(.@..
-0019F1C4: 00000014   00407225: 00 00 00 54 50 69 63 74 75 72 65 20 2A 5B 32 5D  ...TPicture *[2]
-
-
-
-EurekaLog 6.0.20
-
-Application:
--------------------------------------------------------
-  1.1 Start Date      : Wed, 19 Sep 2018 15:10:03 +0800
-  1.2 Name/Description: KBSTree.exe
-  1.3 Version Number  : 
-  1.4 Parameters      : 
-  1.5 Compilation Date: Wed, 19 Sep 2018 15:09:01 +0800
   1.6 Up Time         : 3 seconds
 
 Exception:
@@ -15060,6 +14615,518 @@ Stack:               Memory Dump:
 0019FCC0: 0019FCE0   40647C0D: 5E 5B C3 55 8B EC 6A 00 6A 00 6A 00 6A 00 6A 00  ^[.U..j.j.j.j.j.
 0019FCC4: 400091EF   40647C1D: 53 56 57 8B F9 8B F2 8B D8 33 C0 55 68 8E 7C 64  SVW......3.Uh.|d
 0019FCC8: 40647B42   40647C2D: 40 64 FF 30 64 89 20 8B C3 E8 65 FD FF FF 8D 45  @d.0d. ...e....E
+
+
+
+EurekaLog 6.0.20
+
+Application:
+-------------------------------------------------------
+  1.1 Start Date      : Tue, 25 Sep 2018 16:53:24 +0800
+  1.2 Name/Description: KBSTree.exe
+  1.3 Version Number  : 
+  1.4 Parameters      : 
+  1.5 Compilation Date: Tue, 25 Sep 2018 16:53:23 +0800
+  1.6 Up Time         : 5 minutes, 1 second
+
+Exception:
+-------------------------------------------------------------
+  2.1 Date          : Tue, 25 Sep 2018 16:58:26 +0800
+  2.2 Address       : 400F1FE5
+  2.3 Module Name   : vcl60.bpl - (Borland Component Package)
+  2.4 Module Version: 6.0.6.240
+  2.5 Type          : EInvalidOperation
+  2.6 Message       : Cannot make a visible window modal.
+  2.7 ID            : E8FB
+  2.8 Count         : 1
+  2.9 Status        : New
+  2.10 Note         : 
+
+User:
+-----------------------------------------------------------------
+  3.1 ID        : loner
+  3.2 Name      : loner0822@hotmail.com
+  3.3 Email     : 
+  3.4 Company   : 
+  3.5 Privileges: SeIncreaseQuotaPrivilege        - OFF
+                  SeSecurityPrivilege             - OFF
+                  SeTakeOwnershipPrivilege        - OFF
+                  SeLoadDriverPrivilege           - OFF
+                  SeSystemProfilePrivilege        - OFF
+                  SeSystemtimePrivilege           - OFF
+                  SeProfileSingleProcessPrivilege - OFF
+                  SeIncreaseBasePriorityPrivilege - OFF
+                  SeCreatePagefilePrivilege       - OFF
+                  SeBackupPrivilege               - OFF
+                  SeRestorePrivilege              - OFF
+                  SeShutdownPrivilege             - OFF
+                  SeDebugPrivilege                - OFF
+                  SeSystemEnvironmentPrivilege    - OFF
+                  SeChangeNotifyPrivilege         - ON
+                  SeRemoteShutdownPrivilege       - OFF
+                  SeUndockPrivilege               - OFF
+                  SeManageVolumePrivilege         - OFF
+                  SeImpersonatePrivilege          - ON
+                  SeCreateGlobalPrivilege         - ON
+                  SeIncreaseWorkingSetPrivilege   - OFF
+                  SeTimeZonePrivilege             - OFF
+                  SeCreateSymbolicLinkPrivilege   - OFF
+                  SeDelegateSessionUserImpersonatePrivilege - OFF
+
+Active Controls:
+---------------------------------
+  4.1 Form Class   : TForm2
+  4.2 Form Text    : 定义参数管理
+  4.3 Control Class: TEdit
+  4.4 Control Text : 单位
+
+Computer:
+------------------------------------------------------------------------------------
+  5.1 Name          : DESKTOP-32CLAD5
+  5.2 Total Memory  : 8089 Mb
+  5.3 Free Memory   : 4109 Mb
+  5.4 Total Disk    : 931.39 Gb
+  5.5 Free Disk     : 922.57 Gb
+  5.6 System Up Time: 9 hours, 53 seconds
+  5.7 Processor     : Intel(R) Core(TM) i5-8250U CPU @ 1.60GHz
+  5.8 Display Mode  : 1280 x 720, 32 bit
+  5.9 Display DPI   : 96
+  5.10 Video Card   : Intel(R) UHD Graphics 620 (driver 23.20.16.4973 - RAM 1024 MB)
+  5.11 Printer      : HP Color LaserJet Pro MFP M277 PCL 6 (driver 10.0.17134.191)
+
+Operating System:
+------------------------------------------------
+  6.1 Type    : Microsoft Windows Vista (64 bit)
+  6.2 Build # : 9200
+  6.3 Update  : 
+  6.4 Language: Chinese (Simplified)
+  6.5 Charset : 134
+
+Network:
+---------------------------------------------------------------------------------------------------------------------------------------------
+  7.1 IP Address: 000.000.000.000 - 000.000.000.000 - 000.000.000.000 - 000.000.000.000 - 192.168.005.138 - 000.000.000.000 - 000.000.000.000
+  7.2 Submask   : 000.000.000.000 - 000.000.000.000 - 000.000.000.000 - 000.000.000.000 - 255.255.255.000 - 000.000.000.000 - 000.000.000.000
+  7.3 Gateway   : 000.000.000.000 - 000.000.000.000 - 000.000.000.000 - 000.000.000.000 - 192.168.005.001 - 000.000.000.000 - 000.000.000.000
+  7.4 DNS 1     : 000.000.000.000 - 000.000.000.000 - 000.000.000.000 - 000.000.000.000 - 192.168.005.001 - 000.000.000.000 - 000.000.000.000
+  7.5 DNS 2     : 000.000.000.000 - 000.000.000.000 - 000.000.000.000 - 000.000.000.000 - 000.000.000.000 - 000.000.000.000 - 000.000.000.000
+  7.6 DHCP      : ON              - ON              - ON              - OFF             - ON              - ON              - ON             
+
+Call Stack Information:
+----------------------------------------------------------------------------------------
+|Address |Module      |Unit        |Class         |Procedure/Method          |Line     |
+----------------------------------------------------------------------------------------
+|*Exception Thread: ID=15388; Priority=0; Class=; [Main]                               |
+|--------------------------------------------------------------------------------------|
+|400F1FE5|vcl60.bpl   |Forms.pas   |TCustomForm   |ShowModal                 |         |
+|40002FE4|rtl60.bpl   |System.pas  |              |_GetMem                   |         |
+|40006828|rtl60.bpl   |System.pas  |              |_LStrClr                  |         |
+|0040B4F0|KBSTree.exe |MainUnit.cpp|TForm1        |AdvStringGrid2EditCellDone|1178[20] |
+|0050B8F8|KBSTree.exe |AdvGrid.pas |TAdvStringGrid|WndProc                   |48312[28]|
+|75747B05|USER32.dll  |            |              |CallWindowProcW           |         |
+|7413A062|COMCTL32.DLL|            |              |DefSubclassProc           |         |
+|7413A020|COMCTL32.DLL|            |              |DefSubclassProc           |         |
+|4010A620|vcl60.bpl   |Controls.pas|TWinControl   |MainWndProc               |         |
+|77C5A29A|ntdll.dll   |            |              |NtCallbackReturn          |         |
+|400F57AC|vcl60.bpl   |Forms.pas   |TApplication  |ProcessMessage            |         |
+|400F5866|vcl60.bpl   |Forms.pas   |TApplication  |HandleMessage             |         |
+|400F585C|vcl60.bpl   |Forms.pas   |TApplication  |ProcessMessages           |         |
+|400F20BB|vcl60.bpl   |Forms.pas   |TCustomForm   |ShowModal                 |         |
+|0040B02D|KBSTree.exe |MainUnit.cpp|TForm1        |N1Click                   |1132[3]  |
+|400FD32E|vcl60.bpl   |Menus.pas   |TMenuItem     |Click                     |         |
+|400FE7DB|vcl60.bpl   |Menus.pas   |TMenu         |DispatchCommand           |         |
+|400FE7C8|vcl60.bpl   |Menus.pas   |TMenu         |DispatchCommand           |         |
+|400FF6BE|vcl60.bpl   |Menus.pas   |TPopupList    |WndProc                   |         |
+|4010A84C|vcl60.bpl   |Controls.pas|TWinControl   |WndProc                   |         |
+|77C2DB60|ntdll.dll   |            |              |RtlLeaveCriticalSection   |         |
+|4002A704|rtl60.bpl   |Classes.pas |TThreadList   |UnlockList                |         |
+|4002A700|rtl60.bpl   |Classes.pas |TThreadList   |UnlockList                |         |
+|4010A620|vcl60.bpl   |Controls.pas|TWinControl   |MainWndProc               |         |
+|400FF60D|vcl60.bpl   |Menus.pas   |TPopupList    |MainWndProc               |         |
+|7575CD2B|USER32.dll  |            |              |DispatchMessageA          |         |
+|7575CD20|USER32.dll  |            |              |DispatchMessageA          |         |
+|400F57AC|vcl60.bpl   |Forms.pas   |TApplication  |ProcessMessage            |         |
+|400F5866|vcl60.bpl   |Forms.pas   |TApplication  |HandleMessage             |         |
+|400F585C|vcl60.bpl   |Forms.pas   |TApplication  |ProcessMessages           |         |
+|400F59F0|vcl60.bpl   |Forms.pas   |TApplication  |Run                       |         |
+|00401D4E|KBSTree.exe |KBSTree.cpp |              |WinMain                   |20[9]    |
+|75348482|KERNEL32.DLL|            |              |BaseThreadInitThunk       |         |
+----------------------------------------------------------------------------------------
+
+Modules Information:
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+|Handle  |Name                      |Description                                                                                                                      |Version            |Size    |Modified           |Path                                                                                                         |
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+|00030000|borlndmm.dll              |Borland Memory Manager                                                                                                           |6.0.10.157         |22016   |2004-06-18 06:30:02|C:\Program Files (x86)\Borland\CBuilder6\Bin                                                                 |
+|00400000|KBSTree.exe               |                                                                                                                                 |                   |2363392 |2018-09-25 16:53:24|D:\工作\集中监测标准知识库树状图                                                                             |
+|025B0000|stlpmt45.dll              |                                                                                                                                 |                   |618496  |2004-06-18 06:30:02|C:\Program Files (x86)\Borland\CBuilder6\Bin                                                                 |
+|09E90000|SigViewer.ocx             |                                                                                                                                 |1.0.32.99          |5230080 |2016-08-11 18:27:28|D:\工作\2018.09.15                                                                                           |
+|0BC90000|csDataTypeDef_ocxProj1.ocx|                                                                                                                                 |                   |5554688 |2018-09-20 09:38:52|C:\Program Files (x86)\Borland\ControlUnit\编辑类型定义标准控件                                              |
+|0DAB0000|SogouPy.ime               |搜狗输入法                                                                                                                       |9.1.0.2589         |6134912 |2018-08-27 16:48:26|C:\Windows\system32                                                                                          |
+|0F340000|Resource.dll              |搜狗输入法 资源                                                                                                                  |9.1.0.2589         |1172608 |2018-08-27 16:48:18|d:\Program Files (x86)\SogouInput\9.1.0.2589                                                                 |
+|0F9A0000|VBAJET32.DLL              |Visual Basic for Applications Development Environment - Expression Service Loader                                                |6.0.1.9431         |30749   |2018-04-12 07:34:56|C:\Windows\SYSTEM32                                                                                          |
+|0F9C0000|expsrv.dll                |Visual Basic for Applications Runtime - Expression Service                                                                       |6.0.72.9589        |380957  |2018-04-12 07:34:56|C:\Windows\SYSTEM32                                                                                          |
+|10000000|msadcer.dll               |OLE DB Cursor Engine Resources                                                                                                   |6.2.17134.1        |2560    |2018-04-12 07:34:56|C:\Program Files (x86)\Common Files\System\msadc                                                             |
+|32600000|cc3260mt.dll              |Borland C++ Multi-thread RTL (WIN/VCL MT)                                                                                        |6.0.1.0            |1500160 |2004-06-18 06:30:02|C:\Program Files (x86)\Borland\CBuilder6\Bin                                                                 |
+|40000000|rtl60.bpl                 |Borland Component Package                                                                                                        |6.0.6.240          |676352  |2004-06-18 06:30:02|C:\Windows\SYSTEM32                                                                                          |
+|400B0000|vcl60.bpl                 |Borland Component Package                                                                                                        |6.0.6.240          |1326080 |2004-06-18 06:30:02|C:\Windows\SYSTEM32                                                                                          |
+|40310000|dbrtl60.bpl               |Borland Database Component Package                                                                                               |6.0.6.240          |254464  |2004-06-18 06:30:02|C:\Windows\SYSTEM32                                                                                          |
+|40640000|adortl60.bpl              |Borland ADO DB Component Package                                                                                                 |6.0.6.240          |148992  |2004-06-18 06:30:02|C:\Windows\SYSTEM32                                                                                          |
+|57230000|mswstr10.dll              |Microsoft Jet Sort Library                                                                                                       |4.0.9801.1         |640512  |2018-04-12 07:34:56|C:\Windows\System32                                                                                          |
+|57B90000|msadce.dll                |OLE DB Cursor Engine                                                                                                             |6.2.17134.1        |604672  |2018-04-12 07:34:56|C:\Program Files (x86)\Common Files\System\msadc                                                             |
+|57C30000|msjet40.dll               |Microsoft Jet Engine Library                                                                                                     |4.0.9801.4         |1311744 |2018-08-14 10:14:58|C:\Windows\System32                                                                                          |
+|57E00000|odbcjt32.dll              |Microsoft ODBC Desktop Driver Pack 3.5                                                                                           |6.2.17134.1        |314368  |2018-04-12 07:34:56|C:\Windows\system32                                                                                          |
+|57E50000|msjetoledb40.dll          |                                                                                                                                 |4.0.9801.0         |518144  |2018-04-12 07:34:56|C:\Windows\System32                                                                                          |
+|57EE0000|oledlg.dll                |OLE 用户界面支持                                                                                                                 |6.2.17134.1        |150528  |2018-04-12 07:34:50|C:\Windows\SYSTEM32                                                                                          |
+|57F20000|msjtes40.dll              |Microsoft Jet Expression Service                                                                                                 |4.0.9801.0         |290816  |2018-04-12 07:34:56|C:\Windows\System32                                                                                          |
+|57F70000|comsvcs.dll               |COM+ Services                                                                                                                    |2001.12.10941.16384|1380864 |2018-04-28 21:12:52|C:\Windows\System32                                                                                          |
+|580D0000|oledb32.dll               |OLE DB Core Services                                                                                                             |6.2.17134.1        |813568  |2018-04-12 07:34:56|C:\Program Files (x86)\Common Files\System\Ole DB                                                            |
+|581A0000|MSDART.DLL                |OLE DB Runtime Routines                                                                                                          |6.2.17134.1        |123904  |2018-04-12 07:34:56|C:\Windows\SYSTEM32                                                                                          |
+|581D0000|msado15.dll               |ActiveX Data Objects                                                                                                             |6.2.17134.1        |1082880 |2018-04-12 07:34:56|C:\Program Files (x86)\Common Files\System\ado                                                               |
+|5AD20000|odbcji32.dll              |Microsoft ODBC Desktop Driver Pack 3.5                                                                                           |6.2.17134.1        |10240   |2018-04-12 07:34:54|C:\Windows\system32                                                                                          |
+|61E00000|sqlite3.dll               |SQLite is a software library that implements a self-contained, serverless, zero-configuration, transactional SQL database engine.|3.16.2.0           |840078  |2017-11-01 17:38:26|D:\工作\集中监测标准知识库树状图                                                                             |
+|63900000|RMCLIENT.dll              |Resource Manager Client                                                                                                          |6.2.17134.81       |101288  |2018-05-20 19:33:22|C:\Windows\system32                                                                                          |
+|63920000|twinapi.appcore.dll       |twinapi.appcore                                                                                                                  |6.2.17134.137      |1462824 |2018-06-15 13:04:58|C:\Windows\system32                                                                                          |
+|63A90000|dcomp.dll                 |Microsoft DirectComposition Library                                                                                              |6.2.17134.1        |1286624 |2018-04-12 07:34:52|C:\Windows\system32                                                                                          |
+|63BD0000|dataexchange.dll          |Data exchange                                                                                                                    |6.2.17134.1        |308736  |2018-04-12 07:34:46|C:\Windows\system32                                                                                          |
+|65EC0000|PicFace.dll               |搜狗输入法 图片表情                                                                                                              |1.1.0.1835         |1779328 |2018-09-10 09:55:58|d:\Program Files (x86)\SogouInput\Components\PicFace\1.1.0.1835                                              |
+|66680000|sfc.dll                   |Windows File Protection                                                                                                          |6.2.17134.1        |2560    |2018-04-12 07:35:02|C:\Windows\SYSTEM32                                                                                          |
+|68BD0000|sogoutsf.ime              |搜狗输入法                                                                                                                       |9.1.0.2589         |1427584 |2018-08-27 16:48:28|C:\Windows\System32                                                                                          |
+|68D70000|d3d11.dll                 |Direct3D 11 Runtime                                                                                                              |6.2.17134.112      |2417840 |2018-06-08 18:37:28|C:\Windows\system32                                                                                          |
+|6CAA0000|wintypes.dll              |Windows 基本类型 DLL                                                                                                             |6.2.17134.112      |880152  |2018-06-08 17:10:34|C:\Windows\SYSTEM32                                                                                          |
+|6CB80000|CoreUIComponents.dll      |Microsoft Core UI Components Dll                                                                                                 |6.2.17134.112      |2486992 |2018-06-08 17:09:42|C:\Windows\System32                                                                                          |
+|6CDE0000|CoreMessaging.dll         |Microsoft CoreMessaging Dll                                                                                                      |6.2.17134.285      |568568  |2018-08-31 11:28:22|C:\Windows\System32                                                                                          |
+|6CE70000|TextInputFramework.dll    |"TextInputFramework.DYNLINK"                                                                                                     |6.2.17134.191      |506728  |2018-07-14 12:16:06|C:\Windows\System32                                                                                          |
+|6CF80000|USP10.dll                 |Uniscribe Unicode script processor                                                                                               |6.2.17134.1        |77824   |2018-04-12 07:34:52|C:\Windows\SYSTEM32                                                                                          |
+|6CFA0000|msls31.dll                |Microsoft Line Services library file                                                                                             |3.10.349.0         |187904  |2018-04-12 07:35:00|C:\Windows\SYSTEM32                                                                                          |
+|6CFE0000|RICHED20.dll              |Rich Text Edit Control, v3.1                                                                                                     |5.31.23.1231       |503296  |2018-04-12 07:35:00|C:\Windows\SYSTEM32                                                                                          |
+|6DBB0000|dxgi.dll                  |DirectX Graphics Infrastructure                                                                                                  |6.2.17134.112      |613144  |2018-06-08 18:35:54|C:\Windows\system32                                                                                          |
+|70100000|WSOCK32.DLL               |Windows Socket 32-Bit DLL                                                                                                        |6.2.17134.1        |16384   |2018-04-12 07:34:56|C:\Windows\SYSTEM32                                                                                          |
+|710D0000|PROPSYS.dll               |Microsoft 属性系统                                                                                                               |7.0.17134.112      |1584128 |2018-06-08 17:09:58|C:\Windows\SYSTEM32                                                                                          |
+|71250000|apphelp.dll               |应用程序兼容性客户端库                                                                                                           |6.2.17134.1        |627712  |2018-04-12 07:34:52|C:\Windows\SYSTEM32                                                                                          |
+|71320000|msjter40.dll              |Microsoft Jet Database Engine Error DLL                                                                                          |4.0.9801.0         |83968   |2018-04-12 07:34:56|C:\Windows\System32                                                                                          |
+|713F0000|OLEACC.dll                |Active Accessibility Core Component                                                                                              |7.2.17134.1        |334336  |2018-04-12 07:35:00|C:\Windows\SYSTEM32                                                                                          |
+|71450000|AcLayers.DLL              |Windows Compatibility DLL                                                                                                        |6.2.17134.137      |373248  |2018-06-15 23:04:16|C:\Windows\SYSTEM32                                                                                          |
+|717C0000|DPAPI.dll                 |Data Protection API                                                                                                              |6.2.17134.1        |13312   |2018-04-12 07:34:52|C:\Windows\SYSTEM32                                                                                          |
+|717D0000|sfc_os.DLL                |Windows File Protection                                                                                                          |6.2.17134.1        |47104   |2018-04-12 07:35:02|C:\Windows\SYSTEM32                                                                                          |
+|717F0000|WINSPOOL.DRV              |Windows 后台处理程序驱动程序                                                                                                     |6.2.17134.254      |423424  |2018-08-09 16:20:40|C:\Windows\SYSTEM32                                                                                          |
+|71860000|MSJINT40.DLL              |国际 Microsoft Jet 数据库引擎 DLL                                                                                                |4.0.9801.1         |8704    |2018-04-12 07:34:56|C:\Windows\System32                                                                                          |
+|71D60000|Comctl32.dll              |用户体验控件库                                                                                                                   |6.10.17134.285     |2099184 |2018-08-31 14:51:28|C:\Windows\WinSxS\x86_microsoft.windows.common-controls_6595b64144ccf1df_6.0.17134.285_none_42efceba44e1907b |
+|72100000|RICHED32.DLL              |Wrapper Dll for Richedit 1.0                                                                                                     |6.2.17134.1        |8192    |2018-04-12 07:35:00|C:\Windows\SYSTEM32                                                                                          |
+|72120000|odbccp32.dll              |ODBC Installer                                                                                                                   |6.2.17134.1        |111104  |2018-04-12 07:34:58|C:\Windows\SYSTEM32                                                                                          |
+|72140000|odbc32.dll                |ODBC Driver Manager                                                                                                              |6.2.17134.1        |615936  |2018-04-12 07:34:56|C:\Windows\SYSTEM32                                                                                          |
+|721F0000|sxs.dll                   |Fusion 2.5                                                                                                                       |6.2.17134.1        |542928  |2018-04-12 07:35:00|C:\Windows\SYSTEM32                                                                                          |
+|72280000|OLEPRO32.DLL              |OLEPRO32.DLL                                                                                                                     |6.2.17134.1        |89600   |2018-04-12 07:35:00|C:\Windows\SYSTEM32                                                                                          |
+|727B0000|uxtheme.dll               |Microsoft UxTheme 库                                                                                                             |6.2.17134.1        |485888  |2018-04-12 07:35:02|C:\Windows\system32                                                                                          |
+|72830000|mswsock.dll               |Microsoft Windows Sockets 2.0 服务提供程序                                                                                       |6.2.17134.1        |341920  |2018-04-12 07:34:52|C:\Windows\SYSTEM32                                                                                          |
+|72C30000|dwmapi.dll                |Microsoft 桌面窗口管理器 API                                                                                                     |6.2.17134.1        |124824  |2018-04-12 07:34:52|C:\Windows\system32                                                                                          |
+|72C60000|ntmarta.dll               |Windows NT MARTA 提供程序                                                                                                        |6.2.17134.1        |154016  |2018-04-12 07:34:52|C:\Windows\SYSTEM32                                                                                          |
+|73550000|winmmbase.dll             |Base Multimedia Extension API DLL                                                                                                |6.2.17134.1        |131776  |2018-04-12 07:34:46|C:\Windows\SYSTEM32                                                                                          |
+|73580000|WINMM.DLL                 |MCI API DLL                                                                                                                      |6.2.17134.1        |134920  |2018-04-12 07:34:46|C:\Windows\SYSTEM32                                                                                          |
+|735D0000|MPR.dll                   |多提供程序路由器 DLL                                                                                                             |6.2.17134.1        |90464   |2018-04-12 07:34:52|C:\Windows\SYSTEM32                                                                                          |
+|73620000|SortServer2003Compat.dll  |Sort Version Server 2003                                                                                                         |6.2.17134.1        |39936   |2018-04-12 07:34:54|C:\Windows\SYSTEM32                                                                                          |
+|73630000|MSIMG32.dll               |GDIEXT Client DLL                                                                                                                |6.2.17134.1        |7168    |2018-04-12 07:34:52|C:\Windows\System32                                                                                          |
+|73660000|NETUTILS.DLL              |Net Win32 API Helpers DLL                                                                                                        |6.2.17134.1        |37768   |2018-04-12 07:34:52|C:\Windows\SYSTEM32                                                                                          |
+|73670000|bcrypt.dll                |Windows 加密基元库                                                                                                               |6.2.17134.112      |97176   |2018-06-08 17:10:40|C:\Windows\SYSTEM32                                                                                          |
+|73790000|WINHTTP.dll               |Windows HTTP 服务                                                                                                                |6.2.17134.137      |719552  |2018-06-15 13:04:16|C:\Windows\SYSTEM32                                                                                          |
+|73B10000|IPHLPAPI.DLL              |IP 帮助程序 API                                                                                                                  |6.2.17134.1        |190136  |2018-04-12 07:34:52|C:\Windows\SYSTEM32                                                                                          |
+|73B80000|netapi32.dll              |Net Win32 API DLL                                                                                                                |6.2.17134.1        |69288   |2018-04-12 07:34:50|C:\Windows\SYSTEM32                                                                                          |
+|73FB0000|GDIPLUS.DLL               |Microsoft GDI+                                                                                                                   |6.2.17134.285      |1469952 |2018-08-31 14:36:06|C:\Windows\WinSxS\x86_microsoft.windows.gdiplus_6595b64144ccf1df_1.1.17134.285_none_73dac19f9f740a49         |
+|74120000|COMCTL32.DLL              |公用控件库                                                                                                                       |5.82.17134.48      |573848  |2018-04-28 21:28:40|C:\Windows\WinSxS\x86_microsoft.windows.common-controls_6595b64144ccf1df_5.82.17134.285_none_41037de2450e52da|
+|743B0000|version.dll               |Version Checking and File Installation Libraries                                                                                 |6.2.17134.1        |27424   |2018-04-12 07:35:02|C:\Windows\SYSTEM32                                                                                          |
+|744A0000|CRYPTBASE.dll             |Base cryptographic API DLL                                                                                                       |6.2.17134.1        |31592   |2018-04-12 07:35:02|C:\Windows\System32                                                                                          |
+|744B0000|SspiCli.dll               |Security Support Provider Interface                                                                                              |6.2.17134.1        |123520  |2018-04-12 07:35:02|C:\Windows\System32                                                                                          |
+|744D0000|gdi32full.dll             |GDI Client DLL                                                                                                                   |6.2.17134.285      |1455960 |2018-08-31 14:55:06|C:\Windows\System32                                                                                          |
+|74650000|GDI32.dll                 |GDI Client DLL                                                                                                                   |6.2.17134.285      |134936  |2018-08-31 11:28:44|C:\Windows\System32                                                                                          |
+|746D0000|cfgmgr32.dll              |Configuration Manager DLL                                                                                                        |6.2.17134.1        |228864  |2018-04-12 07:34:52|C:\Windows\System32                                                                                          |
+|74710000|advapi32.dll              |高级 Windows 32 基本 API                                                                                                         |6.2.17134.1        |481976  |2018-04-12 07:35:02|C:\Windows\System32                                                                                          |
+|74790000|SETUPAPI.dll              |Windows 安装程序 API                                                                                                             |6.2.17134.1        |4403720 |2018-04-12 07:35:00|C:\Windows\System32                                                                                          |
+|74BC0000|combase.dll               |用于 Windows 的 Microsoft COM                                                                                                    |6.2.17134.112      |2479272 |2018-06-08 17:10:36|C:\Windows\System32                                                                                          |
+|74E80000|ucrtbase.dll              |Microsoft? C Runtime Library                                                                                                     |6.2.17134.254      |1174552 |2018-08-09 12:29:38|C:\Windows\System32                                                                                          |
+|74FA0000|win32u.dll                |Win32u                                                                                                                           |6.2.17134.1        |86840   |2018-04-12 07:34:50|C:\Windows\System32                                                                                          |
+|74FC0000|WS2_32.dll                |Windows Socket 2.0 32 位 DLL                                                                                                     |6.2.17134.1        |412792  |2018-04-12 07:35:04|C:\Windows\System32                                                                                          |
+|750C0000|RPCRT4.dll                |远程过程调用运行时                                                                                                               |6.2.17134.112      |786176  |2018-06-08 17:12:14|C:\Windows\System32                                                                                          |
+|75180000|profapi.dll               |User Profile Basic API                                                                                                           |6.2.17134.1        |89440   |2018-04-12 07:35:04|C:\Windows\System32                                                                                          |
+|751A0000|shlwapi.dll               |外壳简易实用工具库                                                                                                               |6.2.17134.1        |278960  |2018-04-12 07:35:00|C:\Windows\System32                                                                                          |
+|751F0000|sechost.dll               |Host for SCM/SDDL/LSA Lookup APIs                                                                                                |6.2.17134.1        |269200  |2018-04-12 07:35:04|C:\Windows\System32                                                                                          |
+|75240000|bcryptPrimitives.dll      |Windows Cryptographic Primitives Library                                                                                         |6.2.17134.137      |356960  |2018-06-15 13:03:40|C:\Windows\System32                                                                                          |
+|752A0000|shcore.dll                |SHCORE                                                                                                                           |6.2.17134.112      |553248  |2018-06-08 17:09:56|C:\Windows\System32                                                                                          |
+|75330000|KERNEL32.DLL              |Windows NT 基本 API 客户端 DLL                                                                                                   |6.2.17134.1        |607840  |2018-04-12 07:35:02|C:\Windows\System32                                                                                          |
+|75410000|MSCTF.dll                 |MSCTF 服务器 DLL                                                                                                                 |6.2.17134.285      |1327504 |2018-08-31 14:53:28|C:\Windows\System32                                                                                          |
+|755C0000|comdlg32.dll              |Common Dialogs DLL                                                                                                               |6.2.17134.1        |847872  |2018-04-12 07:35:00|C:\Windows\System32                                                                                          |
+|756A0000|clbcatq.dll               |COM+ Configuration Catalog                                                                                                       |2001.12.10941.16384|526848  |2018-04-12 07:34:52|C:\Windows\System32                                                                                          |
+|75730000|USER32.dll                |多用户 Windows 用户 API 客户端 DLL                                                                                               |6.2.17134.1        |1626536 |2018-04-12 07:34:50|C:\Windows\System32                                                                                          |
+|758E0000|msvcp_win.dll             |Microsoft? C Runtime Library                                                                                                     |6.2.17134.1        |504168  |2018-04-12 07:34:52|C:\Windows\System32                                                                                          |
+|75960000|IMM32.DLL                 |Multi-User Windows IMM32 API Client DLL                                                                                          |6.2.17134.1        |147288  |2018-04-12 07:34:52|C:\Windows\System32                                                                                          |
+|75990000|FLTLIB.DLL                |筛选器库                                                                                                                         |6.2.17134.1        |27936   |2018-04-12 07:34:52|C:\Windows\System32                                                                                          |
+|759A0000|msvcrt.dll                |Windows NT CRT DLL                                                                                                               |7.0.17134.1        |774288  |2018-04-12 07:35:02|C:\Windows\System32                                                                                          |
+|75A60000|powrprof.dll              |电源配置文件帮助程序 DLL                                                                                                         |6.2.17134.1        |274352  |2018-04-12 07:34:52|C:\Windows\System32                                                                                          |
+|75AB0000|OLEAUT32.dll              |OLEAUT32.DLL                                                                                                                     |6.2.17134.48       |606448  |2018-04-28 12:12:56|C:\Windows\System32                                                                                          |
+|75B50000|SHELL32.dll               |Windows Shell 公用 DLL                                                                                                           |6.2.17134.228      |20383720|2018-08-03 15:43:36|C:\Windows\System32                                                                                          |
+|76EA0000|MSASN1.dll                |ASN.1 Runtime APIs                                                                                                               |6.2.17134.1        |49656   |2018-04-12 07:34:52|C:\Windows\System32                                                                                          |
+|76EB0000|CRYPT32.dll               |加密 API32                                                                                                                       |6.2.17134.1        |1658024 |2018-04-12 07:34:52|C:\Windows\System32                                                                                          |
+|771C0000|ole32.dll                 |用于 Windows 的 Microsoft OLE                                                                                                    |6.2.17134.137      |1026896 |2018-06-15 23:22:56|C:\Windows\System32                                                                                          |
+|772C0000|KERNELBASE.dll            |Windows NT 基本 API 客户端 DLL                                                                                                   |6.2.17134.165      |1981896 |2018-07-06 15:14:30|C:\Windows\System32                                                                                          |
+|774B0000|kernel.appcore.dll        |AppModel API Host                                                                                                                |6.2.17134.112      |50208   |2018-06-08 17:09:42|C:\Windows\System32                                                                                          |
+|77520000|PSAPI.DLL                 |Process Status Helper                                                                                                            |6.2.17134.1        |17104   |2018-04-12 07:34:52|C:\Windows\System32                                                                                          |
+|77540000|windows.storage.dll       |Microsoft WinRT Storage API                                                                                                      |6.2.17134.285      |6043680 |2018-08-31 11:28:46|C:\Windows\System32                                                                                          |
+|77BF0000|ntdll.dll                 |NT 层 DLL                                                                                                                        |6.2.17134.254      |1620880 |2018-08-09 12:29:52|C:\Windows\SYSTEM32                                                                                          |
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Processes Information:
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+|ID   |Name                                                              |Description                                       |Version       |Memory|Priority    |Threads|Path                                                    |
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+|0    |[System Process]                                                  |                                                  |              |0     |            |8      |                                                        |
+|4    |System                                                            |                                                  |              |0     |Normal      |174    |                                                        |
+|84   |WUDFHost.exe                                                      |                                                  |              |0     |High        |11     |                                                        |
+|96   |fontdrvhost.exe                                                   |Usermode Font Driver Host                         |10.0.17134.228|0     |Normal      |5      |                                                        |
+|120  |Registry                                                          |                                                  |              |0     |Normal      |3      |                                                        |
+|416  |smss.exe                                                          |                                                  |              |0     |Above-Normal|2      |                                                        |
+|640  |svchost.exe                                                       |Windows 服务主进程                                |10.0.17134.1  |0     |Normal      |2      |                                                        |
+|652  |csrss.exe                                                         |                                                  |              |0     |High        |14     |                                                        |
+|664  |DSAPI.exe                                                         |                                                  |              |0     |Normal      |22     |                                                        |
+|756  |wininit.exe                                                       |                                                  |              |0     |High        |1      |                                                        |
+|764  |csrss.exe                                                         |                                                  |              |0     |High        |20     |                                                        |
+|832  |services.exe                                                      |                                                  |              |0     |Normal      |8      |                                                        |
+|852  |lsass.exe                                                         |                                                  |              |0     |Normal      |9      |                                                        |
+|864  |pcdrwi.exe                                                        |                                                  |              |0     |Normal      |19     |                                                        |
+|896  |svchost.exe                                                       |Windows 服务主进程                                |10.0.17134.1  |0     |Normal      |15     |                                                        |
+|976  |svchost.exe                                                       |Windows 服务主进程                                |10.0.17134.1  |0     |Normal      |2      |                                                        |
+|1004 |svchost.exe                                                       |Windows 服务主进程                                |10.0.17134.1  |0     |Normal      |19     |                                                        |
+|1032 |svchost.exe                                                       |Windows 服务主进程                                |10.0.17134.1  |0     |Normal      |5      |                                                        |
+|1060 |svchost.exe                                                       |Windows 服务主进程                                |10.0.17134.1  |0     |Normal      |4      |                                                        |
+|1064 |chrome.exe                                                        |                                                  |              |0     |Low         |19     |                                                        |
+|1076 |WUDFHost.exe                                                      |                                                  |              |0     |Normal      |5      |                                                        |
+|1136 |svchost.exe                                                       |Windows 服务主进程                                |10.0.17134.1  |0     |Normal      |3      |                                                        |
+|1180 |winlogon.exe                                                      |                                                  |              |0     |High        |5      |                                                        |
+|1240 |fontdrvhost.exe                                                   |Usermode Font Driver Host                         |10.0.17134.228|0     |Normal      |5      |                                                        |
+|1328 |svchost.exe                                                       |Windows 服务主进程                                |10.0.17134.1  |0     |Normal      |7      |                                                        |
+|1336 |svchost.exe                                                       |Windows 服务主进程                                |10.0.17134.1  |0     |Normal      |3      |                                                        |
+|1356 |dwm.exe                                                           |                                                  |              |0     |High        |9      |                                                        |
+|1364 |svchost.exe                                                       |Windows 服务主进程                                |10.0.17134.1  |0     |Normal      |2      |                                                        |
+|1480 |svchost.exe                                                       |Windows 服务主进程                                |10.0.17134.1  |0     |Normal      |5      |                                                        |
+|1484 |svchost.exe                                                       |Windows 服务主进程                                |10.0.17134.1  |0     |Normal      |2      |                                                        |
+|1492 |svchost.exe                                                       |Windows 服务主进程                                |10.0.17134.1  |0     |Normal      |5      |                                                        |
+|1612 |DDVCollectorSvcApi.exe                                            |                                                  |              |0     |Normal      |2      |                                                        |
+|1632 |svchost.exe                                                       |Windows 服务主进程                                |10.0.17134.1  |0     |Normal      |7      |                                                        |
+|1676 |svchost.exe                                                       |Windows 服务主进程                                |10.0.17134.1  |0     |Normal      |2      |                                                        |
+|1728 |svchost.exe                                                       |Windows 服务主进程                                |10.0.17134.1  |0     |Normal      |9      |                                                        |
+|1756 |svchost.exe                                                       |Windows 服务主进程                                |10.0.17134.1  |0     |Normal      |7      |                                                        |
+|1880 |svchost.exe                                                       |Windows 服务主进程                                |10.0.17134.1  |0     |Normal      |3      |                                                        |
+|1888 |svchost.exe                                                       |Windows 服务主进程                                |10.0.17134.1  |0     |Normal      |2      |                                                        |
+|1912 |svchost.exe                                                       |Windows 服务主进程                                |10.0.17134.1  |0     |Normal      |3      |                                                        |
+|2040 |svchost.exe                                                       |Windows 服务主进程                                |10.0.17134.1  |0     |Normal      |14     |                                                        |
+|2080 |svchost.exe                                                       |Windows 服务主进程                                |10.0.17134.1  |0     |Normal      |8      |                                                        |
+|2112 |svchost.exe                                                       |Windows 服务主进程                                |10.0.17134.1  |0     |Normal      |8      |                                                        |
+|2124 |NVDisplay.Container.exe                                           |                                                  |              |0     |Normal      |6      |                                                        |
+|2140 |svchost.exe                                                       |Windows 服务主进程                                |10.0.17134.1  |0     |Normal      |2      |                                                        |
+|2244 |SearchFilterHost.exe                                              |Microsoft Windows Search Filter Host              |7.0.17134.1   |0     |Low         |5      |                                                        |
+|2252 |dllhost.exe                                                       |COM Surrogate                                     |10.0.17134.1  |0     |Normal      |2      |                                                        |
+|2256 |dasHost.exe                                                       |                                                  |              |0     |Normal      |11     |                                                        |
+|2284 |IAStorIcon.exe                                                    |IAStorIcon                                        |15.9.1.1020   |0     |Normal      |5      |C:\Program Files\Intel\Intel(R) Rapid Storage Technology|
+|2292 |svchost.exe                                                       |Windows 服务主进程                                |10.0.17134.1  |0     |Normal      |3      |                                                        |
+|2312 |svchost.exe                                                       |Windows 服务主进程                                |10.0.17134.1  |0     |Normal      |7      |                                                        |
+|2320 |svchost.exe                                                       |Windows 服务主进程                                |10.0.17134.1  |0     |Normal      |5      |                                                        |
+|2348 |SystemSettings.exe                                                |                                                  |              |0     |Normal      |44     |                                                        |
+|2432 |ctfmon.exe                                                        |CTF 加载程序                                      |10.0.17134.1  |0     |High        |14     |                                                        |
+|2448 |svchost.exe                                                       |Windows 服务主进程                                |10.0.17134.1  |0     |Normal      |8      |                                                        |
+|2496 |Memory Compression                                                |                                                  |              |0     |Normal      |34     |                                                        |
+|2544 |svchost.exe                                                       |Windows 服务主进程                                |10.0.17134.1  |0     |Normal      |2      |                                                        |
+|2588 |NVDisplay.Container.exe                                           |                                                  |              |0     |Normal      |20     |                                                        |
+|2636 |igfxCUIService.exe                                                |                                                  |              |0     |Normal      |2      |                                                        |
+|2676 |svchost.exe                                                       |Windows 服务主进程                                |10.0.17134.1  |0     |Normal      |14     |                                                        |
+|2684 |svchost.exe                                                       |Windows 服务主进程                                |10.0.17134.1  |0     |Normal      |7      |                                                        |
+|2748 |svchost.exe                                                       |Windows 服务主进程                                |10.0.17134.1  |0     |Normal      |4      |                                                        |
+|2756 |svchost.exe                                                       |Windows 服务主进程                                |10.0.17134.1  |0     |Normal      |7      |                                                        |
+|2772 |SearchProtocolHost.exe                                            |Microsoft Windows Search Protocol Host            |7.0.17134.285 |0     |Low         |6      |                                                        |
+|2820 |svchost.exe                                                       |Windows 服务主进程                                |10.0.17134.1  |0     |Normal      |6      |                                                        |
+|2992 |KBSTree.exe                                                       |                                                  |              |0     |Normal      |19     |D:\工作\集中监测标准知识库树状图                        |
+|2996 |msdtc.exe                                                         |                                                  |              |0     |Normal      |9      |                                                        |
+|3016 |svchost.exe                                                       |Windows 服务主进程                                |10.0.17134.1  |0     |Normal      |10     |                                                        |
+|3040 |RtkAudioService64.exe                                             |                                                  |              |0     |Normal      |3      |                                                        |
+|3132 |svchost.exe                                                       |Windows 服务主进程                                |10.0.17134.1  |0     |Normal      |18     |                                                        |
+|3184 |svchost.exe                                                       |Windows 服务主进程                                |10.0.17134.1  |0     |Normal      |4      |                                                        |
+|3192 |svchost.exe                                                       |Windows 服务主进程                                |10.0.17134.1  |0     |Normal      |12     |                                                        |
+|3200 |svchost.exe                                                       |Windows 服务主进程                                |10.0.17134.1  |0     |Normal      |11     |                                                        |
+|3328 |svchost.exe                                                       |Windows 服务主进程                                |10.0.17134.1  |0     |Normal      |5      |                                                        |
+|3352 |svchost.exe                                                       |Windows 服务主进程                                |10.0.17134.1  |0     |Normal      |7      |                                                        |
+|3380 |FlashHelperService.exe                                            |                                                  |              |0     |Normal      |35     |                                                        |
+|3444 |svchost.exe                                                       |Windows 服务主进程                                |10.0.17134.1  |0     |Normal      |12     |                                                        |
+|3452 |svchost.exe                                                       |Windows 服务主进程                                |10.0.17134.1  |0     |Normal      |5      |                                                        |
+|3456 |svchost.exe                                                       |Windows 服务主进程                                |10.0.17134.1  |0     |Normal      |2      |                                                        |
+|3476 |LockApp.exe                                                       |                                                  |              |0     |Normal      |18     |                                                        |
+|3512 |NvTelemetryContainer.exe                                          |                                                  |              |0     |Normal      |10     |                                                        |
+|3588 |svchost.exe                                                       |Windows 服务主进程                                |10.0.17134.1  |0     |Normal      |11     |                                                        |
+|3612 |svchost.exe                                                       |Windows 服务主进程                                |10.0.17134.1  |0     |Normal      |4      |                                                        |
+|3636 |SogouCloud.exe                                                    |搜狗输入法 云计算代理                             |9.1.0.2589    |0     |Normal      |19     |D:\Program Files (x86)\SogouInput\9.1.0.2589            |
+|3652 |SmartByteNetworkService.exe                                       |                                                  |              |0     |Normal      |14     |                                                        |
+|3688 |spoolsv.exe                                                       |                                                  |              |0     |Normal      |14     |                                                        |
+|3808 |svchost.exe                                                       |Windows 服务主进程                                |10.0.17134.1  |0     |Normal      |6      |                                                        |
+|3836 |SangforPromoteService.exe                                         |                                                  |              |0     |Normal      |8      |                                                        |
+|3856 |svchost.exe                                                       |Windows 服务主进程                                |10.0.17134.1  |0     |Normal      |14     |                                                        |
+|3892 |QQProtect.exe                                                     |                                                  |              |0     |Normal      |19     |                                                        |
+|4024 |svchost.exe                                                       |Windows 服务主进程                                |10.0.17134.1  |0     |Normal      |8      |                                                        |
+|4032 |AdminService.exe                                                  |                                                  |              |0     |Normal      |3      |                                                        |
+|4052 |IntelCpHDCPSvc.exe                                                |                                                  |              |0     |Normal      |3      |                                                        |
+|4068 |nvcontainer.exe                                                   |                                                  |              |0     |Normal      |26     |                                                        |
+|4076 |esif_uf.exe                                                       |                                                  |              |0     |High        |3      |                                                        |
+|4092 |svchost.exe                                                       |Windows 服务主进程                                |10.0.17134.1  |0     |Normal      |13     |                                                        |
+|4100 |svchost.exe                                                       |Windows 服务主进程                                |10.0.17134.1  |0     |Normal      |15     |                                                        |
+|4108 |OfficeClickToRun.exe                                              |                                                  |              |0     |Normal      |17     |                                                        |
+|4136 |WavesSysSvc64.exe                                                 |                                                  |              |0     |Normal      |2      |                                                        |
+|4144 |svchost.exe                                                       |Windows 服务主进程                                |10.0.17134.1  |0     |Normal      |23     |                                                        |
+|4156 |MsMpEng.exe                                                       |                                                  |              |0     |Normal      |44     |                                                        |
+|4176 |SecurityHealthService.exe                                         |                                                  |              |0     |Normal      |7      |                                                        |
+|4272 |svchost.exe                                                       |Windows 服务主进程                                |10.0.17134.1  |0     |Normal      |11     |                                                        |
+|4280 |svchost.exe                                                       |Windows 服务主进程                                |10.0.17134.1  |0     |Normal      |2      |                                                        |
+|4356 |svchost.exe                                                       |Windows 服务主进程                                |10.0.17134.1  |0     |Normal      |7      |                                                        |
+|4648 |svchost.exe                                                       |Windows 服务主进程                                |10.0.17134.1  |0     |Normal      |14     |                                                        |
+|4736 |svchost.exe                                                       |Windows 服务主进程                                |10.0.17134.1  |0     |Normal      |5      |                                                        |
+|4808 |svchost.exe                                                       |Windows 服务主进程                                |10.0.17134.1  |0     |Normal      |5      |                                                        |
+|4832 |RAVBg64.exe                                                       |                                                  |              |0     |Normal      |4      |                                                        |
+|4992 |IntelCpHeciSvc.exe                                                |                                                  |              |0     |Normal      |3      |                                                        |
+|5032 |svchost.exe                                                       |Windows 服务主进程                                |10.0.17134.1  |0     |Normal      |6      |                                                        |
+|5252 |chrome.exe                                                        |                                                  |              |0     |Normal      |11     |                                                        |
+|5300 |WINWORD.EXE                                                       |                                                  |              |0     |Normal      |19     |                                                        |
+|5336 |WindowsInternal.ComposableShell.Experiences.TextInput.InputApp.exe|                                                  |              |0     |Normal      |25     |                                                        |
+|5432 |svchost.exe                                                       |Windows 服务主进程                                |10.0.17134.1  |0     |Normal      |16     |                                                        |
+|5728 |svchost.exe                                                       |Windows 服务主进程                                |10.0.17134.1  |0     |Normal      |2      |                                                        |
+|6244 |svchost.exe                                                       |Windows 服务主进程                                |10.0.17134.1  |0     |Normal      |6      |                                                        |
+|6328 |NisSrv.exe                                                        |                                                  |              |0     |Normal      |8      |                                                        |
+|6728 |chrome.exe                                                        |                                                  |              |0     |Normal      |38     |                                                        |
+|6752 |chrome.exe                                                        |                                                  |              |0     |Low         |17     |                                                        |
+|7312 |dptf_helper.exe                                                   |                                                  |              |0     |Normal      |3      |                                                        |
+|7400 |nvcontainer.exe                                                   |NVIDIA Container                                  |1.9.2305.6807 |0     |Normal      |25     |C:\Program Files (x86)\NVIDIA Corporation\NvContainer   |
+|7448 |sihost.exe                                                        |                                                  |              |0     |Normal      |10     |                                                        |
+|7512 |svchost.exe                                                       |Windows 服务主进程                                |10.0.17134.1  |0     |Normal      |12     |                                                        |
+|7572 |PresentationFontCache.exe                                         |                                                  |              |0     |Normal      |4      |                                                        |
+|7600 |svchost.exe                                                       |Windows 服务主进程                                |10.0.17134.1  |0     |Normal      |3      |                                                        |
+|7700 |taskhostw.exe                                                     |                                                  |              |0     |Normal      |8      |                                                        |
+|7784 |svchost.exe                                                       |Windows 服务主进程                                |10.0.17134.1  |0     |Normal      |8      |                                                        |
+|8120 |svchost.exe                                                       |Windows 服务主进程                                |10.0.17134.1  |0     |Normal      |3      |                                                        |
+|8232 |explorer.exe                                                      |Windows 资源管理器                                |10.0.17134.165|0     |Normal      |163    |                                                        |
+|8548 |svchost.exe                                                       |Windows 服务主进程                                |10.0.17134.1  |0     |Normal      |9      |                                                        |
+|8612 |igfxEM.exe                                                        |                                                  |              |0     |Normal      |5      |                                                        |
+|8636 |svchost.exe                                                       |Windows 服务主进程                                |10.0.17134.1  |0     |Normal      |6      |                                                        |
+|8728 |GoogleCrashHandler.exe                                            |                                                  |              |0     |Low         |3      |                                                        |
+|8800 |dllhost.exe                                                       |COM Surrogate                                     |10.0.17134.1  |0     |Normal      |4      |                                                        |
+|8944 |ShellExperienceHost.exe                                           |                                                  |              |0     |Normal      |40     |                                                        |
+|9028 |ChsIME.exe                                                        |                                                  |              |0     |Normal      |2      |                                                        |
+|9276 |RuntimeBroker.exe                                                 |                                                  |              |0     |Normal      |14     |                                                        |
+|9556 |notepad++.exe                                                     |                                                  |              |0     |Normal      |8      |                                                        |
+|9652 |chrome.exe                                                        |                                                  |              |0     |Normal      |17     |                                                        |
+|9840 |RuntimeBroker.exe                                                 |                                                  |              |0     |Normal      |3      |                                                        |
+|9884 |SettingSyncHost.exe                                               |Host Process for Setting Synchronization          |10.0.17134.1  |0     |Below-Normal|5      |                                                        |
+|9976 |svchost.exe                                                       |Windows 服务主进程                                |10.0.17134.1  |0     |Normal      |2      |                                                        |
+|9996 |svchost.exe                                                       |Windows 服务主进程                                |10.0.17134.1  |0     |Normal      |10     |                                                        |
+|10212|svchost.exe                                                       |Windows 服务主进程                                |10.0.17134.1  |0     |Normal      |8      |                                                        |
+|10224|DDVRulesProcessor.exe                                             |                                                  |              |0     |Normal      |6      |                                                        |
+|10280|GoogleCrashHandler64.exe                                          |                                                  |              |0     |Low         |3      |                                                        |
+|10348|HelpPane.exe                                                      |Microsoft 帮助和支持                              |10.0.17134.137|0     |Normal      |4      |                                                        |
+|10468|DellSupportAssistRemedationService.exe                            |                                                  |              |0     |Normal      |16     |                                                        |
+|10488|chrome.exe                                                        |                                                  |              |0     |Normal      |15     |                                                        |
+|10492|NVIDIA Web Helper.exe                                             |NVIDIA Web Helper Service                         |6.12.0.0      |0     |Below-Normal|86     |C:\Program Files (x86)\NVIDIA Corporation\NvNode        |
+|10500|conhost.exe                                                       |                                                  |              |0     |Below-Normal|2      |                                                        |
+|10656|svchost.exe                                                       |Windows 服务主进程                                |10.0.17134.1  |0     |Normal      |5      |                                                        |
+|10724|ServiceShell.exe                                                  |                                                  |              |0     |Normal      |20     |                                                        |
+|10864|svchost.exe                                                       |Windows 服务主进程                                |10.0.17134.1  |0     |Normal      |4      |                                                        |
+|10896|conhost.exe                                                       |                                                  |              |0     |Normal      |2      |                                                        |
+|10988|SharePal_updater.exe                                              |SharePal Updater Agent                            |2.3.0.5       |0     |Normal      |1      |C:\Users\loner\AppData\Local\SharePal                   |
+|11052|armsvc.exe                                                        |                                                  |              |0     |Normal      |3      |                                                        |
+|11064|SystemSettingsBroker.exe                                          |                                                  |              |0     |Normal      |5      |                                                        |
+|11184|chrome.exe                                                        |                                                  |              |0     |Normal      |7      |                                                        |
+|11212|WmiPrvSE.exe                                                      |WMI Provider Host                                 |10.0.17134.1  |0     |Normal      |8      |                                                        |
+|11224|dllhost.exe                                                       |COM Surrogate                                     |10.0.17134.1  |0     |Normal      |10     |                                                        |
+|11508|ApplicationFrameHost.exe                                          |                                                  |              |0     |Normal      |4      |                                                        |
+|11552|MSASCuiL.exe                                                      |                                                  |              |0     |Normal      |6      |                                                        |
+|11808|chrome.exe                                                        |                                                  |              |0     |Normal      |15     |                                                        |
+|11876|svchost.exe                                                       |Windows 服务主进程                                |10.0.17134.1  |0     |Normal      |2      |                                                        |
+|11908|RtkNGUI64.exe                                                     |                                                  |              |0     |Normal      |7      |                                                        |
+|12004|YunDetectService.exe                                              |                                                  |              |0     |Normal      |12     |D:\Program Files (x86)\BaiduNetdisk                     |
+|12016|RAVBg64.exe                                                       |                                                  |              |0     |Normal      |4      |                                                        |
+|12048|WavesSvc64.exe                                                    |                                                  |              |0     |Normal      |9      |                                                        |
+|12136|svchost.exe                                                       |Windows 服务主进程                                |10.0.17134.1  |0     |Normal      |9      |                                                        |
+|12156|dllhost.exe                                                       |COM Surrogate                                     |10.0.17134.1  |0     |Normal      |2      |                                                        |
+|12348|chrome.exe                                                        |                                                  |              |0     |Normal      |10     |                                                        |
+|12400|SogouImeBroker.exe                                                |搜狗输入法 Metro代理程序                          |9.1.0.2589    |0     |Normal      |3      |C:\Windows\SysWOW64\IME\SogouPY                         |
+|12408|WeChat.exe                                                        |WeChat                                            |2.4.5.1       |0     |Normal      |40     |C:\Program Files (x86)\Tencent\WeChat                   |
+|12444|TIM.exe                                                           |TIM                                               |2.2.8.20935   |0     |Normal      |72     |D:\Program Files (x86)\Tencent\TIM\Bin                  |
+|12484|svchost.exe                                                       |Windows 服务主进程                                |10.0.17134.1  |0     |Below-Normal|3      |                                                        |
+|12660|WeChatWeb.exe                                                     |Tencent Browsing Service                          |3.43.650.400  |0     |Normal      |6      |C:\Program Files (x86)\Tencent\WeChat                   |
+|12720|DeliveryService.exe                                               |                                                  |              |0     |Normal      |11     |                                                        |
+|13148|TXPlatform.exe                                                    |TIM多客户端管理服务                               |2.2.8.20935   |0     |Normal      |2      |d:\Program Files (x86)\Tencent\TIM\Bin                  |
+|13384|SmartByteTelemetry.exe                                            |                                                  |              |0     |Below-Normal|18     |                                                        |
+|13656|IAStorDataMgrSvc.exe                                              |                                                  |              |0     |Normal      |5      |                                                        |
+|13732|jhi_service.exe                                                   |Intel(R) Dynamic Application Loader Host Interface|11.7.0.1054   |0     |Normal      |2      |                                                        |
+|13764|LMS.exe                                                           |                                                  |              |0     |Normal      |4      |                                                        |
+|13948|SearchProtocolHost.exe                                            |Microsoft Windows Search Protocol Host            |7.0.17134.285 |0     |Low         |10     |                                                        |
+|13988|SgrmBroker.exe                                                    |                                                  |              |0     |Normal      |2      |                                                        |
+|14088|chrome.exe                                                        |                                                  |              |0     |Low         |16     |                                                        |
+|14132|Baacloud.exe                                                      |                                                  |              |0     |Normal      |25     |D:\Program Files (x86)\Baacloud                         |
+|14136|SupportAssistAgent.exe                                            |                                                  |              |0     |Normal      |22     |                                                        |
+|14304|nvapiw.exe                                                        |                                                  |              |0     |Normal      |1      |                                                        |
+|14356|chrome.exe                                                        |                                                  |              |0     |Normal      |16     |                                                        |
+|14372|chrome.exe                                                        |                                                  |              |0     |Normal      |2      |                                                        |
+|14376|WmiPrvSE.exe                                                      |WMI Provider Host                                 |10.0.17134.1  |0     |Normal      |5      |                                                        |
+|14484|RuntimeBroker.exe                                                 |                                                  |              |0     |Normal      |6      |                                                        |
+|15260|SearchIndexer.exe                                                 |Microsoft Windows Search 索引器                   |7.0.17134.285 |0     |Normal      |25     |                                                        |
+|15768|bcb.exe                                                           |C++ Builder Development Environment               |6.0.10.166    |0     |Normal      |14     |C:\Program Files (x86)\Borland\CBuilder6\Bin            |
+|15780|RuntimeBroker.exe                                                 |                                                  |              |0     |Normal      |1      |                                                        |
+|15940|SearchUI.exe                                                      |                                                  |              |0     |Normal      |35     |                                                        |
+|16124|svchost.exe                                                       |Windows 服务主进程                                |10.0.17134.1  |0     |Normal      |4      |                                                        |
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Assembler Information:
+---------------------------------------------------------------------
+; Forms.TCustomForm.ShowModal (Line=0 - Offset=0)
+; -----------------------------------------------
+400F1FBD  mov     eax, [ebp-$04]
+400F1FC0  cmp     byte ptr [eax+$022F], $01
+400F1FC7  jnz     Forms.TCustomForm.ShowModal
+400F1FC9  lea     edx, [ebp-$20]
+400F1FCC  mov     eax, dword ptr [$4017B2C8]
+400F1FD1  call    System.LoadResString
+400F1FD6  mov     ecx, [ebp-$20]
+400F1FD9  mov     dl, $01
+400F1FDB  mov     eax, dword ptr [EInvalidOperation]
+400F1FE0  call    Sysutils.Exception
+400F1FE5  call    System._RaiseExcept                 ; <-- EXCEPTION
+400F1FEA  call    GetCapture
+400F1FEF  test    eax, eax
+400F1FF1  jz      Forms.TCustomForm.ShowModal
+400F1FF3  push    $00
+400F1FF5  push    $00
+400F1FF7  push    $1F
+400F1FF9  call    GetCapture
+400F1FFE  push    eax
+400F1FFF  call    SendMessageA
+400F2004  call    ReleaseCapture
+
+Registers:
+-----------------------------
+EAX: 0272854C   EDI: 0000C33C
+EBX: 4017C120   ESI: 00000000
+ECX: 00000002   ESP: 0019F744
+EDX: 400F1FEA   EIP: 400F1FE5
+
+Stack:               Memory Dump:
+------------------   ---------------------------------------------------------------------------
+0019F744: 0019F798   400F1FE5: E8 BE F1 FB FF E8 9D 05 FC FF 85 C0 74 11 6A 00  ............t.j.
+0019F748: 40005F18   400F1FF5: 6A 00 6A 1F E8 8E 05 FC FF 50 E8 90 08 FC FF E8  j.j......P......
+0019F74C: 0019F778   400F2005: 4B 08 FC FF 8B 45 FC 80 88 EC 02 00 00 08 E8 6C  K....E.........l
+0019F750: 00000000   400F2015: 05 FC FF 89 45 E4 A1 F0 A6 17 40 89 45 F0 A1 24  ....E.....@.E..$
+0019F754: 0A53F010   400F2025: C1 17 40 8B 48 78 A1 24 C1 17 40 8B 40 7C 33 D2  ..@.Hx.$..@.@|3.
+0019F758: 00000000   400F2035: E8 06 0D FC FF A1 24 C1 17 40 8B 55 FC 89 50 78  ......$..@.U..Px
+0019F75C: 0A53F010   400F2045: A1 24 C1 17 40 66 8B 40 44 66 89 45 EE 33 D2 A1  .$..@f.@Df.E.3..
+0019F760: 40006849   400F2055: 24 C1 17 40 E8 EE 16 00 00 A1 24 C1 17 40 8B 40  $..@......$..@.@
+0019F764: 0019F7C8   400F2065: 48 89 45 E8 33 C0 E8 84 9A FF FF 89 45 F4 33 D2  H.E.3.......E.3.
+0019F768: 00549105   400F2075: 55 68 E4 21 0F 40 64 FF 32 64 89 22 8B 45 FC E8  Uh.!.@d.2d.".E..
+0019F76C: 00000000   400F2085: 3B FE FF FF 33 D2 55 68 43 21 0F 40 64 FF 32 64  ;...3.UhC!.@d.2d
+0019F770: 0A53F010   400F2095: 89 22 6A 00 6A 00 68 00 B0 00 00 8B 45 FC E8 04  ."j.j.h.....E...
+0019F774: 0A59AE2C   400F20A5: AF 01 00 50 E8 E6 07 FC FF 8B 45 FC 33 D2 89 90  ...P......E.3...
+0019F778: 0019F804   400F20B5: 4C 02 00 00 8B 03 E8 9C 37 00 00 8B 03 80 B8 9C  L.......7.......
+0019F77C: 0040B4F6   400F20C5: 00 00 00 00 74 0F 8B 45 FC C7 80 4C 02 00 00 02  ....t..E...L....
+0019F780: 0275BEBC   400F20D5: 00 00 00 EB 14 8B 45 FC 83 B8 4C 02 00 00 00 74  ......E...L....t
 
 
 

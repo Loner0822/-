@@ -64,7 +64,6 @@ __published:	// IDE-managed Components
     TPopupMenu *PopupMenu;
     TMenuItem *N2;
     TMenuItem *N1;
-    void __fastcall GetDataButtonClick(TObject *Sender);
     void __fastcall TreeViewChange(TObject *Sender, TTreeNode *Node);
     void __fastcall FormCreate(TObject *Sender);
     void __fastcall AdvStringGridClickCell(TObject *Sender, int ARow,
