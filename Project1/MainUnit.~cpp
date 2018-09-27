@@ -259,7 +259,7 @@ void TForm1::FindFather(TTreeNode *tnode, int &level) {
     while (!tempQuery -> Eof) {
         AdvStringGrid1 -> Cells[0][level + cnt] = level + cnt;
         AdvStringGrid1 -> Cells[1][level + cnt] = node[u].Data.JdText;
-        AdvStringGrid1 -> Cells[2][level + cnt]  = tempQuery -> FieldByName("属性") -> AsString;
+        AdvStringGrid1 -> Cells[2][level + cnt] = tempQuery -> FieldByName("属性") -> AsString;
         tempQuery -> Next();
         ++ cnt;
         AdvStringGrid1->AddRow();
@@ -339,13 +339,25 @@ void __fastcall TForm1::TreeViewChange(TObject *Sender, TTreeNode *Node)
     AdvStringGrid2 -> Options << goColSizing;
     AdvStringGrid2 -> Options >> goRowSizing;
     AdvStringGrid2 -> RowCount = 2;
-    AdvStringGrid2 -> ColCount = 3;
+    AdvStringGrid2 -> ColCount = 2;
     AdvStringGrid2 -> FixedRows = 1;
-    AdvStringGrid2 -> FixedCols = 1;
-    AdvStringGrid2 -> ColWidths[0] = 32;
-    AdvStringGrid2 -> Cells[0][0] = "序号";
-    AdvStringGrid2 -> Cells[1][0] = "数据类型";
-    AdvStringGrid2 -> Cells[2][0] = "值";
+    AdvStringGrid2 -> FixedCols = 0;
+    AdvStringGrid2 -> Cells[0][0] = "数据类型";
+    AdvStringGrid2 -> Cells[1][0] = "值";
+    TADOQuery *tempQuery = new TADOQuery(NULL);
+    tempQuery -> Connection = DMod -> ADOConnection3;
+    String sql = "select PGUID, 参数 from Parm order by Index_ asc, ID asc";
+    DMod->OpenSql(sql, tempQuery);
+    cnt = 0;
+    while (!tempQuery -> Eof) {
+        if (cnt + 1 >= AdvStringGrid2->RowCount)
+            AdvStringGrid2->AddRow();
+        ++ cnt;
+        AdvStringGrid2->Cells[0][cnt] = tempQuery->FieldByName("参数")->AsString;
+        tempQuery->Next();
+    }
+
+
 }
 //---------------------------------------------------------------------------
 void __fastcall TForm1::FormCreate(TObject *Sender)
@@ -1115,81 +1127,55 @@ void __fastcall TForm1::TimerTimer(TObject *Sender)
     ::InvalidateRect((HWND)this->SigViewer1->DrawingWindow, NULL, TRUE);
 }
 //---------------------------------------------------------------------------
-void __fastcall TForm1::AdvStringGrid2MouseDown(TObject *Sender,
-        TMouseButton Button, TShiftState Shift, int X, int Y)
-{
-    //
-    int row = 1, col = 1;
-    int Width = AdvStringGrid2->ColWidths[0] + AdvStringGrid2->ColWidths[1] + AdvStringGrid2->ColWidths[2];
-    int Height = 0;
-    for (int i = 0; i < AdvStringGrid2->RowCount; ++ i)
-        Height += AdvStringGrid2->RowHeights[i];
-    if (Width >= X && Height >= Y)
-        AdvStringGrid2->MouseToCell(X, Y, col, row);
-    AdvStringGrid2->Col = 0;
-    AdvStringGrid2->Row = 0;
-}
-//---------------------------------------------------------------------------
 
 void __fastcall TForm1::N1Click(TObject *Sender)
 {
-    //
     Form2->ShowModal();
-    //ShowMessage(AdvStringGrid2->ColWidths[0]);
-}
-
-void __fastcall TForm1::N2Click(TObject *Sender)
-{
-    //
-}
-//---------------------------------------------------------------------------
-
-void __fastcall TForm1::AdvStringGrid2CanEditCell(TObject *Sender, int ARow,
-      int ACol, bool &CanEdit)
-{
-    //
-    if (ACol == 2) {
-        CanEdit = 0;
-        return;
-    }
-    if (AdvStringGrid2->Cells[ARow][0] == ARow) {
-        CanEdit = 0;
-        return;
-    }
-    CanEdit = 1;
-}
-//---------------------------------------------------------------------------
-
-void __fastcall TForm1::AdvStringGrid2EditCellDone(TObject *Sender,
-      int ACol, int ARow)
-{
-    int A1Row = AdvStringGrid1->Row;
-    if (AdvStringGrid2->Cells[1][ARow] == "")
-        return;
+    AdvStringGrid2->Clear();
+    //AdvStringGrid2 -> Options << goEditing;
+    AdvStringGrid2 -> Options << goColSizing;
+    AdvStringGrid2 -> Options >> goRowSizing;
+    AdvStringGrid2 -> RowCount = 2;
+    AdvStringGrid2 -> ColCount = 2;
+    AdvStringGrid2 -> FixedRows = 1;
+    AdvStringGrid2 -> FixedCols = 0;
+    AdvStringGrid2 -> Cells[0][0] = "数据类型";
+    AdvStringGrid2 -> Cells[1][0] = "值";
     TADOQuery *tempQuery = new TADOQuery(NULL);
     tempQuery -> Connection = DMod -> ADOConnection3;
-    String sql = "select PGUID from Nature where UPGUID = '" + node[Now_Node].Data.PGUID + "' and 属性 = '" + AdvStringGrid1->Cells[2][A1Row] + "'";
-    DMod -> OpenSql(sql, tempQuery);
-    if (tempQuery -> Eof) {
-        ShowMessage("请先定义属性");
-        AdvStringGrid2->Cells[1][ARow] = "";
-        return;
+    String sql = "select PGUID, 参数 from Parm order by Index_ asc, ID asc";
+    DMod->OpenSql(sql, tempQuery);
+    int cnt = 0;
+    while (!tempQuery -> Eof) {
+        if (cnt + 1 >= AdvStringGrid2->RowCount)
+            AdvStringGrid2->AddRow();
+        ++ cnt;
+        AdvStringGrid2->Cells[0][cnt] = tempQuery->FieldByName("参数")->AsString;
+        tempQuery->Next();
     }
-    if (ACol == 1)
-        AdvStringGrid2->Cells[0][ARow] = ARow;
-    AdvStringGrid2->AddRow();
-    Form2->Edit->Text = AdvStringGrid2->Cells[1][ARow];
-    Form2->PGUID = tempQuery -> FieldByName("PGUID") -> AsString;
-    Form2->csDataTypeDef_ocx1->InitShow(WideString(Form2->Edit->Text),WideString(""),true) ;
-    Form2->ShowModal();
     delete tempQuery;
-    /*
-    AdoQ = new TADOQuery(NULL);
-    AdoQ -> Connection = DMod -> ADOConnection1;
-    sql = "select * from YJZH_SheJiYuan where ISDELETE = 0 ";
-    DMod -> OpenSql(sql, AdoQ); */
 }
 //---------------------------------------------------------------------------
 
+void __fastcall TForm1::AdvStringGrid2CanEditCell(TObject *Sender,
+      int ARow, int ACol, bool &CanEdit)
+{
+    CanEdit = 1;
+    if (ACol == 0)
+        CanEdit = 0;
+    if (ARow == 0)
+        CanEdit = 0;
+}
+//---------------------------------------------------------------------------
 
+void __fastcall TForm1::AdvStringGrid2GetEditorType(TObject *Sender,
+      int ACol, int ARow, TEditorType &AEditor)
+{
+    TADOQuery * tempQuery = new TADOQuery(NULL);
+    tempQuery -> Connection = DMod -> ADOConnection3;
+    //String sql = "select PGUID, 参数 from Parm order by Index_ asc, ID asc";
+    DMod->OpenSql(sql, tempQuery);
+    delete tempQuery;
+}
+//---------------------------------------------------------------------------
 

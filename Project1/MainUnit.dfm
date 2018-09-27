@@ -297,6 +297,7 @@ object Form1: TForm1
         ControlLook.DropDownFooter.Font.Style = []
         ControlLook.DropDownFooter.Visible = True
         ControlLook.DropDownFooter.Buttons = <>
+        EnableWheel = False
         Filter = <>
         FilterDropDown.Font.Charset = DEFAULT_CHARSET
         FilterDropDown.Font.Color = clWindowText
@@ -386,9 +387,8 @@ object Form1: TForm1
         PopupMenu = PopupMenu
         ScrollBars = ssBoth
         TabOrder = 0
-        OnMouseDown = AdvStringGrid2MouseDown
         OnCanEditCell = AdvStringGrid2CanEditCell
-        OnEditCellDone = AdvStringGrid2EditCellDone
+        OnGetEditorType = AdvStringGrid2GetEditorType
         ActiveCellFont.Charset = DEFAULT_CHARSET
         ActiveCellFont.Color = clWindowText
         ActiveCellFont.Height = -11
@@ -408,6 +408,7 @@ object Form1: TForm1
         ControlLook.DropDownFooter.Font.Style = []
         ControlLook.DropDownFooter.Visible = True
         ControlLook.DropDownFooter.Buttons = <>
+        EnableWheel = False
         Filter = <>
         FilterDropDown.Font.Charset = DEFAULT_CHARSET
         FilterDropDown.Font.Color = clWindowText
@@ -508,18 +509,15 @@ object Form1: TForm1
   object Timer: TTimer
     Interval = 100
     OnTimer = TimerTimer
-    Left = 288
-    Top = 160
+    Left = 240
+    Top = 64
   end
   object PopupMenu: TPopupMenu
-    Left = 256
+    Left = 776
+    Top = 72
     object N1: TMenuItem
-      Caption = #20462#25913'(&U)'
+      Caption = #35774#32622'(&S)'
       OnClick = N1Click
-    end
-    object N2: TMenuItem
-      Caption = #21024#38500'(&D)'
-      OnClick = N2Click
     end
   end
 end

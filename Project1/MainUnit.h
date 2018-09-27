@@ -62,7 +62,6 @@ __published:	// IDE-managed Components
     TButton *Button2;
     TButton *Button3;
     TPopupMenu *PopupMenu;
-    TMenuItem *N2;
     TMenuItem *N1;
     void __fastcall TreeViewChange(TObject *Sender, TTreeNode *Node);
     void __fastcall FormCreate(TObject *Sender);
@@ -88,14 +87,11 @@ __published:	// IDE-managed Components
           int ToIndex);
     void __fastcall AdvStringGrid1RowMoving(TObject *Sender, int ARow,
           bool &Allow);
-    void __fastcall AdvStringGrid2MouseDown(TObject *Sender,
-          TMouseButton Button, TShiftState Shift, int X, int Y);
     void __fastcall N1Click(TObject *Sender);
     void __fastcall AdvStringGrid2CanEditCell(TObject *Sender, int ARow,
           int ACol, bool &CanEdit);
-    void __fastcall AdvStringGrid2EditCellDone(TObject *Sender, int ACol,
-          int ARow);
-    void __fastcall N2Click(TObject *Sender);
+    void __fastcall AdvStringGrid2GetEditorType(TObject *Sender, int ACol,
+          int ARow, TEditorType &AEditor);
 private:	// User declarations
 public:		// User declarations
     __fastcall TForm1(TComponent* Owner);
