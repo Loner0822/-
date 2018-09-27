@@ -33,8 +33,11 @@
 #include <ExtCtrls.hpp>
 #include "SigViewerLib_OCX.h"
 #include "SystemUnit.h"
+#include "TCheckListEditLink.h"
 #include <OleCtrls.hpp>
 #include <memory>
+#include "clisted.hpp"
+
 using namespace std;
 //---------------------------------------------------------------------------
 class TForm1 : public TForm

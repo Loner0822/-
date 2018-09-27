@@ -15,6 +15,7 @@
 #include "PenUnit.h"
 #include "ExtraUnit.h"
 #include "SystemUnit.h"
+#include "TCheckListEditLink.h"
 using namespace std;
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
@@ -26,6 +27,7 @@ using namespace std;
 #pragma link "SigViewerLib_OCX"
 #pragma resource "*.dfm"
 TForm1 *Form1;
+TCheckListEditLink *edCheckListEdit;
 map<String, int> P_ID;
 multimap<String, TData2> Find_Map;
 DynamicArray<String> Map_PGUID;
@@ -45,6 +47,7 @@ set<Pen> Pen_Node;    				// 表笔编号, 表笔类型, x, y
 
 int Now_Node;
 String Now_Nature;
+map<String, String>Data_Type;
 
 const char* newGUID()
 {
@@ -70,6 +73,7 @@ const char* newGUID()
 __fastcall TForm1::TForm1(TComponent* Owner)
     : TForm(Owner)
 {
+    edCheckListEdit = new TCheckListEditLink(this->AdvStringGrid2);
 }
 //---------------------------------------------------------------------------
 void TForm1::BuildTree() {
@@ -356,8 +360,20 @@ void __fastcall TForm1::TreeViewChange(TObject *Sender, TTreeNode *Node)
         AdvStringGrid2->Cells[0][cnt] = tempQuery->FieldByName("参数")->AsString;
         tempQuery->Next();
     }
-
-
+    delete tempQuery;
+    tempQuery = new TADOQuery(NULL);
+    tempQuery->Connection = DMod->ADOConnection4;
+    sql = "select UPGUID, DATATYPE from ZSK_DATATYPE_H0000Z000K06";
+    DMod->OpenSql(sql, tempQuery);
+    Data_Type.clear();
+    while (!tempQuery->Eof) {
+        String upguid, datatype;
+        upguid = tempQuery->FieldByName("UPGUID")->AsString;
+        datatype = tempQuery->FieldByName("DATATYPE")->AsString;
+        Data_Type[upguid] = datatype;
+        tempQuery->Next();
+    }
+    delete tempQuery;
 }
 //---------------------------------------------------------------------------
 void __fastcall TForm1::FormCreate(TObject *Sender)
@@ -1092,6 +1108,7 @@ void TForm1::Choose_Move_Pen(const vector<set<Pen>::iterator> &L) {
     Partner = it -> partner;
     Pen_Node.erase(it);
 }
+
 //---------------------------------------------------------------------------
 void TForm1::Choose_Delete_Pen(const vector<set<Pen>::iterator> &L) {
     ExtraForm->Caption = "请选择所要删除的表笔";
@@ -1171,11 +1188,77 @@ void __fastcall TForm1::AdvStringGrid2CanEditCell(TObject *Sender,
 void __fastcall TForm1::AdvStringGrid2GetEditorType(TObject *Sender,
       int ACol, int ARow, TEditorType &AEditor)
 {
-    TADOQuery * tempQuery = new TADOQuery(NULL);
-    tempQuery -> Connection = DMod -> ADOConnection3;
-    //String sql = "select PGUID, 参数 from Parm order by Index_ asc, ID asc";
-    DMod->OpenSql(sql, tempQuery);
-    delete tempQuery;
+    /*TADOQuery * tempQuery = new TADOQuery(NULL);
+    tempQuery -> Connection = DMod -> ADOConnection4;
+    String sql = "select UPGUID from ZSK_DATATYPE_H0000Z000K06";
+    //DMod->OpenSql(sql, tempQuery);
+    delete tempQuery;*/
+    if (ACol == 1) {
+        String datatype;
+        datatype = Data_Type[AdvStringGrid2->Cells[0][ARow]];
+        //ShowMessage(datatype);
+        if (datatype == "文本")
+            AEditor = edNormal;
+        if (datatype == "数字")
+            AEditor = edNumeric;
+        if (datatype == "日期")
+            AEditor = edDateEditUpDown;
+        if (datatype == "可选项") {
+            TADOQuery * tempQuery = new TADOQuery(NULL);
+            tempQuery -> Connection = DMod -> ADOConnection4;
+            String sql = "select PROPVALUE from ZSK_LIMIT_H0000Z000K06 where UPGUID = '" + AdvStringGrid2->Cells[0][ARow] + "'";
+            DMod->OpenSql(sql, tempQuery);
+            if (tempQuery->FieldByName("PROPVALUE")->AsString == "否") {
+                AEditor = edComboList;
+                String str;
+                TADOQuery * AdoQ = new TADOQuery(NULL);
+                AdoQ -> Connection = DMod -> ADOConnection4;
+                sql = "select COMBOSTR from ZSK_COMBOSTRLIST_H0000Z000K06 where UPGUID = '" + AdvStringGrid2->Cells[0][ARow] + "'";
+                DMod->OpenSql(sql, AdoQ);
+                if (!AdoQ->Eof) {
+                    str += AdoQ->FieldByName("COMBOSTR")->AsString;
+                    AdoQ->Next();
+                }
+                while (!AdoQ -> Eof) {
+                    str += "," + AdoQ->FieldByName("COMBOSTR")->AsString;
+                    AdoQ->Next();
+                }
+                this->AdvStringGrid2->Combobox->Items->CommaText = str;
+                delete AdoQ;
+            }
+            else if (tempQuery->FieldByName("PROPVALUE")->AsString == "是") {
+                String str;
+                AEditor = edCustom;
+                this->AdvStringGrid2->EditLink = edCheckListEdit;
+                TADOQuery * AdoQ = new TADOQuery(NULL);
+                AdoQ -> Connection = DMod -> ADOConnection4;
+                sql = "select COMBOSTR from ZSK_COMBOSTRLIST_H0000Z000K06 where UPGUID = '" + AdvStringGrid2->Cells[0][ARow] + "'";
+                DMod->OpenSql(sql, AdoQ);
+                if (!AdoQ->Eof) {
+                    str += AdoQ->FieldByName("COMBOSTR")->AsString;
+                    AdoQ->Next();
+                }
+                while (!AdoQ -> Eof) {
+                    str += "," + AdoQ->FieldByName("COMBOSTR")->AsString;
+                    AdoQ->Next();
+                }
+                delete AdoQ;
+                edCheckListEdit->CommaText = str;         
+            }
+            delete tempQuery;
+
+        }
+        if (datatype == "时间")
+            AEditor = edTimeEdit;
+        if (datatype == "时间段")
+            AEditor = edNormal;
+        if (datatype == "日期+时间")
+            AEditor = edNormal;
+        if (datatype == "链接")
+            AEditor = edNormal;
+        if (datatype == "文件")
+            AEditor = edNormal;
+    }
 }
 //---------------------------------------------------------------------------
 

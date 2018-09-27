@@ -21,6 +21,7 @@ public:
     Pen& operator = (const Pen & rhs) {
         id = rhs.id, type = rhs.type, partner = rhs.partner;
         x = rhs.x, y = rhs.y;
+        return *this;
     }
 
     bool operator <(const Pen &rhs) const
@@ -29,6 +30,7 @@ public:
             return id < rhs.id;
         else if (type != rhs.type)
             return type < rhs.type;
+        return 0;
     }
 };
 

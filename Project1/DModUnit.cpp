@@ -47,10 +47,10 @@ void TDMod::ExecSql(String SQL, TADOQuery *q) {
 void __fastcall TDMod::DataModuleCreate(TObject *Sender)
 {
     String path1 = ExtractFilePath( Application->ExeName ) + "data\\YjzhZsk.mdb";
-    Conn( this->ADOConnection1, path1, ""); //è¿žæŽ¥æ•°æ®åº“
-    String path2 = ExtractFilePath( Application->ExeName ) + "data\\åº”æ€¥æŒ‡æŒ¥ç»“çº¿å›¾.mdb";
+    Conn( this->ADOConnection1, path1, ""); //Á¬½ÓÊý¾Ý¿â
+    String path2 = ExtractFilePath( Application->ExeName ) + "data\\Ó¦¼±Ö¸»Ó½áÏßÍ¼.mdb";
     Conn( this->ADOConnection2, path2, "");
-    String path3 = ExtractFilePath( Application->ExeName ) + "data\\å±žæ€§ä¿¡æ¯.mdb";
+    String path3 = ExtractFilePath( Application->ExeName ) + "data\\ÊôÐÔÐÅÏ¢.mdb";
     Conn( this->ADOConnection3, path3, "");
     String path4 = ExtractFilePath( Application->ExeName ) + "data\\ZSK_H0000Z000K06.mdb";
     Conn( this->ADOConnection4, path4, "");
