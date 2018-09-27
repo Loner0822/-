@@ -1266,3 +1266,12 @@ void __fastcall TForm1::AdvStringGrid2GetEditorType(TObject *Sender,
 }
 //---------------------------------------------------------------------------
 
+void __fastcall TForm1::AdvStringGrid2EditCellDone(TObject *Sender,
+      int ACol, int ARow)
+{
+    //
+    int row1 = AdvStringGrid1->Row, row2 = AdvStringGrid2->Row;
+    
+}
+//---------------------------------------------------------------------------
+

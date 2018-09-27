@@ -95,6 +95,8 @@ __published:	// IDE-managed Components
           int ACol, bool &CanEdit);
     void __fastcall AdvStringGrid2GetEditorType(TObject *Sender, int ACol,
           int ARow, TEditorType &AEditor);
+    void __fastcall AdvStringGrid2EditCellDone(TObject *Sender, int ACol,
+          int ARow);
 private:	// User declarations
 public:		// User declarations
     __fastcall TForm1(TComponent* Owner);

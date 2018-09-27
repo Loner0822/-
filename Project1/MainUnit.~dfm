@@ -389,6 +389,7 @@ object Form1: TForm1
         TabOrder = 0
         OnCanEditCell = AdvStringGrid2CanEditCell
         OnGetEditorType = AdvStringGrid2GetEditorType
+        OnEditCellDone = AdvStringGrid2EditCellDone
         ActiveCellFont.Charset = DEFAULT_CHARSET
         ActiveCellFont.Color = clWindowText
         ActiveCellFont.Height = -11
