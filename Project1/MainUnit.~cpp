@@ -338,16 +338,17 @@ void __fastcall TForm1::TreeViewChange(TObject *Sender, TTreeNode *Node)
     //AdvStringGrid1->MergeCells(1, 0, AdvStringGrid1->ColCount - 1, 1);
     //AdvStringGrid1 -> AutoSizeColumns(True, 4);
 
-    AdvStringGrid2->Clear();
+    AdvStringGrid2 -> Clear();
     AdvStringGrid2 -> Options << goEditing;
     AdvStringGrid2 -> Options << goColSizing;
     AdvStringGrid2 -> Options >> goRowSizing;
     AdvStringGrid2 -> RowCount = 2;
-    AdvStringGrid2 -> ColCount = 2;
+    AdvStringGrid2 -> ColCount = 3;
     AdvStringGrid2 -> FixedRows = 1;
     AdvStringGrid2 -> FixedCols = 0;
     AdvStringGrid2 -> Cells[0][0] = "数据类型";
     AdvStringGrid2 -> Cells[1][0] = "值";
+    AdvStringGrid2 -> ColWidths[2] = 0;
     TADOQuery *tempQuery = new TADOQuery(NULL);
     tempQuery -> Connection = DMod -> ADOConnection3;
     String sql = "select PGUID, 参数 from Parm order by Index_ asc, ID asc";
@@ -358,6 +359,7 @@ void __fastcall TForm1::TreeViewChange(TObject *Sender, TTreeNode *Node)
             AdvStringGrid2->AddRow();
         ++ cnt;
         AdvStringGrid2->Cells[0][cnt] = tempQuery->FieldByName("参数")->AsString;
+        AdvStringGrid2->Cells[2][cnt] = tempQuery->FieldByName("PGUID")->AsString;
         tempQuery->Next();
     }
     delete tempQuery;
@@ -1153,11 +1155,12 @@ void __fastcall TForm1::N1Click(TObject *Sender)
     AdvStringGrid2 -> Options << goColSizing;
     AdvStringGrid2 -> Options >> goRowSizing;
     AdvStringGrid2 -> RowCount = 2;
-    AdvStringGrid2 -> ColCount = 2;
+    AdvStringGrid2 -> ColCount = 3;
     AdvStringGrid2 -> FixedRows = 1;
     AdvStringGrid2 -> FixedCols = 0;
     AdvStringGrid2 -> Cells[0][0] = "数据类型";
     AdvStringGrid2 -> Cells[1][0] = "值";
+    AdvStringGrid2 -> ColWidths[2] = 0;
     TADOQuery *tempQuery = new TADOQuery(NULL);
     tempQuery -> Connection = DMod -> ADOConnection3;
     String sql = "select PGUID, 参数 from Parm order by Index_ asc, ID asc";
@@ -1168,6 +1171,7 @@ void __fastcall TForm1::N1Click(TObject *Sender)
             AdvStringGrid2->AddRow();
         ++ cnt;
         AdvStringGrid2->Cells[0][cnt] = tempQuery->FieldByName("参数")->AsString;
+        AdvStringGrid2->Cells[2][cnt] = tempQuery->FieldByName("PGUID")->AsString;
         tempQuery->Next();
     }
     delete tempQuery;
@@ -1195,7 +1199,7 @@ void __fastcall TForm1::AdvStringGrid2GetEditorType(TObject *Sender,
     delete tempQuery;*/
     if (ACol == 1) {
         String datatype;
-        datatype = Data_Type[AdvStringGrid2->Cells[0][ARow]];
+        datatype = Data_Type[AdvStringGrid2->Cells[2][ARow]];
         //ShowMessage(datatype);
         if (datatype == "文本")
             AEditor = edNormal;
@@ -1206,14 +1210,14 @@ void __fastcall TForm1::AdvStringGrid2GetEditorType(TObject *Sender,
         if (datatype == "可选项") {
             TADOQuery * tempQuery = new TADOQuery(NULL);
             tempQuery -> Connection = DMod -> ADOConnection4;
-            String sql = "select PROPVALUE from ZSK_LIMIT_H0000Z000K06 where UPGUID = '" + AdvStringGrid2->Cells[0][ARow] + "'";
+            String sql = "select PROPVALUE from ZSK_LIMIT_H0000Z000K06 where UPGUID = '" + AdvStringGrid2->Cells[2][ARow] + "'";
             DMod->OpenSql(sql, tempQuery);
             if (tempQuery->FieldByName("PROPVALUE")->AsString == "否") {
                 AEditor = edComboList;
                 String str;
                 TADOQuery * AdoQ = new TADOQuery(NULL);
                 AdoQ -> Connection = DMod -> ADOConnection4;
-                sql = "select COMBOSTR from ZSK_COMBOSTRLIST_H0000Z000K06 where UPGUID = '" + AdvStringGrid2->Cells[0][ARow] + "'";
+                sql = "select COMBOSTR from ZSK_COMBOSTRLIST_H0000Z000K06 where UPGUID = '" + AdvStringGrid2->Cells[2][ARow] + "'";
                 DMod->OpenSql(sql, AdoQ);
                 if (!AdoQ->Eof) {
                     str += AdoQ->FieldByName("COMBOSTR")->AsString;
@@ -1232,7 +1236,7 @@ void __fastcall TForm1::AdvStringGrid2GetEditorType(TObject *Sender,
                 this->AdvStringGrid2->EditLink = edCheckListEdit;
                 TADOQuery * AdoQ = new TADOQuery(NULL);
                 AdoQ -> Connection = DMod -> ADOConnection4;
-                sql = "select COMBOSTR from ZSK_COMBOSTRLIST_H0000Z000K06 where UPGUID = '" + AdvStringGrid2->Cells[0][ARow] + "'";
+                sql = "select COMBOSTR from ZSK_COMBOSTRLIST_H0000Z000K06 where UPGUID = '" + AdvStringGrid2->Cells[2][ARow] + "'";
                 DMod->OpenSql(sql, AdoQ);
                 if (!AdoQ->Eof) {
                     str += AdoQ->FieldByName("COMBOSTR")->AsString;

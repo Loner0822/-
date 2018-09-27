@@ -1,5 +1,4 @@
 //---------------------------------------------------------------------------
-
 #include <vcl.h>
 #include <stdio.h>
 #pragma hdrstop
@@ -44,20 +43,20 @@ void __fastcall TForm2::FormCreate(TObject *Sender)
     this->csDataTypeDef_ocx1->DataBaseType =  1  ;
     this->csDataTypeDef_ocx1->DBFilePath = ExtractFilePath(Application->ExeName)+"data\\ZSK_H0000Z000K06.mdb";
     this->csDataTypeDef_ocx1->DBtbqz = "H0000Z000K06";
-
     AdvStringGrid1 -> Clear();
     AdvStringGrid1 -> Options << goEditing;
     //AdvStringGrid1 -> Options << goRowSelect;
     AdvStringGrid1 -> Options << goColSizing;
     AdvStringGrid1 -> Options >> goRowSizing;
     AdvStringGrid1 -> RowCount = 2;
-    AdvStringGrid1 -> ColCount = 2;
+    AdvStringGrid1 -> ColCount = 3;
     AdvStringGrid1 -> FixedRows = 1;
     AdvStringGrid1 -> FixedCols = 1;
     AdvStringGrid1 -> ColWidths[0] = 32;
+    AdvStringGrid1 -> ColWidths[2] = 0;
     AdvStringGrid1 -> Cells[0][0] = "序号";
     AdvStringGrid1 -> Cells[1][0] = "数据类型";
-    
+
     TADOQuery *tempQuery = new TADOQuery(NULL);
     tempQuery -> Connection = DMod -> ADOConnection3;
     String sql = "select PGUID, 参数 from Parm order by Index_ asc, ID asc";
@@ -69,6 +68,7 @@ void __fastcall TForm2::FormCreate(TObject *Sender)
         ++ cnt;
         AdvStringGrid1->Cells[0][cnt] = cnt;
         AdvStringGrid1->Cells[1][cnt] = tempQuery->FieldByName("参数")->AsString;
+        AdvStringGrid1->Cells[2][cnt] = tempQuery->FieldByName("PGUID")->AsString;
         tempQuery->Next();
     }
     AdvStringGrid1->AddRow();
@@ -84,7 +84,8 @@ void __fastcall TForm2::FormCreate(TObject *Sender)
     tempQuery = new TADOQuery(NULL);
     tempQuery->Connection = DMod->ADOConnection4;
     sql = "delete * from ZSK_LIMIT_H0000Z000K06";
-    DMod->ExecSql(sql, tempQuery); */
+    DMod->ExecSql(sql, tempQuery);
+    */
 }
 //---------------------------------------------------------------------------
 
@@ -190,7 +191,7 @@ void __fastcall TForm2::AdvStringGrid1RowMoving(TObject *Sender, int ARow,
 void __fastcall TForm2::AdvStringGrid1SelectCell(TObject *Sender, int ACol,
       int ARow, bool &CanSelect)
 {
-    this->csDataTypeDef_ocx1->InitShow(WideString(AdvStringGrid1->Cells[1][ARow]),WideString(""),true);
+    this->csDataTypeDef_ocx1->InitShow(WideString(AdvStringGrid1->Cells[2][ARow]),WideString(""),true);
 }
 //---------------------------------------------------------------------------
 

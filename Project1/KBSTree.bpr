@@ -6,7 +6,7 @@
     <PROJECT value="KBSTree.exe"/>
     <OBJFILES value="KBSTree.obj MainUnit.obj DModUnit.obj DataUnit.obj TreeUnit.obj 
       &quot;C:\Program Files (x86)\EurekaLog 6\CBuilder6\ExceptionLog.obj&quot; 
-      PenUnit.obj ExtraUnit.obj SystemUnit.obj"/>
+      PenUnit.obj ExtraUnit.obj SystemUnit.obj TCheckListEditLink.obj"/>
     <RESFILES value="KBSTree.res"/>
     <IDLFILES value=""/>
     <IDLGENFILES value=""/>
@@ -74,6 +74,7 @@
       <FILE FILENAME="PenUnit.cpp" FORMNAME="" UNITNAME="PenUnit" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="ExtraUnit.cpp" FORMNAME="ExtraForm" UNITNAME="ExtraUnit" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="SystemUnit.cpp" FORMNAME="Form2" UNITNAME="SystemUnit" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="TCheckListEditLink.cpp" FORMNAME="" UNITNAME="TCheckListEditLink" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
   </FILELIST>
   <BUILDTOOLS>
   </BUILDTOOLS>

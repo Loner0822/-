@@ -29,7 +29,7 @@ object Form2: TForm2
       Height = 312
       Cursor = crDefault
       Align = alClient
-      ColCount = 2
+      ColCount = 3
       FixedCols = 0
       RowCount = 2
       Font.Charset = DEFAULT_CHARSET
