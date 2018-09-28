@@ -165,6 +165,7 @@ void __fastcall TForm1::AdvStringGrid1CellValidate(TObject *Sender,
         AdvStringGrid1->AddRow();
         AdvStringGrid1 -> Cells[0][ARow] = ARow;
         AdvStringGrid1 -> Cells[1][ARow + 1] = node[Now_Node].Data.JdText;
+        AdvStringGrid1 -> Cells[3][ARow] = pguid;
     }
     else {
         if (Value == "") {
@@ -177,6 +178,8 @@ void __fastcall TForm1::AdvStringGrid1CellValidate(TObject *Sender,
             AdvStringGrid1->RemoveRows(ARow, 1);
             for (int i = 1; i < AdvStringGrid1->RowCount - 1; ++ i)
                 AdvStringGrid1->Cells[0][i] = i;
+            sql = "delete * from Data where UPGUID1 = '" + node[Now_Node].Data.PGUID + "'";
+            DMod -> ExecSql(sql, tempQuery);
         }
         else {
             // find
@@ -253,7 +256,7 @@ void TForm1::FindFather(TTreeNode *tnode, int &level) {
     String pguid = node[u].Data.PGUID;
     TADOQuery *tempQuery = new TADOQuery(NULL);
     tempQuery -> Connection = DMod -> ADOConnection3;
-    String sql = "select * from Nature where UPGUID = '" + pguid + "' order by Index_";
+    String sql = "select PGUID, 属性 from Nature where UPGUID = '" + pguid + "' order by Index_";
     DMod -> OpenSql(sql, tempQuery);
     if (tempQuery -> Eof) {
         delete tempQuery;
@@ -264,6 +267,7 @@ void TForm1::FindFather(TTreeNode *tnode, int &level) {
         AdvStringGrid1 -> Cells[0][level + cnt] = level + cnt;
         AdvStringGrid1 -> Cells[1][level + cnt] = node[u].Data.JdText;
         AdvStringGrid1 -> Cells[2][level + cnt] = tempQuery -> FieldByName("属性") -> AsString;
+        AdvStringGrid1 -> Cells[3][level + cnt] = tempQuery -> FieldByName("PGUID") -> AsString;
         tempQuery -> Next();
         ++ cnt;
         AdvStringGrid1->AddRow();
@@ -322,10 +326,11 @@ void __fastcall TForm1::TreeViewChange(TObject *Sender, TTreeNode *Node)
     AdvStringGrid1 -> Options << goColSizing;
     AdvStringGrid1 -> Options >> goRowSizing;
     AdvStringGrid1 -> RowCount = 2;
-    AdvStringGrid1 -> ColCount = 3;
+    AdvStringGrid1 -> ColCount = 4;
     AdvStringGrid1 -> FixedRows = 1;
     AdvStringGrid1 -> FixedCols = 2;
     AdvStringGrid1->ColWidths[0] = 32;
+    AdvStringGrid1->ColWidths[3] = 0;
     AdvStringGrid1 -> Cells[0][0] = "序号";
     AdvStringGrid1 -> Cells[1][0] = "结点名称";
     AdvStringGrid1 -> Cells[2][0] = "所带属性";
@@ -376,6 +381,7 @@ void __fastcall TForm1::TreeViewChange(TObject *Sender, TTreeNode *Node)
         tempQuery->Next();
     }
     delete tempQuery;
+    AdvStringGrid1ClickCell(AdvStringGrid1, 1, 2);
 }
 //---------------------------------------------------------------------------
 void __fastcall TForm1::FormCreate(TObject *Sender)
@@ -583,6 +589,7 @@ void __fastcall TForm1::AdvStringGridClickCell(TObject *Sender, int ARow,
     s = ExtractFilePath( Application->ExeName ) + "1.emf";
     SigViewer1 -> OpenDrawingFile(++ num_of_pic , WideString(s), L"" );
     emf_Analysis();
+
 }
 //---------------------------------------------------------------------------
 void __fastcall TForm1::SigViewer1Paint(TObject *Sender, long DC)
@@ -1219,10 +1226,6 @@ void __fastcall TForm1::AdvStringGrid2GetEditorType(TObject *Sender,
                 AdoQ -> Connection = DMod -> ADOConnection4;
                 sql = "select COMBOSTR from ZSK_COMBOSTRLIST_H0000Z000K06 where UPGUID = '" + AdvStringGrid2->Cells[2][ARow] + "'";
                 DMod->OpenSql(sql, AdoQ);
-                if (!AdoQ->Eof) {
-                    str += AdoQ->FieldByName("COMBOSTR")->AsString;
-                    AdoQ->Next();
-                }
                 while (!AdoQ -> Eof) {
                     str += "," + AdoQ->FieldByName("COMBOSTR")->AsString;
                     AdoQ->Next();
@@ -1271,7 +1274,47 @@ void __fastcall TForm1::AdvStringGrid2EditCellDone(TObject *Sender,
 {
     //
     int row1 = AdvStringGrid1->Row, row2 = AdvStringGrid2->Row;
-    
+    String sql, up1, up2;
+    up1 = AdvStringGrid1->Cells[3][row1];
+    up2 = AdvStringGrid2->Cells[2][row2];
+    TADOQuery *AdoQ = new TADOQuery(NULL);
+    sql = "select DATA from Data where UPGUID1 = '" + up1 + "' and UPGUID2 = '" + up2 + "'";
+    AdoQ->Connection = DMod->ADOConnection3;
+    DMod->OpenSql(sql, AdoQ);
+    if (up1 == "" || up2 == "")
+        ShowMessage("Error");
+    if (!AdoQ->Eof) {
+        sql = "update Data set DATA = '" + AdvStringGrid2->Cells[1][row2] + "' where UPGUID1 = '" + up1 + "' and UPGUID2 = '" + up2 + "'";
+        DMod->ExecSql(sql, AdoQ);
+    }
+    else {
+        CoInitialize(NULL);
+        String pguid = newGUID();
+        sql = "insert into Data (PGUID, UPGUID1, UPGUID2, DATA) values('" + pguid + "', '" + up1 + "', '" + up2 + "', '" + AdvStringGrid2->Cells[1][row2] + "')";
+        DMod->ExecSql(sql, AdoQ);
+    }
+    delete AdoQ;
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TForm1::AdvStringGrid1ClickCell(TObject *Sender, int ARow,
+      int ACol)
+{
+    // read data
+    String up1, up2, sql;
+    up1 = AdvStringGrid1->Cells[3][ARow];
+    for (int i = 1; i < AdvStringGrid2->RowCount; ++ i) {
+        up2 = AdvStringGrid2->Cells[2][i];
+        TADOQuery *AdoQ = new TADOQuery(NULL);
+        sql = "select DATA from Data where UPGUID1 = '" + up1 + "' and UPGUID2 = '" + up2 + "'";
+        AdoQ->Connection = DMod->ADOConnection3;
+        DMod->OpenSql(sql, AdoQ);
+        if (!AdoQ->Eof)
+            AdvStringGrid2->Cells[1][i] = AdoQ->FieldByName("DATA")->AsString;
+        else
+            AdvStringGrid2->Cells[1][i] = "";
+        delete AdoQ;
+    }
 }
 //---------------------------------------------------------------------------
 

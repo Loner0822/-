@@ -1,6 +1,6 @@
 object Form1: TForm1
-  Left = 221
-  Top = 192
+  Left = 208
+  Top = 139
   Width = 834
   Height = 428
   Caption = #38598#20013#30417#27979#26631#20934#30693#35782#24211
@@ -199,7 +199,7 @@ object Form1: TForm1
       Align = alBottom
     end
     object Splitter4: TSplitter
-      Left = 219
+      Left = 241
       Top = 15
       Width = 3
       Height = 153
@@ -249,7 +249,7 @@ object Form1: TForm1
     object GroupBox5: TGroupBox
       Left = 2
       Top = 15
-      Width = 217
+      Width = 239
       Height = 153
       Align = alLeft
       Caption = #23646#24615#21015#34920
@@ -257,7 +257,7 @@ object Form1: TForm1
       object AdvStringGrid1: TAdvStringGrid
         Left = 2
         Top = 15
-        Width = 213
+        Width = 235
         Height = 136
         Cursor = crDefault
         Align = alClient
@@ -273,6 +273,7 @@ object Form1: TForm1
         ScrollBars = ssBoth
         TabOrder = 0
         OnRowMoved = AdvStringGrid1RowMoved
+        OnClickCell = AdvStringGrid1ClickCell
         OnCanEditCell = AdvStringGrid1CanEditCell
         OnCellValidate = AdvStringGrid1CellValidate
         OnEditCellDone = AdvStringGrid1EditCellDone
@@ -363,9 +364,9 @@ object Form1: TForm1
       end
     end
     object GroupBox6: TGroupBox
-      Left = 222
+      Left = 244
       Top = 15
-      Width = 254
+      Width = 232
       Height = 153
       Align = alClient
       Caption = #23646#24615#23450#20041
@@ -373,7 +374,7 @@ object Form1: TForm1
       object AdvStringGrid2: TAdvStringGrid
         Left = 2
         Top = 15
-        Width = 250
+        Width = 228
         Height = 136
         Cursor = crDefault
         Align = alClient

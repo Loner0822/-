@@ -102,7 +102,7 @@ void __fastcall TForm2::AdvStringGrid1CellValidate(TObject *Sender,
         String pguid = newGUID();
         String sql = "select * from Parm where 参数 = '" + Value + "'";
         DMod->OpenSql(sql, tempQuery);
-        if (!tempQuery-> Eof) {
+        if (!tempQuery->Eof) {
             delete tempQuery;
             Valid = false;
             ShowMessage(Value + "已经被定义");
