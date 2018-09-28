@@ -1,6 +1,6 @@
 object Form1: TForm1
-  Left = 208
-  Top = 139
+  Left = 246
+  Top = 217
   Width = 834
   Height = 428
   Caption = #38598#20013#30417#27979#26631#20934#30693#35782#24211
@@ -390,6 +390,7 @@ object Form1: TForm1
         TabOrder = 0
         OnCanEditCell = AdvStringGrid2CanEditCell
         OnGetEditorType = AdvStringGrid2GetEditorType
+        OnComboCloseUp = AdvStringGrid2ComboCloseUp
         OnEditCellDone = AdvStringGrid2EditCellDone
         ActiveCellFont.Charset = DEFAULT_CHARSET
         ActiveCellFont.Color = clWindowText

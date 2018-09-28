@@ -431,6 +431,11 @@ void __fastcall TForm1::FormCreate(TObject *Sender)
     BuildTree();
     AdvStringGridClickCell(AdvStringGrid, 1, 0);
     delete AdoQ;
+    /*AdoQ = new TADOQuery(NULL);
+    AdoQ -> Connection = DMod -> ADOConnection3;
+    sql = "delete * from Data";
+    DMod -> ExecSql(sql, AdoQ);
+    delete AdoQ;*/
 }
 //---------------------------------------------------------------------------
 void TForm1::ReadData2(TADOQuery *AdoQuery) {
@@ -451,18 +456,13 @@ void TForm1::ReadData2(TADOQuery *AdoQuery) {
 }
 //---------------------------------------------------------------------------
 void TForm1::emf_Analysis() {
-    /*
-        储存上一张图的数据
-    */
     // 初始化
     Map_Node.clear();
     Pen_Node.clear();
     ClickDown = 0;
     using_red = using_black = using_clamp = 0;
     used_red_pen = used_black_pen = used_clamp_pen = 0;
-    /*
-        读取这张图的数据
-    */
+
     String file = "1.emf";
     TMemoryStream *stream = new TMemoryStream();
     stream->LoadFromFile( file );
@@ -1253,7 +1253,6 @@ void __fastcall TForm1::AdvStringGrid2GetEditorType(TObject *Sender,
                 edCheckListEdit->CommaText = str;         
             }
             delete tempQuery;
-
         }
         if (datatype == "时间")
             AEditor = edTimeEdit;
@@ -1300,6 +1299,14 @@ void __fastcall TForm1::AdvStringGrid2EditCellDone(TObject *Sender,
 void __fastcall TForm1::AdvStringGrid1ClickCell(TObject *Sender, int ARow,
       int ACol)
 {
+    /*
+        储存上一张图的数据
+        
+    */
+
+    /*
+        读取这张图的数据
+    */
     // read data
     String up1, up2, sql;
     up1 = AdvStringGrid1->Cells[3][ARow];
@@ -1315,6 +1322,13 @@ void __fastcall TForm1::AdvStringGrid1ClickCell(TObject *Sender, int ARow,
             AdvStringGrid2->Cells[1][i] = "";
         delete AdoQ;
     }
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TForm1::AdvStringGrid2ComboCloseUp(TObject *Sender,
+      int ARow, int ACol)
+{
+    this->AdvStringGrid2->Combobox->Visible=false;
 }
 //---------------------------------------------------------------------------
 

@@ -99,6 +99,8 @@ __published:	// IDE-managed Components
           int ARow);
     void __fastcall AdvStringGrid1ClickCell(TObject *Sender, int ARow,
           int ACol);
+    void __fastcall AdvStringGrid2ComboCloseUp(TObject *Sender, int ARow,
+          int ACol);
 private:	// User declarations
 public:		// User declarations
     __fastcall TForm1(TComponent* Owner);
