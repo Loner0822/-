@@ -43,7 +43,7 @@ pair<long, long> Coordinate;
 const long dx[4] = {0, 35, 3, 6};
 const long dy[4] = {0, 23, 22, 20};
 set<pair<long, long> > Map_Node;    // x, y
-set<Pen> Pen_Node;    				// ±í±Ê±àºÅ, ±í±ÊÀàĞÍ, x, y
+set<Pen> Pen_Node;    				// è¡¨ç¬”ç¼–å·, è¡¨ç¬”ç±»å‹, x, y
 
 int Now_Node;
 String Now_Nature;
@@ -137,7 +137,7 @@ void TForm1::FindSon(int u, TTreeNode* tnode) {
 void __fastcall TForm1::AdvStringGrid1EditCellDone(TObject *Sender,
       int ACol, int ARow)
 {
-    // ÍË³ö´¥·¢
+    // é€€å‡ºè§¦å‘
 }
 //---------------------------------------------------------------------------
 void __fastcall TForm1::AdvStringGrid1CellValidate(TObject *Sender,
@@ -151,16 +151,16 @@ void __fastcall TForm1::AdvStringGrid1CellValidate(TObject *Sender,
         CoInitialize(NULL);
         String pguid = newGUID();
         // find
-        String sql = "select * from Nature where ÊôĞÔ = '" + Value + "' and UPGUID = '" + node[Now_Node].Data.PGUID + "'";
+        String sql = "select * from Nature where å±æ€§ = '" + Value + "' and UPGUID = '" + node[Now_Node].Data.PGUID + "'";
         DMod -> OpenSql(sql, tempQuery);
         if (!tempQuery -> Eof) {
             delete tempQuery;
             Valid = false;
-            ShowMessage(Value + "ÒÑ¾­±»Ìí¼Ó½øÊôĞÔ");
+            ShowMessage(Value + "å·²ç»è¢«æ·»åŠ è¿›å±æ€§");
             Value = "";
             return;
         }
-        sql = "insert into Nature (PGUID, ÊôĞÔ, UPGUID) values('" + pguid + "', '"+ Value + "', '" + node[Now_Node].Data.PGUID + "')";
+        sql = "insert into Nature (PGUID, å±æ€§, UPGUID) values('" + pguid + "', '"+ Value + "', '" + node[Now_Node].Data.PGUID + "')";
         DMod -> ExecSql(sql, tempQuery);
         AdvStringGrid1->AddRow();
         AdvStringGrid1 -> Cells[0][ARow] = ARow;
@@ -171,7 +171,7 @@ void __fastcall TForm1::AdvStringGrid1CellValidate(TObject *Sender,
         if (Value == "") {
             //  delete
             //
-            String sql = "delete * from Nature where ÊôĞÔ = '" + Now_Nature + "' and UPGUID = '" + node[Now_Node].Data.PGUID + "'";
+            String sql = "delete * from Nature where å±æ€§ = '" + Now_Nature + "' and UPGUID = '" + node[Now_Node].Data.PGUID + "'";
             //ShowMessage(sql);
             DMod -> ExecSql(sql, tempQuery);
             Value = AdvStringGrid1->Cells[ACol][ARow + 1];
@@ -183,16 +183,16 @@ void __fastcall TForm1::AdvStringGrid1CellValidate(TObject *Sender,
         }
         else {
             // find
-            String sql = "select * from Nature where ÊôĞÔ = '" + Value + "' and UPGUID = '" + node[Now_Node].Data.PGUID + "'";
+            String sql = "select * from Nature where å±æ€§ = '" + Value + "' and UPGUID = '" + node[Now_Node].Data.PGUID + "'";
             DMod -> OpenSql(sql, tempQuery);
             if (!tempQuery -> Eof) {
                 delete tempQuery;
                 Valid = false;
-                ShowMessage(Value + "ÒÑ¾­±»Ìí¼Ó½øÊôĞÔ");
+                ShowMessage(Value + "å·²ç»è¢«æ·»åŠ è¿›å±æ€§");
                 Value = "";
                 return;
             }
-            sql = "update Nature set ÊôĞÔ = '" + Value + "' where ÊôĞÔ = '" + Now_Nature + "' and UPGUID = '" + node[Now_Node].Data.PGUID + "'";
+            sql = "update Nature set å±æ€§ = '" + Value + "' where å±æ€§ = '" + Now_Nature + "' and UPGUID = '" + node[Now_Node].Data.PGUID + "'";
             DMod -> ExecSql(sql, tempQuery);
         }
     }
@@ -202,7 +202,7 @@ void __fastcall TForm1::AdvStringGrid1CellValidate(TObject *Sender,
 void __fastcall TForm1::AdvStringGrid1CanEditCell(TObject *Sender,
       int ARow, int ACol, bool &CanEdit)
 {
-    // ±à¼­Ç°¿É´¥·¢
+    // ç¼–è¾‘å‰å¯è§¦å‘
     if (ACol == 1) {
         CanEdit = false;
         return;
@@ -229,7 +229,7 @@ void __fastcall TForm1::AdvStringGrid1RowMoved(TObject *Sender,
     TADOQuery *tempQuery = new TADOQuery(NULL);
     tempQuery -> Connection = DMod -> ADOConnection3;
     for (int i = 1; i < AdvStringGrid1->RowCount - 1; ++ i) {
-        String sql = "update Nature set Index_ = " + IntToStr(i) + " where ÊôĞÔ = '" + AdvStringGrid1->Cells[2][i] + "' and UPGUID = '" + node[Now_Node].Data.PGUID + "'";
+        String sql = "update Nature set Index_ = " + IntToStr(i) + " where å±æ€§ = '" + AdvStringGrid1->Cells[2][i] + "' and UPGUID = '" + node[Now_Node].Data.PGUID + "'";
         //ShowMessage(sql);
         DMod-> ExecSql(sql, tempQuery);
         AdvStringGrid1->Cells[0][i] = i;
@@ -256,7 +256,7 @@ void TForm1::FindFather(TTreeNode *tnode, int &level) {
     String pguid = node[u].Data.PGUID;
     TADOQuery *tempQuery = new TADOQuery(NULL);
     tempQuery -> Connection = DMod -> ADOConnection3;
-    String sql = "select PGUID, ÊôĞÔ from Nature where UPGUID = '" + pguid + "' order by Index_";
+    String sql = "select PGUID, å±æ€§ from Nature where UPGUID = '" + pguid + "' order by Index_";
     DMod -> OpenSql(sql, tempQuery);
     if (tempQuery -> Eof) {
         delete tempQuery;
@@ -266,7 +266,7 @@ void TForm1::FindFather(TTreeNode *tnode, int &level) {
     while (!tempQuery -> Eof) {
         AdvStringGrid1 -> Cells[0][level + cnt] = level + cnt;
         AdvStringGrid1 -> Cells[1][level + cnt] = node[u].Data.JdText;
-        AdvStringGrid1 -> Cells[2][level + cnt] = tempQuery -> FieldByName("ÊôĞÔ") -> AsString;
+        AdvStringGrid1 -> Cells[2][level + cnt] = tempQuery -> FieldByName("å±æ€§") -> AsString;
         AdvStringGrid1 -> Cells[3][level + cnt] = tempQuery -> FieldByName("PGUID") -> AsString;
         tempQuery -> Next();
         ++ cnt;
@@ -282,8 +282,8 @@ void __fastcall TForm1::TreeViewChange(TObject *Sender, TTreeNode *Node)
     Map_PGUID.Length = 0;
     AdvStringGrid -> Clear();
     AdvStringGrid -> RowCount = 2;
-    AdvStringGrid -> Cells[0][0] = "ÀàĞÍÃû³Æ";
-    AdvStringGrid -> Cells[1][0] = "Í¼ÏñÃû³Æ";
+    AdvStringGrid -> Cells[0][0] = "ç±»å‹åç§°";
+    AdvStringGrid -> Cells[1][0] = "å›¾åƒåç§°";
     String name = Node -> Text;
     //ShowMessage(node[tindex].Data.JdText);
     String uid = node[Now_Node].Data.PGUID;
@@ -313,7 +313,7 @@ void __fastcall TForm1::TreeViewChange(TObject *Sender, TTreeNode *Node)
     GroupBox2 -> Width = AdvStringGrid -> ColWidths[0] + AdvStringGrid -> ColWidths[1] + 8;
     //ShowMessage(GroupBox2 -> Width);
     AdvStringGridClickCell(AdvStringGrid, 1, 0);
-    //³õÊ¼»¯ÊôĞÔÁĞ±í
+    //åˆå§‹åŒ–å±æ€§åˆ—è¡¨
     /*
     TADOQuery *tempQuery = new TADOQuery(NULL);
     tempQuery -> Connection = DMod -> ADOConnection3;
@@ -331,9 +331,9 @@ void __fastcall TForm1::TreeViewChange(TObject *Sender, TTreeNode *Node)
     AdvStringGrid1 -> FixedCols = 2;
     AdvStringGrid1->ColWidths[0] = 32;
     AdvStringGrid1->ColWidths[3] = 0;
-    AdvStringGrid1 -> Cells[0][0] = "ĞòºÅ";
-    AdvStringGrid1 -> Cells[1][0] = "½áµãÃû³Æ";
-    AdvStringGrid1 -> Cells[2][0] = "Ëù´øÊôĞÔ";
+    AdvStringGrid1 -> Cells[0][0] = "åºå·";
+    AdvStringGrid1 -> Cells[1][0] = "ç»“ç‚¹åç§°";
+    AdvStringGrid1 -> Cells[2][0] = "æ‰€å¸¦å±æ€§";
 
     FindFather(Node, 1);
     AdvStringGrid1 -> Cells[1][AdvStringGrid1 -> RowCount - 1] = node[Now_Node].Data.JdText;
@@ -351,19 +351,19 @@ void __fastcall TForm1::TreeViewChange(TObject *Sender, TTreeNode *Node)
     AdvStringGrid2 -> ColCount = 3;
     AdvStringGrid2 -> FixedRows = 1;
     AdvStringGrid2 -> FixedCols = 0;
-    AdvStringGrid2 -> Cells[0][0] = "Êı¾İÀàĞÍ";
-    AdvStringGrid2 -> Cells[1][0] = "Öµ";
+    AdvStringGrid2 -> Cells[0][0] = "æ•°æ®ç±»å‹";
+    AdvStringGrid2 -> Cells[1][0] = "å€¼";
     AdvStringGrid2 -> ColWidths[2] = 0;
     TADOQuery *tempQuery = new TADOQuery(NULL);
     tempQuery -> Connection = DMod -> ADOConnection3;
-    String sql = "select PGUID, ²ÎÊı from Parm order by Index_ asc, ID asc";
+    String sql = "select PGUID, å‚æ•° from Parm order by Index_ asc, ID asc";
     DMod->OpenSql(sql, tempQuery);
     cnt = 0;
     while (!tempQuery -> Eof) {
         if (cnt + 1 >= AdvStringGrid2->RowCount)
             AdvStringGrid2->AddRow();
         ++ cnt;
-        AdvStringGrid2->Cells[0][cnt] = tempQuery->FieldByName("²ÎÊı")->AsString;
+        AdvStringGrid2->Cells[0][cnt] = tempQuery->FieldByName("å‚æ•°")->AsString;
         AdvStringGrid2->Cells[2][cnt] = tempQuery->FieldByName("PGUID")->AsString;
         tempQuery->Next();
     }
@@ -386,23 +386,23 @@ void __fastcall TForm1::TreeViewChange(TObject *Sender, TTreeNode *Node)
 //---------------------------------------------------------------------------
 void __fastcall TForm1::FormCreate(TObject *Sender)
 {
-    // SigViewer ³õÊ¼»¯
+    // SigViewer åˆå§‹åŒ–
     SigViewer1->OnMouseDown = SigViewer1MouseDown;
     SigViewer1->Init( L"123", L"" );
     SigViewer1->ShowToolbar = false;
     Panel -> Visible = true;
-    // AdvStringGird ³õÊ¼»¯
+    // AdvStringGird åˆå§‹åŒ–
     AdvStringGrid -> Clear();
     AdvStringGrid -> RowCount = 2;
-    AdvStringGrid -> Cells[0][0] = "ÀàĞÍÃû³Æ";
-    AdvStringGrid -> Cells[1][0] = "Í¼ÏñÃû³Æ";
+    AdvStringGrid -> Cells[0][0] = "ç±»å‹åç§°";
+    AdvStringGrid -> Cells[1][0] = "å›¾åƒåç§°";
     AdvStringGrid -> AutoSizeColumns(true, 4);
     AdvStringGrid -> Options << goColSizing;
     AdvStringGrid -> Options << goRowSizing;
     AdvStringGrid -> Options << goRowSelect;
     AdvStringGrid -> WordWrap = true;
     GroupBox2 -> Width = AdvStringGrid -> ColWidths[0] * 2 + 8;
-    // ¶ÁÈ¡Êı¾İ¿â²¢´æÈëDynamicArray
+    // è¯»å–æ•°æ®åº“å¹¶å­˜å…¥DynamicArray
     TADOQuery *AdoQ = new TADOQuery(NULL);
     node.Length = 0;
     edge.Length = 0;
@@ -456,7 +456,7 @@ void TForm1::ReadData2(TADOQuery *AdoQuery) {
 }
 //---------------------------------------------------------------------------
 void TForm1::emf_Analysis() {
-    // ³õÊ¼»¯
+    // åˆå§‹åŒ–
     Map_Node.clear();
     Pen_Node.clear();
     ClickDown = 0;
@@ -489,15 +489,15 @@ void TForm1::ExplainLinkPoint( TStream* pStream )
     char flag[2];
     pStream->Read( flag, 2 );
     if( flag[0] == 'C' && flag[1] == 'N' )
-    {   //°æ±¾
+    {   //ç‰ˆæœ¬
         int m_ver = 0;
         pStream->Read( &m_ver, 4 );
         if( m_ver == 0xFFFF0000 + 1 || m_ver == 0xFFFF0000 + 2 )
         {
-            //Í¼Ö½ID
+            //å›¾çº¸ID
             int FDrawingID = 0;
             pStream->Read( &FDrawingID, 4 );
-            //LogOut("Í¼Ö½ID:" + AnsiString(FDrawingID) );
+            //LogOut("å›¾çº¸ID:" + AnsiString(FDrawingID) );
             //  RECT
             TRect rect;
             pStream->Read( &rect.left, 4 );
@@ -505,10 +505,10 @@ void TForm1::ExplainLinkPoint( TStream* pStream )
             pStream->Read( &rect.right, 4 );
             pStream->Read( &rect.bottom, 4 );
             //LogOut( "RECT:" + AnsiString( rect.Left ) + " " +  AnsiString( rect.Top )+ " " + AnsiString( rect.Right )+ " " + AnsiString( rect.Bottom ) );
-            //ÊıÁ¿
+            //æ•°é‡
             int count = 0;
             pStream->Read( &count, 4 );
-            //LogOut("ÊıÁ¿:" + AnsiString(count) );
+            //LogOut("æ•°é‡:" + AnsiString(count) );
             //
             for( int i = 0; i < count; i++ )
             {
@@ -516,15 +516,15 @@ void TForm1::ExplainLinkPoint( TStream* pStream )
                 //id
                 int id = 0;
                 pStream->Read( &id, 4 );
-                //LogOut("  ËùÊôÍ¼·ûid:" + AnsiString(id) );
+                //LogOut("  æ‰€å±å›¾ç¬¦id:" + AnsiString(id) );
                 //group
                 int group = 0;
                 pStream->Read( &group, 4 );
-                //LogOut("  ·Ö×é:" + AnsiString(group) );
+                //LogOut("  åˆ†ç»„:" + AnsiString(group) );
                 //guid
                 short guid_length = 0;
                 pStream->Read( &guid_length, 2 );
-                //LogOut("  GUID³¤¶È:" + AnsiString(guid_length) );
+                //LogOut("  GUIDé•¿åº¦:" + AnsiString(guid_length) );
                 //guid
                 AnsiString m_guid = "";
                 m_guid.SetLength( guid_length );
@@ -533,7 +533,7 @@ void TForm1::ExplainLinkPoint( TStream* pStream )
                 //conncount
                 int concount = 0;
                 pStream->Read( &concount, 4 );
-                //LogOut("  Êı¾İ³¤¶È(¸öÊı*4):" + AnsiString(concount) );
+                //LogOut("  æ•°æ®é•¿åº¦(ä¸ªæ•°*4):" + AnsiString(concount) );
                 for (int m = 0; m < concount; m+=4)
                 {
                     int m_index = 0;
@@ -555,7 +555,7 @@ void TForm1::ExplainLinkPoint( TStream* pStream )
                     LogOut("  x:" + AnsiString(x) );
                     LogOut("  y:" + AnsiString(y) );
                     */
-                   // m_index >= 0 ±íÊ¾Á¬½Óµã
+                   // m_index >= 0 è¡¨ç¤ºè¿æ¥ç‚¹
                 }
             }     
         }
@@ -595,37 +595,37 @@ void __fastcall TForm1::AdvStringGridClickCell(TObject *Sender, int ARow,
 void __fastcall TForm1::SigViewer1Paint(TObject *Sender, long DC)
 {
     HDC hdc = (HDC)DC;
-    double zoom =(double)this->SigViewer1->RealZoom/10000;     //Ëõ·ÅÏµÊı
+    double zoom =(double)this->SigViewer1->RealZoom/10000;     //ç¼©æ”¾ç³»æ•°
     if( zoom == 0)
     {
         zoom = 1;
     }
     String p_path = ExtractFilePath( Application->ExeName )+"picture\\";
 
-    //»­ºì±í±Ê
-    TPicture  *  r_pen0;  //ºì±í±Ê
+    //ç”»çº¢è¡¨ç¬”
+    TPicture  *  r_pen0;  //çº¢è¡¨ç¬”
     long r_x0,r_y0;
     r_pen0 = new TPicture;
-    r_pen0->LoadFromFile(p_path+"ºì±í±Ê.bmp");
+    r_pen0->LoadFromFile(p_path+"çº¢è¡¨ç¬”.bmp");
     int bmp_width = 0;
     int bmp_height = 0;
     Graphics::TBitmap *bm = r_pen0->Bitmap; //
     bmp_width = bm->Width;
     bmp_height = bm->Height;
     long x0 =  this->SigViewer1->Width - 200;
-    SigViewer1->WindowToView(x0, 20, &r_x0, &r_y0);  //ÆÁÄ»×ø±ê×ª»»³É¿Ø¼ş×ø±ê
-    int orgin[4]; //Í¼Æ¬×ø±êÓë¿í¸ß
+    SigViewer1->WindowToView(x0, 20, &r_x0, &r_y0);  //å±å¹•åæ ‡è½¬æ¢æˆæ§ä»¶åæ ‡
+    int orgin[4]; //å›¾ç‰‡åæ ‡ä¸å®½é«˜
     orgin[0] = r_x0;
     orgin[1] = r_y0;
-    orgin[2] = bmp_width/zoom;  //±£³Ö»æÖÆµÄÍ¼Æ¬¹Ì¶¨³ß´ç£¬²»ËæÍ¼Ö½±ä´óËõĞ¡
+    orgin[2] = bmp_width/zoom;  //ä¿æŒç»˜åˆ¶çš„å›¾ç‰‡å›ºå®šå°ºå¯¸ï¼Œä¸éšå›¾çº¸å˜å¤§ç¼©å°
     orgin[3] = bmp_height/zoom;
     DrawPicture(hdc, orgin, bm->Canvas->Handle, 0, 0, bmp_width, bmp_height, RGB(255, 255, 255));
     delete r_pen0;
 
-    //»­ºÚ±í±Ê
-    TPicture  *  b_pen0;  //ºÚ±í±Ê
+    //ç”»é»‘è¡¨ç¬”
+    TPicture  *  b_pen0;  //é»‘è¡¨ç¬”
     b_pen0 = new  TPicture;
-    b_pen0->LoadFromFile(p_path+"ºÚ±í±Ê.bmp");
+    b_pen0->LoadFromFile(p_path+"é»‘è¡¨ç¬”.bmp");
     long b_x0,b_y0;
     bm = b_pen0->Bitmap;
     bmp_width = bm->Width;
@@ -633,7 +633,7 @@ void __fastcall TForm1::SigViewer1Paint(TObject *Sender, long DC)
 
     x0 =  this->SigViewer1->Width - 150;
     SigViewer1->WindowToView(x0, 20, &b_x0, &b_y0);
-    //Í¼Æ¬×ø±êÓë¿í¸ß
+    //å›¾ç‰‡åæ ‡ä¸å®½é«˜
     orgin[0] = b_x0;
     orgin[1] = b_y0;
     orgin[2] = bmp_width/zoom;
@@ -641,17 +641,17 @@ void __fastcall TForm1::SigViewer1Paint(TObject *Sender, long DC)
     DrawPicture(hdc, orgin, bm->Canvas->Handle, 0, 0, bmp_width, bmp_height, RGB(255, 255, 255));
     delete b_pen0;
 
-    //»­µçÁ÷Ç¯
-    TPicture  *c_pen0; //µçÁ÷Ç¯
+    //ç”»ç”µæµé’³
+    TPicture  *c_pen0; //ç”µæµé’³
     long c_x0,c_y0;
     c_pen0 = new TPicture;
-    c_pen0->LoadFromFile(p_path+"µçÁ÷Ç¯.bmp");
+    c_pen0->LoadFromFile(p_path+"ç”µæµé’³.bmp");
     bm = c_pen0->Bitmap;
     bmp_width = bm->Width;
     bmp_height = bm->Height;
     x0 = this->SigViewer1->Width - 100;
     SigViewer1->WindowToView(x0, 20, &c_x0, &c_y0);
-    //Í¼Æ¬×ø±êÓë¿í¸ß
+    //å›¾ç‰‡åæ ‡ä¸å®½é«˜
     orgin[0] = c_x0;
     orgin[1] = c_y0;
     orgin[2] = bmp_width/zoom;
@@ -659,7 +659,7 @@ void __fastcall TForm1::SigViewer1Paint(TObject *Sender, long DC)
     DrawPicture(hdc, orgin, bm->Canvas->Handle, 0, 0, bmp_width, bmp_height, RGB(255, 255, 255));
     delete c_pen0;
 
-    //»­¾ØĞÎ¿ò
+    //ç”»çŸ©å½¢æ¡†
     this->SigViewer1->DcSetPenColor(DC,clRed) ;
     this->SigViewer1->DcSetPenWidth(DC,1) ;
     this->SigViewer1->DcMoveTo(DC,r_x0-5/zoom ,r_y0-5/zoom);
@@ -671,13 +671,13 @@ void __fastcall TForm1::SigViewer1Paint(TObject *Sender, long DC)
     //
     //this->SigViewer1->DcEllipse(DC,)
 
-    //»­ÒÆ¶¯±í±Ê
+    //ç”»ç§»åŠ¨è¡¨ç¬”
     long tx = Coordinate.first, ty = Coordinate.second;
     if (ClickDown == 1) {
         TPicture  *movepen;
         if (using_red) {
             movepen = new TPicture;
-            movepen->LoadFromFile(p_path+"ºì±í±Ê.bmp");
+            movepen->LoadFromFile(p_path+"çº¢è¡¨ç¬”.bmp");
             bm = movepen->Bitmap;
             bmp_width = bm->Width;
             bmp_height = bm->Height;
@@ -701,7 +701,7 @@ void __fastcall TForm1::SigViewer1Paint(TObject *Sender, long DC)
         }
         else if(using_black) {
             movepen = new  TPicture;
-            movepen->LoadFromFile(p_path+"ºÚ±í±Ê.bmp");
+            movepen->LoadFromFile(p_path+"é»‘è¡¨ç¬”.bmp");
             bm = movepen->Bitmap;
             bmp_width = bm->Width;
             bmp_height = bm->Height;
@@ -725,7 +725,7 @@ void __fastcall TForm1::SigViewer1Paint(TObject *Sender, long DC)
         }
         else if (using_clamp){
             movepen = new TPicture;
-            movepen->LoadFromFile(p_path+"µçÁ÷Ç¯.bmp");
+            movepen->LoadFromFile(p_path+"ç”µæµé’³.bmp");
             bm = movepen->Bitmap;
             bmp_width = bm->Width;
             bmp_height = bm->Height;
@@ -750,7 +750,7 @@ void __fastcall TForm1::SigViewer1Paint(TObject *Sender, long DC)
         delete movepen;
     }
 
-    //»­Ñ¡ÖĞ±í±Ê
+    //ç”»é€‰ä¸­è¡¨ç¬”
     set<Pen>::iterator it;
 
     for (it = Pen_Node.begin(); it != Pen_Node.end(); ++ it) {
@@ -758,7 +758,7 @@ void __fastcall TForm1::SigViewer1Paint(TObject *Sender, long DC)
         tx = it -> x, ty = it -> y;
         if (it -> type == 1) {
             nodepen = new TPicture;
-            nodepen->LoadFromFile(p_path+"ºì±í±Ê.bmp");
+            nodepen->LoadFromFile(p_path+"çº¢è¡¨ç¬”.bmp");
             bm = nodepen->Bitmap;
             bmp_width = bm->Width;
             bmp_height = bm->Height;
@@ -767,7 +767,7 @@ void __fastcall TForm1::SigViewer1Paint(TObject *Sender, long DC)
             //SigViewer1->WindowToView(tx - dx[1], ty - dy[1], &r_x0, &r_y0);
             orgin[0] = tx - dx[1] / zoom;
             orgin[1] = ty - dy[1] / zoom;
-            orgin[2] = bmp_width/zoom;  //±£³Ö»æÖÆµÄÍ¼Æ¬¹Ì¶¨³ß´ç£¬²»ËæÍ¼Ö½±ä´óËõĞ¡
+            orgin[2] = bmp_width/zoom;  //ä¿æŒç»˜åˆ¶çš„å›¾ç‰‡å›ºå®šå°ºå¯¸ï¼Œä¸éšå›¾çº¸å˜å¤§ç¼©å°
             orgin[3] = bmp_height/zoom;
             DrawPicture(hdc, orgin, bm->Canvas->Handle, 0, 0, bmp_width, bmp_height, RGB(255, 255, 255));
             this->SigViewer1->DcSetPenColor(DC,clRed);
@@ -775,7 +775,7 @@ void __fastcall TForm1::SigViewer1Paint(TObject *Sender, long DC)
         }
         else if(it -> type == 2) {
             nodepen = new  TPicture;
-            nodepen->LoadFromFile(p_path+"ºÚ±í±Ê.bmp");
+            nodepen->LoadFromFile(p_path+"é»‘è¡¨ç¬”.bmp");
             bm = nodepen->Bitmap;
             bmp_width = bm->Width;
             bmp_height = bm->Height;
@@ -784,7 +784,7 @@ void __fastcall TForm1::SigViewer1Paint(TObject *Sender, long DC)
             //SigViewer1->WindowToView(tx - dx[2], ty - dy[2], &b_x0, &b_y0);
             orgin[0] = tx - dx[2] / zoom;
             orgin[1] = ty - dy[2] / zoom;
-            orgin[2] = bmp_width/zoom;  //±£³Ö»æÖÆµÄÍ¼Æ¬¹Ì¶¨³ß´ç£¬²»ËæÍ¼Ö½±ä´óËõĞ¡
+            orgin[2] = bmp_width/zoom;  //ä¿æŒç»˜åˆ¶çš„å›¾ç‰‡å›ºå®šå°ºå¯¸ï¼Œä¸éšå›¾çº¸å˜å¤§ç¼©å°
             orgin[3] = bmp_height/zoom;
             DrawPicture(hdc, orgin, bm->Canvas->Handle, 0, 0, bmp_width, bmp_height, RGB(255, 255, 255));
             this->SigViewer1->DcSetPenColor(DC,clBlack);
@@ -792,7 +792,7 @@ void __fastcall TForm1::SigViewer1Paint(TObject *Sender, long DC)
         }
         else {
             nodepen = new TPicture;
-            nodepen->LoadFromFile(p_path+"µçÁ÷Ç¯.bmp");
+            nodepen->LoadFromFile(p_path+"ç”µæµé’³.bmp");
             bm = nodepen->Bitmap;
             bmp_width = bm->Width;
             bmp_height = bm->Height;
@@ -801,7 +801,7 @@ void __fastcall TForm1::SigViewer1Paint(TObject *Sender, long DC)
             //SigViewer1->WindowToView(tx - dx[3], ty - dy[3], &c_x0, &c_y0);
             orgin[0] = tx - dx[3] / zoom;
             orgin[1] = ty - dy[3] / zoom;
-            orgin[2] = bmp_width/zoom;  //±£³Ö»æÖÆµÄÍ¼Æ¬¹Ì¶¨³ß´ç£¬²»ËæÍ¼Ö½±ä´óËõĞ¡
+            orgin[2] = bmp_width/zoom;  //ä¿æŒç»˜åˆ¶çš„å›¾ç‰‡å›ºå®šå°ºå¯¸ï¼Œä¸éšå›¾çº¸å˜å¤§ç¼©å°
             orgin[3] = bmp_height/zoom;
             DrawPicture(hdc, orgin, bm->Canvas->Handle, 0, 0, bmp_width, bmp_height, RGB(255, 255, 255));
             this->SigViewer1->DcSetPenColor(DC,clYellow);
@@ -819,37 +819,37 @@ void TForm1::DrawPicture(HDC hdcDest, int Orign[4], HDC hdcSrc, int nXOriginSrc,
     nWidthDest = Orign[2];
     nHeightDest = Orign[3];
 
-    HBITMAP hOldImageBMP, hImageBMP = CreateCompatibleBitmap(hdcDest, nWidthDest, nHeightDest);	// ´´½¨¼æÈİÎ»Í¼
-	HBITMAP hOldMaskBMP, hMaskBMP = CreateBitmap(nWidthDest, nHeightDest, 1, 1, NULL);			// ´´½¨µ¥É«ÑÚÂëÎ»Í¼
+    HBITMAP hOldImageBMP, hImageBMP = CreateCompatibleBitmap(hdcDest, nWidthDest, nHeightDest);	// åˆ›å»ºå…¼å®¹ä½å›¾
+	HBITMAP hOldMaskBMP, hMaskBMP = CreateBitmap(nWidthDest, nHeightDest, 1, 1, NULL);			// åˆ›å»ºå•è‰²æ©ç ä½å›¾
 	HDC		hImageDC = CreateCompatibleDC(hdcDest);
 	HDC		hMaskDC = CreateCompatibleDC(hdcDest);
 	hOldImageBMP = (HBITMAP)SelectObject(hImageDC, hImageBMP);
 	hOldMaskBMP = (HBITMAP)SelectObject(hMaskDC, hMaskBMP);
 
-	// ½«Ô´DCÖĞµÄÎ»Í¼¿½±´µ½ÁÙÊ±DCÖĞ
+	// å°†æºDCä¸­çš„ä½å›¾æ‹·è´åˆ°ä¸´æ—¶DCä¸­
 	if (nWidthDest == nWidthSrc && nHeightDest == nHeightSrc)
 		BitBlt(hImageDC, 0, 0, nWidthDest, nHeightDest, hdcSrc, nXOriginSrc, nYOriginSrc, SRCCOPY);
 	else
 		StretchBlt(hImageDC, 0, 0, nWidthDest, nHeightDest,
 		hdcSrc, nXOriginSrc, nYOriginSrc, nWidthSrc, nHeightSrc, SRCCOPY);
 
-	// ÉèÖÃÍ¸Ã÷É«
+	// è®¾ç½®é€æ˜è‰²
 	SetBkColor(hImageDC, crTransparent);
 
-	// Éú³ÉÍ¸Ã÷ÇøÓòÎª°×É«£¬ÆäËüÇøÓòÎªºÚÉ«µÄÑÚÂëÎ»Í¼
+	// ç”Ÿæˆé€æ˜åŒºåŸŸä¸ºç™½è‰²ï¼Œå…¶å®ƒåŒºåŸŸä¸ºé»‘è‰²çš„æ©ç ä½å›¾
 	BitBlt(hMaskDC, 0, 0, nWidthDest, nHeightDest, hImageDC, 0, 0, SRCCOPY);
 
-	// Éú³ÉÍ¸Ã÷ÇøÓòÎªºÚÉ«£¬ÆäËüÇøÓò±£³Ö²»±äµÄÎ»Í¼
+	// ç”Ÿæˆé€æ˜åŒºåŸŸä¸ºé»‘è‰²ï¼Œå…¶å®ƒåŒºåŸŸä¿æŒä¸å˜çš„ä½å›¾
 	SetBkColor(hImageDC, RGB(0,0,0));
 	SetTextColor(hImageDC, RGB(255,255,255));
 	BitBlt(hImageDC, 0, 0, nWidthDest, nHeightDest, hMaskDC, 0, 0, SRCAND);
 
-	// Í¸Ã÷²¿·Ö±£³ÖÆÁÄ»²»±ä£¬ÆäËü²¿·Ö±ä³ÉºÚÉ«
+	// é€æ˜éƒ¨åˆ†ä¿æŒå±å¹•ä¸å˜ï¼Œå…¶å®ƒéƒ¨åˆ†å˜æˆé»‘è‰²
 	SetBkColor(hdcDest,RGB(0xff,0xff,0xff));
 	SetTextColor(hdcDest,RGB(0,0,0));
 	BitBlt(hdcDest, nXOriginDest, nYOriginDest, nWidthDest, nHeightDest, hMaskDC, 0, 0, SRCAND);
 
-	// "»ò"ÔËËã,Éú³É×îÖÕĞ§¹û
+	// "æˆ–"è¿ç®—,ç”Ÿæˆæœ€ç»ˆæ•ˆæœ
 	BitBlt(hdcDest, nXOriginDest, nYOriginDest, nWidthDest, nHeightDest, hImageDC, 0, 0, SRCPAINT);
 
 	SelectObject(hImageDC, hOldImageBMP);
@@ -885,7 +885,7 @@ bool Check_Point(long x, long y) {
 void __fastcall TForm1::SigViewer1MouseDown(TObject *Sender,
       Sigviewerlib_tlb::TxMouseButton Button, long X, long Y, long *Cancel)
 {
-// Êó±ê°´ÏÂ
+// é¼ æ ‡æŒ‰ä¸‹
     set<pair<long, long> >::iterator iter;
     long tx0, ty0;
     SigViewer1->WindowToView(X, Y, &tx0, &ty0);
@@ -908,7 +908,7 @@ void __fastcall TForm1::SigViewer1MouseDown(TObject *Sender,
                             iter_List.push_back(it);
                     }
                     if (iter_List.size() >= 2) {
-                        //ShowMessage("ÇëÑ¡Ôñ±í±ÊÒÆ¶¯");
+                        //ShowMessage("è¯·é€‰æ‹©è¡¨ç¬”ç§»åŠ¨");
                         // balabala...
                         Choose_Move_Pen(iter_List);
                     }
@@ -927,7 +927,7 @@ void __fastcall TForm1::SigViewer1MouseDown(TObject *Sender,
                     break;
                 case 1:
                     if (used_red_pen > used_black_pen) {
-                        ShowMessage("ÉĞÓĞÎ´Åä¶ÔµÄºì±í±Ê");
+                        ShowMessage("å°šæœ‰æœªé…å¯¹çš„çº¢è¡¨ç¬”");
                         break;
                     }
                     else {
@@ -939,7 +939,7 @@ void __fastcall TForm1::SigViewer1MouseDown(TObject *Sender,
                     break;
                 case 2:
                     if (used_black_pen > used_red_pen) {
-                        ShowMessage("ÉĞÓĞÎ´Åä¶ÔµÄºÚ±í±Ê");
+                        ShowMessage("å°šæœ‰æœªé…å¯¹çš„é»‘è¡¨ç¬”");
                         break;
                     }
                     else {
@@ -1026,7 +1026,7 @@ void __fastcall TForm1::SigViewer1MouseDown(TObject *Sender,
                     iter_List.push_back(it);
             }
             if (iter_List.size() >= 2) {
-                //ShowMessage("ÇëÑ¡Ôñ±í±ÊÉ¾³ı");
+                //ShowMessage("è¯·é€‰æ‹©è¡¨ç¬”åˆ é™¤");
                 // balabala...
                 Choose_Delete_Pen(iter_List);
             }
@@ -1089,7 +1089,7 @@ void __fastcall TForm1::SigViewer1MouseDown(TObject *Sender,
 //---------------------------------------------------------------------------
 void __fastcall TForm1::SigViewer1MouseMove(TObject *Sender, long X, long Y, long *Cancel)
 {
-// Êó±êÒÆ¶¯
+// é¼ æ ‡ç§»åŠ¨
     //*Cancel = 1;
     Coordinate.first = X, Coordinate.second = Y;
 }
@@ -1097,11 +1097,11 @@ void __fastcall TForm1::SigViewer1MouseMove(TObject *Sender, long X, long Y, lon
 void __fastcall TForm1::SigViewer1MouseUp(TObject *Sender,
       Sigviewerlib_tlb::TxMouseButton Button, long X, long Y, long *Cancel)
 {
-// Êó±êÌ§Æğ
+// é¼ æ ‡æŠ¬èµ·
 }
 //---------------------------------------------------------------------------
 void TForm1::Choose_Move_Pen(const vector<set<Pen>::iterator> &L) {
-    ExtraForm->Caption = "ÇëÑ¡ÔñËùÒªÒÆ¶¯µÄ±í±Ê";
+    ExtraForm->Caption = "è¯·é€‰æ‹©æ‰€è¦ç§»åŠ¨çš„è¡¨ç¬”";
     ExtraForm->Move_Pen(L);
     ExtraForm->ShowModal();
     set<Pen>::iterator it;
@@ -1120,7 +1120,7 @@ void TForm1::Choose_Move_Pen(const vector<set<Pen>::iterator> &L) {
 
 //---------------------------------------------------------------------------
 void TForm1::Choose_Delete_Pen(const vector<set<Pen>::iterator> &L) {
-    ExtraForm->Caption = "ÇëÑ¡ÔñËùÒªÉ¾³ıµÄ±í±Ê";
+    ExtraForm->Caption = "è¯·é€‰æ‹©æ‰€è¦åˆ é™¤çš„è¡¨ç¬”";
     ExtraForm->Delete_Pen(L);
     ExtraForm->ShowModal();
     set<Pen>::iterator it;
@@ -1165,19 +1165,19 @@ void __fastcall TForm1::N1Click(TObject *Sender)
     AdvStringGrid2 -> ColCount = 3;
     AdvStringGrid2 -> FixedRows = 1;
     AdvStringGrid2 -> FixedCols = 0;
-    AdvStringGrid2 -> Cells[0][0] = "Êı¾İÀàĞÍ";
-    AdvStringGrid2 -> Cells[1][0] = "Öµ";
+    AdvStringGrid2 -> Cells[0][0] = "æ•°æ®ç±»å‹";
+    AdvStringGrid2 -> Cells[1][0] = "å€¼";
     AdvStringGrid2 -> ColWidths[2] = 0;
     TADOQuery *tempQuery = new TADOQuery(NULL);
     tempQuery -> Connection = DMod -> ADOConnection3;
-    String sql = "select PGUID, ²ÎÊı from Parm order by Index_ asc, ID asc";
+    String sql = "select PGUID, å‚æ•° from Parm order by Index_ asc, ID asc";
     DMod->OpenSql(sql, tempQuery);
     int cnt = 0;
     while (!tempQuery -> Eof) {
         if (cnt + 1 >= AdvStringGrid2->RowCount)
             AdvStringGrid2->AddRow();
         ++ cnt;
-        AdvStringGrid2->Cells[0][cnt] = tempQuery->FieldByName("²ÎÊı")->AsString;
+        AdvStringGrid2->Cells[0][cnt] = tempQuery->FieldByName("å‚æ•°")->AsString;
         AdvStringGrid2->Cells[2][cnt] = tempQuery->FieldByName("PGUID")->AsString;
         tempQuery->Next();
     }
@@ -1208,18 +1208,18 @@ void __fastcall TForm1::AdvStringGrid2GetEditorType(TObject *Sender,
         String datatype;
         datatype = Data_Type[AdvStringGrid2->Cells[2][ARow]];
         //ShowMessage(datatype);
-        if (datatype == "ÎÄ±¾")
+        if (datatype == "æ–‡æœ¬")
             AEditor = edNormal;
-        if (datatype == "Êı×Ö")
+        if (datatype == "æ•°å­—")
             AEditor = edNumeric;
-        if (datatype == "ÈÕÆÚ")
+        if (datatype == "æ—¥æœŸ")
             AEditor = edDateEditUpDown;
-        if (datatype == "¿ÉÑ¡Ïî") {
+        if (datatype == "å¯é€‰é¡¹") {
             TADOQuery * tempQuery = new TADOQuery(NULL);
             tempQuery -> Connection = DMod -> ADOConnection4;
             String sql = "select PROPVALUE from ZSK_LIMIT_H0000Z000K06 where UPGUID = '" + AdvStringGrid2->Cells[2][ARow] + "'";
             DMod->OpenSql(sql, tempQuery);
-            if (tempQuery->FieldByName("PROPVALUE")->AsString == "·ñ") {
+            if (tempQuery->FieldByName("PROPVALUE")->AsString == "å¦") {
                 AEditor = edComboList;
                 String str;
                 TADOQuery * AdoQ = new TADOQuery(NULL);
@@ -1233,7 +1233,7 @@ void __fastcall TForm1::AdvStringGrid2GetEditorType(TObject *Sender,
                 this->AdvStringGrid2->Combobox->Items->CommaText = str;
                 delete AdoQ;
             }
-            else if (tempQuery->FieldByName("PROPVALUE")->AsString == "ÊÇ") {
+            else if (tempQuery->FieldByName("PROPVALUE")->AsString == "æ˜¯") {
                 String str;
                 AEditor = edCustom;
                 this->AdvStringGrid2->EditLink = edCheckListEdit;
@@ -1254,15 +1254,15 @@ void __fastcall TForm1::AdvStringGrid2GetEditorType(TObject *Sender,
             }
             delete tempQuery;
         }
-        if (datatype == "Ê±¼ä")
+        if (datatype == "æ—¶é—´")
             AEditor = edTimeEdit;
-        if (datatype == "Ê±¼ä¶Î")
+        if (datatype == "æ—¶é—´æ®µ")
             AEditor = edNormal;
-        if (datatype == "ÈÕÆÚ+Ê±¼ä")
+        if (datatype == "æ—¥æœŸ+æ—¶é—´")
             AEditor = edNormal;
-        if (datatype == "Á´½Ó")
+        if (datatype == "é“¾æ¥")
             AEditor = edNormal;
-        if (datatype == "ÎÄ¼ş")
+        if (datatype == "æ–‡ä»¶")
             AEditor = edNormal;
     }
 }
@@ -1300,12 +1300,12 @@ void __fastcall TForm1::AdvStringGrid1ClickCell(TObject *Sender, int ARow,
       int ACol)
 {
     /*
-        ´¢´æÉÏÒ»ÕÅÍ¼µÄÊı¾İ
+        å‚¨å­˜ä¸Šä¸€å¼ å›¾çš„æ•°æ®
         
     */
 
     /*
-        ¶ÁÈ¡ÕâÕÅÍ¼µÄÊı¾İ
+        è¯»å–è¿™å¼ å›¾çš„æ•°æ®
     */
     // read data
     String up1, up2, sql;
