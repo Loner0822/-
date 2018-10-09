@@ -50,22 +50,19 @@ __published:	// IDE-managed Components
     TAdvStringGrid *AdvStringGrid;
     TSplitter *Splitter2;
     TGroupBox *GroupBox3;
-    TSigViewer *SigViewer1;
     TTimer *Timer;
-    TGroupBox *GroupBox4;
-    TSplitter *Splitter3;
     TGroupBox *GroupBox5;
     TSplitter *Splitter4;
     TGroupBox *GroupBox6;
-    TPanel *Panel;
     TAdvStringGrid *AdvStringGrid1;
     TAdvStringGrid *AdvStringGrid2;
-    TToolBar *ToolBar1;
-    TButton *Button1;
-    TButton *Button2;
-    TButton *Button3;
     TPopupMenu *PopupMenu;
     TMenuItem *N1;
+    TGroupBox *GroupBox4;
+    TSigViewer *SigViewer1;
+    TPanel *Panel1;
+    TSplitter *Splitter3;
+    TPanel *Panel;
     void __fastcall TreeViewChange(TObject *Sender, TTreeNode *Node);
     void __fastcall FormCreate(TObject *Sender);
     void __fastcall AdvStringGridClickCell(TObject *Sender, int ARow,
@@ -101,6 +98,8 @@ __published:	// IDE-managed Components
           int ACol);
     void __fastcall AdvStringGrid2ComboCloseUp(TObject *Sender, int ARow,
           int ACol);
+    void __fastcall AdvStringGrid2MouseMove(TObject *Sender,
+          TShiftState Shift, int X, int Y);
 private:	// User declarations
 public:		// User declarations
     __fastcall TForm1(TComponent* Owner);
