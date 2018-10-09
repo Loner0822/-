@@ -116,6 +116,8 @@ public:		// User declarations
     void Choose_Move_Pen(const vector<set<Pen>::iterator> &L);
     void Choose_Delete_Pen(const vector<set<Pen>::iterator> &L);
     void FindFather(TTreeNode *tnode, int &level);
+    void DB_AddPen(const Pen &u_pen);
+    void DB_DeletePen(int type, int id);
 };
 //---------------------------------------------------------------------------
 extern PACKAGE TForm1 *Form1;
