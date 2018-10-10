@@ -191,7 +191,7 @@ void __fastcall TForm1::AdvStringGrid1CellValidate(TObject *Sender,
                 Value = "";
                 return;
             }
-            sql = "update ZSK_NATURE_H0000Z000K06 set NATURE = '" + Value + "' where NATURE = '" + Now_Nature + "' and UPGUID = '" + node[Now_Node].Data.PGUID + "' and ISDELETE = 0";
+            sql = "update ZSK_NATURE_H0000Z000K06 set NATURE = '" + Value + "', S_UDTIME = '" + Now().FormatString("yyyy-MM-dd hh:mm:ss") + "' where NATURE = '" + Now_Nature + "' and UPGUID = '" + node[Now_Node].Data.PGUID + "' and ISDELETE = 0";
             DMod -> ExecSql(sql, tempQuery);
         }
     }
@@ -318,13 +318,6 @@ void __fastcall TForm1::TreeViewChange(TObject *Sender, TTreeNode *Node)
     //ShowMessage(GroupBox2 -> Width);
 
     //初始化属性列表
-    /*
-    TADOQuery *tmpQuery = new TADOQuery(NULL);
-    tmpQuery -> Connection = DMod -> ADOConnection3;
-    String tsql = "delete * from Map";
-    DMod -> ExecSql(tsql, tmpQuery);
-    delete tmpQuery;
-    */
     AdvStringGrid1 -> Clear();
     AdvStringGrid1 -> Options << goEditing;
     //AdvStringGrid1 -> Options << goRowSelect;
@@ -344,11 +337,6 @@ void __fastcall TForm1::TreeViewChange(TObject *Sender, TTreeNode *Node)
     FindFather(Node, 1);
     AdvStringGrid1 -> Cells[1][AdvStringGrid1 -> RowCount - 1] = node[Now_Node].Data.JdText;
     AdvStringGrid1->Options << goRowMoving;
-
-    //ShowMessage(AdvStringGrid1 -> RowCount);
-    //AdvStringGrid1->ColCount = 3;
-    //AdvStringGrid1->MergeCells(1, 0, AdvStringGrid1->ColCount - 1, 1);
-    //AdvStringGrid1 -> AutoSizeColumns(True, 4);
 
     AdvStringGrid2 -> Clear();
     AdvStringGrid2 -> Options << goEditing;
@@ -439,11 +427,6 @@ void __fastcall TForm1::FormCreate(TObject *Sender)
     BuildTree();
     AdvStringGridClickCell(AdvStringGrid, 1, 0);
     delete AdoQ;
-    /*AdoQ = new TADOQuery(NULL);
-    AdoQ -> Connection = DMod -> ADOConnection3;
-    sql = "delete * from Data";
-    DMod -> ExecSql(sql, AdoQ);
-    delete AdoQ;*/
 }
 //---------------------------------------------------------------------------
 void TForm1::ReadData2(TADOQuery *AdoQuery) {
@@ -1328,7 +1311,7 @@ void __fastcall TForm1::AdvStringGrid2EditCellDone(TObject *Sender,
     DMod->OpenSql(sql, AdoQ);
 
     if (!AdoQ->Eof) {
-        sql = "update ZSK_DATA_H0000Z000K06 set DATA = '" + AdvStringGrid2->Cells[1][row2] + "' where UPGUID1 = '" + up1 + "' and UPGUID2 = '" + up2 + "' and ISDELETE = 0";
+        sql = "update ZSK_DATA_H0000Z000K06 set DATA = '" + AdvStringGrid2->Cells[1][row2] + "', and S_UDTIME = '" + Now().FormatString("yyyy-MM-dd hh:mm:ss") + "' where UPGUID1 = '" + up1 + "' and UPGUID2 = '" + up2 + "' and ISDELETE = 0";
         DMod->ExecSql(sql, AdoQ);
     }
     else {
