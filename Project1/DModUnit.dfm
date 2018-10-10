@@ -1,8 +1,8 @@
 object DMod: TDMod
   OldCreateOrder = False
   OnCreate = DataModuleCreate
-  Left = 520
-  Top = 262
+  Left = 125
+  Top = 504
   Height = 150
   Width = 216
   object ADOConnection1: TADOConnection
@@ -30,9 +30,5 @@ object DMod: TDMod
     ConnectionString = 'Provider=Microsoft.Jet.OLEDB.4.0;Persist Security Info=False'
     Provider = 'Microsoft.Jet.OLEDB.4.0'
     Left = 120
-  end
-  object ADOConnection4: TADOConnection
-    Left = 120
-    Top = 48
   end
 end

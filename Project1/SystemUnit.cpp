@@ -59,7 +59,7 @@ void __fastcall TForm2::FormCreate(TObject *Sender)
 
     TADOQuery *tempQuery = new TADOQuery(NULL);
     tempQuery -> Connection = DMod -> ADOConnection3;
-    String sql = "select PGUID, 参数 from Parm order by Index_ asc, ID asc";
+    String sql = "select PGUID, PARM from ZSK_PARM_H0000Z000K06 where ISDELETE = 0 order by Index_ asc, ID asc";
     DMod->OpenSql(sql, tempQuery);
     int cnt = 0;
     while (!tempQuery -> Eof) {
@@ -67,11 +67,12 @@ void __fastcall TForm2::FormCreate(TObject *Sender)
             AdvStringGrid1->AddRow();
         ++ cnt;
         AdvStringGrid1->Cells[0][cnt] = cnt;
-        AdvStringGrid1->Cells[1][cnt] = tempQuery->FieldByName("参数")->AsString;
+        AdvStringGrid1->Cells[1][cnt] = tempQuery->FieldByName("PARM")->AsString;
         AdvStringGrid1->Cells[2][cnt] = tempQuery->FieldByName("PGUID")->AsString;
         tempQuery->Next();
     }
-    AdvStringGrid1->AddRow();
+    if (AdvStringGrid1->RowCount > 2)
+        AdvStringGrid1->AddRow();
     delete tempQuery;
     /*tempQuery = new TADOQuery(NULL);
     tempQuery->Connection = DMod->ADOConnection4;
@@ -100,7 +101,7 @@ void __fastcall TForm2::AdvStringGrid1CellValidate(TObject *Sender,
             return;
         CoInitialize(NULL);
         String pguid = newGUID();
-        String sql = "select * from Parm where 参数 = '" + Value + "'";
+        String sql = "select * from ZSK_PARM_H0000Z000K06 where PARM = '" + Value + "' and ISDELETE = 0";
         DMod->OpenSql(sql, tempQuery);
         if (!tempQuery->Eof) {
             delete tempQuery;
@@ -109,14 +110,15 @@ void __fastcall TForm2::AdvStringGrid1CellValidate(TObject *Sender,
             Value = "";
             return;
         }
-        sql = "insert into Parm (PGUID, 参数) values('" + pguid + "', '" + Value + "')";
+        sql = "insert into ZSK_PARM_H0000Z000K06 (PGUID, S_UDTIME, PARM) values('" + pguid + "', '" + Now().FormatString("yyyy-MM-dd hh:mm:ss") + "', '" + Value + "')";
         DMod->ExecSql(sql, tempQuery);
         AdvStringGrid1->AddRow();
         AdvStringGrid1->Cells[0][ARow] = ARow;
     }
     else {
         if (Value == "") {
-            String sql = "delete * from Parm where 参数 = '" + Now_Parm + "'";
+            //String sql = "delete * from ZSK_PARM_H0000Z000K06 where PARM = '" + Now_Parm + "'";
+			String sql = "update ZSK_PARM_H0000Z000K06 set ISDELETE = 1 where PARM = '" + Now_Parm + "'";
             DMod->ExecSql(sql, tempQuery);
             Value = AdvStringGrid1->Cells[ACol][ARow + 1];
             AdvStringGrid1->RemoveRows(ARow, 1);
@@ -124,7 +126,7 @@ void __fastcall TForm2::AdvStringGrid1CellValidate(TObject *Sender,
                 AdvStringGrid1->Cells[0][i] = i;
         }
         else {
-            String sql = "select * from Parm where 参数 = '" + Value + "'";
+            String sql = "select * from ZSK_PARM_H0000Z000K06 where PARM = '" + Value + "' and ISDELETE = 0";
             DMod->OpenSql(sql, tempQuery);
             if (!tempQuery->Eof) {
                 delete tempQuery;
@@ -133,7 +135,7 @@ void __fastcall TForm2::AdvStringGrid1CellValidate(TObject *Sender,
                 Value = "";
                 return;
             }
-            sql = "update Parm set 参数 = '" + Value + "' where 参数 = '" + Now_Parm + "'";
+            sql = "update ZSK_PARM_H0000Z000K06 set PARM = '" + Value + "' where PARM = '" + Now_Parm + "' and ISDELETE = 0";
             DMod->ExecSql(sql, tempQuery);
         }
     }
@@ -156,7 +158,7 @@ void __fastcall TForm2::AdvStringGrid1RowMoved(TObject *Sender,
     TADOQuery *tempQuery = new TADOQuery(NULL);
     tempQuery -> Connection = DMod->ADOConnection3;
     for (int i = 1; i < AdvStringGrid1->RowCount - 1; ++ i) {
-        String sql = "update Parm set Index_ = " + IntToStr(i) + " where 参数 = '" + AdvStringGrid1->Cells[1][i] + "'";
+        String sql = "update ZSK_PARM_H0000Z000K06 set Index_ = " + IntToStr(i) + " where PARM = '" + AdvStringGrid1->Cells[1][i] + "' and ISDELETE = 0";
         DMod->ExecSql(sql, tempQuery);
         AdvStringGrid1->Cells[0][i] = i;
     }
@@ -194,4 +196,5 @@ void __fastcall TForm2::AdvStringGrid1SelectCell(TObject *Sender, int ACol,
     this->csDataTypeDef_ocx1->InitShow(WideString(AdvStringGrid1->Cells[2][ARow]),WideString(""),true);
 }
 //---------------------------------------------------------------------------
+
 
