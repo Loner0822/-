@@ -97,8 +97,19 @@ void __fastcall TForm2::AdvStringGrid1CellValidate(TObject *Sender,
     TADOQuery *tempQuery = new TADOQuery(NULL);
     tempQuery->Connection = DMod->ADOConnection3;
     if (ARow == AdvStringGrid1->RowCount - 1) {
-        if (Value == "")
-            return;
+        if (Value == "" ) {
+            if (Now_Parm == "")
+                return;
+            else {
+                String sql = "update ZSK_PARM_H0000Z000K06 set ISDELETE = 1 where PARM = '" + Now_Parm + "'";
+                DMod->ExecSql(sql, tempQuery);
+                Value = AdvStringGrid1->Cells[ACol][ARow + 1];
+                AdvStringGrid1->RemoveRows(ARow, 1);
+                for (int i = 1; i < AdvStringGrid1->RowCount - 1; ++ i)
+                    AdvStringGrid1->Cells[0][i] = i;
+                return;
+            }
+        }
         CoInitialize(NULL);
         String pguid = newGUID();
         String sql = "select * from ZSK_PARM_H0000Z000K06 where PARM = '" + Value + "' and ISDELETE = 0";

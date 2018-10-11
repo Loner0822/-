@@ -63,6 +63,15 @@ __published:	// IDE-managed Components
     TPanel *Panel1;
     TSplitter *Splitter3;
     TPanel *Panel;
+    TMainMenu *MainMenu1;
+    TMenuItem *N2;
+    TMenuItem *N3;
+    TMenuItem *N4;
+    TMenuItem *N5;
+    TMenuItem *N6;
+    TMenuItem *N7;
+    TMenuItem *IP1;
+    TMenuItem *N8;
     void __fastcall TreeViewChange(TObject *Sender, TTreeNode *Node);
     void __fastcall FormCreate(TObject *Sender);
     void __fastcall AdvStringGridClickCell(TObject *Sender, int ARow,
@@ -100,6 +109,12 @@ __published:	// IDE-managed Components
           int ACol);
     void __fastcall AdvStringGrid2MouseMove(TObject *Sender,
           TShiftState Shift, int X, int Y);
+    void __fastcall N5Click(TObject *Sender);
+    void __fastcall N6Click(TObject *Sender);
+    void __fastcall N7Click(TObject *Sender);
+    void __fastcall IP1Click(TObject *Sender);
+    void __fastcall N8Click(TObject *Sender);
+    void __fastcall N4Click(TObject *Sender);
 private:	// User declarations
 public:		// User declarations
     __fastcall TForm1(TComponent* Owner);
