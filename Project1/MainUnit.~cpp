@@ -16,6 +16,8 @@
 #include "ExtraUnit.h"
 #include "SystemUnit.h"
 #include "TCheckListEditLink.h"
+#include "TProcess.h"
+#include "TBuildSoftwareF.h"
 using namespace std;
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
@@ -1311,7 +1313,7 @@ void __fastcall TForm1::AdvStringGrid2EditCellDone(TObject *Sender,
     DMod->OpenSql(sql, AdoQ);
 
     if (!AdoQ->Eof) {
-        sql = "update ZSK_DATA_H0000Z000K06 set DATA = '" + AdvStringGrid2->Cells[1][row2] + "', and S_UDTIME = '" + Now().FormatString("yyyy-MM-dd hh:mm:ss") + "' where UPGUID1 = '" + up1 + "' and UPGUID2 = '" + up2 + "' and ISDELETE = 0";
+        sql = "update ZSK_DATA_H0000Z000K06 set DATA = '" + AdvStringGrid2->Cells[1][row2] + "', S_UDTIME = '" + Now().FormatString("yyyy-MM-dd hh:mm:ss") + "' where UPGUID1 = '" + up1 + "' and UPGUID2 = '" + up2 + "' and ISDELETE = 0";
         DMod->ExecSql(sql, AdoQ);
     }
     else {
@@ -1408,3 +1410,44 @@ void __fastcall TForm1::AdvStringGrid2MouseMove(TObject *Sender,
         AdvStringGrid2->Hint = AdvStringGrid2->Cells[col][row];
 }
 //---------------------------------------------------------------------------
+//数据备份
+void __fastcall TForm1::N5Click(TObject *Sender)
+{
+    //String path = ExtractFilePath(Application->ExeName) + "Backup\\sdfs.exe";
+    //WinExec(path.c_str(), NULL);
+}
+//---------------------------------------------------------------------------
+//数据恢复
+void __fastcall TForm1::N6Click(TObject *Sender)
+{
+//
+}
+//---------------------------------------------------------------------------
+//数据同步
+void __fastcall TForm1::N7Click(TObject *Sender)
+{
+//
+       
+}
+//---------------------------------------------------------------------------
+//IP设置
+void __fastcall TForm1::IP1Click(TObject *Sender)
+{
+    String path = ExtractFilePath(Application->ExeName) + "SetIP.exe";
+    WinExec(path.c_str(), NULL);
+}
+//---------------------------------------------------------------------------
+//数据类型设置
+void __fastcall TForm1::N8Click(TObject *Sender)
+{
+    String path = ExtractFilePath(Application->ExeName) + "PropDefine_pro.exe";
+    WinExec(path.c_str(), NULL);
+}
+//---------------------------------------------------------------------------
+//软件发布
+void __fastcall TForm1::N4Click(TObject *Sender)
+{
+    BuildSoftware->BuilderSetupSoftware()
+}
+//---------------------------------------------------------------------------
+

@@ -27,9 +27,9 @@ WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
         }
         Application->CreateForm(__classid(TDMod), &DMod);
         Application->CreateForm(__classid(TForm1), &Form1);
-        Application->CreateForm(__classid(TExtraForm), &ExtraForm);
-        Application->CreateForm(__classid(TForm2), &Form2);
-        Application->Run();
+         Application->CreateForm(__classid(TExtraForm), &ExtraForm);
+         Application->CreateForm(__classid(TForm2), &Form2);
+         Application->Run();
     }
     catch (Exception &exception)
     {

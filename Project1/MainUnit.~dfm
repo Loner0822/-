@@ -1,7 +1,7 @@
 object Form1: TForm1
-  Left = -143
-  Top = 102
-  Width = 834
+  Left = 290
+  Top = 215
+  Width = 978
   Height = 426
   Caption = #38598#20013#30417#27979#26631#20934#30693#35782#24211
   Color = clBtnFace
@@ -483,6 +483,7 @@ object Form1: TForm1
     00000000000000000000FFFFFF188FFF0000007F000000070000000300003063
     000030710000103100001031000011B1000088F9000088190000C8090000CC09
     0000FE000000FE0C0000FFCE0000}
+  Menu = MainMenu1
   OldCreateOrder = False
   WindowState = wsMaximized
   OnCreate = FormCreate
@@ -492,21 +493,21 @@ object Form1: TForm1
     Left = 345
     Top = 0
     Width = 3
-    Height = 395
+    Height = 375
     Cursor = crHSplit
   end
   object Splitter1: TSplitter
     Left = 169
     Top = 0
     Width = 3
-    Height = 395
+    Height = 375
     Cursor = crHSplit
   end
   object GroupBox1: TGroupBox
     Left = 0
     Top = 0
     Width = 169
-    Height = 395
+    Height = 375
     Align = alLeft
     Caption = #22270#32440#20998#31867
     TabOrder = 0
@@ -514,7 +515,7 @@ object Form1: TForm1
       Left = 2
       Top = 15
       Width = 165
-      Height = 378
+      Height = 358
       Align = alClient
       Ctl3D = False
       HideSelection = False
@@ -530,7 +531,7 @@ object Form1: TForm1
     Left = 172
     Top = 0
     Width = 173
-    Height = 395
+    Height = 375
     Align = alLeft
     Caption = #22270#32440#21015#34920
     TabOrder = 1
@@ -538,7 +539,7 @@ object Form1: TForm1
       Left = 2
       Top = 15
       Width = 169
-      Height = 378
+      Height = 358
       Cursor = crDefault
       Align = alClient
       ColCount = 2
@@ -666,15 +667,15 @@ object Form1: TForm1
   object GroupBox3: TGroupBox
     Left = 348
     Top = 0
-    Width = 478
-    Height = 395
+    Width = 622
+    Height = 375
     Align = alClient
     Caption = #37197#32447#26631#20934
     TabOrder = 2
     object Splitter3: TSplitter
       Left = 2
       Top = 193
-      Width = 474
+      Width = 618
       Height = 3
       Cursor = crVSplit
       Align = alTop
@@ -682,13 +683,13 @@ object Form1: TForm1
     object Panel1: TPanel
       Left = 2
       Top = 15
-      Width = 474
+      Width = 618
       Height = 178
       Align = alTop
       Caption = 'Panel1'
       TabOrder = 0
       object Splitter4: TSplitter
-        Left = 87
+        Left = 191
         Top = 1
         Width = 3
         Height = 176
@@ -698,7 +699,7 @@ object Form1: TForm1
       object GroupBox5: TGroupBox
         Left = 1
         Top = 1
-        Width = 86
+        Width = 190
         Height = 176
         Align = alClient
         Caption = #23646#24615#21015#34920
@@ -706,7 +707,7 @@ object Form1: TForm1
         object AdvStringGrid1: TAdvStringGrid
           Left = 2
           Top = 15
-          Width = 82
+          Width = 186
           Height = 159
           Cursor = crDefault
           Align = alClient
@@ -817,9 +818,9 @@ object Form1: TForm1
         end
       end
       object GroupBox6: TGroupBox
-        Left = 90
+        Left = 194
         Top = 1
-        Width = 383
+        Width = 423
         Height = 176
         Align = alRight
         Caption = #23646#24615#23450#20041
@@ -827,7 +828,7 @@ object Form1: TForm1
         object AdvStringGrid2: TAdvStringGrid
           Left = 2
           Top = 15
-          Width = 379
+          Width = 419
           Height = 159
           Cursor = crDefault
           Hint = '11111'
@@ -939,23 +940,23 @@ object Form1: TForm1
     object GroupBox4: TGroupBox
       Left = 2
       Top = 196
-      Width = 474
-      Height = 197
+      Width = 618
+      Height = 177
       Align = alClient
       Caption = #27979#35797#20301#32622
       TabOrder = 1
       object SigViewer1: TSigViewer
         Left = 2
         Top = 15
-        Width = 470
-        Height = 180
+        Width = 614
+        Height = 160
         Align = alClient
         TabOrder = 0
         OnMouseMove = SigViewer1MouseMove
         OnPaint = SigViewer1Paint
         ControlData = {
           545046300A5453696756696577657209536967566965776572044C6566740202
-          03546F70020F05576964746803D6010648656967687403B4000743617074696F
+          03546F70020F0557696474680366020648656967687403A0000743617074696F
           6E060953696756696577657205436F6C6F720709636C42746E466163650C466F
           6E742E43686172736574070F44454641554C545F434841525345540A466F6E74
           2E436F6C6F72070C636C57696E646F77546578740B466F6E742E486569676874
@@ -967,8 +968,8 @@ object Form1: TForm1
       object Panel: TPanel
         Left = 2
         Top = 15
-        Width = 470
-        Height = 180
+        Width = 614
+        Height = 160
         Align = alClient
         BevelOuter = bvNone
         Caption = #26080#22270#32440
@@ -983,11 +984,45 @@ object Form1: TForm1
     Top = 64
   end
   object PopupMenu: TPopupMenu
-    Left = 776
-    Top = 72
+    Left = 488
+    Top = 56
     object N1: TMenuItem
       Caption = #35774#32622'(&S)'
       OnClick = N1Click
+    end
+  end
+  object MainMenu1: TMainMenu
+    Left = 40
+    Top = 48
+    object N2: TMenuItem
+      Caption = #25968#25454#31649#29702
+      object N5: TMenuItem
+        Caption = #25968#25454#22791#20221
+        OnClick = N5Click
+      end
+      object N6: TMenuItem
+        Caption = #25968#25454#24674#22797
+        OnClick = N6Click
+      end
+      object N7: TMenuItem
+        Caption = #25968#25454#21516#27493
+        OnClick = N7Click
+      end
+    end
+    object N3: TMenuItem
+      Caption = #31995#32479#35774#32622
+      object IP1: TMenuItem
+        Caption = #26381#21153#22120'IP'#35774#32622
+        OnClick = IP1Click
+      end
+      object N8: TMenuItem
+        Caption = #25968#25454#31867#22411#35774#32622
+        OnClick = N8Click
+      end
+    end
+    object N4: TMenuItem
+      Caption = #36719#20214#21457#24067
+      OnClick = N4Click
     end
   end
 end

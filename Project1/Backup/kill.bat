@@ -1,3 +1,0 @@
-@echo off
-echo 清理进程...
-taskkill /F /IM BaseInfoSys.exe

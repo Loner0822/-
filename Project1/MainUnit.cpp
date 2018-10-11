@@ -16,6 +16,8 @@
 #include "ExtraUnit.h"
 #include "SystemUnit.h"
 #include "TCheckListEditLink.h"
+#include "TProcess.h"
+#include "TBuildSoftwareF.h"
 using namespace std;
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
@@ -1431,21 +1433,21 @@ void __fastcall TForm1::N7Click(TObject *Sender)
 //IP设置
 void __fastcall TForm1::IP1Click(TObject *Sender)
 {
-    String path = ExtractFilePath(Application->ExeName) + "IPManager\\SetIP.exe";
+    String path = ExtractFilePath(Application->ExeName) + "SetIP.exe";
     WinExec(path.c_str(), NULL);
 }
 //---------------------------------------------------------------------------
 //数据类型设置
 void __fastcall TForm1::N8Click(TObject *Sender)
 {
-    String path = ExtractFilePath(Application->ExeName) + "DatatypeManager\\PropDefine_pro.exe";
+    String path = ExtractFilePath(Application->ExeName) + "PropDefine_pro.exe";
     WinExec(path.c_str(), NULL);
 }
 //---------------------------------------------------------------------------
 //软件发布
 void __fastcall TForm1::N4Click(TObject *Sender)
 {
-//    
+    //BuildSoftware->BuilderSetupSoftware();
 }
 //---------------------------------------------------------------------------
 
