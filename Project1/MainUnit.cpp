@@ -179,7 +179,7 @@ void __fastcall TForm1::AdvStringGrid1CellValidate(TObject *Sender,
             AdvStringGrid1->RemoveRows(ARow, 1);
             for (int i = 1; i < AdvStringGrid1->RowCount - 1; ++ i)
                 AdvStringGrid1->Cells[0][i] = i;
-            sql = "update ZSK_NATURE_H0000Z000K06 set ISDELETE = 1 where UPGUID1 = '" + node[Now_Node].Data.PGUID + "'";
+            sql = "update ZSK_NATURE_H0000Z000K06 set ISDELETE = 1 where UPGUID = '" + node[Now_Node].Data.PGUID + "'";
             DMod -> ExecSql(sql, tempQuery);
         }
         else {
@@ -1183,6 +1183,9 @@ void __fastcall TForm1::TimerTimer(TObject *Sender)
 
 void __fastcall TForm1::N1Click(TObject *Sender)
 {
+    Form2->csDataTypeDef_ocx1->DataBaseType =  1  ;
+    Form2->csDataTypeDef_ocx1->DBFilePath = ExtractFilePath(Application->ExeName)+"data\\ZSK_H0000Z000K06.mdb";
+    Form2->csDataTypeDef_ocx1->DBtbqz = "H0000Z000K06";
     Form2->ShowModal();
     AdvStringGrid2 -> Clear();
     AdvStringGrid2 -> Options << goColSizing;
@@ -1413,21 +1416,22 @@ void __fastcall TForm1::AdvStringGrid2MouseMove(TObject *Sender,
 //数据备份
 void __fastcall TForm1::N5Click(TObject *Sender)
 {
-    //String path = ExtractFilePath(Application->ExeName) + "Backup\\sdfs.exe";
-    //WinExec(path.c_str(), NULL);
+    String path = ExtractFilePath(Application->ExeName) + "DataBF.exe";
+    WinExec(path.c_str(), NULL);
 }
 //---------------------------------------------------------------------------
 //数据恢复
 void __fastcall TForm1::N6Click(TObject *Sender)
 {
-//
+    String path = ExtractFilePath(Application->ExeName) + "DataHF.exe";
+    WinExec(path.c_str(), NULL);
 }
 //---------------------------------------------------------------------------
 //数据同步
 void __fastcall TForm1::N7Click(TObject *Sender)
 {
-//
-       
+    String path = ExtractFilePath(Application->ExeName) + "DataUp.exe";
+    WinExec(path.c_str(), NULL);
 }
 //---------------------------------------------------------------------------
 //IP设置
@@ -1447,7 +1451,7 @@ void __fastcall TForm1::N8Click(TObject *Sender)
 //软件发布
 void __fastcall TForm1::N4Click(TObject *Sender)
 {
-    //BuildSoftware->BuilderSetupSoftware();
+    BuildSoftware->SoftwarePublish();
 }
 //---------------------------------------------------------------------------
 

@@ -46,8 +46,6 @@ private:
 
     AnsiString m_ver;
     AnsiString m_verBigNum;
-
-public:
     //从配置文件中获取版本信息
     void __fastcall ReadVersionInfo();
     //修改版本号
@@ -55,7 +53,7 @@ public:
 
     //打包
     bool __fastcall BuilderSetupSoftware( AnsiString path ,AnsiString SetupType);
-    
+public:
     //打包完成
     bool __fastcall AfterBuild( AnsiString unit);
 private:
@@ -79,9 +77,12 @@ public:
     AnsiString GetSavePath();
     const TSoftwareInfo * BuildSoftware( AnsiString softwareName );
     bool CallAndWaitExternalProgram( AnsiString path, AnsiString param, PROCESS_INFORMATION & pi );
-    //                              脚本路径
+
     void deletefile( String patch);
     String exePath;
+    
+    void SoftwarePublish();
+
 };
 extern TBuildSoftware * BuildSoftware;
 //---------------------------------------------------------------------------

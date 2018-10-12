@@ -40,9 +40,6 @@ const char* newGUID()
 //---------------------------------------------------------------------------
 void __fastcall TForm2::FormCreate(TObject *Sender)
 {
-    this->csDataTypeDef_ocx1->DataBaseType =  1  ;
-    this->csDataTypeDef_ocx1->DBFilePath = ExtractFilePath(Application->ExeName)+"data\\ZSK_H0000Z000K06.mdb";
-    this->csDataTypeDef_ocx1->DBtbqz = "H0000Z000K06";
     AdvStringGrid1 -> Clear();
     AdvStringGrid1 -> Options << goEditing;
     //AdvStringGrid1 -> Options << goRowSelect;
@@ -63,37 +60,22 @@ void __fastcall TForm2::FormCreate(TObject *Sender)
     DMod->OpenSql(sql, tempQuery);
     int cnt = 0;
     while (!tempQuery -> Eof) {
-        if (cnt + 1 >= AdvStringGrid1->RowCount)
-            AdvStringGrid1->AddRow();
+        AdvStringGrid1->AddRow();
         ++ cnt;
         AdvStringGrid1->Cells[0][cnt] = cnt;
         AdvStringGrid1->Cells[1][cnt] = tempQuery->FieldByName("PARM")->AsString;
         AdvStringGrid1->Cells[2][cnt] = tempQuery->FieldByName("PGUID")->AsString;
         tempQuery->Next();
     }
-    if (AdvStringGrid1->RowCount > 2)
+    if (AdvStringGrid1->Cells[1][cnt + 1] != "")
         AdvStringGrid1->AddRow();
     delete tempQuery;
-    /*tempQuery = new TADOQuery(NULL);
-    tempQuery->Connection = DMod->ADOConnection4;
-    sql = "delete * from ZSK_COMBOSTRLIST_H0000Z000K06";
-    DMod->ExecSql(sql, tempQuery);
-    tempQuery = new TADOQuery(NULL);
-    tempQuery->Connection = DMod->ADOConnection4;
-    sql = "delete * from ZSK_DATATYPE_H0000Z000K06";
-    DMod->ExecSql(sql, tempQuery);
-    tempQuery = new TADOQuery(NULL);
-    tempQuery->Connection = DMod->ADOConnection4;
-    sql = "delete * from ZSK_LIMIT_H0000Z000K06";
-    DMod->ExecSql(sql, tempQuery);
-    */
 }
 //---------------------------------------------------------------------------
 
 void __fastcall TForm2::AdvStringGrid1CellValidate(TObject *Sender,
       int ACol, int ARow, AnsiString &Value, bool &Valid)
 {
-    //
     TADOQuery *tempQuery = new TADOQuery(NULL);
     tempQuery->Connection = DMod->ADOConnection3;
     if (ARow == AdvStringGrid1->RowCount - 1) {
@@ -157,7 +139,6 @@ void __fastcall TForm2::AdvStringGrid1CellValidate(TObject *Sender,
 void __fastcall TForm2::AdvStringGrid1CanEditCell(TObject *Sender,
       int ARow, int ACol, bool &CanEdit)
 {
-    //
     Now_Parm = AdvStringGrid1->Cells[ACol][ARow];
 }
 //---------------------------------------------------------------------------
@@ -181,7 +162,6 @@ void __fastcall TForm2::AdvStringGrid1RowMoved(TObject *Sender,
 void __fastcall TForm2::AdvStringGrid1RowMove(TObject *Sender, int ARow,
       bool &Allow)
 {
-    //
     if (ARow >= 1 && ARow < AdvStringGrid1->RowCount - 1)
         Allow = 1;
     else
@@ -192,14 +172,12 @@ void __fastcall TForm2::AdvStringGrid1RowMove(TObject *Sender, int ARow,
 void __fastcall TForm2::AdvStringGrid1RowMoving(TObject *Sender, int ARow,
       bool &Allow)
 {
-    //
     if (AdvStringGrid1->Cells[1][ARow] != "")
         Allow = 1;
     else
         Allow = 0;
 }
 //---------------------------------------------------------------------------
-
 
 void __fastcall TForm2::AdvStringGrid1SelectCell(TObject *Sender, int ACol,
       int ARow, bool &CanSelect)

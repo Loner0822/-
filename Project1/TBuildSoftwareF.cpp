@@ -11,7 +11,8 @@
 #include <memory>
 #include "TBuildSoftwareF.h"
 #include "TProcess.h"
-TBuildSoftware * BuildSoftware = NULL;
+
+TBuildSoftware * BuildSoftware = new TBuildSoftware();
 
 TBuildSoftware::TBuildSoftware()
     : m_softwareInfo(NULL), m_FilePath("")
@@ -86,6 +87,7 @@ void __fastcall TBuildSoftware::ChoiceDirectory()
     }
     m_FilePath = path;
 }
+
 //拷贝配置文件到目录下
 void __fastcall TBuildSoftware::CopyIniFile( AnsiString sourcePath, AnsiString destPath, AnsiString fileName )
 {
@@ -99,6 +101,7 @@ void __fastcall TBuildSoftware::CopyIniFile( AnsiString sourcePath, AnsiString d
         CopyFile( ( sourcePath + "\\" + fileName ).c_str(), ( destPath + "\\" + fileName ).c_str(), true );
     }
 }
+
 void __fastcall TBuildSoftware::CopyIniFile( AnsiString sourceName, AnsiString destName )
 {
     if( sourceName !=  destName )
@@ -111,6 +114,7 @@ void __fastcall TBuildSoftware::CopyIniFile( AnsiString sourceName, AnsiString d
         CopyFile( sourceName.c_str(), destName.c_str(), true );
     }
 }
+
 //拷贝打包文件
 AnsiString __fastcall TBuildSoftware::CopyWiseFile( AnsiString path, AnsiString fileName )
 {
@@ -129,6 +133,7 @@ AnsiString __fastcall TBuildSoftware::CopyWiseFile( AnsiString path, AnsiString 
 const static AnsiString s_BigVerStr = "_MyBigVer_";
 const static AnsiString s_VerStr = "_MyVer_";
 const static AnsiString s_ExeFileName = "_MyExeFileName_";
+
 //修改版本号
 void __fastcall TBuildSoftware::ChangeVer(AnsiString bigVerNum, AnsiString ver, AnsiString path,AnsiString SetupType)
 {
@@ -190,6 +195,7 @@ void __fastcall TBuildSoftware::Build()
     }
     int fileExist = -1;    //检查是否有“Setup.wse”
     ReadSetupType();   //安装类型
+    m_SetupType="Inno";
     do
     {
         if(m_SetupType=="Inno")
@@ -223,6 +229,7 @@ void __fastcall TBuildSoftware::Build()
     Sleep(1000);
     std::auto_ptr<TIniFile> pIniFile ( new TIniFile( m_FilePath + "\\" + "RegInfo.ini") );
     AnsiString unitName = pIniFile->ReadString( "Public", "UnitName", "" );
+
     AfterBuild( unitName );
 }
 
@@ -340,6 +347,7 @@ bool TBuildSoftware::CallAndWaitExternalProgram( AnsiString path, AnsiString par
     ZeroMemory( &pi, sizeof(pi) );
     STARTUPINFO si;
     ZeroMemory( &si, sizeof(si) );
+
     si.cb = sizeof(STARTUPINFO);
     si.lpReserved = NULL;
     si.lpReserved2 = NULL;
@@ -354,11 +362,14 @@ bool TBuildSoftware::CallAndWaitExternalProgram( AnsiString path, AnsiString par
     strcpy( pbuf, tmp.c_str() );
     if( !CreateProcess( NULL, pbuf, NULL, NULL, FALSE, 0, NULL, NULL, &si, &pi ) )
 	{
+
 		return false;
 	}
     else
     {
+
         WaitForSingleObject( pi.hProcess, INFINITE );
+
 	    return true;
     }
 
@@ -373,10 +384,11 @@ bool __fastcall TBuildSoftware::BuilderSetupSoftware( AnsiString path ,AnsiStrin
     PROCESS_INFORMATION pi;
     if(m_SetupType=="Inno")
     {
-        AnsiString Path = "D:\\Inno Setup\\Compil32.exe";
+        AnsiString Path = exePath + "\\Inno Setup\\Compil32.exe";
         Path = "\"" + Path + "\"";
         path = "\"" + path + "\"";
         SetCurrentDir("D:\\Inno Setup\\Compil32.exe");
+
         result = CallAndWaitExternalProgram( Path, " /cc " + path , pi );
     }
     else
@@ -389,6 +401,7 @@ bool __fastcall TBuildSoftware::BuilderSetupSoftware( AnsiString path ,AnsiStrin
         ShowMessage( "没有找到打包程序。" );
     }
     GetExitCodeProcess( pi.hProcess, &ret );
+
     return result;
 }
 
@@ -421,7 +434,7 @@ void __fastcall TBuildSoftware::ReadVersionInfo()
     m_verBigNum = pIniFile->ReadString( "Version", "BigNum", "" );
     m_ver = " " + pIniFile->ReadString( "Version", "Num", "" );
 }
-//xhy从配置文件中获取安装程序类型
+//从配置文件中获取安装程序类型
 void __fastcall TBuildSoftware::ReadSetupType()
 {
     std::auto_ptr<TIniFile> pIniFile ( new TIniFile( m_FilePath + "\\" + "VerInfo.ini") );
@@ -444,5 +457,9 @@ void TBuildSoftware::deletefile( String patch)
       SetFileAttributes( patch.c_str(), FILE_ATTRIBUTE_NORMAL );
       DeleteFile( patch.c_str() );
     }
+}
+
+void TBuildSoftware::SoftwarePublish() {
+    this-> BuildSoftware("Setup");
 }
 #pragma package(smart_init)

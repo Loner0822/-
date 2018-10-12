@@ -1,6 +1,6 @@
 object Form1: TForm1
-  Left = 290
-  Top = 215
+  Left = 173
+  Top = 211
   Width = 978
   Height = 426
   Caption = #38598#20013#30417#27979#26631#20934#30693#35782#24211
@@ -981,11 +981,11 @@ object Form1: TForm1
     Interval = 100
     OnTimer = TimerTimer
     Left = 240
-    Top = 64
+    Top = 48
   end
   object PopupMenu: TPopupMenu
-    Left = 488
-    Top = 56
+    Left = 392
+    Top = 48
     object N1: TMenuItem
       Caption = #35774#32622'(&S)'
       OnClick = N1Click
