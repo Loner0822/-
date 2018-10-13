@@ -31,4 +31,8 @@ object DMod: TDMod
     Provider = 'Microsoft.Jet.OLEDB.4.0'
     Left = 120
   end
+  object ADOConnection4: TADOConnection
+    Left = 120
+    Top = 48
+  end
 end

@@ -11,6 +11,7 @@
 #include <memory>
 #include "TBuildSoftwareF.h"
 #include "TProcess.h"
+#include "DModUnit.h"
 
 TBuildSoftware * BuildSoftware = new TBuildSoftware();
 
@@ -460,6 +461,16 @@ void TBuildSoftware::deletefile( String patch)
 }
 
 void TBuildSoftware::SoftwarePublish() {
-    this-> BuildSoftware("Setup");
+    // 读取当前 公司信息
+
+
+    // 找到下属 公司
+    //TADOQuery *AdoQ = new TADOQuery(NULL);
+    //String sql = "select DATA from ZSK_DATA_H0000Z000K06 where UPGUID1 = '" + up1 + "' and UPGUID2 = '" + up2 + "' and ISDELETE = 0";
+    //AdoQ->Connection = DMod->ADOConnection4;
+    //DMod->OpenSql(sql, AdoQ);
+
+    // 发布
+
 }
 #pragma package(smart_init)

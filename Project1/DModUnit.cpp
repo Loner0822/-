@@ -52,6 +52,8 @@ void __fastcall TDMod::DataModuleCreate(TObject *Sender)
     Conn( this->ADOConnection2, path2, "");
     String path3 = ExtractFilePath( Application->ExeName ) + "Data\\ZSK_H0000Z000K06.mdb";
     Conn( this->ADOConnection3, path3, "");
+    String path4 = ExtractFilePath( Application->ExeName ) + "Data\\µ¥Î»×¢²á.accdb";
+    Conn( this->ADOConnection4, path4, "");
 }
 //---------------------------------------------------------------------------
 
