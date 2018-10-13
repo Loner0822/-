@@ -32,35 +32,35 @@ private:
     void __fastcall ChoiceDirectory();
     void __fastcall Build();
 
-    //¼ì²éÊÇ·ñÓĞ¡°°²×°°ü.wse¡±
+    //æ£€æŸ¥æ˜¯å¦æœ‰â€œå®‰è£…åŒ….wseâ€
     int __fastcall CheckDirectory( AnsiString path, AnsiString fileName );
 
-    //xhy´ÓÅäÖÃÎÄ¼şÖĞ»ñÈ¡°²×°³ÌĞòÀàĞÍ
+    //xhyä»é…ç½®æ–‡ä»¶ä¸­è·å–å®‰è£…ç¨‹åºç±»å‹
     void __fastcall ReadSetupType();
-    //¿½±´ÅäÖÃÎÄ¼şµ½Ä¿Â¼ÏÂ
+    //æ‹·è´é…ç½®æ–‡ä»¶åˆ°ç›®å½•ä¸‹
     void __fastcall CopyIniFile( AnsiString sourcePath, AnsiString destPath, AnsiString fileName );
     void __fastcall CopyIniFile( AnsiString sourceName, AnsiString destName );
 
-    //¿½±´´ò°üÎÄ¼ş
+    //æ‹·è´æ‰“åŒ…æ–‡ä»¶
     AnsiString __fastcall CopyWiseFile( AnsiString path, AnsiString fileName );
 
     AnsiString m_ver;
     AnsiString m_verBigNum;
-    //´ÓÅäÖÃÎÄ¼şÖĞ»ñÈ¡°æ±¾ĞÅÏ¢
+    //ä»é…ç½®æ–‡ä»¶ä¸­è·å–ç‰ˆæœ¬ä¿¡æ¯
     void __fastcall ReadVersionInfo();
-    //ĞŞ¸Ä°æ±¾ºÅ
+    //ä¿®æ”¹ç‰ˆæœ¬å·
     void __fastcall ChangeVer( AnsiString bigVerNum, AnsiString ver, AnsiString path,AnsiString SetupType);
 
-    //´ò°ü
+    //æ‰“åŒ…
     bool __fastcall BuilderSetupSoftware( AnsiString path ,AnsiString SetupType);
 public:
-    //´ò°üÍê³É
+    //æ‰“åŒ…å®Œæˆ
     bool __fastcall AfterBuild( AnsiString unit);
 private:
-    //´ÓÅäÖÃÎÄ¼şÖĞ»ñÈ¡Èí¼şÃû³Æ
+    //ä»é…ç½®æ–‡ä»¶ä¸­è·å–è½¯ä»¶åç§°
     void __fastcall ReadSoftwareName();
 
-   // AnsiString GetSavePath(); ÔİÊ±ÒÆÈëpublicÖĞ
+   // AnsiString GetSavePath(); æš‚æ—¶ç§»å…¥publicä¸­
 
     //bool CallAndWaitExternalProgram( AnsiString path, AnsiString param, PROCESS_INFORMATION & pi );
 
