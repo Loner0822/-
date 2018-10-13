@@ -7,12 +7,13 @@
     <OBJFILES value="KBS.obj MainUnit.obj DModUnit.obj DataUnit.obj TreeUnit.obj 
       &quot;C:\Program Files (x86)\EurekaLog 6\CBuilder6\ExceptionLog.obj&quot; 
       PenUnit.obj ExtraUnit.obj SystemUnit.obj TCheckListEditLink.obj 
-      TBuildSoftwareF.obj TProcess.obj"/>
+      TBuildSoftwareF.obj TProcess.obj CompanyUnit.obj"/>
     <RESFILES value="KBS.res"/>
     <IDLFILES value=""/>
     <IDLGENFILES value=""/>
     <DEFFILE value=""/>
-    <RESDEPEN value="$(RESFILES) MainUnit.dfm DModUnit.dfm ExtraUnit.dfm SystemUnit.dfm"/>
+    <RESDEPEN value="$(RESFILES) MainUnit.dfm DModUnit.dfm ExtraUnit.dfm SystemUnit.dfm 
+      CompanyUnit.dfm"/>
     <LIBFILES value=""/>
     <LIBRARIES value="tmsxlsc6.lib tmsexc6.lib bcb2kaxserver.lib indy.lib dbxcds.lib dclocx.lib 
       soaprtl.lib bcbie.lib nmfast.lib dbexpress.lib inetdbxpress.lib 
@@ -82,6 +83,7 @@
       <FILE FILENAME="TCheckListEditLink.cpp" FORMNAME="" UNITNAME="TCheckListEditLink" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="TBuildSoftwareF.cpp" FORMNAME="" UNITNAME="TBuildSoftwareF.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="TProcess.cpp" FORMNAME="" UNITNAME="TProcess.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="CompanyUnit.cpp" FORMNAME="Form3" UNITNAME="CompanyUnit" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
   </FILELIST>
   <BUILDTOOLS>
   </BUILDTOOLS>
