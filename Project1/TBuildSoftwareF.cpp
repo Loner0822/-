@@ -37,41 +37,41 @@ const TSoftwareInfo * TBuildSoftware::BuildSoftware( AnsiString softwareName )
     m_softwareInfo->Clear();
     m_softwareInfo->Name = softwareName;
     m_softwareName =  softwareName;
-    ChoiceDirectory(); //Ñ¡ÔñÄ¿Â¼
+    ChoiceDirectory(); //é€‰æ‹©ç›®å½•
     bool result = true;
     if( result )
     {
-        Build();   //´ò°ü
+        Build();   //æ‰“åŒ…
     }
     return m_softwareInfo;
 }
 
 AnsiString GetPath( AnsiString name )
 {
-    std::auto_ptr<TIniFile> pIniFile( new TIniFile( ExtractFilePath( Application->ExeName ) + "´ò°ü»·¾³Î»ÖÃ.ini" ) );
-    AnsiString path = pIniFile->ReadString( "Î»ÖÃ", name, "" );
-    path = ExtractFilePath( Application->ExeName ) +path;   //Ïà¶ÔÂ·¾¶
+    std::auto_ptr<TIniFile> pIniFile( new TIniFile( ExtractFilePath( Application->ExeName ) + "æ‰“åŒ…ç¯å¢ƒä½ç½®.ini" ) );
+    AnsiString path = pIniFile->ReadString( "ä½ç½®", name, "" );
+    path = ExtractFilePath( Application->ExeName ) +path;   //ç›¸å¯¹è·¯å¾„
     return path;
 }
 
 AnsiString GetDefaultPath()
 {
-    std::auto_ptr<TIniFile> pIniFile( new TIniFile( ExtractFilePath( Application->ExeName ) + "´ò°ü»·¾³Î»ÖÃ.ini" ) );
-    AnsiString path = pIniFile->ReadString( "Ä¬ÈÏÎ»ÖÃ", "Î»ÖÃ", "" );
+    std::auto_ptr<TIniFile> pIniFile( new TIniFile( ExtractFilePath( Application->ExeName ) + "æ‰“åŒ…ç¯å¢ƒä½ç½®.ini" ) );
+    AnsiString path = pIniFile->ReadString( "é»˜è®¤ä½ç½®", "ä½ç½®", "" );
     return path;
 }
 
-//Ñ¡ÔñÎÄ¼ş¼Ğ
+//é€‰æ‹©æ–‡ä»¶å¤¹
 void __fastcall TBuildSoftware::ChoiceDirectory()
 {
     m_FilePath = "";
     AnsiString path = "";
     if( m_softwareInfo->Name != "" )
     {
-        path =  GetPath( m_softwareInfo->Name );  //»ñÈ¡´ò°üÄ¿Â¼
+        path =  GetPath( m_softwareInfo->Name );  //è·å–æ‰“åŒ…ç›®å½•
         if( path == "" )
         {
-            path = GetDefaultPath() + "\\" + m_softwareInfo->Name + "°²×°°üÖÆ×÷»·¾³";
+            path = GetDefaultPath() + "\\" + m_softwareInfo->Name + "å®‰è£…åŒ…åˆ¶ä½œç¯å¢ƒ";
         }
         if( !DirectoryExists( path ) )
         {
@@ -84,21 +84,21 @@ void __fastcall TBuildSoftware::ChoiceDirectory()
     }
     if( !DirectoryExists( path ) )
     {
-        path = ExtractFilePath(Application->ExeName) + "°²×°°üÖÆ×÷»·¾³";
+        path = ExtractFilePath(Application->ExeName) + "å®‰è£…åŒ…åˆ¶ä½œç¯å¢ƒ";
     }
     m_FilePath = path;
 }
 
-//¿½±´ÅäÖÃÎÄ¼şµ½Ä¿Â¼ÏÂ
+//æ‹·è´é…ç½®æ–‡ä»¶åˆ°ç›®å½•ä¸‹
 void __fastcall TBuildSoftware::CopyIniFile( AnsiString sourcePath, AnsiString destPath, AnsiString fileName )
 {
     if( sourcePath !=  destPath )
     {
-        //É¾³ıÔ­À´µÄ
+        //åˆ é™¤åŸæ¥çš„
         SetFileAttributes( ( destPath + "\\" + fileName ).c_str(), FILE_ATTRIBUTE_NORMAL);
         DeleteFile( ( destPath + "\\" + fileName ).c_str() );
 
-        //¿½±´
+        //æ‹·è´
         CopyFile( ( sourcePath + "\\" + fileName ).c_str(), ( destPath + "\\" + fileName ).c_str(), true );
     }
 }
@@ -107,25 +107,25 @@ void __fastcall TBuildSoftware::CopyIniFile( AnsiString sourceName, AnsiString d
 {
     if( sourceName !=  destName )
     {
-        //É¾³ıÔ­À´µÄ
+        //åˆ é™¤åŸæ¥çš„
         SetFileAttributes( destName.c_str(), FILE_ATTRIBUTE_NORMAL );
         DeleteFile( destName.c_str() );
 
-        //¿½±´
+        //æ‹·è´
         CopyFile( sourceName.c_str(), destName.c_str(), true );
     }
 }
 
-//¿½±´´ò°üÎÄ¼ş
+//æ‹·è´æ‰“åŒ…æ–‡ä»¶
 AnsiString __fastcall TBuildSoftware::CopyWiseFile( AnsiString path, AnsiString fileName )
 {
-    AnsiString copyName = "¸´¼ş " + fileName;
+    AnsiString copyName = "å¤ä»¶ " + fileName;
 
-    //É¾³ıÔ­À´µÄ¸±±¾ÎÄ¼ş
+    //åˆ é™¤åŸæ¥çš„å‰¯æœ¬æ–‡ä»¶
     SetFileAttributes( ( path + "\\" + copyName ).c_str(), FILE_ATTRIBUTE_NORMAL);
     DeleteFile( ( path + "\\" + copyName ).c_str() );
 
-    //¿½±´Ò»·İĞÂµÄ¸±±¾
+    //æ‹·è´ä¸€ä»½æ–°çš„å‰¯æœ¬
     CopyFile( ( path + "\\" + fileName ).c_str(), ( path + "\\" + copyName ).c_str(), true );
 
     return ( path + "\\" + copyName );
@@ -135,20 +135,20 @@ const static AnsiString s_BigVerStr = "_MyBigVer_";
 const static AnsiString s_VerStr = "_MyVer_";
 const static AnsiString s_ExeFileName = "_MyExeFileName_";
 
-//ĞŞ¸Ä°æ±¾ºÅ
+//ä¿®æ”¹ç‰ˆæœ¬å·
 void __fastcall TBuildSoftware::ChangeVer(AnsiString bigVerNum, AnsiString ver, AnsiString path,AnsiString SetupType)
 {
     std::auto_ptr <TStrings> tmpStrings( new TStringList );
 
-    //¶ÁÈë²¢ĞŞ¸ÄĞÂµÄ¸±±¾ÔÙ±£´æ
+    //è¯»å…¥å¹¶ä¿®æ”¹æ–°çš„å‰¯æœ¬å†ä¿å­˜
     tmpStrings->LoadFromFile( path );
     tmpStrings->Text = StringReplace( tmpStrings->Text, s_BigVerStr, bigVerNum, TReplaceFlags() << rfReplaceAll );
     tmpStrings->Text = StringReplace( tmpStrings->Text, s_VerStr, ver, TReplaceFlags() << rfReplaceAll );
 
-    //ĞŞ¸Ä´ò°üÎÄ¼şÃû³Æ
+    //ä¿®æ”¹æ‰“åŒ…æ–‡ä»¶åç§°
     ReadSoftwareName();
     tmpStrings->Text = StringReplace( tmpStrings->Text, s_ExeFileName, m_softwareName, TReplaceFlags() << rfReplaceAll );
-    //ĞŞ¸ÄAppID
+    //ä¿®æ”¹AppID
     String guid = GenerateGuidStr();
     tmpStrings->Text = StringReplace( tmpStrings->Text, "{2ACBD3A3-0116-4EF4-8497-722D81BD39D3}", guid, TReplaceFlags() << rfReplaceAll );
 
@@ -176,7 +176,7 @@ void __fastcall TBuildSoftware::ChangeVer(AnsiString bigVerNum, AnsiString ver, 
     FILE * pFile = fopen( ( path ).c_str(), "wb" );
     if( !pFile )
     {
-        ShowMessage( "Ğ´Èë°²×°°üÎÄ¼ş³ö´í£¡" );
+        ShowMessage( "å†™å…¥å®‰è£…åŒ…æ–‡ä»¶å‡ºé”™ï¼" );
         return;
     }
     for( int i = 0; i < tmpStrings->Count; i++ )
@@ -187,15 +187,15 @@ void __fastcall TBuildSoftware::ChangeVer(AnsiString bigVerNum, AnsiString ver, 
     fclose(pFile);
 }
 
-//´ò°ü³ÌĞò
+//æ‰“åŒ…ç¨‹åº
 void __fastcall TBuildSoftware::Build()
 {
     if( m_FilePath == "" )
     {
         return;
     }
-    int fileExist = -1;    //¼ì²éÊÇ·ñÓĞ¡°Setup.wse¡±
-    ReadSetupType();   //°²×°ÀàĞÍ
+    int fileExist = -1;    //æ£€æŸ¥æ˜¯å¦æœ‰â€œSetup.wseâ€
+    ReadSetupType();   //å®‰è£…ç±»å‹
     m_SetupType="Inno";
     do
     {
@@ -207,7 +207,7 @@ void __fastcall TBuildSoftware::Build()
         {
             fileExist = CheckDirectory( m_FilePath, "Setup.wse" );
         }
-        if( fileExist == 0 )    //ÓÃ»§Ñ¡ÔñÈ¡Ïû
+        if( fileExist == 0 )    //ç”¨æˆ·é€‰æ‹©å–æ¶ˆ
         {
             return;
         }
@@ -216,16 +216,16 @@ void __fastcall TBuildSoftware::Build()
     AnsiString fileName;
     if(m_SetupType=="Inno")
     {
-        fileName = CopyWiseFile( m_FilePath, "Setup.iss" );  //¿½±´´ò°üÎÄ¼ş
+        fileName = CopyWiseFile( m_FilePath, "Setup.iss" );  //æ‹·è´æ‰“åŒ…æ–‡ä»¶
     }
     else
     {
         fileName = CopyWiseFile( m_FilePath, "Setup.wse" );
     }
-    ReadVersionInfo();   //ĞŞ¸Ä°æ±¾ºÅ
+    ReadVersionInfo();   //ä¿®æ”¹ç‰ˆæœ¬å·
     ChangeVer( m_verBigNum, m_ver, fileName ,m_SetupType);
 
-    BuilderSetupSoftware( fileName , m_SetupType);   //´ò°ü
+    BuilderSetupSoftware( fileName , m_SetupType);   //æ‰“åŒ…
 
     Sleep(1000);
     std::auto_ptr<TIniFile> pIniFile ( new TIniFile( m_FilePath + "\\" + "RegInfo.ini") );
@@ -241,8 +241,8 @@ AnsiString TBuildSoftware::GetSavePath()
     SHGetSpecialFolderLocation( NULL, CSIDL_DESKTOP, &pidl );
     SHGetPathFromIDList( pidl, arr_cDesktopPath );
 
-    std::auto_ptr<TIniFile> pIniFile( new TIniFile( ExtractFilePath( Application->ExeName ) + "\\´ò°ü»·¾³Î»ÖÃ.ini" ) );
-    AnsiString path = pIniFile->ReadString( "¿½±´Î»ÖÃ", "Î»ÖÃ", "" );
+    std::auto_ptr<TIniFile> pIniFile( new TIniFile( ExtractFilePath( Application->ExeName ) + "\\æ‰“åŒ…ç¯å¢ƒä½ç½®.ini" ) );
+    AnsiString path = pIniFile->ReadString( "æ‹·è´ä½ç½®", "ä½ç½®", "" );
     AnsiString unit = GetUnitName();
     path = AnsiString( arr_cDesktopPath ) + "\\" + unit + path;
 
@@ -271,27 +271,27 @@ void MyCreateDir( AnsiString dirPath )
     }
 }
 
-//´ò°üÍê³É
+//æ‰“åŒ…å®Œæˆ
 bool __fastcall TBuildSoftware::AfterBuild( AnsiString unit )
 {
 
     bool flag = false;
     //if( FileExists( path ) )
     {
-        std::auto_ptr<TIniFile> pIniFile( new TIniFile( ExtractFilePath( Application->ExeName ) + "\\´ò°ü»·¾³Î»ÖÃ.ini" ) );
-        AnsiString path = pIniFile->ReadString( "¿½±´Î»ÖÃ", "Î»ÖÃ", "" );
+        std::auto_ptr<TIniFile> pIniFile( new TIniFile( ExtractFilePath( Application->ExeName ) + "\\æ‰“åŒ…ç¯å¢ƒä½ç½®.ini" ) );
+        AnsiString path = pIniFile->ReadString( "æ‹·è´ä½ç½®", "ä½ç½®", "" );
         static char arr_cDesktopPath[MAX_PATH];
         LPITEMIDLIST pidl;
         SHGetSpecialFolderLocation( NULL, CSIDL_DESKTOP, &pidl );
         SHGetPathFromIDList( pidl, arr_cDesktopPath );
-        path = AnsiString( arr_cDesktopPath ) + "\\µ±Ç°Éú³ÉµÄ" +unit+"Èí¼ş";
-        //¸´ÖÆµ½×ÀÃæ
+        path = AnsiString( arr_cDesktopPath ) + "\\å½“å‰ç”Ÿæˆçš„" +unit+"è½¯ä»¶";
+        //å¤åˆ¶åˆ°æ¡Œé¢
         if( !DirectoryExists( path ) )
         {
             MyCreateDir( path );
         }
-        TIniFile *ini = new TIniFile(ExtractFilePath(Application->ExeName)+"´ò°ü»·¾³Î»ÖÃ.ini");
-        AnsiString softpath = ini->ReadString("¿½±´Î»ÖÃ", "Î»ÖÃ", "");   //  GetPath( m_softwareInfo->Name );
+        TIniFile *ini = new TIniFile(ExtractFilePath(Application->ExeName)+"æ‰“åŒ…ç¯å¢ƒä½ç½®.ini");
+        AnsiString softpath = ini->ReadString("æ‹·è´ä½ç½®", "ä½ç½®", "");   //  GetPath( m_softwareInfo->Name );
         AnsiString copath = path+ "\\" + m_softwareName + ".exe";
         softpath += "\\" + m_softwareName + ".exe";
         if( FileExists( softpath ) )
@@ -309,17 +309,17 @@ bool __fastcall TBuildSoftware::AfterBuild( AnsiString unit )
 
         if( FileExists( copath ) )
         {
-            ShowMessage( "ÖªÊ¶¹ÜÀíÏµÍ³Èí¼şÉú³ÉÍê±Ï" );
-            //É¾³ıÉú³ÉÎ»ÖÃµÄ°²×°°ü
+            ShowMessage( "çŸ¥è¯†ç®¡ç†ç³»ç»Ÿè½¯ä»¶ç”Ÿæˆå®Œæ¯•" );
+            //åˆ é™¤ç”Ÿæˆä½ç½®çš„å®‰è£…åŒ…
             SetFileAttributes( softpath.c_str(), FILE_ATTRIBUTE_NORMAL );
             DeleteFile( softpath.c_str() );
-            //×ÀÃæÉÏ´ò¿ªÎÄ¼ş¼Ğ
+            //æ¡Œé¢ä¸Šæ‰“å¼€æ–‡ä»¶å¤¹
             ShellExecute( NULL, "open", path.c_str(), NULL, NULL, SW_SHOWNORMAL );
             flag = true;
         }
         else
         {
-            ShowMessage( "ÎÄ¼ş¸´ÖÆÊ§°Ü£¡" );
+            ShowMessage( "æ–‡ä»¶å¤åˆ¶å¤±è´¥ï¼" );
             flag = false;
         }
 
@@ -328,12 +328,12 @@ bool __fastcall TBuildSoftware::AfterBuild( AnsiString unit )
     return flag;
 }
 
-//¼ì²éÊÇ·ñÓĞ¡°Setup.wse¡±
+//æ£€æŸ¥æ˜¯å¦æœ‰â€œSetup.wseâ€
 int __fastcall TBuildSoftware::CheckDirectory( AnsiString path, AnsiString fileName )
 {
     if( !FileExists( path + "\\" + fileName ) )
     {
-        ShowMessage( "Ã»ÓĞÔÚËùÑ¡Ä¿Â¼ÏÂ¼ì²éµ½°²×°ÅÌÖÆ×÷ÎÄ¼ş¡£"+path + "\\" + fileName );
+        ShowMessage( "æ²¡æœ‰åœ¨æ‰€é€‰ç›®å½•ä¸‹æ£€æŸ¥åˆ°å®‰è£…ç›˜åˆ¶ä½œæ–‡ä»¶ã€‚"+path + "\\" + fileName );
         return 0;
     }
     return 1;
@@ -376,10 +376,10 @@ bool TBuildSoftware::CallAndWaitExternalProgram( AnsiString path, AnsiString par
 
 }
 
-//´ò°ü
+//æ‰“åŒ…
 bool __fastcall TBuildSoftware::BuilderSetupSoftware( AnsiString path ,AnsiString SetupType)
 {
-    //µ÷ÓÃ´ò°ü
+    //è°ƒç”¨æ‰“åŒ…
     bool result = true;
     unsigned long ret = -1;
     PROCESS_INFORMATION pi;
@@ -399,14 +399,14 @@ bool __fastcall TBuildSoftware::BuilderSetupSoftware( AnsiString path ,AnsiStrin
 
     if( !result )
     {
-        ShowMessage( "Ã»ÓĞÕÒµ½´ò°ü³ÌĞò¡£" );
+        ShowMessage( "æ²¡æœ‰æ‰¾åˆ°æ‰“åŒ…ç¨‹åºã€‚" );
     }
     GetExitCodeProcess( pi.hProcess, &ret );
 
     return result;
 }
 
-//´ÓÅäÖÃÎÄ¼şÖĞ»ñÈ¡Èí¼şÃû³Æ
+//ä»é…ç½®æ–‡ä»¶ä¸­è·å–è½¯ä»¶åç§°
 void __fastcall TBuildSoftware::ReadSoftwareName()
 {
     m_softwareName = GetUnitName();
@@ -422,20 +422,20 @@ AnsiString TBuildSoftware::GetSoftwareName()
 
 AnsiString TBuildSoftware::GetUnitName()
 {
-    //m_FilePath = ExtractFilePath( Application->ExeName ) + "°²×°°üÖÆ×÷»·¾³\\ĞÅºÅĞéÄâÊÀ½ç£¨¹¤Çø£©°²×°°üÖÆ×÷»·¾³";
+    //m_FilePath = ExtractFilePath( Application->ExeName ) + "å®‰è£…åŒ…åˆ¶ä½œç¯å¢ƒ\\ä¿¡å·è™šæ‹Ÿä¸–ç•Œï¼ˆå·¥åŒºï¼‰å®‰è£…åŒ…åˆ¶ä½œç¯å¢ƒ";
     std::auto_ptr<TIniFile> pIniFile ( new TIniFile( m_FilePath + "\\" + "RegInfo.ini") );
     AnsiString unitName = pIniFile->ReadString( "Public", "UnitName", "" );
     return unitName;
 }
 
-//´ÓÅäÖÃÎÄ¼şÖĞ»ñÈ¡°æ±¾ĞÅÏ¢
+//ä»é…ç½®æ–‡ä»¶ä¸­è·å–ç‰ˆæœ¬ä¿¡æ¯
 void __fastcall TBuildSoftware::ReadVersionInfo()
 {
     std::auto_ptr<TIniFile> pIniFile ( new TIniFile( m_FilePath + "\\" + "VerInfo.ini") );
     m_verBigNum = pIniFile->ReadString( "Version", "BigNum", "" );
     m_ver = " " + pIniFile->ReadString( "Version", "Num", "" );
 }
-//´ÓÅäÖÃÎÄ¼şÖĞ»ñÈ¡°²×°³ÌĞòÀàĞÍ
+//ä»é…ç½®æ–‡ä»¶ä¸­è·å–å®‰è£…ç¨‹åºç±»å‹
 void __fastcall TBuildSoftware::ReadSetupType()
 {
     std::auto_ptr<TIniFile> pIniFile ( new TIniFile( m_FilePath + "\\" + "VerInfo.ini") );
@@ -461,16 +461,16 @@ void TBuildSoftware::deletefile( String patch)
 }
 
 void TBuildSoftware::SoftwarePublish() {
-    // ¶ÁÈ¡µ±Ç° ¹«Ë¾ĞÅÏ¢
+    // è¯»å–å½“å‰ å…¬å¸ä¿¡æ¯
 
 
-    // ÕÒµ½ÏÂÊô ¹«Ë¾
+    // æ‰¾åˆ°ä¸‹å± å…¬å¸
     //TADOQuery *AdoQ = new TADOQuery(NULL);
     //String sql = "select DATA from ZSK_DATA_H0000Z000K06 where UPGUID1 = '" + up1 + "' and UPGUID2 = '" + up2 + "' and ISDELETE = 0";
     //AdoQ->Connection = DMod->ADOConnection4;
     //DMod->OpenSql(sql, AdoQ);
 
-    // ·¢²¼
+    // å‘å¸ƒ
 
 }
 #pragma package(smart_init)
