@@ -55,7 +55,7 @@ private:
     bool __fastcall BuilderSetupSoftware( AnsiString path ,AnsiString SetupType);
 public:
     //打包完成
-    bool __fastcall AfterBuild( AnsiString unit);
+    bool __fastcall AfterBuild(AnsiString unit);
 private:
     //从配置文件中获取软件名称
     void __fastcall ReadSoftwareName();

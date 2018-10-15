@@ -72,6 +72,7 @@ __published:	// IDE-managed Components
     TMenuItem *N7;
     TMenuItem *IP1;
     TMenuItem *N8;
+    TMenuItem *N9;
     void __fastcall TreeViewChange(TObject *Sender, TTreeNode *Node);
     void __fastcall FormCreate(TObject *Sender);
     void __fastcall AdvStringGridClickCell(TObject *Sender, int ARow,
@@ -115,6 +116,7 @@ __published:	// IDE-managed Components
     void __fastcall IP1Click(TObject *Sender);
     void __fastcall N8Click(TObject *Sender);
     void __fastcall N4Click(TObject *Sender);
+    void __fastcall N9Click(TObject *Sender);
 private:	// User declarations
 public:		// User declarations
     __fastcall TForm1(TComponent* Owner);

@@ -334,7 +334,6 @@ bool __fastcall TBuildSoftware::AfterBuild( AnsiString unit )
             AnsiString cpyparam = "xcopy \""+ ExtractFilePath( Application->ExeName ) + "html\\*\"";
             cpyparam = cpyparam + " \""+ path +"\\html\\\" \/s\/e\/h\/r";
             WinExec(cpyparam.c_str(),SW_HIDE);
-
         }
 
         if( FileExists( copath ) )
@@ -542,6 +541,7 @@ void TBuildSoftware::Package(String unitName) {
     DMod->OpenSql(sql, AdoQ);
     String unitlevel = AdoQ->FieldByName("单位级别")->AsString;
     int unitID = AdoQ->FieldByName("单位编号")->AsInteger;
+    delete AdoQ;
     auto_ptr<TIniFile> pIniFile ( new TIniFile( this->m_FilePath + "\\" + "RegInfo.ini") );
     m_verBigNum = pIniFile->ReadString("版本号", "VerNum", "1.0");
     pIniFile->DeleteKey("Public", "UnitLevel");
