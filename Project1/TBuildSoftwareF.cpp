@@ -512,7 +512,7 @@ void TBuildSoftware::SoftwarePublish() {
         }
         int u_id = tempQuery->FieldByName("单位编号")->AsInteger;
         delete tempQuery;
-        sql = "select 名称 from BD_AU_单位字典表 where 上级编号 = " + IntToStr(u_id);
+        sql = "select 名称 from BD_AU_单位字典表 where 上级单位 = " + IntToStr(u_id);
         AdoQ->Connection = DMod->ADOConnection4;
         DMod->OpenSql(sql, AdoQ);
     }
@@ -604,6 +604,9 @@ void TBuildSoftware::Package(String unitName) {
     path = "\"" + path + "\"";
     result = CallAndWaitExternalProgram( Path, " /cc " + path , pi );
     GetExitCodeProcess( pi.hProcess, &ret );
+    CopyFile((this->m_FilePath + "\\Output\\Setup.exe").c_str(), (this->exePath + "\\Output\\Setup.exe").c_str(), 0);
+    DeleteFolder(this->m_FilePath);
+    RemoveDir(this->m_FilePath);
 }
 
 void __fastcall TBuildSoftware::CopyFolder(String srcPath, String aimPath) {
@@ -633,7 +636,32 @@ void __fastcall TBuildSoftware::CopyFolder(String srcPath, String aimPath) {
         } while (FindNext(sr) == 0);
         FindClose(sr);
     }
-
 }
+
+void __fastcall TBuildSoftware::DeleteFolder(String srcPath) {
+    TSearchRec sr;
+    if (!DirectoryExists(srcPath)) {
+        return ;
+    }
+    if (FindFirst(srcPath + "//*.*", faAnyFile, sr) == 0) {
+        do {
+            try {
+                if ((sr.Attr & faDirectory) != 0) {
+                    //folder
+                    if (sr.Name != "." && sr.Name != "..") {
+                        DeleteFolder(srcPath+"//"+sr.Name);
+                        RemoveDir(srcPath+"//"+sr.Name);
+                    }
+                }
+                else {
+                    //file
+                    DeleteFile((srcPath + "//" + sr.Name).c_str());
+                }
+            }catch(...){}
+        } while (FindNext(sr) == 0);
+        FindClose(sr);
+    }
+}
+
 //---------------------------------------------------------------------------
 #pragma package(smart_init)

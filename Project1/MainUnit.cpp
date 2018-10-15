@@ -411,7 +411,7 @@ void __fastcall TForm1::FormCreate(TObject *Sender)
     while (!AdoQ -> Eof) {
         ++ cnt;
         ReadData(AdoQ);
-        TData tmpdata;
+        TData tmpdata;                                              
         tmpdata = node[node.High].Data;
         //ShowMessage(tmpdata.PGUID);
         P_ID[tmpdata.PGUID] = cnt;

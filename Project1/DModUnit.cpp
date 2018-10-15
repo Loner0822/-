@@ -31,7 +31,6 @@ void TDMod::Conn(TADOConnection *conn, AnsiString path, AnsiString password) {
     }
 }
 
-
 void TDMod::OpenSql(String SQL, TADOQuery *q) {
     q -> Close();
     q -> SQL -> Text = SQL;

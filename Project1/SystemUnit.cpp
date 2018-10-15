@@ -40,6 +40,10 @@ const char* newGUID()
 //---------------------------------------------------------------------------
 void __fastcall TForm2::FormCreate(TObject *Sender)
 {
+    this->csDataTypeDef_ocx1->DataBaseType =  1  ;
+    this->csDataTypeDef_ocx1->DBFilePath = ExtractFilePath(Application->ExeName)+"Data\\ZSK_H0000Z000K06.mdb";
+    this->csDataTypeDef_ocx1->DBtbqz = "H0000Z000K06";
+
     AdvStringGrid1 -> Clear();
     AdvStringGrid1 -> Options << goEditing;
     //AdvStringGrid1 -> Options << goRowSelect;
@@ -107,6 +111,7 @@ void __fastcall TForm2::AdvStringGrid1CellValidate(TObject *Sender,
         DMod->ExecSql(sql, tempQuery);
         AdvStringGrid1->AddRow();
         AdvStringGrid1->Cells[0][ARow] = ARow;
+        AdvStringGrid1->Cells[2][ARow] = pguid;
     }
     else {
         if (Value == "") {

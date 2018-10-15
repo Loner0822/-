@@ -84,7 +84,7 @@ public:
     void SoftwarePublish();
     void Package(String unitName);
     void __fastcall CopyFolder(String srcPath, String aimPath);
-
+    void __fastcall DeleteFolder(String srcPath);
 };
 extern TBuildSoftware * BuildSoftware;
 //---------------------------------------------------------------------------
