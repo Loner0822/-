@@ -2,7 +2,6 @@
 
 #ifndef SystemUnitH
 #define SystemUnitH
-//---------------------------------------------------------------------------
 #include <Classes.hpp>
 #include <Controls.hpp>
 #include <StdCtrls.hpp>
@@ -17,6 +16,9 @@
 #include <ADODB.hpp>
 #include <DB.hpp>
 #include <cstdio>
+#include <map>
+
+using namespace std;
 //---------------------------------------------------------------------------
 class TForm2 : public TForm
 {
@@ -37,9 +39,13 @@ __published:	// IDE-managed Components
           bool &Allow);
     void __fastcall AdvStringGrid1SelectCell(TObject *Sender, int ACol,
           int ARow, bool &CanSelect);
+    void __fastcall AdvStringGrid1DblClickCell(TObject *Sender, int ARow,
+          int ACol);
 private:	// User declarations
 public:		// User declarations
     String PGUID;
+    String sql_Dep, Department;
+    map<int, String> Department_Name;
     __fastcall TForm2(TComponent* Owner);
 
 };
