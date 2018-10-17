@@ -355,12 +355,13 @@ void __fastcall TForm1::TreeViewChange(TObject *Sender, TTreeNode *Node)
     AdvStringGrid2->Options << goColSizing;
     AdvStringGrid2->Options >> goRowSizing;
     AdvStringGrid2->RowCount = 2;
-    AdvStringGrid2->ColCount = 3;
+    AdvStringGrid2->ColCount = 4;
     AdvStringGrid2->FixedRows = 1;
     AdvStringGrid2->FixedCols = 0;
     AdvStringGrid2->Cells[0][0] = "数据类型";
     AdvStringGrid2->Cells[1][0] = "值";
     AdvStringGrid2->ColWidths[2] = 0;
+    AdvStringGrid2->ColWidths[3] = 0;
     TADOQuery *tempQuery = new TADOQuery(NULL);
     tempQuery->Connection = DMod->ADOConnection3;
     String sql = "select PGUID, PARM from ZSK_PARM_H0000Z000K06 where ISDELETE = 0";
@@ -1241,7 +1242,7 @@ void __fastcall TForm1::N1Click(TObject *Sender)
     AdvStringGrid2->ColWidths[2] = 0;
     TADOQuery *tempQuery = new TADOQuery(NULL);
     tempQuery->Connection = DMod->ADOConnection3;
-    String sql = "select PGUID, PARM from ZSK_PARM_H0000Z000K06 where ISDELETE = 0";
+    String sql = "select PGUID, PARM, DEPARTMENT from ZSK_PARM_H0000Z000K06 where ISDELETE = 0";
     DMod->OpenSql(sql + sql_Dep + " order by Index_ asc, ID asc", tempQuery);
     int cnt = 0;
     while (!tempQuery->Eof) {
@@ -1250,6 +1251,7 @@ void __fastcall TForm1::N1Click(TObject *Sender)
         ++ cnt;
         AdvStringGrid2->Cells[0][cnt] = tempQuery->FieldByName("PARM")->AsString;
         AdvStringGrid2->Cells[2][cnt] = tempQuery->FieldByName("PGUID")->AsString;
+        AdvStringGrid2->Cells[3][cnt] = tempQuery->FieldByName("DEPARTMENT")->AsString;
         tempQuery->Next();
     }
     delete tempQuery;
@@ -1264,9 +1266,10 @@ void __fastcall TForm1::AdvStringGrid2CanEditCell(TObject *Sender,
     CanEdit = 1;
     if (AdvStringGrid1->Cells[3][AdvStringGrid1->Row] == "")
         CanEdit = 0;
-    if (AdvStringGrid2->Cells[2][AdvStringGrid2->Row] == "")
+    if (AdvStringGrid2->Cells[2][ARow] == "")
         CanEdit = 0;
-
+    if (AdvStringGrid2->Cells[3][ARow] != IntToStr(Department[0]) && AdvStringGrid2->Cells[3][ARow] != "-1")
+        CanEdit = 0;
     if (ACol == 0)
         CanEdit = 0;
     if (ARow == 0)
@@ -1364,7 +1367,7 @@ void __fastcall TForm1::AdvStringGrid2EditCellDone(TObject *Sender,
     else {
         CoInitialize(NULL);
         String pguid = newGUID();
-        sql = "insert into ZSK_DATA_H0000Z000K06 (PGUID, S_UDTIME, UPGUID1, UPGUID2, DATA) values('" + pguid + "', '" + Now().FormatString("yyyy-MM-dd hh:mm:ss") + "', '" + up1 + "', '" + up2 + "', '" + AdvStringGrid2->Cells[1][row2] + "')";
+        sql = "insert into ZSK_DATA_H0000Z000K06 (PGUID, S_UDTIME, UPGUID1, UPGUID2, DATA, DEPARTMENT) values('" + pguid + "', '" + Now().FormatString("yyyy-MM-dd hh:mm:ss") + "', '" + up1 + "', '" + up2 + "', '" + AdvStringGrid2->Cells[1][row2] + "', " + IntToStr(Department[0]) +")";
         DMod->ExecSql(sql, AdoQ);
     }
     delete AdoQ;
@@ -1382,14 +1385,18 @@ void __fastcall TForm1::AdvStringGrid1ClickCell(TObject *Sender, int ARow,
     for (int i = 1; i < AdvStringGrid2->RowCount; ++ i) {
         up2 = AdvStringGrid2->Cells[2][i];
         TADOQuery *AdoQ = new TADOQuery(NULL);
-        sql = "select DATA from ZSK_DATA_H0000Z000K06 where UPGUID1 = '" + up1 + "' and UPGUID2 = '" + up2 + "' and ISDELETE = 0";
+        sql = "select DATA, DEPARTMENT from ZSK_DATA_H0000Z000K06 where UPGUID1 = '" + up1 + "' and UPGUID2 = '" + up2 + "' and ISDELETE = 0";
         AdoQ->Connection = DMod->ADOConnection3;
         DMod->OpenSql(sql + sql_Dep, AdoQ);
-        if (!AdoQ->Eof)
-            AdvStringGrid2->Cells[1][i] = AdoQ->FieldByName("DATA")->AsString;
-        else
+        if (!AdoQ->Eof) {
+			AdvStringGrid2->Cells[1][i] = AdoQ->FieldByName("DATA")->AsString;
+			AdvStringGrid2->Cells[3][i] = AdoQ->FieldByName("DEPARTMENT")->AsString;
+		}
+        else {
             AdvStringGrid2->Cells[1][i] = "";
-        delete AdoQ;
+			AdvStringGrid2->Cells[3][i] = "-1";
+        }
+		delete AdoQ;
     }
     // 读取这张图数据
     Pen_Node.clear();
@@ -1549,7 +1556,20 @@ void __fastcall TForm1::AdvStringGrid1DblClickCell(TObject *Sender,
     if (AdvStringGrid1->Cells[4][ARow] == "")
         return;
     int u_id = StrToInt(AdvStringGrid1->Cells[4][ARow]);
-    if (AdvStringGrid1->Cells[4][ARow] != Department[0] && AdvStringGrid1->Cells[2][ARow] != "") {
+    if (u_id != Department[0] && AdvStringGrid1->Cells[2][ARow] != "") {
+		ShowMessage("无法修改上级" + Department_Name[u_id] + "的数据");
+		return;
+	}
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TForm1::AdvStringGrid2DblClickCell(TObject *Sender,
+      int ARow, int ACol)
+{
+    if (AdvStringGrid2->Cells[3][ARow] == "-1")
+        return;
+    int u_id = StrToInt(AdvStringGrid2->Cells[3][ARow]);
+    if (u_id != Department[0]) {
 		ShowMessage("无法修改上级" + Department_Name[u_id] + "的数据");
 		return;
 	}

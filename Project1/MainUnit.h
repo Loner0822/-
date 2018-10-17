@@ -119,6 +119,8 @@ __published:	// IDE-managed Components
     void __fastcall N9Click(TObject *Sender);
     void __fastcall AdvStringGrid1DblClickCell(TObject *Sender, int ARow,
           int ACol);
+    void __fastcall AdvStringGrid2DblClickCell(TObject *Sender, int ARow,
+          int ACol);
 private:	// User declarations
 public:		// User declarations
     __fastcall TForm1(TComponent* Owner);
