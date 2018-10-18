@@ -1467,35 +1467,35 @@ void __fastcall TForm1::AdvStringGrid2MouseMove(TObject *Sender,
 void __fastcall TForm1::N5Click(TObject *Sender)
 {
     String path = ExtractFilePath(Application->ExeName) + "DataBF.exe";
-    WinExec(path.c_str(), NULL);
+    ShellExecute(NULL,"open",path.c_str(),NULL,NULL,SW_SHOWNORMAL);
 }
 //---------------------------------------------------------------------------
 //数据恢复
 void __fastcall TForm1::N6Click(TObject *Sender)
 {
     String path = ExtractFilePath(Application->ExeName) + "DataHF.exe";
-    WinExec(path.c_str(), NULL);
+    ShellExecute(NULL,"open",path.c_str(),NULL,NULL,SW_SHOWNORMAL);
 }
 //---------------------------------------------------------------------------
 //数据同步
 void __fastcall TForm1::N7Click(TObject *Sender)
 {
     String path = ExtractFilePath(Application->ExeName) + "DataUp.exe";
-    WinExec(path.c_str(), NULL);
+    ShellExecute(NULL,"open",path.c_str(),NULL,NULL,SW_SHOWNORMAL);
 }
 //---------------------------------------------------------------------------
 //IP设置
 void __fastcall TForm1::IP1Click(TObject *Sender)
 {
     String path = ExtractFilePath(Application->ExeName) + "SetIP.exe";
-    WinExec(path.c_str(), NULL);
+    ShellExecute(NULL,"open",path.c_str(),NULL,NULL,SW_SHOWNORMAL);
 }
 //---------------------------------------------------------------------------
 //数据类型设置
 void __fastcall TForm1::N8Click(TObject *Sender)
 {
     String path = ExtractFilePath(Application->ExeName) + "PropDefine_pro.exe";
-    WinExec(path.c_str(), NULL);
+    ShellExecute(NULL,"open",path.c_str(),NULL,NULL,SW_SHOWNORMAL);
 }
 //---------------------------------------------------------------------------
 //软件发布
