@@ -35,7 +35,7 @@ private:
     //检查是否有“安装包.wse”
     int __fastcall CheckDirectory( AnsiString path, AnsiString fileName );
 
-    //xhy从配置文件中获取安装程序类型
+    //从配置文件中获取安装程序类型
     void __fastcall ReadSetupType();
     //拷贝配置文件到目录下
     void __fastcall CopyIniFile( AnsiString sourcePath, AnsiString destPath, AnsiString fileName );
@@ -80,6 +80,7 @@ public:
 
     void deletefile( String patch);
     String exePath;
+    int Department_Level;
     
     void SoftwarePublish();
     void Package(String unitName);

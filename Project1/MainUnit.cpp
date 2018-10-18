@@ -414,6 +414,7 @@ void __fastcall TForm1::FormCreate(TObject *Sender)
     }
     Department.push_back(u_id);
     Department_Name[u_id] = "ÖÐ±±ÐÅºÅ";
+    BuildSoftware->Department_Level = Department[0];
     sql_Dep = " and ( DEPARTMENT = 0";
     for (int i = 0; i < Department.size() - 1; ++ i)
         sql_Dep += " or DEPARTMENT = " + IntToStr(Department[i]);
@@ -1537,15 +1538,15 @@ void __fastcall TForm1::N9Click(TObject *Sender)
     delete tempQuery;
 
     tempQuery = new TADOQuery(NULL);
-    tempQuery -> Connection = DMod -> ADOConnection3;
+    tempQuery->Connection = DMod->ADOConnection3;
     sql = "delete * from ZSK_NATURE_H0000Z000K06";
-    DMod -> ExecSql(sql, tempQuery);
+    DMod->ExecSql(sql, tempQuery);
     delete tempQuery;
 
     tempQuery = new TADOQuery(NULL);
-    tempQuery -> Connection = DMod -> ADOConnection3;
+    tempQuery->Connection = DMod->ADOConnection3;
     sql = "delete * from ZSK_PARM_H0000Z000K06";
-    DMod -> ExecSql(sql, tempQuery);
+    DMod->ExecSql(sql, tempQuery);
     delete tempQuery;
 }
 //---------------------------------------------------------------------------

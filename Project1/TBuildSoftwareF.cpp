@@ -9,6 +9,7 @@
 #include <Inifiles.hpp>
 #include <stdio.h>
 #include <fstream>
+#include <sstream>
 #include <string>
 #include <memory>
 #include "TBuildSoftwareF.h"
@@ -552,6 +553,11 @@ void TBuildSoftware::Package(String unitName) {
     pIniFile->WriteString("Public", "UnitID", unitID);
 
     // 修改Raw.iss并存入Setup.iss
+    static char arr_cDesktopPath[MAX_PATH];
+    LPITEMIDLIST pidl;
+    SHGetSpecialFolderLocation( NULL, CSIDL_DESKTOP, &pidl );
+    SHGetPathFromIDList( pidl, arr_cDesktopPath );
+    string desktop_path = string( arr_cDesktopPath );
     string file_path = StringTostring(this->m_FilePath) + "\\Raw.iss";
     string out_path = StringTostring(this->m_FilePath) + "\\Setup.iss";
     string str;
@@ -588,6 +594,19 @@ void TBuildSoftware::Package(String unitName) {
         pos = str.find("SOURCE_PATH");
         if (pos != string::npos)
             str.replace(pos, 11, StringTostring(m_FilePath));
+        pos = str.find("OUTPUT_DIR");
+        if (pos != string::npos)
+            str.replace(pos, 10, desktop_path);
+        pos = str.find("OUTPUT_BASE_FILENAME");
+        if (pos != string::npos)
+            str.replace(pos, 20, StringTostring(unitName) + "集中监测标准知识库安装包");
+        pos = str.find("REGISTRY_SUBKEY");
+        stringstream stream;
+        string DLstring;
+        stream << Department_Level;
+        stream >> DLstring;
+        if (pos != string::npos)
+            str.replace(pos, 15, "JZJCBZZSK" + DLstring);
         outstream << str <<endl;
     }
     instream.close();
@@ -612,7 +631,7 @@ void TBuildSoftware::Package(String unitName) {
 void __fastcall TBuildSoftware::CopyFolder(String srcPath, String aimPath) {
     TSearchRec sr;
     if (!DirectoryExists(srcPath)) {
-        return ;
+        return;
     }
     if (!DirectoryExists(aimPath)) {
    		ForceDirectories(aimPath);
