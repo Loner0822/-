@@ -183,8 +183,6 @@ void __fastcall TForm1::AdvStringGrid1CellValidate(TObject *Sender,
             AdvStringGrid1->RemoveRows(ARow, 1);
             for (int i = 1; i < AdvStringGrid1->RowCount - 1; ++ i)
                 AdvStringGrid1->Cells[0][i] = i;
-            sql = "update ZSK_NATURE_H0000Z000K06 set ISDELETE = 1 where UPGUID = '" + node[Now_Node].Data.PGUID + "'";
-            DMod->ExecSql(sql + sql_Dep, tempQuery);
         }
         else {
             // find
@@ -264,7 +262,7 @@ void TForm1::FindFather(TTreeNode *tnode, int &level) {
     TADOQuery *tempQuery = new TADOQuery(NULL);
     tempQuery->Connection = DMod->ADOConnection3;
     String sql = "select PGUID, NATURE, DEPARTMENT from ZSK_NATURE_H0000Z000K06 where UPGUID = '" + pguid + "' and ISDELETE = 0";
-    DMod->OpenSql(sql + sql_Dep + " order by Index_", tempQuery);
+    DMod->OpenSql(sql + " order by Index_", tempQuery);
     if (tempQuery->Eof) {
         delete tempQuery;
         return;
@@ -365,7 +363,7 @@ void __fastcall TForm1::TreeViewChange(TObject *Sender, TTreeNode *Node)
     TADOQuery *tempQuery = new TADOQuery(NULL);
     tempQuery->Connection = DMod->ADOConnection3;
     String sql = "select PGUID, PARM from ZSK_PARM_H0000Z000K06 where ISDELETE = 0";
-    DMod->OpenSql(sql + sql_Dep + " order by Index_ asc, ID asc", tempQuery);
+    DMod->OpenSql(sql + " order by Index_ asc, ID asc", tempQuery);
     cnt = 0;
     while (!tempQuery->Eof) {
         if (cnt + 1 >= AdvStringGrid2->RowCount)
@@ -1225,7 +1223,7 @@ void __fastcall TForm1::TimerTimer(TObject *Sender)
 void __fastcall TForm1::N1Click(TObject *Sender)
 {
 	Form2->sql_Dep = sql_Dep;
-    Form2->Department = Department[0];
+    Form2->Department = IntToStr(Department[0]);
     Form2->Department_Name = Department_Name;
     Form2->csDataTypeDef_ocx1->DataBaseType =  1  ;
     Form2->csDataTypeDef_ocx1->DBFilePath = ExtractFilePath(Application->ExeName)+"data\\ZSK_H0000Z000K06.mdb";
@@ -1244,7 +1242,7 @@ void __fastcall TForm1::N1Click(TObject *Sender)
     TADOQuery *tempQuery = new TADOQuery(NULL);
     tempQuery->Connection = DMod->ADOConnection3;
     String sql = "select PGUID, PARM, DEPARTMENT from ZSK_PARM_H0000Z000K06 where ISDELETE = 0";
-    DMod->OpenSql(sql + sql_Dep + " order by Index_ asc, ID asc", tempQuery);
+    DMod->OpenSql(sql + " order by Index_ asc, ID asc", tempQuery);
     int cnt = 0;
     while (!tempQuery->Eof) {
         if (cnt + 1 >= AdvStringGrid2->RowCount)
@@ -1265,16 +1263,26 @@ void __fastcall TForm1::AdvStringGrid2CanEditCell(TObject *Sender,
       int ARow, int ACol, bool &CanEdit)
 {
     CanEdit = 1;
-    if (AdvStringGrid1->Cells[3][AdvStringGrid1->Row] == "")
+    if (AdvStringGrid1->Cells[3][AdvStringGrid1->Row] == "") {
         CanEdit = 0;
-    if (AdvStringGrid2->Cells[2][ARow] == "")
+        return;
+    }
+    if (AdvStringGrid2->Cells[2][ARow] == "") {
         CanEdit = 0;
-    if (AdvStringGrid2->Cells[3][ARow] != IntToStr(Department[0]) && AdvStringGrid2->Cells[3][ARow] != "-1")
+        return;
+    }
+    if (AdvStringGrid2->Cells[3][ARow] != IntToStr(Department[0]) && AdvStringGrid2->Cells[3][ARow] != "-1") {
         CanEdit = 0;
-    if (ACol == 0)
+        return;
+    }
+    if (ACol == 0) {
         CanEdit = 0;
-    if (ARow == 0)
+        return;
+    }
+    if (ARow == 0) {
         CanEdit = 0;
+        return;
+    }
 }
 //---------------------------------------------------------------------------
 
@@ -1567,7 +1575,9 @@ void __fastcall TForm1::AdvStringGrid1DblClickCell(TObject *Sender,
 void __fastcall TForm1::AdvStringGrid2DblClickCell(TObject *Sender,
       int ARow, int ACol)
 {
-    if (AdvStringGrid2->Cells[3][ARow] == "-1")
+    if (ACol != 1)
+        return;
+    if (AdvStringGrid2->Cells[1][ARow] == "")
         return;
     int u_id = StrToInt(AdvStringGrid2->Cells[3][ARow]);
     if (u_id != Department[0]) {
