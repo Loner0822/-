@@ -40,7 +40,10 @@ void TExtraForm::Move_Pen(const vector<set<Pen>::iterator> &L) {
             AdvStringGridExtra -> Cells[1][i + 1] = "黑表笔";
         if (L[i] -> type == 3)
             AdvStringGridExtra -> Cells[1][i + 1] = "电流钳";
-        AdvStringGridExtra->AddRadioButton(2, i + 1, false);
+        if (L[i]->company == Department[0])
+            AdvStringGridExtra->AddRadioButton(2, i + 1, false);
+        else
+            AdvStringGridExtra -> Cells[2][i + 1] = "无法编辑";
     }
 }
 
@@ -64,7 +67,10 @@ void TExtraForm::Delete_Pen (const vector<set<Pen>::iterator> &L) {
             AdvStringGridExtra -> Cells[1][i + 1] = "黑表笔";
         if (L[i] -> type == 3)
             AdvStringGridExtra -> Cells[1][i + 1] = "电流钳";
-        AdvStringGridExtra->AddCheckBox(2, i + 1, false, false);
+        if (L[i]->company == Department[0])
+            AdvStringGridExtra->AddCheckBox(2, i + 1, false, false);
+        else
+            AdvStringGridExtra -> Cells[2][i + 1] = "无法编辑";
     }
 }
 
@@ -75,21 +81,23 @@ void __fastcall TExtraForm::ButtonExtraClick(TObject *Sender)
 {
     if (AdvStringGridExtra -> Cells[2][0] == "是否移动") {
         Move_num = -1;
-        for (int i = 1; i < AdvStringGridExtra->RowCount; ++ i) {
-            if (AdvStringGridExtra->IsRadioButtonChecked(2, i)) {
-                Move_num = i - 1;
-                break;
+        for (int i = 1; i < AdvStringGridExtra->RowCount; ++ i)
+            if (AdvStringGridExtra->Cells[2][i] != "无法编辑") {
+                if (AdvStringGridExtra->IsRadioButtonChecked(2, i)) {
+                    Move_num = i - 1;
+                    break;
+                }
             }
-        }
     }
     if (AdvStringGridExtra -> Cells[2][0] == "是否删除") {
         Delete_num.clear();
-        for (int i = 1; i < AdvStringGridExtra->RowCount; ++ i) {
-            bool flag;
-            AdvStringGridExtra->GetCheckBoxState(2, i, flag);
-            if (flag)
-                Delete_num.push_back(i - 1);
-        }
+        for (int i = 1; i < AdvStringGridExtra->RowCount; ++ i)
+            if (AdvStringGridExtra->Cells[2][i] != "无法编辑") {
+                bool flag;
+                AdvStringGridExtra->GetCheckBoxState(2, i, flag);
+                if (flag)
+                    Delete_num.push_back(i - 1);
+            }
     }
 }
 //---------------------------------------------------------------------------

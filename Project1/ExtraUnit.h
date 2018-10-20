@@ -26,6 +26,7 @@ __published:	// IDE-managed Components
 private:	// User declarations
 public:		// User declarations
     int Move_num;
+    vector<int> Department;
     vector<int> Delete_num;
     __fastcall TExtraForm(TComponent* Owner);
     void __fastcall FormCreate(TObject *Sender);
