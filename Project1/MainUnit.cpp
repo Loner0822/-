@@ -1075,6 +1075,8 @@ void TForm1::Choose_Move_Pen(const vector<set<Pen>::iterator> &L) {
     ExtraForm->ShowModal();
     set<Pen>::iterator it;
     //ShowMessage(ExtraForm->Move_num);
+    if (ExtraForm->Move_num == -1)
+        return;
     it = L[ExtraForm->Move_num];
     ClickDown = 1;
     if (it->type == 1)
@@ -1185,6 +1187,7 @@ void __fastcall TForm1::AdvStringGrid1ClickCell(TObject *Sender, int ARow,
         tmppen.id = AdoQ->FieldByName("PEN_ID")->AsInteger;
         tmppen.type = AdoQ->FieldByName("PEN_TYPE")->AsInteger;
         tmppen.partner = AdoQ->FieldByName("PEN_PARTNER")->AsInteger;
+        tmppen.company = AdoQ->FieldByName("DEPARTMENT")->AsInteger;
         tmppen.x = AdoQ->FieldByName("PEN_X")->AsInteger;
         tmppen.y = AdoQ->FieldByName("PEN_Y")->AsInteger;
         if (tmppen.partner != 0)
