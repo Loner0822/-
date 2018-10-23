@@ -72,7 +72,6 @@ __published:	// IDE-managed Components
     TMenuItem *N7;
     TMenuItem *IP1;
     TMenuItem *N8;
-    TMenuItem *N9;
     TPopupMenu *PopupMenu1;
     TMenuItem *A1;
     TMenuItem *U1;
@@ -130,7 +129,7 @@ __published:	// IDE-managed Components
     void __fastcall IP1Click(TObject *Sender);
     void __fastcall N8Click(TObject *Sender);
     void __fastcall N4Click(TObject *Sender);
-    void __fastcall N9Click(TObject *Sender);
+    //void __fastcall N9Click(TObject *Sender);
     void __fastcall AdvStringGrid1GetAlignment(TObject *Sender, int ARow,
           int ACol, TAlignment &HAlign, TVAlignment &VAlign);
     void __fastcall AdvStringGridGetAlignment(TObject *Sender, int ARow,
@@ -144,8 +143,9 @@ __published:	// IDE-managed Components
     void __fastcall A1Click(TObject *Sender);
     void __fastcall U1Click(TObject *Sender);
     void __fastcall D1Click(TObject *Sender);
-    
-    
+
+    void __fastcall TreeViewCustomDrawItem(TCustomTreeView *Sender,
+          TTreeNode *Node, TCustomDrawState State, bool &DefaultDraw);
 private:	// User declarations
 public:		// User declarations
     __fastcall TForm1(TComponent* Owner);

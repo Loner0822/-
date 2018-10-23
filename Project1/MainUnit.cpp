@@ -142,14 +142,14 @@ void __fastcall TForm1::FormCreate(TObject *Sender) {
     AdvStringGrid->Options << goRowSelect;
     AdvStringGrid->ColWidths[0] = 32;
     AdvStringGrid->ColWidths[1] = 64;
-    AdvStringGrid->ColWidths[2] = 64;
+    AdvStringGrid->ColWidths[2] = 128;
     AdvStringGrid->ColWidths[3] = 0;
-    GroupBox2->Width = AdvStringGrid->ColWidths[0] + AdvStringGrid->ColWidths[1] * 2 + 8;
+    GroupBox2->Width = AdvStringGrid->ColWidths[0] + AdvStringGrid->ColWidths[1] * 3 + 8;
 
     AdvStringGrid->Clear();
     AdvStringGrid->Cells[0][0] = "序号";
-    AdvStringGrid->Cells[1][0] = "类型名称";
-    AdvStringGrid->Cells[2][0] = "图像名称";
+    AdvStringGrid->Cells[1][0] = "设计院";
+    AdvStringGrid->Cells[2][0] = "图纸名称";
 
 
     //初始化属性列表 Parm
@@ -175,7 +175,6 @@ void __fastcall TForm1::FormCreate(TObject *Sender) {
     AdvStringGrid1->Cells[1][0] = "节点名称";
     AdvStringGrid1->Cells[2][0] = "配线名称";
 
-
     AdvStringGrid2->Options << goEditing;
     AdvStringGrid2->Options << goColSizing;
     AdvStringGrid2->Options >> goRowSizing;
@@ -190,8 +189,8 @@ void __fastcall TForm1::FormCreate(TObject *Sender) {
 
     AdvStringGrid2->Clear();
     AdvStringGrid2->Cells[0][0] = "序号";
-    AdvStringGrid2->Cells[1][0] = "数据类型";
-    AdvStringGrid2->Cells[2][0] = "值";
+    AdvStringGrid2->Cells[1][0] = "定义参数";
+    AdvStringGrid2->Cells[2][0] = "定义值";
 }
 //---------------------------------------------------------------------------
 
@@ -201,8 +200,8 @@ void __fastcall TForm1::TreeViewChange(TObject *Sender, TTreeNode *Node) {
 
     AdvStringGrid->Clear();
     AdvStringGrid->Cells[0][0] = "序号";
-    AdvStringGrid->Cells[1][0] = "类型名称";
-    AdvStringGrid->Cells[2][0] = "图像名称";
+    AdvStringGrid->Cells[1][0] = "设计院";
+    AdvStringGrid->Cells[2][0] = "图纸名称";
     String name = Node->Text;
     //ShowMessage(node[tindex].Data.JdText);
     String uid = node[Now_Node].Data.PGUID;
@@ -1356,6 +1355,7 @@ void __fastcall TForm1::N1Click(TObject *Sender) {
     Form2->Department = IntToStr(Department[0]);
     Form2->Department_Name = Department_Name;
     Form2->Refresh();
+    Form2->AdvStringGrid1SelectCell(Form2->AdvStringGrid1, 1, 1, true);
     Form2->ShowModal();
 
     AdvStringGrid1ClickCell(AdvStringGrid1, AdvStringGrid1->Row, AdvStringGrid1->Col);
@@ -1551,7 +1551,7 @@ void __fastcall TForm1::N4Click(TObject *Sender) {
 //---------------------------------------------------------------------------
 
 //数据清除
-void __fastcall TForm1::N9Click(TObject *Sender) {
+/*void __fastcall TForm1::N9Click(TObject *Sender) {
     TADOQuery *tempQuery = new TADOQuery(NULL);
     tempQuery -> Connection = DMod -> ADOConnection3;
     String sql = "delete * from ZSK_COMBOSTRLIST_H0000Z000K06";
@@ -1595,6 +1595,7 @@ void __fastcall TForm1::N9Click(TObject *Sender) {
     delete tempQuery;
 }
 //---------------------------------------------------------------------------
+*/
 
 void TForm1::InsertNature(String u_name) {
     for (int i = 1; i < AdvStringGrid1->RowCount; ++ i) {
@@ -1692,8 +1693,8 @@ void __fastcall TForm1::AdvStringGrid2GetAlignment(TObject *Sender,
 //---------------------------------------------------------------------------
 
 void __fastcall TForm1::AdvStringGridResize(TObject *Sender) {
-    AdvStringGrid->ColWidths[1] = (AdvStringGrid->Width - AdvStringGrid->ColWidths[0] - 4) / 2;
-    AdvStringGrid->ColWidths[2] = (AdvStringGrid->Width - AdvStringGrid->ColWidths[0] - 4) / 2;
+    AdvStringGrid->ColWidths[1] = (AdvStringGrid->Width - AdvStringGrid->ColWidths[0] - 4) / 3;
+    AdvStringGrid->ColWidths[2] = (AdvStringGrid->Width - AdvStringGrid->ColWidths[0] - 4) / 3 * 2;
 }
 //---------------------------------------------------------------------------
 
@@ -1765,8 +1766,8 @@ void TForm1::AdvStringGrid2Refresh() {
     AdvStringGrid2->FixedRows = 1;
     AdvStringGrid2->FixedCols = 1;
     AdvStringGrid2->Cells[0][0] = "序号";
-    AdvStringGrid2->Cells[1][0] = "数据类型";
-    AdvStringGrid2->Cells[2][0] = "值";
+    AdvStringGrid2->Cells[1][0] = "定义参数";
+    AdvStringGrid2->Cells[2][0] = "定义值";
     AdvStringGrid2->ColWidths[3] = 0;
     AdvStringGrid2->ColWidths[4] = 0;
     AdvStringGrid2->ColWidths[5] = 0;
@@ -1810,4 +1811,18 @@ void TForm1::AdvStringGrid2Refresh() {
     }
 }
 //---------------------------------------------------------------------------
+
+void __fastcall TForm1::TreeViewCustomDrawItem(TCustomTreeView *Sender,
+      TTreeNode *Node, TCustomDrawState State, bool &DefaultDraw)
+{
+    if (Node == TreeView->Selected) {
+		TreeView->Canvas->Brush->Color = 0x00FF8000;
+	}
+	else {
+		TreeView->Canvas->Brush->Color = clWhite;
+	}
+}
+//---------------------------------------------------------------------------
+
+
 

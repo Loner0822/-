@@ -173,7 +173,7 @@ void TForm2::Refresh() {
     AdvStringGrid1->ColWidths[2] = 0;
     AdvStringGrid1->ColWidths[3] = 0;
     AdvStringGrid1->Cells[0][0] = "序号";
-    AdvStringGrid1->Cells[1][0] = "数据类型";
+    AdvStringGrid1->Cells[1][0] = "定义参数";
 
     TADOQuery *tempQuery = new TADOQuery(NULL);
     tempQuery->Connection = DMod->ADOConnection3;
@@ -181,7 +181,7 @@ void TForm2::Refresh() {
     DMod->OpenSql(sql + sql_Dep + " order by Index_ asc, ID asc", tempQuery);
     int cnt = 0;
     while (!tempQuery->Eof) {
-        if (AdvStringGrid1->Cells[1][AdvStringGrid1->RowCount - 2] != "数据类型" ||
+        if (AdvStringGrid1->Cells[1][AdvStringGrid1->RowCount - 2] != "定义参数" ||
             AdvStringGrid1->Cells[1][AdvStringGrid1->RowCount - 1] != "")
             AdvStringGrid1->AddRow();
         ++ cnt;
@@ -196,9 +196,9 @@ void TForm2::Refresh() {
 
 void __fastcall TForm2::A1Click(TObject *Sender)
 {
-    Form4->Caption = "添加新的数据类型";
-    Form4->Label1->Caption = "数据类型";
-    Form4->Edit1->Text = "请输入数据类型";
+    Form4->Caption = "添加新的定义参数";
+    Form4->Label1->Caption = "定义参数";
+    Form4->Edit1->Text = "请输入定义参数";
     Form4->Edit1->SelectAll();
     Form4->Tip = 3;
     Form4->ShowModal();
@@ -208,7 +208,7 @@ void __fastcall TForm2::A1Click(TObject *Sender)
 void TForm2::InsertParm(String u_name) {
     for (int i = 1; i < AdvStringGrid1->RowCount; ++ i) {
         if (AdvStringGrid1->Cells[2][i] == u_name) {
-            ShowMessage("数据类型'" + u_name + "'已存在");
+            ShowMessage("定义参数'" + u_name + "'已存在");
             AdvStringGrid1->Row = i;
             AdvStringGrid1->Col = 1;
             return;
@@ -221,7 +221,7 @@ void TForm2::InsertParm(String u_name) {
     String sql = "insert into ZSK_PARM_H0000Z000K06 (PGUID, S_UDTIME, PARM, DEPARTMENT) values('" + pguid + "', '" + Now().FormatString("yyyy-MM-dd hh:mm:ss") + "', '" + u_name + "', '" + Department + "')";
     DMod->ExecSql(sql, tempQuery);
     delete tempQuery;
-    if (AdvStringGrid1->Cells[1][AdvStringGrid1->RowCount - 2] != "数据类型" ||
+    if (AdvStringGrid1->Cells[1][AdvStringGrid1->RowCount - 2] != "定义参数" ||
         AdvStringGrid1->Cells[1][AdvStringGrid1->RowCount - 1] != "")
         AdvStringGrid1->AddRow();
     int row = AdvStringGrid1->RowCount;
@@ -255,8 +255,8 @@ void __fastcall TForm2::U1Click(TObject *Sender)
         ShowMessage("无法修改上级" + Department_Name[u_id] + "的数据");
         return;
     }
-    Form4->Caption = "修改数据类型";
-    Form4->Label1->Caption = "数据类型";
+    Form4->Caption = "修改定义参数";
+    Form4->Label1->Caption = "定义参数";
     Form4->Edit1->Text = AdvStringGrid1->Cells[1][AdvStringGrid1->Row];
     Form4->Edit1->SelectAll();
     Form4->Tip = 4;
@@ -266,8 +266,8 @@ void __fastcall TForm2::U1Click(TObject *Sender)
 
 void TForm2::UpdateParm(String u_name) {
     for (int i = 1; i < AdvStringGrid1->RowCount; ++ i) {
-        if (AdvStringGrid1->Cells[2][i] == u_name) {
-            ShowMessage("数据类型'" + u_name + "'已存在");
+        if (AdvStringGrid1->Cells[1][i] == u_name) {
+            ShowMessage("定义参数'" + u_name + "'已存在");
             AdvStringGrid1->Row = i;
             AdvStringGrid1->Col = 1;
             return;
@@ -290,7 +290,7 @@ void __fastcall TForm2::D1Click(TObject *Sender)
         ShowMessage("无法删除上级" + Department_Name[u_id] + "的数据");
         return;
     }
-    int msg = Application->MessageBox("是否删除该数据类型", "提示", MB_YESNO);
+    int msg = Application->MessageBox("是否删除该定义参数", "提示", MB_YESNO);
     if (msg == 6)
         DeleteParm();
 }

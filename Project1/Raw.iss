@@ -18,7 +18,8 @@ AppVersion={#MyAppVersion}
 AppPublisher={#MyAppPublisher}
 DefaultDirName={pf}\{#MyAppName}
 DefaultGroupName={#MyAppName}
-OutputBaseFilename=Setup
+OutputDir=OUTPUT_DIR
+OutputBaseFilename=OUTPUT_BASE_FILENAME
 SetupIconFile=SOURCE_PATH\ZBXH.ico
 Compression=lzma
 SolidCompression=yes
@@ -31,7 +32,6 @@ UninstalledMost=%1 已顺利地从您的电脑中删除。
 
 [Tasks]
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked; OnlyBelowVersion: 0,6.1
-Name: "quicklaunchicon"; Description: "{cm:CreateQuickLaunchIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 
 [Files]
 Source: "SOURCE_EXE_PATH"; DestDir: "{app}"; Flags: ignoreversion
@@ -42,26 +42,23 @@ Source: "SOURCE_PATH\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs c
 ; 安装完调用
 Filename: "{app}\RegOcx.exe";
 Filename: "{app}\ZskAz.exe";
-Filename: "{app}\DesktopAz.bat"
 
 [UninstallRun]
 ; 卸载前调用
 Filename: "{app}\kill.bat";Flags:RunHidden SkipIfDoesntExist;
 Filename: "{app}\ZskXz.exe";Flags:RunHidden SkipIfDoesntExist;
-Filename: "{app}\DesktopXz.bat";Flags:RunHidden SkipIfDoesntExist;
 
 [UninstallDelete]
 Name: {app}; Type: filesandordirs
 
 [Icons]
 Name: "{group}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"
-Name: "{commondesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: desktopicon
-Name: "{userappdata}\Microsoft\Internet Explorer\Quick Launch\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: quicklaunchicon
+Name: "{group}\{cm:UninstallProgram,{#MyAppName}}"; Filename: "{uninstallexe}"
+Name: "{commondesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}";
 
 [Run]
 Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, "&", "&&")}}"; Flags: nowait postinstall skipifsilent
-
-[registry]
+[registry]
 Root:HKCU;Subkey:"REGISTRY_SUBKEY";Flags:uninsdeletekeyifempty
 Root:HKCU;Subkey:"REGISTRY_SUBKEY";ValueType:string;ValueName:"InstallPath";ValueData:"{app}";Flags:uninsdeletekey
 Root:HKCU;Subkey:"REGISTRY_SUBKEY";ValueType:string;ValueName:"AppName";ValueData:"{#MyAppName}";Flags:uninsdeletekey
@@ -86,3 +83,5 @@ begin
      if CurUninstallStep= usUninstall then
      RegDeleteKeyIncludingSubkeys(HKEY_CURRENT_USER,'REGISTRY_SUBKEY');
 end;
+
+
