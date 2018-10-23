@@ -169,11 +169,7 @@ public:		// User declarations
     void UpdateNature(String u_name);
     void DeleteNature();
 
-    void InsertParm(String u_name);
-    void UpdateParm(String u_name);
-    void DeleteParm();
-
-
+    void AdvStringGrid2Refresh();
 };
 //---------------------------------------------------------------------------
 extern PACKAGE TForm1 *Form1;

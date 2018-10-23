@@ -15,6 +15,7 @@
 #include <Menus.hpp>
 #include <ADODB.hpp>
 #include <DB.hpp>
+#include <ExtCtrls.hpp>
 #include <cstdio>
 #include <map>
 
@@ -26,6 +27,11 @@ __published:	// IDE-managed Components
     TGroupBox *GroupBox1;
     TcsDataTypeDef_ocx *csDataTypeDef_ocx1;
     TAdvStringGrid *AdvStringGrid1;
+    TPopupMenu *PopupMenu1;
+    TMenuItem *A1;
+    TMenuItem *U1;
+    TMenuItem *D1;
+    TSplitter *Splitter1;
     void __fastcall FormCreate(TObject *Sender);
     void __fastcall AdvStringGrid1CellValidate(TObject *Sender, int ACol,
           int ARow, AnsiString &Value, bool &Valid);
@@ -41,12 +47,24 @@ __published:	// IDE-managed Components
           int ARow, bool &CanSelect);
     void __fastcall AdvStringGrid1DblClickCell(TObject *Sender, int ARow,
           int ACol);
+    void __fastcall A1Click(TObject *Sender);
+    void __fastcall AdvStringGrid1GetAlignment(TObject *Sender, int ARow,
+          int ACol, TAlignment &HAlign, TVAlignment &VAlign);
+    void __fastcall AdvStringGrid1Resize(TObject *Sender);
+    void __fastcall U1Click(TObject *Sender);
+    void __fastcall D1Click(TObject *Sender);
 private:	// User declarations
 public:		// User declarations
     String PGUID;
     String sql_Dep, Department;
     map<int, String> Department_Name;
     __fastcall TForm2(TComponent* Owner);
+
+    void Refresh();
+
+    void InsertParm(String u_name);
+    void UpdateParm(String u_name);
+    void DeleteParm();
 
 };
 //---------------------------------------------------------------------------

@@ -33,6 +33,12 @@ void __fastcall TForm4::Button1Click(TObject *Sender)
         case 2:
             Form1->UpdateNature(this->Edit1->Text);
             break;
+        case 3:
+            Form2->InsertParm(this->Edit1->Text);
+            break;
+        case 4:
+            Form2->UpdateParm(this->Edit1->Text);
+            break;
     }
     this->Close();
 }
