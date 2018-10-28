@@ -50,8 +50,9 @@ public:
     vector<pair<int, int> > connect; 
 };
 vector<TheIcon> Icons;
-
 HWND visioHwnd;//visio窗口句柄
+TSigDrawing* drawing = new TSigDrawing();
+//TImage *LcImage;
 
 BOOL CALLBACK EnumWindowsProc(HWND hwnd,LPARAM lParam) {
     if (IsWindowVisible(hwnd)) {
@@ -75,7 +76,6 @@ BOOL CALLBACK EnumWindowsProc1(HWND hwnd,LPARAM lParam) {
         if(s[0] == 'M' && s[1] == 'i' && s[2] == 'c' && s[3] == 'r' && s[4] == 'o' &&
            s[10] == 'V' && s[11] == 'i' && s[12] == 's' && s[13] == 'i' && s[14] == 'o' ){
             visioHwnd = hwnd;
-
             //::SetWindowPos(hwnd, HWND_TOPMOST, 0, 0, Screen->Width, Screen->Height, SWP_SHOWWINDOW);
             return TRUE;
         }
@@ -178,16 +178,6 @@ void Open_Visio(String path) {
     while (visioHwnd  && IsWindow(visioHwnd )) {
         ;
     }
-}
-//---------------------------------------------------------------------------
-
-void LogOut(AnsiString str)
-{
-    AnsiString file = "temp\\emf.log";
-    AnsiString Path = ExtractFilePath(Application->ExeName) + file;
-    ofstream f1(Path.c_str(), ios::app);
-    f1<<str.c_str()<<endl;
-    f1.close();
 }
 //---------------------------------------------------------------------------
 
@@ -439,11 +429,11 @@ void Get_Iconid_Text() {
         if (str[0] == 't' && str[3] == 't') {
             text = str.substr(5);
             for (int i = 0; i < Icons.size(); ++ i)
-                if (Icons[i].id == id) {
-                    Icons[i].text = text.c_str();
-                    //ShowMessage(Icons[i].text);
-                    break;
-                }
+            if (Icons[i].id == id) {
+                Icons[i].text = text.c_str();
+                //ShowMessage(Icons[i].text);
+                break;
+            }
         }
     }
 }
@@ -475,7 +465,36 @@ void Get_From_To() {
 }
 //---------------------------------------------------------------------------
 
+String To_XML() {
+    String xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
+    xml += "<UserProperty>";
+    for (int i = 0; i < Icons.size(); ++ i) {
+        xml += "<id_" + IntToStr(Icons[i].id) + ">";
+        xml += "<id>";
+        xml += IntToStr(Icons[i].id);
+        xml += "</id>";
+        xml += "<icon_id>";
+        xml += IntToStr(Icons[i].icon_id);
+        xml += "</icon_id>";
+        xml += "<text>";
+        xml += Icons[i].text;
+        xml += "</text>";
+        xml += "<from>";
+        xml += IntToStr(Icons[i].from);
+        xml += "</from>";
+        xml += "<to>";
+        xml += IntToStr(Icons[i].to);
+        xml += "</to>";
+        xml += "</id_" + IntToStr(Icons[i].id) + ">";
+    }
+    xml += "</UserProperty>";
+    //LogOut(xml);
+    return xml;
+}
+
 extern "C" __declspec(dllexport) bool __stdcall Create_LiuCheng(char* &emf_path, char* &xcd_path, char* &vsd_path) {
+    if (FileExists(ExtractFilePath(Application->ExeName) + "temp\\icon.log"))
+        DeleteFile(ExtractFilePath(Application->ExeName) + "temp\\icon.log");
     if (Check_Run()) {
         return 0;
     }
@@ -486,14 +505,25 @@ extern "C" __declspec(dllexport) bool __stdcall Create_LiuCheng(char* &emf_path,
     Open_Visio(dFile);
     String emf = ChangeVsdToEmf(dFile);
     String xcd = dFile.SubString(0, dFile.Length() - 4) + ".xcd";
-    emf_path = emf.c_str();
-    xcd_path = xcd.c_str();
-    vsd_path = dFile.c_str();
+
+    int len = emf.Length();
+    emf_path = new char[len + 1];
+    StrCopy(emf_path, emf.c_str());
+
+    len = xcd.Length();
+    xcd_path = new char[len + 1];
+    StrCopy(xcd_path, xcd.c_str());
+
+    len = dFile.Length();
+    vsd_path = new char[len + 1];
+    StrCopy(vsd_path, dFile.c_str());
     return 1;
 }
 //---------------------------------------------------------------------------
 
 extern "C" __declspec(dllexport) bool __stdcall Edit_LiuCheng(const char* &get_vsd_path, char* &emf_path, char* &xcd_path, char* &vsd_path) {
+    if (FileExists(ExtractFilePath(Application->ExeName) + "temp\\icon.log"))
+        DeleteFile(ExtractFilePath(Application->ExeName) + "temp\\icon.log");
     if (Check_Run()) {
         return 0;
     }
@@ -504,14 +534,23 @@ extern "C" __declspec(dllexport) bool __stdcall Edit_LiuCheng(const char* &get_v
     Open_Visio(dFile);
     String emf = ChangeVsdToEmf(dFile);
     String xcd = dFile.SubString(0, dFile.Length() - 4) + ".xcd";
-    emf_path = emf.c_str();
-    xcd_path = xcd.c_str();
-    vsd_path = dFile.c_str();
+
+    int len = emf.Length();
+    emf_path = new char[len + 1];
+    StrCopy(emf_path, emf.c_str());
+
+    len = xcd.Length();
+    xcd_path = new char[len + 1];
+    StrCopy(xcd_path, xcd.c_str());
+
+    len = dFile.Length();
+    vsd_path = new char[len + 1];
+    StrCopy(vsd_path, dFile.c_str());
     return 1;
 }
 //---------------------------------------------------------------------------
 
-extern "C" __declspec(dllexport) String __stdcall Icon_Analysis() {
+extern "C" __declspec(dllexport) char* __stdcall Icon_Analysis() {
     if (FileExists(ExtractFilePath(Application->ExeName) + "temp\\xcd.log"))
         DeleteFile(ExtractFilePath(Application->ExeName) + "temp\\xcd.log");
     if (FileExists(ExtractFilePath(Application->ExeName) + "temp\\emf.log"))
@@ -525,6 +564,8 @@ extern "C" __declspec(dllexport) String __stdcall Icon_Analysis() {
     xcdTranslater->ParsFieldInfo(xcdmap, length);
     delete  xcdTranslater;
     xcdTranslater = NULL;
+    delete xcdmap;
+    xcdmap = NULL;
     
     // emf 解析
     String emf = ExtractFilePath(Application->ExeName) + "temp\\demo.emf";
@@ -606,19 +647,73 @@ extern "C" __declspec(dllexport) String __stdcall Icon_Analysis() {
     ExplainLinkPoint( stream );
     //LogOut( "连接点信息end-----------------------------------------------------------------" );
     delete stream;
+    stream = NULL;
     Get_Iconid_Text();
     Get_From_To();
-
-    for (int i = 0; i < Icons.size(); ++ i) {
-        LogOut("ID " + String(Icons[i].id));
-        LogOut("IconID " + String(Icons[i].icon_id));
-        LogOut("text " + Icons[i].text);
-        LogOut("From " + String(Icons[i].from));
-        LogOut("To " + String(Icons[i].to));
-        LogOut("-------------------");
-    }
     if (FileExists(ExtractFilePath(Application->ExeName) + "temp\\xcd.log"))
         DeleteFile(ExtractFilePath(Application->ExeName) + "temp\\xcd.log");
-    return "";
+    String xml = To_XML();
+    int len = xml.Length();
+    char *xml_char = new char [len + 1];
+    StrCopy(xml_char, xml.c_str());
+
+    TFileStream* fs = new TFileStream(emf, fmOpenRead	|  fmShareDenyNone);
+    drawing->LoadFromStream( fs );
+    //LcImage->Picture->Assign( drawing->GetImage()->Picture );
+    delete fs;
+
+    return xml_char;
+}
+//---------------------------------------------------------------------------
+
+extern "C" __declspec(dllexport) bool __stdcall Icon_Type(const int &id, int &icon_id, char* &text) {
+    if (Icons.size() > 0) {
+        for (int i = 0; i < Icons.size(); ++ i) {
+            if (Icons[i].id == id) {
+                icon_id = Icons[i].icon_id;
+                int len = Icons[i].text.Length();
+                text = new char [len + 1];
+                StrCopy(text, Icons[i].text.c_str());
+                return 1;
+            }
+        }
+        icon_id = 0;
+        text = NULL;
+        ShowMessage("未找到该ID的图符");
+        return 0;
+    }
+    else {
+        ShowMessage("请先解析图符!");
+    }
+    return 0;
+}
+//---------------------------------------------------------------------------
+
+extern "C" __declspec(dllexport) bool __stdcall Coordinate_Icon(const int &X, const int &Y, int &id, int &icon_id, char* &text) {
+    const TShapeInfo* shape = drawing->HitTest( X, Y );
+    if (Icons.size() > 0) {
+        if(shape) {
+            icon_id = shape->GetIconId();
+            id = shape->GetId();
+            for (int i = 0; i < Icons.size(); ++ i) {
+                if (id == Icons[i].id) {
+                    int len = Icons[i].text.Length();
+                    text = new char [len + 1];
+                    StrCopy(text, Icons[i].text.c_str());
+                    return 1;
+                }
+            }
+            ShowMessage("对应坐标无图符!");
+            return 0;
+        }
+        else {
+            ShowMessage("对应坐标无图符!");
+            return 0;
+        }
+    }
+    else {
+        ShowMessage("请先解析图符!");
+    }
+    return 0;
 }
 //---------------------------------------------------------------------------
