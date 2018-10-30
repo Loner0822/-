@@ -35,9 +35,9 @@ TForm1 *Form1;
 TCheckListEditLink *edCheckListEdit;
 map<String, int> P_ID;
 multimap<String, TData2> Find_Map;
-DynamicArray<String> Map_PGUID;
-DynamicArray< TNode<TData> > node;
-DynamicArray<TEdge> edge;
+vector<String> Map_PGUID;
+vector< TNode<TData> > node;
+vector<TEdge> edge;
 int num_of_pic = 0;
 
 int used_red_pen, used_black_pen, used_clamp_pen;
@@ -103,8 +103,8 @@ void __fastcall TForm1::FormCreate(TObject *Sender) {
 
     // ¶ÁÈ¡Êý¾Ý¿âyjzhzsk.mdb
     TADOQuery *AdoQ = new TADOQuery(NULL);
-    node.Length = 0;
-    edge.Length = 0;
+    node.clear();
+    edge.clear();
     AdoQ->Connection = DMod->ADOConnection1;
     String sql = "select * from YJZH_MapFenLei where ISDELETE = 0 order by Index_ desc";
     DMod->OpenSql(sql, AdoQ);
@@ -113,7 +113,7 @@ void __fastcall TForm1::FormCreate(TObject *Sender) {
         ++ cnt;
         ReadData(AdoQ);
         TData tmpdata;
-        tmpdata = node[node.High].Data;
+        tmpdata = node.back().Data;
         //ShowMessage(tmpdata.PGUID);
         P_ID[tmpdata.PGUID] = cnt;
         AdoQ->Next();
@@ -196,7 +196,7 @@ void __fastcall TForm1::FormCreate(TObject *Sender) {
 
 void __fastcall TForm1::TreeViewChange(TObject *Sender, TTreeNode *Node) {
     Now_Node = (int)Node->Data;
-    Map_PGUID.Length = 0;
+    Map_PGUID.clear();
 
     AdvStringGrid->Clear();
     AdvStringGrid->Cells[0][0] = "ÐòºÅ";
@@ -218,8 +218,7 @@ void __fastcall TForm1::TreeViewChange(TObject *Sender, TTreeNode *Node) {
         AdvStringGrid->Cells[1][cnt] = it->second.TypeName;
         AdvStringGrid->Cells[2][cnt] = it->second.MapName;
         AdvStringGrid->Cells[3][cnt] = it->second.PGUID;
-        Map_PGUID.Length ++;
-        Map_PGUID[cnt - 1] = it->second.MapID;
+        Map_PGUID.push_back(it->second.MapID);
     }
     AdvStringGridClickCell(AdvStringGrid, 1, 1);
 
@@ -297,15 +296,15 @@ void TForm1::FindSon(int u, TTreeNode* tnode) {
 //---------------------------------------------------------------------------
 
 void TForm1::BuildTree() {
-    for (int i = node.Low; i <= node.High; ++ i) {
+    for (int i = 0; i < node.size(); ++ i) {
          if (node[i].Data.UPGUID != "") {
             int fa = P_ID.find(node[i].Data.UPGUID)->second;
-            if (fa > 0)
+            if (fa > 0 && P_ID.find(node[i].Data.UPGUID) != P_ID.end())
                 AddEdge(fa - 1, i);
         }
     }
     P_ID.clear();
-    for (int i = node.High; i >= node.Low; -- i) {
+    for (int i = node.size() - 1; i >= 0; -- i) {
         TData tmpdata = node[i].Data;
         if (tmpdata.UPGUID == "") {
             TTreeNode* parent = this->TreeView->Items->Add(NULL, tmpdata.JdText);
@@ -331,10 +330,11 @@ void TForm1::ReadData(TADOQuery *AdoQuery) {
     tmpdata.IconSxName = AdoQuery->FieldByName("IconSxName")->AsString;
     tmpdata.MapGuid = AdoQuery->FieldByName("MapGuid")->AsString;
     tmpdata.DevID = AdoQuery->FieldByName("DevID")->AsString;
-    node.Length ++;
-    node[node.High].Data = tmpdata;
-    node[node.High].Head = -1;
-    node[node.High].fa = node.High;
+    TNode<TData> tmpnode;
+    tmpnode.Data = tmpdata;
+    tmpnode.Head = -1;
+    tmpnode.fa = node.size();
+    node.push_back(tmpnode);
 }
 //---------------------------------------------------------------------------
 
@@ -357,10 +357,11 @@ void TForm1::ReadData2(TADOQuery *AdoQuery) {
 //---------------------------------------------------------------------------
 
 void TForm1::AddEdge(int x, int y) {
-    edge.Length++;
-    edge[edge.High].to = y;
-    edge[edge.High].next = node[x].Head;
-    node[x].Head = edge.High;
+    TEdge tmpedge;
+    tmpedge.to = y;
+    tmpedge.next = node[x].Head;
+    edge.push_back(tmpedge);
+    node[x].Head = edge.size() - 1;
     node[y].fa = x;
 }
 //---------------------------------------------------------------------------
@@ -370,7 +371,7 @@ void __fastcall TForm1::AdvStringGridClickCell(TObject *Sender, int ARow, int AC
     if (ARow == 0 || ACol == 0)
         return;
     Panel->Visible = true;
-    if (Map_PGUID.Length < ARow)
+    if (Map_PGUID.size() < ARow)
         return;
     TADOQuery *AdoQ = new TADOQuery(NULL);
     AdoQ->Connection = DMod->ADOConnection2;
