@@ -123,8 +123,8 @@ void __fastcall TForm1::Button2Click(TObject *Sender)
 void __fastcall TForm1::Button3Click(TObject *Sender)// 解析xcd, emf 结果存入.log文件
 {
     char* xml = NULL;
-    String xcd = ExtractFilePath(Application->ExeName) + "temp//demo.xcd";
-    bool flag = Icon_XML("", "", xcd.c_str(), xml);
+    String vsd = ExtractFilePath(Application->ExeName) + "temp//demo.vsd";
+    bool flag = Icon_XML(vsd.c_str(), "", "", xml);
     ShowMessage(xml);
     delete xml;
     xml = NULL;

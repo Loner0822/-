@@ -44,6 +44,10 @@ BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD fwdreason, LPVOID lpvReserved)
 
 class TheIcon {
 public:
+    TheIcon() {
+        id = 0, icon_id = 0, text = "", from = 0, to = 0;
+        connect.clear();
+    }
     int id, icon_id;
     String text;
     int from, to;
@@ -53,6 +57,7 @@ vector<TheIcon> Icons;
 String path_analysis;
 HWND visioHwnd;//visio´°¿Ú¾ä±ú
 TSigDrawing* drawing = new TSigDrawing();
+String res_all;
 //TImage *LcImage;
 
 BOOL CALLBACK EnumWindowsProc(HWND hwnd,LPARAM lParam) {
@@ -102,7 +107,7 @@ BOOL FindProcess(std::string strProc)
         }
         bMore = ::Process32Next(hProcessSnap, &pe32);
     }
-    if( i >= 1) {
+    if(i >= 1) {
         return true;
     }
     else {
@@ -580,7 +585,12 @@ bool Icon_Analysis(String vsd, String emf, String xcd) {
 
     if (FileExists(ExtractFilePath(Application->ExeName) + "temp\\xcd.log"))
         DeleteFile(ExtractFilePath(Application->ExeName) + "temp\\xcd.log");
-
+    for (vector<TheIcon>::iterator it = Icons.begin(); it != Icons.end();) {
+        if (it->icon_id == 0)
+            it = Icons.erase(it);
+        else
+            ++ it;
+    }
     return 1;
 }
 
@@ -598,17 +608,14 @@ extern "C" __declspec(dllexport) bool __stdcall Create_LiuCheng(char* &emf_path,
     String emf = ChangeVsdToEmf(dFile);
     String xcd = dFile.SubString(0, dFile.Length() - 4) + ".xcd";
 
-    int len = emf.Length();
-    emf_path = new char[len + 1];
-    StrCopy(emf_path, emf.c_str());
+    res_all = emf;
+    emf_path = res_all.c_str();
 
-    len = xcd.Length();
-    xcd_path = new char[len + 1];
-    StrCopy(xcd_path, xcd.c_str());
+    res_all = xcd;
+    xcd_path = res_all.c_str();
 
-    len = dFile.Length();
-    vsd_path = new char[len + 1];
-    StrCopy(vsd_path, dFile.c_str());
+    res_all = dFile;
+    vsd_path = res_all.c_str();
     return 1;
 }
 //---------------------------------------------------------------------------
@@ -627,17 +634,14 @@ extern "C" __declspec(dllexport) bool __stdcall Edit_LiuCheng(const char* &get_v
     String emf = ChangeVsdToEmf(dFile);
     String xcd = dFile.SubString(0, dFile.Length() - 4) + ".xcd";
 
-    int len = emf.Length();
-    emf_path = new char[len + 1];
-    StrCopy(emf_path, emf.c_str());
+    res_all = emf;
+    emf_path = res_all.c_str();
 
-    len = xcd.Length();
-    xcd_path = new char[len + 1];
-    StrCopy(xcd_path, xcd.c_str());
+    res_all = xcd;
+    xcd_path = res_all.c_str();
 
-    len = dFile.Length();
-    vsd_path = new char[len + 1];
-    StrCopy(vsd_path, dFile.c_str());
+    res_all = dFile;
+    vsd_path = res_all.c_str();
     return 1;
 }
 //---------------------------------------------------------------------------
@@ -649,12 +653,10 @@ extern "C" __declspec(dllexport) bool __stdcall Icon_XML(const char* &vsd_path, 
         flag = Icon_Analysis(vsd_path, emf_path, xcd_path);
         path_analysis = vsd + emf + xcd;
     }
-    if (!flag)
+    if (!flag && vsd + emf + xcd != path_analysis)
         return 0;
-    String xml = To_XML();
-    int len = xml.Length();
-    xml_text = new char [len + 1];
-    StrCopy(xml_text, xml.c_str());
+    res_all = To_XML();
+    xml_text = res_all.c_str();
     return 1;
 }
 //---------------------------------------------------------------------------
@@ -666,14 +668,13 @@ extern "C" __declspec(dllexport) bool __stdcall Icon_Type(const char* &vsd_path,
         flag = Icon_Analysis(vsd_path, emf_path, xcd_path);
         path_analysis = vsd + emf + xcd;
     }
-    if (!flag)
+    if (!flag && vsd + emf + xcd != path_analysis)
         return 0;
     for (int i = 0; i < Icons.size(); ++ i) {
         if (Icons[i].id == id) {
             icon_id = Icons[i].icon_id;
-            int len = Icons[i].text.Length();
-            text = new char [len + 1];
-            StrCopy(text, Icons[i].text.c_str());
+            res_all = Icons[i].text;
+            text = res_all.c_str();
             return 1;
         }
     }
@@ -691,7 +692,7 @@ extern "C" __declspec(dllexport) bool __stdcall Coordinate_Icon(const char* &vsd
         flag = Icon_Analysis(vsd_path, emf_path, xcd_path);
         path_analysis = vsd + emf + xcd;
     }
-    if (!flag)
+    if (!flag && vsd + emf + xcd != path_analysis)
         return 0;
     const TShapeInfo* shape = drawing->HitTest( X, Y );
     if(shape) {
@@ -699,9 +700,9 @@ extern "C" __declspec(dllexport) bool __stdcall Coordinate_Icon(const char* &vsd
         id = shape->GetId();
         for (int i = 0; i < Icons.size(); ++ i) {
             if (id == Icons[i].id) {
-                int len = Icons[i].text.Length();
-                text = new char [len + 1];
-                StrCopy(text, Icons[i].text.c_str());
+
+                res_all = Icons[i].text;
+                text = res_all.c_str();
                 return 1;
             }
         }
