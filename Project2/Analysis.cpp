@@ -50,6 +50,7 @@ public:
     vector<pair<int, int> > connect; 
 };
 vector<TheIcon> Icons;
+String path_analysis;
 HWND visioHwnd;//visio窗口句柄
 TSigDrawing* drawing = new TSigDrawing();
 //TImage *LcImage;
@@ -116,9 +117,9 @@ String ChangeVsdToEmf(String vsdpath)
     vsdName = vsdName.SubString(0, vsdName.Length()-4);//去掉文件类
     String emf =  ExtractFilePath( Application->ExeName ) +"temp\\"+ vsdName+".emf";
     String xcd =  ExtractFilePath( Application->ExeName ) +"temp\\"+ vsdName+".xcd";
-    String xcd1 =  ExtractFilePath( Application->ExeName ) +"1.xcd";
+    //String xcd1 =  ExtractFilePath( Application->ExeName ) +"1.xcd";
     System::Variant V  = Variant::CreateObject("Visio.Application");
-    Sleep(6000);  // 等待visio打开
+    //Sleep(6000);  // 等待visio打开
     try {
         const AnsiString vsl = ExtractFilePath( Application->ExeName ) + "Xaddon.vsl";
         System::Variant o = V.OlePropertyGet( "Addons" ).OleFunction( "Add", WideString(vsl) );
@@ -169,7 +170,7 @@ void Open_Visio(String path) {
     visioHwnd = NULL;
     String vssFile = ExtractFilePath(Application->ExeName)+"vss\\49.vss";
     System::Variant V  = Variant::CreateObject("Visio.Application");
-    Sleep(6000);  // 等待visio打开
+    //Sleep(6000);  // 等待visio打开
 
     System::Variant doc = V.OlePropertyGet("Documents").OleFunction("Open", WideString(path));
     V.OlePropertyGet( "Documents" ).OleFunction("Add", WideString(vssFile));
@@ -413,7 +414,18 @@ void Get_Iconid_Text() {
             for (int i = 3; i < str.size(); ++ i)
                 if ('0' <= str[i] && str[i] <= '9')
                     id = id * 10 + str[i] - '0';
-            //ShowMessage(id);
+            bool flag = 0;
+            for (int i = 0; i < Icons.size(); ++ i) {
+                if (Icons[i].id == id) {
+                    flag = 1;
+                    break;
+                }
+            }
+            if (!flag) {
+                TheIcon tmpicon;
+                tmpicon.id = id;
+                Icons.push_back(tmpicon);
+            }
         }
         if (str[0] == 'i' && str[5] == 'D') {
             icon_id = 0;
@@ -491,6 +503,86 @@ String To_XML() {
     //LogOut(xml);
     return xml;
 }
+//---------------------------------------------------------------------------
+
+bool Icon_Analysis(String vsd, String emf, String xcd) {
+    String t_vsd = "", t_emf = "", t_xcd = "";
+    path_analysis = vsd + emf + xcd;
+    if (path_analysis == "") {
+        ShowMessage("请给出路径!");
+        return 0;
+    }
+    if (emf != "") {
+        t_emf = ExtractFilePath(Application->ExeName) + "temp\\demo.emf";
+        ::CopyFile(emf.c_str(), t_emf.c_str(), false);
+    }
+    if (xcd != "") {
+        t_xcd = ExtractFilePath(Application->ExeName) + "temp\\demo.xcd";
+        ::CopyFile(xcd.c_str(), t_xcd.c_str(), false);
+    }
+    if (vsd != "") {
+        t_vsd = ExtractFilePath(Application->ExeName) + "temp\\demo.vsd";
+        ::CopyFile(vsd.c_str(), t_vsd.c_str(), false);
+        t_emf = ChangeVsdToEmf(t_vsd);
+        t_xcd = t_vsd.SubString(0, t_vsd.Length() - 4) + ".xcd";
+    }
+    
+    if (FileExists(ExtractFilePath(Application->ExeName) + "temp\\emf.log"))
+        DeleteFile(ExtractFilePath(Application->ExeName) + "temp\\emf.log");
+    if (FileExists(ExtractFilePath(Application->ExeName) + "temp\\xcd.log"))
+        DeleteFile(ExtractFilePath(Application->ExeName) + "temp\\xcd.log");
+
+    // emf 解析
+    if (t_emf != "") {
+        TFileStream* fs = new TFileStream(t_emf, fmOpenRead | fmShareDenyNone);
+        drawing->LoadFromStream(fs);
+        delete fs;
+        
+        TMemoryStream *stream = new TMemoryStream();
+        stream->LoadFromFile(t_emf);
+        stream->Position = 0;
+        int pos = 0;
+        //最后四位 代表数据开始位置
+        //seek实现指针移动
+        //            偏移字节数  移动后指针距离数据结束
+        stream->Seek(-4, soFromEnd);
+        stream->Read(&pos, 4);
+        int HeadBeginPos = pos - 1;
+        stream->Seek(HeadBeginPos, soFromBeginning);
+        char header[2];
+        stream->Read(header, 2);
+
+        int LinkPointPos = HeadBeginPos - 4;
+
+        //---解析连接点-------------------
+        stream->Seek( LinkPointPos, soFromBeginning );
+        stream->Read( &LinkPointPos, 4 );
+        stream->Seek( LinkPointPos - 1, soFromBeginning );
+        ExplainLinkPoint( stream );
+        delete stream;
+        stream = NULL;
+        Get_From_To();
+    }
+
+    // xcd 解析
+    if (t_xcd != "") {
+        char *xcdmap = NULL;
+        int length = 0;
+        LoadFile(t_xcd, xcdmap, length);
+        xcdTranslater = new TXcdTrans();
+        xcdTranslater->ParsFieldInfo(xcdmap, length);
+        delete  xcdTranslater;
+        xcdTranslater = NULL;
+        delete xcdmap;
+        xcdmap = NULL;
+        Get_Iconid_Text();
+    }
+
+    if (FileExists(ExtractFilePath(Application->ExeName) + "temp\\xcd.log"))
+        DeleteFile(ExtractFilePath(Application->ExeName) + "temp\\xcd.log");
+
+    return 1;
+}
 
 extern "C" __declspec(dllexport) bool __stdcall Create_LiuCheng(char* &emf_path, char* &xcd_path, char* &vsd_path) {
     if (FileExists(ExtractFilePath(Application->ExeName) + "temp\\icon.log"))
@@ -550,169 +642,75 @@ extern "C" __declspec(dllexport) bool __stdcall Edit_LiuCheng(const char* &get_v
 }
 //---------------------------------------------------------------------------
 
-extern "C" __declspec(dllexport) char* __stdcall Icon_Analysis() {
-    if (FileExists(ExtractFilePath(Application->ExeName) + "temp\\xcd.log"))
-        DeleteFile(ExtractFilePath(Application->ExeName) + "temp\\xcd.log");
-    if (FileExists(ExtractFilePath(Application->ExeName) + "temp\\emf.log"))
-        DeleteFile(ExtractFilePath(Application->ExeName) + "temp\\emf.log");
-    // xcd 解析
-    char *xcdmap = NULL;
-    int length = 0;
-    String xcd = ExtractFilePath(Application->ExeName) +"temp\\demo.xcd";
-    LoadFile(xcd, xcdmap , length);
-    xcdTranslater = new TXcdTrans();
-    xcdTranslater->ParsFieldInfo(xcdmap, length);
-    delete  xcdTranslater;
-    xcdTranslater = NULL;
-    delete xcdmap;
-    xcdmap = NULL;
-    
-    // emf 解析
-    String emf = ExtractFilePath(Application->ExeName) + "temp\\demo.emf";
-    TMemoryStream *stream = new TMemoryStream();
-    stream->LoadFromFile(emf);
-    stream->Position = 0;
-    int pos = 0;
-    //最后四位 代表数据开始位置
-    //seek实现指针移动
-    //            偏移字节数  移动后指针距离数据结束
-    stream->Seek(-4, soFromEnd);
-    stream->Read(&pos, 4);
-    int HeadBeginPos = pos - 1;
-    stream->Seek(HeadBeginPos, soFromBeginning);
-    char header[2];
-    stream->Read(header, 2);
-
-    int LinkPointPos = HeadBeginPos - 4;
-    /*
-    //解析文件头
-
-    //-解析图符------------
-    if( header[0] == 'B' && header[1] == 'S' )
-    {
-        int ver = 0;
-        stream->Read( &ver, 4 );
-        if( ver == 0xFFFF0000 + 1 )   // 版本
-        {
-            int FDrawingID = 0;
-            stream->Read( &FDrawingID, 4 ); //图纸编号
-            //LogOut( "图纸编号:" + AnsiString( FDrawingID ) );
-            TRect rect;                    //RECT 图纸尺寸
-            stream->Read( &rect.left, 4 );
-            stream->Read( &rect.top, 4 );
-            stream->Read( &rect.right, 4 );
-            stream->Read( &rect.bottom, 4 );
-            //LogOut( "图纸尺寸:" + AnsiString( rect.Left ) + " " +  AnsiString( rect.Top )+ " " + AnsiString( rect.Right )+ " " + AnsiString( rect.Bottom ) );
-            int count = 0;
-            stream->Read( &count, 4 );    //图符数量
-            //LogOut( "图符数量:" + AnsiString( count ) );
-            //解析图符 还没写
-            for( int i = 0; i < count; i++ )
-            {
-                ExplainDataBS( stream );
-            }
-        }
-    }else if( header[0] == 'B' && header[1] == 'N' )
-    {
-        int ver = 0;
-        stream->Read( &ver, 4 );
-        if( ver == 0xFFFF0000 + 1 || ver == 0xFFFF0000 + 2 )   // 版本
-        {
-            int FDrawingID = 0;
-            stream->Read( &FDrawingID, 4 ); //图纸编号
-            //LogOut( "图纸编号:" + AnsiString( FDrawingID ) );
-            TRect rect;                    //RECT 图纸尺寸
-            stream->Read( &rect.left, 4 );
-            stream->Read( &rect.top, 4 );
-            stream->Read( &rect.right, 4 );
-            stream->Read( &rect.bottom, 4 );
-            //LogOut( "图纸尺寸:" + AnsiString( rect.Left ) + " " +  AnsiString( rect.Top )+ " " + AnsiString( rect.Right )+ " " + AnsiString( rect.Bottom ) );
-            int count = 0;
-            stream->Read( &count, 4 );    //图符数量
-            //LogOut( "图符数量:" + AnsiString( count ) );
-            //解析图符
-            for( int i = 0; i < count; i++ )
-            {
-                //LogOut( "---------------------------------------------------------------------" );
-                ExplainDataBN( stream );
-            }
-        }
+extern "C" __declspec(dllexport) bool __stdcall Icon_XML(const char* &vsd_path, const char* &emf_path, const char* &xcd_path, char* &xml_text) {
+    bool flag = 0;
+    String vsd = vsd_path, emf = emf_path, xcd = xcd_path;
+    if (vsd + emf + xcd != path_analysis) {
+        flag = Icon_Analysis(vsd_path, emf_path, xcd_path);
+        path_analysis = vsd + emf + xcd;
     }
-    */
-    //---解析连接点-------------------
-    stream->Seek( LinkPointPos, soFromBeginning );
-    stream->Read( &LinkPointPos, 4 );
-    stream->Seek( LinkPointPos - 1, soFromBeginning );
-    //LogOut( "连接点信息begin-----------------------------------------------------------------" );
-    ExplainLinkPoint( stream );
-    //LogOut( "连接点信息end-----------------------------------------------------------------" );
-    delete stream;
-    stream = NULL;
-    Get_Iconid_Text();
-    Get_From_To();
-    if (FileExists(ExtractFilePath(Application->ExeName) + "temp\\xcd.log"))
-        DeleteFile(ExtractFilePath(Application->ExeName) + "temp\\xcd.log");
+    if (!flag)
+        return 0;
     String xml = To_XML();
     int len = xml.Length();
-    char *xml_char = new char [len + 1];
-    StrCopy(xml_char, xml.c_str());
-
-    TFileStream* fs = new TFileStream(emf, fmOpenRead	|  fmShareDenyNone);
-    drawing->LoadFromStream( fs );
-    //LcImage->Picture->Assign( drawing->GetImage()->Picture );
-    delete fs;
-
-    return xml_char;
+    xml_text = new char [len + 1];
+    StrCopy(xml_text, xml.c_str());
+    return 1;
 }
 //---------------------------------------------------------------------------
 
-extern "C" __declspec(dllexport) bool __stdcall Icon_Type(const int &id, int &icon_id, char* &text) {
-    if (Icons.size() > 0) {
+extern "C" __declspec(dllexport) bool __stdcall Icon_Type(const char* &vsd_path, const char* &emf_path, const char* &xcd_path, const int &id, int &icon_id, char* &text) {
+    bool flag = 0;
+    String vsd = vsd_path, emf = emf_path, xcd = xcd_path;
+    if (vsd + emf + xcd != path_analysis) {
+        flag = Icon_Analysis(vsd_path, emf_path, xcd_path);
+        path_analysis = vsd + emf + xcd;
+    }
+    if (!flag)
+        return 0;
+    for (int i = 0; i < Icons.size(); ++ i) {
+        if (Icons[i].id == id) {
+            icon_id = Icons[i].icon_id;
+            int len = Icons[i].text.Length();
+            text = new char [len + 1];
+            StrCopy(text, Icons[i].text.c_str());
+            return 1;
+        }
+    }
+    icon_id = 0;
+    text = NULL;
+    ShowMessage("未找到该ID的图符");
+    return 0;
+}
+//---------------------------------------------------------------------------
+
+extern "C" __declspec(dllexport) bool __stdcall Coordinate_Icon(const char* &vsd_path, const char* &emf_path, const char* &xcd_path, const int &X, const int &Y, int &id, int &icon_id, char* &text) {
+    bool flag = 0;
+    String vsd = vsd_path, emf = emf_path, xcd = xcd_path;
+    if (vsd + emf + xcd != path_analysis) {
+        flag = Icon_Analysis(vsd_path, emf_path, xcd_path);
+        path_analysis = vsd + emf + xcd;
+    }
+    if (!flag)
+        return 0;
+    const TShapeInfo* shape = drawing->HitTest( X, Y );
+    if(shape) {
+        icon_id = shape->GetIconId();
+        id = shape->GetId();
         for (int i = 0; i < Icons.size(); ++ i) {
-            if (Icons[i].id == id) {
-                icon_id = Icons[i].icon_id;
+            if (id == Icons[i].id) {
                 int len = Icons[i].text.Length();
                 text = new char [len + 1];
                 StrCopy(text, Icons[i].text.c_str());
                 return 1;
             }
         }
-        icon_id = 0;
-        text = NULL;
-        ShowMessage("未找到该ID的图符");
+        ShowMessage("对应坐标无图符!");
         return 0;
     }
     else {
-        ShowMessage("请先解析图符!");
-    }
-    return 0;
-}
-//---------------------------------------------------------------------------
-
-extern "C" __declspec(dllexport) bool __stdcall Coordinate_Icon(const int &X, const int &Y, int &id, int &icon_id, char* &text) {
-    const TShapeInfo* shape = drawing->HitTest( X, Y );
-    if (Icons.size() > 0) {
-        if(shape) {
-            icon_id = shape->GetIconId();
-            id = shape->GetId();
-            for (int i = 0; i < Icons.size(); ++ i) {
-                if (id == Icons[i].id) {
-                    int len = Icons[i].text.Length();
-                    text = new char [len + 1];
-                    StrCopy(text, Icons[i].text.c_str());
-                    return 1;
-                }
-            }
-            ShowMessage("对应坐标无图符!");
-            return 0;
-        }
-        else {
-            ShowMessage("对应坐标无图符!");
-            return 0;
-        }
-    }
-    else {
-        ShowMessage("请先解析图符!");
+        ShowMessage("对应坐标无图符!");
+        return 0;
     }
     return 0;
 }

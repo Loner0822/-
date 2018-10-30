@@ -29,8 +29,9 @@ __published:	// IDE-managed Components
     void __fastcall Button5Click(TObject *Sender);
     void __fastcall FormCreate(TObject *Sender);
     void __fastcall FormClose(TObject *Sender, TCloseAction &Action);
-    void __fastcall SigViewer1MouseDown(TObject *Sender,
-          TxMouseButton Button, long X, long Y, long *Cancel);
+    //void __fastcall Button6Click(TObject *Sender);
+    //void __fastcall SigViewer1MouseDown(TObject *Sender,
+          //TxMouseButton Button, long X, long Y, long *Cancel);
 private:	// User declarations
 public:		// User declarations
     __fastcall TForm1(TComponent* Owner);

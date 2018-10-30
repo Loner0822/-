@@ -1,10 +1,11 @@
 
 #include <Graphics.hpp>
 #include "DrawingInfo.h"
-#include "meta.h"
 #include <math>
 #include <algorithm>
 using namespace std;
+
+#include "meta.h"
 
 Graphics::TBitmap* TSigDrawing::m_defBitmap16 = 0;
 
@@ -421,7 +422,7 @@ int TShapeInfo::HitTest( int x, int y )
 //============================================================
 TSigDrawing::TSigDrawing()
 {
-    m_image = 0;
+    m_image = NULL;
     FDrawingID = -1;
 }
 void __fastcall TSigDrawing::OnZipError(TStream* Stream, int & ErrorCode)
@@ -636,7 +637,7 @@ static const COLORREF win_clr[16] = {
     {
         int ver = 0;
         ms->Read( &ver, 4 );
-        if( ver == 0xFFFF0000 + 1 )
+        if( ver == 0xFFFF0000 + 1 || ver == 0xFFFF0000 + 2)
         {
             ms->Read( &FDrawingID, 4 );
 
@@ -699,7 +700,8 @@ const TShapeInfo* TSigDrawing::HitTest( int x, int y )
 {
     for( int i = m_shapes.size() -1; i >= 0; i-- )
     {
-        if( m_shapes[i].HitTest( x, y ) )
+
+        if( m_shapes[i].HitTest( x, y ) && m_shapes[i].GetIconId() != 5107)
         {
             return &m_shapes[i];
         }

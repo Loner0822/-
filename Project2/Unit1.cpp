@@ -23,9 +23,9 @@ __fastcall TForm1::TForm1(TComponent* Owner)
 HINSTANCE Hdl;
 bool __stdcall (*Create_LiuCheng)(char* &, char* &, char* &);
 bool __stdcall (*Edit_LiuCheng)(const char* &, char* &, char* &, char* &);
-char* __stdcall (*Icon_Analysis)();
-bool __stdcall (*Icon_Type)(const int &, int &, char* &);
-bool __stdcall (*Coordinate_Icon)(const int &, const int &, int &, int &, char* &);
+bool __stdcall (*Icon_XML)(const char* &, const char* &, const char* &, char* &);
+bool __stdcall (*Icon_Type)(const char* &, const char* &, const char* &, const int &, int &, char* &);
+bool __stdcall (*Coordinate_Icon)(const char* &, const char* &, const char* &, const int &, const int &, int &, int &, char* &);
 
 void __fastcall TForm1::FormCreate(TObject *Sender)
 {
@@ -51,13 +51,13 @@ void __fastcall TForm1::FormCreate(TObject *Sender)
 		else {
 			Edit_LiuCheng = (bool __stdcall (*)(const char* &, char* &, char* &, char* &))P;
 		}
-		// Analysis
-        P = GetProcAddress(Hdl, "Icon_Analysis");
+		// XML
+        P = GetProcAddress(Hdl, "Icon_XML");
 		if (P == NULL) {
-			ShowMessage("打开Icon_Analysis()函数错误!");
+			ShowMessage("打开Icon_XML()函数错误!");
 		}
 		else {
-			Icon_Analysis = (char* __stdcall (*)())P;
+			Icon_XML = (bool __stdcall(*)(const char* &, const char* &, const char* &, char* &))P;
 		}
 		// Type
 		P = GetProcAddress(Hdl, "Icon_Type");
@@ -65,7 +65,7 @@ void __fastcall TForm1::FormCreate(TObject *Sender)
 			ShowMessage("打开Icon_Type()函数错误!");
 		}
 		else {
-			Icon_Type = (bool __stdcall (*)(const int &, int &, char* &))P;
+			Icon_Type = (bool __stdcall (*)(const char* &, const char* &, const char* &, const int &, int &, char* &))P;
 		}
 		// Coordinate
 		P = GetProcAddress(Hdl, "Coordinate_Icon");
@@ -73,7 +73,7 @@ void __fastcall TForm1::FormCreate(TObject *Sender)
 			ShowMessage("打开Coordinate_Icon()函数错误!");
 		}
 		else {
-			Coordinate_Icon = (bool __stdcall (*)(const int &, const int &, int &, int &, char* &))P;
+			Coordinate_Icon = (bool __stdcall (*)(const char* &, const char* &, const char* &, const int &, const int &, int &, int &, char* &))P;
 		}
 	}
 	else {
@@ -123,19 +123,20 @@ void __fastcall TForm1::Button2Click(TObject *Sender)
 void __fastcall TForm1::Button3Click(TObject *Sender)// 解析xcd, emf 结果存入.log文件
 {
     char* xml = NULL;
-    xml = Icon_Analysis();
+    String xcd = ExtractFilePath(Application->ExeName) + "temp//demo.xcd";
+    bool flag = Icon_XML("", "", xcd.c_str(), xml);
     ShowMessage(xml);
     delete xml;
     xml = NULL;
 }
 //---------------------------------------------------------------------------
 
-
 void __fastcall TForm1::Button4Click(TObject *Sender) //传入：图符ID，返回：图符类型ID，图符内容
 {
     int ID = 81, Icon_ID;
     char* Text;
-    bool flag = Icon_Type(ID, Icon_ID, Text);
+    String vsd = ExtractFilePath(Application->ExeName) + "temp//demo.vsd";
+    bool flag = Icon_Type(vsd.c_str(), "", "", ID, Icon_ID, Text);
     ShowMessage(Icon_ID);
     ShowMessage(Text);
     delete Text;
@@ -144,23 +145,14 @@ void __fastcall TForm1::Button4Click(TObject *Sender) //传入：图符ID，返回：图符
 
 void __fastcall TForm1::Button5Click(TObject *Sender)
 {
-
-    SigViewer1->Init( L"123", L"" );
-    SigViewer1->ShowToolbar = false;
-    AnsiString s = ExtractFilePath( Application->ExeName ) + "temp//demo.emf";
-    SigViewer1->OpenDrawingFile( ++ Mapid, WideString(s), L"" );//Mapid整形不重复即可
-    TFileStream* fs = new TFileStream(s, fmOpenRead	|  fmShareDenyNone);
-    drawing->LoadFromStream( fs );
-    //LcImage->Picture->Assign( drawing->GetImage()->Picture );
-    delete fs;
-    int X = 180, Y = 180;
+    int X = 235, Y = 13;
     int ID = 0, Icon_ID = 0;
     char *Text = NULL;
-    bool flag = Coordinate_Icon(X, Y, ID, Icon_ID, Text);
-    ShowMessage(ID);
-    ShowMessage(Icon_ID);
-    ShowMessage(Text);
+    String vsd = ExtractFilePath(Application->ExeName) + "temp//demo.vsd";
+    bool flag = Coordinate_Icon(vsd.c_str(), "", "", X, Y, ID, Icon_ID, Text);
+    ShowMessage("ID: " + IntToStr(ID) + ", Icon_ID: " + IntToStr(Icon_ID) + ", Text: " + String(Text));
     delete Text;
+    Text = NULL;
 }
 //---------------------------------------------------------------------------
 
@@ -170,19 +162,29 @@ void __fastcall TForm1::FormClose(TObject *Sender, TCloseAction &Action)
 }
 //---------------------------------------------------------------------------
 
-
+/*void __fastcall TForm1::Button6Click(TObject *Sender)
+{
+    SigViewer1->Init( L"123", L"" );
+    SigViewer1->ShowToolbar = false;
+    String emfpath = ExtractFilePath( Application->ExeName )+"temp\\demo.emf"  ;
+    this->SigViewer1->OpenDrawingFile(++Mapid,WideString(emfpath),L"") ;
+    TFileStream* fs = new TFileStream( emfpath, fmOpenRead	|  fmShareDenyNone );
+    tmpdraw->LoadFromStream( fs );
+    delete fs;
+}
+//---------------------------------------------------------------------------
+*/
+/*
 void __fastcall TForm1::SigViewer1MouseDown(TObject *Sender,
       TxMouseButton Button, long X, long Y, long *Cancel)
 {
-    long tx0, ty0;
-    SigViewer1->WindowToView(X, Y, &tx0, &ty0);
-    const TShapeInfo* shape = drawing->HitTest( X, Y );
+    //
+    long mapx, mapy;
+    this->SigViewer1->WindowToView(X, Y, &mapx, &mapy);
+    //ShowMessage(IntToStr(mapx) + ", " + IntToStr(mapy));
+    //bool flag = Coordinate_Icon(mapx, mapy, ID, Icon_ID, Text);
 
-    int ID = 0, Icon_ID = 0;
-    if (shape)
-        Icon_ID = shape->GetIconId();
-    //bool flag = Coordinate_Icon(X, Y, ID, Icon_ID, Text);
-    ShowMessage(Icon_ID);
 }
 //---------------------------------------------------------------------------
+*/
 
