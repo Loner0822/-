@@ -17,7 +17,7 @@ WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
          Application->CreateForm(__classid(TForm2), &Form2);
          Application->CreateForm(__classid(TForm3), &Form3);
          Application->CreateForm(__classid(TForm4), &Form4);
-         //Application->ShowMainForm = false;
+         Application->ShowMainForm = false;
          Application->Run();
     }
     catch (Exception &exception)

@@ -2,6 +2,7 @@
 
 #include <vcl.h>
 #include <vector>
+#include <algorithm>
 #include <inifiles.hpp>
 #pragma hdrstop
 
@@ -19,15 +20,32 @@ __fastcall TForm2::TForm2(TComponent* Owner)
 
 void __fastcall TForm2::FormShow(TObject *Sender)
 {
-    ComboBox->Items->Clear();
-    ComboBox->Items->Add("1天");
-    ComboBox->Items->Add("2天");
-    ComboBox->Items->Add("4天");
-    ComboBox->Items->Add("7天");
-    ComboBox->Items->Add("15天");
-    ComboBox->Items->Add("30天");
-    ComboBox->ItemIndex = 0;
-    ComboBox->Style = csDropDownList;
+    int hour, minute, second;
+    second = Times % 100, minute = (Times / 100) % 100, hour = Times / 10000;
+    DateTimePicker->Time = StrToTime(IntToStr(hour) + ":" + IntToStr(minute) + ":" + IntToStr(second));
+    switch (Days) {
+        case 1:
+            ComboBox->ItemIndex = 0;
+            break;
+        case 2:
+            ComboBox->ItemIndex = 1;
+            break;
+        case 4:
+            ComboBox->ItemIndex = 2;
+            break;
+        case 7:
+            ComboBox->ItemIndex = 3;
+            break;
+        case 15:
+            ComboBox->ItemIndex = 4;
+            break;
+        case 30:
+            ComboBox->ItemIndex = 5;
+            break;
+        default:
+            ComboBox->ItemIndex = 0;
+    }
+    Edit->Text = IntToStr(Files);
 }
 //---------------------------------------------------------------------------
 
@@ -43,6 +61,13 @@ void __fastcall TForm2::BitBtnClick(TObject *Sender)
     }
     tmp = Edit->Text;
     Files = StrToInt(tmp);
+
+    TIniFile *ini;
+    ini = new TIniFile(ExtractFilePath(Application->ExeName) + "Reg.ini");
+    ini->WriteInteger("Time", "time", Times);
+    ini->WriteInteger("Day", "day", Days);
+    ini->WriteInteger("File", "file", Files);
+	delete ini;
 }
 //---------------------------------------------------------------------------
 
@@ -79,11 +104,14 @@ String __fastcall Find_Last_Backup(String AppName) {
 
 void __fastcall TForm2::TimerTimer(TObject *Sender)
 {
+    if (Files == 0 || Days == 0) {
+        Days = 1, Files = 7;
+    }
     TDateTime Now_DT = Now();
     String Now_T = Now_DT.FormatString("hhmmss");
     if (StrToInt(Now_T) / 100 == Times / 100) {
         String Now_DateTime = Now_DT.FormatString("YYYYMMDDhhmmss");
-        TSearchRec sr;
+        TSearchRec sr, sr_dmp;
         String path = ExtractFilePath(Application->ExeName) + "Backup//";
         if (FindFirst(path + "*.ini", faAnyFile, sr) == 0) {
             do {
@@ -104,6 +132,7 @@ void __fastcall TForm2::TimerTimer(TObject *Sender)
                                 String table_tmp = ini->ReadString("table", IntToStr(i), "");
                                 tableName.push_back(table_tmp);
                             }
+							delete ini;
                             String bkup_path = "D:\\管理知识库数据备份\\";
                             String SignIn = "manager/zbxhzbxh@ZBXH";
                             String backup_cmd = "exp " + SignIn + " file=" + bkup_path + AppName + "\\Auto\\" + Now_DateTime + ".dmp tables=(";
@@ -115,8 +144,8 @@ void __fastcall TForm2::TimerTimer(TObject *Sender)
                             continue;
                         }
                         TDateTime tmp_dt = StrToDateTime(tmp);
-                        int delta = Now_DT - tmp_dt;
-                        if (delta > Days) {
+                        int delta = (int)Now_DT - (int)tmp_dt;
+                        if (delta >= Days) {
                             /*
                                 解析ini
                                 备份
@@ -129,6 +158,7 @@ void __fastcall TForm2::TimerTimer(TObject *Sender)
                                 String table_tmp = ini->ReadString("table", IntToStr(i), "");
                                 tableName.push_back(table_tmp);
                             }
+							delete ini;
                             String bkup_path = "D:\\管理知识库数据备份\\";
                             String SignIn = "manager/zbxhzbxh@ZBXH";
                             String backup_cmd = "exp " + SignIn + " file=" + bkup_path + AppName + "\\Auto\\" + Now_DateTime + ".dmp tables=(";
@@ -138,6 +168,25 @@ void __fastcall TForm2::TimerTimer(TObject *Sender)
                             backup_cmd += ")\n";
                             if (system(backup_cmd.c_str()) != 0)
                                 logAuto(AppName, backup_cmd);
+                            std::vector<String> backup_files;
+                            if (FindFirst(bkup_path + AppName + "\\Auto\\*.dmp", faAnyFile, sr_dmp) == 0) {
+                                do {
+                                    try {
+                                        if ((sr_dmp.Attr & faDirectory) != 0) {
+                                            //folder
+                                        }
+                                        else {
+                                            String tmp_file = sr_dmp.Name;
+                                            backup_files.push_back(tmp_file);
+                                        }
+                                    }
+                                    catch(...){}
+                                } while(FindNext(sr_dmp) == 0);
+                            }
+                            FindClose(sr_dmp);
+                            std::sort(backup_files.begin(), backup_files.end());
+                            for (int i = 0; i < (int)backup_files.size() - Files; ++ i)
+                                DeleteFile(bkup_path + AppName + "\\Auto\\" + backup_files[i]);
                         }
                     }
                 }catch(...){}
@@ -145,6 +194,26 @@ void __fastcall TForm2::TimerTimer(TObject *Sender)
         }
         FindClose(sr);
     }
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TForm2::FormCreate(TObject *Sender)
+{
+    TIniFile *ini;
+    ini = new TIniFile(ExtractFilePath(Application->ExeName) + "Reg.ini");
+    Times = ini->ReadInteger("Time", "time", 0);
+    Days = ini->ReadInteger("Day", "day", 1);
+    Files = ini->ReadInteger("File", "file", 7);
+	delete ini;
+
+    ComboBox->Items->Clear();
+    ComboBox->Items->Add("1天");
+    ComboBox->Items->Add("2天");
+    ComboBox->Items->Add("4天");
+    ComboBox->Items->Add("7天");
+    ComboBox->Items->Add("15天");
+    ComboBox->Items->Add("30天");
+    ComboBox->Style = csDropDownList;
 }
 //---------------------------------------------------------------------------
 

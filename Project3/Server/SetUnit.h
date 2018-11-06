@@ -26,10 +26,11 @@ __published:	// IDE-managed Components
     void __fastcall FormShow(TObject *Sender);
     void __fastcall BitBtnClick(TObject *Sender);
     void __fastcall TimerTimer(TObject *Sender);
+    void __fastcall FormCreate(TObject *Sender);
 private:	// User declarations
 public:		// User declarations
     __fastcall TForm2(TComponent* Owner);
-    int Dates, Times, Days, Files;
+    int Times, Days, Files;
 };
 //---------------------------------------------------------------------------
 extern PACKAGE TForm2 *Form2;

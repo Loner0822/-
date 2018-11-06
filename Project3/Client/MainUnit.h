@@ -7,6 +7,7 @@
 #include <Controls.hpp>
 #include <ScktComp.hpp>
 #include <StdCtrls.hpp>
+#include <ExtCtrls.hpp>
 //---------------------------------------------------------------------------
 #include <vector>
 #include <Classes.hpp>
@@ -28,6 +29,7 @@ __published:	// IDE-managed Components
     TButton *Button3;
     TStatusBar *StatusBar;
     TButton *Button4;
+    TTimer *Timer;
     void __fastcall ClientSocketConnect(TObject *Sender,
           TCustomWinSocket *Socket);
     void __fastcall ClientSocketConnecting(TObject *Sender,
@@ -45,6 +47,7 @@ __published:	// IDE-managed Components
     void __fastcall Button2Click(TObject *Sender);
     void __fastcall Button3Click(TObject *Sender);
     void __fastcall FormCloseQuery(TObject *Sender, bool &CanClose);
+    void __fastcall TimerTimer(TObject *Sender);
 private:	// User declarations
 public:		// User declarations
     __fastcall TForm1(TComponent* Owner);
@@ -52,7 +55,8 @@ public:		// User declarations
     String TimeNow;
     std::vector<String> TableName;
     int ServerPort, RecvPort;
-    int op;
+    int option;
+    bool isActive;
 };
 //---------------------------------------------------------------------------
 extern PACKAGE TForm1 *Form1;

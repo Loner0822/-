@@ -13,6 +13,7 @@
 #include "logrec.h"
 #include "trayicon.h"
 #include "SetUnit.h"
+#include <ImgList.hpp>
 //---------------------------------------------------------------------------
 class TForm1 : public TForm
 {
@@ -24,6 +25,7 @@ __published:	// IDE-managed Components
     TMenuItem *S1;
     TMenuItem *E1;
     TTrayIcon *TrayIcon;
+    TImageList *ImageList;
     void __fastcall ButtonClick(TObject *Sender);
     void __fastcall ServerSocketAccept(TObject *Sender,
           TCustomWinSocket *Socket);

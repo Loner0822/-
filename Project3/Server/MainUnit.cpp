@@ -31,10 +31,12 @@ __fastcall TForm1::TForm1(TComponent* Owner)
 void __fastcall TForm1::ButtonClick(TObject *Sender)
 {
     if (!ServerSocket->Active) {
+        TrayIcon->IconIndex = 0;
         ServerSocket->Open();
         Button->Caption = "停止服务";
     }
     else {
+        TrayIcon->IconIndex = 1;
         ServerSocket->Close();
         Button->Caption = "开始服务";
     }
@@ -178,7 +180,7 @@ void __fastcall TForm1::ServerSocketClientRead(TObject *Sender,
         r_bat.close();*/
 
         String recover_cmd;
-        recover_cmd = "sqlplus " + SignIn + " @Delete.sql\n"; 
+        recover_cmd = "sqlplus " + SignIn + " @Delete.sql\n";
 
         if (system(recover_cmd.c_str()) != 0) {
             String Msg = "Recover_Error\n";
@@ -242,6 +244,8 @@ void __fastcall TForm1::ServerSocketClientRead(TObject *Sender,
     }
 
     if (cmd == "Backup") {
+        String Now_DT = Now().FormatString("YYYYMMDDhhmmss");
+
         if (!DirectoryExists(Datapath)) {
             CreateDir(Datapath);
         }
@@ -253,6 +257,7 @@ void __fastcall TForm1::ServerSocketClientRead(TObject *Sender,
         pos = sRecvText.Pos("\n");
         FileName = sRecvText.SubString(1, pos - 1);
         sRecvText = sRecvText.SubString(pos + 1, sRecvText.Length() - pos);
+        FileName = Now_DT + "_" + FileName;
 
         pos = sRecvText.Pos("\n");
         TableNum = StrToInt(sRecvText.SubString(1, pos - 1));
@@ -395,7 +400,6 @@ void __fastcall TForm1::FormCloseQuery(TObject *Sender, bool &CanClose)
 }
 //---------------------------------------------------------------------------
 
-
 void __fastcall TForm1::S1Click(TObject *Sender)
 {
     Form2->ShowModal();    
@@ -415,9 +419,10 @@ void __fastcall TForm1::FormCreate(TObject *Sender)
 {
     //MessageBeep(MB_OK);
     TIniFile *ini;
-    ini = new TIniFile("Port.ini");
+    ini = new TIniFile(ExtractFilePath(Application->ExeName) + "Reg.ini");
     ServerSocket->Port = ini->ReadInteger("Port", "First", 900);
-    ServerSocket->Open();    
+    ServerSocket->Open();
+	delete ini;
 }
 //---------------------------------------------------------------------------
 

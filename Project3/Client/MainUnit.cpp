@@ -18,7 +18,7 @@ __fastcall TForm1::TForm1(TComponent* Owner)
 
 void __fastcall TForm1::FormCreate(TObject *Sender)
 {
-    //op = ParamStr(1).ToInt();
+    option = ParamStr(1).ToInt();
     Button1->Enabled = false;
     TIniFile *Reg, *SyncDB;
     Reg = new TIniFile(ExtractFilePath(Application->ExeName) + "RegInfo.ini");
@@ -34,13 +34,23 @@ void __fastcall TForm1::FormCreate(TObject *Sender)
         TableName.push_back(tmp);
     }
     delete SyncDB;
+
+
+    TIniFile *ini;
+    ini = new TIniFile(ExtractFilePath(Application->ExeName) + "SyncInfo.ini");
+    ServerPort = RecvPort = ini->ReadInteger("Login", "port_up_down", 900);
+    ClientSocket->Port = ServerPort;
+    ClientSocket->Address = ini->ReadString("Login", "ip", "127.0.0.1");
+    delete ini;
+    ClientSocket->Open();
+    Timer->Enabled = true;
 }
 //---------------------------------------------------------------------------
 
-void __fastcall TForm1::ClientSocketConnect(TObject *Sender,
-      TCustomWinSocket *Socket)
+void __fastcall TForm1::ClientSocketConnect(TObject *Sender, TCustomWinSocket *Socket)
 {
     StatusBar->SimpleText = "与服务器连接成功";
+    isActive = true;
 }
 //---------------------------------------------------------------------------
 
@@ -135,21 +145,29 @@ void __fastcall TForm1::ClientSocketRead(TObject *Sender,
 
     if (cmd == "Recover_Error") {
         ShowMessage("恢复数据失败!");
+        ClientSocket->Close();
+        Close();
         return;
     }
     
     if (cmd == "Recover_Success") {
         ShowMessage("恢复数据成功!");
+        ClientSocket->Close();
+        Close();
         return;
     }
 
     if (cmd == "Backup_Error") {
         ShowMessage("备份数据失败!");
+        ClientSocket->Close();
+        Close();
         return;
     }
 
     if (cmd == "Backup_Success") {
         ShowMessage("备份数据成功!");
+        ClientSocket->Close();
+        Close();
         return;
     }
 }
@@ -157,6 +175,7 @@ void __fastcall TForm1::ClientSocketRead(TObject *Sender,
 
 void __fastcall TForm1::Button1Click(TObject *Sender)
 {
+    isActive = false;
     if (ClientSocket->Active) {
         ClientSocket->Close();
         Button1->Caption = "连接";
@@ -199,14 +218,13 @@ void __fastcall TForm1::Button3Click(TObject *Sender)
         return;
     }
     String cmd = "Backup";
-    TimeNow = Now().FormatString("yyyyMMddhhmmss");
+    //TimeNow = Now().FormatString("yyyyMMddhhmmss");
     //ShowMessage(TimeNow);
     Form4->Edit->Text = "备份";
     Form4->Edit->SelectAll();
-    Form4->Label2->Caption = TimeNow + "_";
     Form4->Label1->Caption = ".dmp";
     if (Form4->ShowModal() == mrOk) {
-        TimeNow = Form4->Label2->Caption + Form4->Edit->Text + Form4->Label1->Caption;
+        TimeNow = Form4->Edit->Text + Form4->Label1->Caption;
         String Msg = cmd + "\n" +
                      AppName + "\n" +
                      TimeNow + "\n" +
@@ -232,6 +250,38 @@ void __fastcall TForm1::FormCloseQuery(TObject *Sender, bool &CanClose)
         else {
             CanClose = false;
         }
+    }
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TForm1::TimerTimer(TObject *Sender)
+{
+    Timer->Enabled = false;
+
+    try {
+        for (int i = 0; i < 100; ++ i) {
+            Sleep(100);
+            if (isActive) {
+                Timer->Enabled = false;
+                break;
+            }
+        }
+        if (!isActive) {
+            Timer->Enabled = false;
+            throw 1;
+        }
+    }
+    catch(...) {
+        ShowMessage("与服务器连接失败!");
+        Application->Terminate();
+        return;
+    }
+
+    if (option == 1) {
+        Button2Click(Button2);
+    }
+    if (option == 2) {
+        Button3Click(Button3);
     }
 }
 //---------------------------------------------------------------------------
