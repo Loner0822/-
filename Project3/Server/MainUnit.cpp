@@ -74,9 +74,6 @@ void __fastcall TForm1::ServerSocketClientError(TObject *Sender,
 void __fastcall TForm1::ServerSocketClientRead(TObject *Sender,
       TCustomWinSocket *Socket)
 {
-
-    String Datapath = "D:\\管理知识库数据备份\\";
-    String SignIn = "manager/zbxhzbxh@ZBXH";
     String sRecvText = Socket->ReceiveText();
     String sRemoteAddr = Socket->RemoteAddress;
     logrec(sRecvText, sRemoteAddr);
@@ -98,7 +95,7 @@ void __fastcall TForm1::ServerSocketClientRead(TObject *Sender,
         dmp_file.clear();
         auto_file.clear();
         TSearchRec sr;
-        String path = Datapath + AppName;
+        String path = DataPath + AppName;
         if (!FindFirst(path + "\\*.dmp", faAnyFile, sr)) {
             do {
                 if (sr.Name != "." && sr.Name != "..") {
@@ -195,9 +192,9 @@ void __fastcall TForm1::ServerSocketClientRead(TObject *Sender,
         }
 
         if (op == 1)
-            recover_cmd = "imp " + SignIn + " file=" + Datapath + AppName + "\\" + FileName + " tables=(";
+            recover_cmd = "imp " + SignIn + " file=" + DataPath + AppName + "\\" + FileName + " tables=(";
         else
-            recover_cmd = "imp " + SignIn + " file=" + Datapath + AppName + "\\Auto\\" + FileName + " tables=(";
+            recover_cmd = "imp " + SignIn + " file=" + DataPath + AppName + "\\Auto\\" + FileName + " tables=(";
         for (int i = 0; i < TableNum - 1; ++ i)
             recover_cmd += TableName[i] + ",";
         recover_cmd += TableName[TableNum - 1] + ")\n";
@@ -246,8 +243,8 @@ void __fastcall TForm1::ServerSocketClientRead(TObject *Sender,
     if (cmd == "Backup") {
         String Now_DT = Now().FormatString("YYYYMMDDhhmmss");
 
-        if (!DirectoryExists(Datapath)) {
-            CreateDir(Datapath);
+        if (!DirectoryExists(DataPath)) {
+            CreateDir(DataPath);
         }
         
         pos = sRecvText.Pos("\n");
@@ -271,8 +268,8 @@ void __fastcall TForm1::ServerSocketClientRead(TObject *Sender,
             sRecvText = sRecvText.SubString(pos + 1, sRecvText.Length() - pos);
         }
 
-        if (!DirectoryExists(Datapath + AppName)) {
-            CreateDir(Datapath + AppName);
+        if (!DirectoryExists(DataPath + AppName)) {
+            CreateDir(DataPath + AppName);
         }
 
         /*ofstream b_bat;
@@ -284,7 +281,7 @@ void __fastcall TForm1::ServerSocketClientRead(TObject *Sender,
         b_bat << TableName[TableNum - 1].c_str();
         b_bat << ")" << endl;
         b_bat.close();*/
-        String backup_cmd = "exp " + SignIn + " file=" + Datapath + AppName + "\\" + FileName + " tables=(";
+        String backup_cmd = "exp " + SignIn + " file=" + DataPath + AppName + "\\" + FileName + " tables=(";
         for (int i = 0; i < TableNum - 1; ++ i)
             backup_cmd += TableName[i].c_str();
         backup_cmd += TableName[TableNum - 1].c_str();
@@ -423,6 +420,17 @@ void __fastcall TForm1::FormCreate(TObject *Sender)
     ServerSocket->Port = ini->ReadInteger("Port", "First", 900);
     ServerSocket->Open();
 	delete ini;
+
+    ini = new TIniFile(ExtractFilePath(Application->ExeName) + "Reg.ini");
+    DataPath = ini->ReadString("Database", "path", "D:\\管理知识库数据备份\\");
+    String username = ini->ReadString("Database", "username", "manager");
+    String password = ini->ReadString("Database", "password", "zbxhzbxh");
+    String ip = ini->ReadString("Database", "ip", "192.168.0.211");
+    String port = ini->ReadString("Database", "password", "zbxhzbxh");
+    String uid = ini->ReadString("Database", "uid", "ZBXH");
+    SignIn = username + "/" + password + "@" + ip + ":" + port + "/" + uid;
+    
+    delete ini;
 }
 //---------------------------------------------------------------------------
 

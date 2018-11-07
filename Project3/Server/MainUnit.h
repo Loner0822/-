@@ -45,6 +45,7 @@ __published:	// IDE-managed Components
 private:	// User declarations
 public:		// User declarations
     __fastcall TForm1(TComponent* Owner);
+    String DataPath, SignIn;
 };
 //---------------------------------------------------------------------------
 extern PACKAGE TForm1 *Form1;

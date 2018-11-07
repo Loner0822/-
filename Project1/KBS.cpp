@@ -9,6 +9,7 @@ USEFORM("ExtraUnit.cpp", ExtraForm);
 USEFORM("SystemUnit.cpp", Form2);
 USEFORM("CompanyUnit.cpp", Form3);
 USEFORM("EditUnit.cpp", Form4);
+USEFORM("include\SymbFrame.cpp", SymbolFrame); /* TFrame: File Type */
 //---------------------------------------------------------------------------
 WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 {

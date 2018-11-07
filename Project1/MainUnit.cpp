@@ -50,7 +50,6 @@ const long dy[4] = {0, 23, 22, 20};
 set<pair<long, long> > Map_Node;    // x, y
 set<Pen> Pen_Node;    				// 表笔编号, 表笔类型, x, y
 
-int Now_Node;
 String Now_Nature;
 map<String, String>Data_Type;
 vector<int> Department;
@@ -197,7 +196,7 @@ void __fastcall TForm1::FormCreate(TObject *Sender) {
 void __fastcall TForm1::TreeViewChange(TObject *Sender, TTreeNode *Node) {
     Now_Node = (int)Node->Data;
     Map_PGUID.clear();
-
+    
     AdvStringGrid->Clear();
     AdvStringGrid->Cells[0][0] = "序号";
     AdvStringGrid->Cells[1][0] = "设计院";
@@ -227,6 +226,7 @@ void __fastcall TForm1::TreeViewChange(TObject *Sender, TTreeNode *Node) {
     AdvStringGrid1->Cells[0][0] = "序号";
     AdvStringGrid1->Cells[1][0] = "节点名称";
     AdvStringGrid1->Cells[2][0] = "配线名称";
+    Route = "";
     FindFather(Node, 1);
     //AdvStringGrid1->Cells[1][AdvStringGrid1->RowCount - 1] = node[Now_Node].Data.JdText;
     AdvStringGrid1ClickCell(AdvStringGrid1, 1, 2);
@@ -252,8 +252,13 @@ void __fastcall TForm1::TreeViewChange(TObject *Sender, TTreeNode *Node) {
 void TForm1::FindFather(TTreeNode *tnode, int &level) {
     int u = (int)tnode->Data;
     TTreeNode* pa = tnode->Parent;
-    if (node[u].fa != u)
+    if (node[u].fa != u) {
         FindFather(pa, level);
+        Route += "/" + node[u].Data.JdText;
+    }
+    else {
+        Route += node[u].Data.JdText;
+    }
     String pguid = node[u].Data.PGUID;
     TADOQuery *tempQuery = new TADOQuery(NULL);
     tempQuery->Connection = DMod->ADOConnection3;
@@ -277,7 +282,6 @@ void TForm1::FindFather(TTreeNode *tnode, int &level) {
 		AdvStringGrid1->Cells[6][level + cnt] = tempQuery->FieldByName("CodeGUID")->AsString;
         tempQuery->Next();
         ++ cnt;
-
     }
     level += cnt;
     delete tempQuery;
@@ -368,6 +372,7 @@ void TForm1::AddEdge(int x, int y) {
 
 
 void __fastcall TForm1::AdvStringGridClickCell(TObject *Sender, int ARow, int ACol) {
+    this->GroupBox1->SetFocus();
     if (ARow == 0 || ACol == 0)
         return;
     Panel->Visible = true;
@@ -1158,6 +1163,7 @@ void TForm1::DB_DeletePen(int type, int id) {
 
 void __fastcall TForm1::AdvStringGrid1ClickCell(TObject *Sender, int ARow,
       int ACol) {
+    this->GroupBox1->SetFocus();
     if (ARow == 0 || ACol == 0)
         return;
 
@@ -1453,7 +1459,7 @@ void __fastcall TForm1::AdvStringGrid2GetEditorType(TObject *Sender,
 
 void __fastcall TForm1::AdvStringGrid2EditCellDone(TObject *Sender,
       int ACol, int ARow) {
-    int row1 = AdvStringGrid1->Row, row2 = AdvStringGrid2->Row;
+    int row1 = AdvStringGrid1->Row, row2 = ARow;
     String sql, up1, up2;
     up1 = AdvStringGrid1->Cells[4][row1];
     up2 = AdvStringGrid2->Cells[3][row2];
@@ -1694,20 +1700,22 @@ void __fastcall TForm1::AdvStringGrid2GetAlignment(TObject *Sender,
 //---------------------------------------------------------------------------
 
 void __fastcall TForm1::AdvStringGridResize(TObject *Sender) {
-    AdvStringGrid->ColWidths[1] = (AdvStringGrid->Width - AdvStringGrid->ColWidths[0] - 4) / 3;
-    AdvStringGrid->ColWidths[2] = (AdvStringGrid->Width - AdvStringGrid->ColWidths[0] - 4) / 3 * 2;
+    AdvStringGrid->ColWidths[1] = (AdvStringGrid->Width - AdvStringGrid->ColWidths[0] - 32) / 3;
+    AdvStringGrid->ColWidths[2] = (AdvStringGrid->Width - AdvStringGrid->ColWidths[0] - 32) / 3 * 2;
 }
 //---------------------------------------------------------------------------
 
 void __fastcall TForm1::AdvStringGrid1Resize(TObject *Sender) {
-    AdvStringGrid1->ColWidths[1] = (AdvStringGrid1->Width - AdvStringGrid1->ColWidths[0] - 4) / 2;
-    AdvStringGrid1->ColWidths[2] = (AdvStringGrid1->Width - AdvStringGrid1->ColWidths[0] - 4) / 2;
+    AdvStringGrid1->ColWidths[1] = (AdvStringGrid1->Width - AdvStringGrid1->ColWidths[0] - 32) / 2;
+    AdvStringGrid1->ColWidths[2] = (AdvStringGrid1->Width - AdvStringGrid1->ColWidths[0] - 32) / 2;
 }
 //---------------------------------------------------------------------------
 
 void __fastcall TForm1::AdvStringGrid2Resize(TObject *Sender) {
-    AdvStringGrid2->ColWidths[1] = (AdvStringGrid2->Width - AdvStringGrid2->ColWidths[0] - 4) / 2;
-    AdvStringGrid2->ColWidths[2] = (AdvStringGrid2->Width - AdvStringGrid2->ColWidths[0] - 4) / 2;
+    AdvStringGrid2->ColWidths[1] = (AdvStringGrid2->Width - AdvStringGrid2->ColWidths[0] - 32) / 2;
+    AdvStringGrid2->ColWidths[2] = (AdvStringGrid2->Width - AdvStringGrid2->ColWidths[0] - 32) / 2;
+    ToolButton1->Width = AdvStringGrid2->ColWidths[0] + AdvStringGrid2->ColWidths[1];
+    Button1->Width = AdvStringGrid2->ColWidths[2];
 }
 //---------------------------------------------------------------------------
 
@@ -1825,5 +1833,37 @@ void __fastcall TForm1::TreeViewCustomDrawItem(TCustomTreeView *Sender,
 }
 //---------------------------------------------------------------------------
 
+void __fastcall TForm1::Button2Click(TObject *Sender)
+{
+    Form5->Caption = "参数属性定义-" + Route;
+    Form5->AdvStringGrid->RowCount = 2;
+    Form5->AdvStringGrid->ColCount = AdvStringGrid1->RowCount + 2;
+    Form5->AdvStringGrid->Cells[0][0] = "序号";
+    for (int i = 1; i < AdvStringGrid1->RowCount; ++ i)
+        Form5->AdvStringGrid->Cells[i][0] = AdvStringGrid1->Cells[2][i];
+    Form5->AdvStringGrid->Cells[AdvStringGrid1->RowCount][0] = "原因";
+    Form5->AdvStringGrid->ColWidths[AdvStringGrid1->RowCount + 1] = 0;
+    Form5->Node_GUID = node[Now_Node].Data.PGUID;
+    Form5->ColNum = AdvStringGrid1->RowCount + 1;
+    Form5->ShowModal();
+}
+//---------------------------------------------------------------------------
 
+void __fastcall TForm1::Form5N4Click(TObject *Sender)
+{
+    this->Close();    
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TForm1::N9Click(TObject *Sender)
+{
+    this->Close();    
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TForm1::Button3Click(TObject *Sender)
+{
+    this->Close();    
+}
+//---------------------------------------------------------------------------
 
