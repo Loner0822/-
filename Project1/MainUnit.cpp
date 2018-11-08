@@ -30,6 +30,7 @@ using namespace std;
 #pragma link "AdvGrid"
 #pragma link "BaseGrid"
 #pragma link "SigViewerLib_OCX"
+#pragma link "AdvToolBtn"
 #pragma resource "*.dfm"
 TForm1 *Form1;
 TCheckListEditLink *edCheckListEdit;
@@ -190,6 +191,8 @@ void __fastcall TForm1::FormCreate(TObject *Sender) {
     AdvStringGrid2->Cells[0][0] = "序号";
     AdvStringGrid2->Cells[1][0] = "定义参数";
     AdvStringGrid2->Cells[2][0] = "定义值";
+
+    this->TreeView->Selected = this->TreeView->Items->GetFirstNode();
 }
 //---------------------------------------------------------------------------
 
@@ -1714,8 +1717,8 @@ void __fastcall TForm1::AdvStringGrid1Resize(TObject *Sender) {
 void __fastcall TForm1::AdvStringGrid2Resize(TObject *Sender) {
     AdvStringGrid2->ColWidths[1] = (AdvStringGrid2->Width - AdvStringGrid2->ColWidths[0] - 32) / 2;
     AdvStringGrid2->ColWidths[2] = (AdvStringGrid2->Width - AdvStringGrid2->ColWidths[0] - 32) / 2;
-    ToolButton1->Width = AdvStringGrid2->ColWidths[0] + AdvStringGrid2->ColWidths[1];
-    Button1->Width = AdvStringGrid2->ColWidths[2];
+    Label1->Width = AdvStringGrid2->ColWidths[0] + AdvStringGrid2->ColWidths[1];
+    Button3->Width = AdvStringGrid2->ColWidths[2];
 }
 //---------------------------------------------------------------------------
 
@@ -1833,7 +1836,7 @@ void __fastcall TForm1::TreeViewCustomDrawItem(TCustomTreeView *Sender,
 }
 //---------------------------------------------------------------------------
 
-void __fastcall TForm1::Button2Click(TObject *Sender)
+/*void __fastcall TForm1::Button2Click(TObject *Sender)
 {
     Form5->Caption = "参数属性定义-" + Route;
     Form5->AdvStringGrid->RowCount = 2;
@@ -1846,24 +1849,34 @@ void __fastcall TForm1::Button2Click(TObject *Sender)
     Form5->Node_GUID = node[Now_Node].Data.PGUID;
     Form5->ColNum = AdvStringGrid1->RowCount + 1;
     Form5->ShowModal();
-}
+}*/
 //---------------------------------------------------------------------------
 
-void __fastcall TForm1::Form5N4Click(TObject *Sender)
+
+void __fastcall TForm1::Button1Click(TObject *Sender)
 {
     this->Close();    
 }
 //---------------------------------------------------------------------------
 
-void __fastcall TForm1::N9Click(TObject *Sender)
+
+
+
+void __fastcall TForm1::Button2Click(TObject *Sender)
 {
-    this->Close();    
+    Form5->Caption = "参数属性定义-" + Route;
+    Form5->AdvStringGrid->RowCount = 2;
+    Form5->AdvStringGrid->ColCount = AdvStringGrid1->RowCount + 2;
+    Form5->AdvStringGrid->Cells[0][0] = "序号";
+    for (int i = 1; i < AdvStringGrid1->RowCount; ++ i)
+        Form5->AdvStringGrid->Cells[i][0] = AdvStringGrid1->Cells[2][i];
+    Form5->AdvStringGrid->Cells[AdvStringGrid1->RowCount][0] = "原因";
+    Form5->AdvStringGrid->ColWidths[AdvStringGrid1->RowCount + 1] = 0;
+    Form5->Node_GUID = node[Now_Node].Data.PGUID;
+    Form5->ColNum = AdvStringGrid1->RowCount + 1;
+    Form5->ShowModal();    
 }
 //---------------------------------------------------------------------------
 
-void __fastcall TForm1::Button3Click(TObject *Sender)
-{
-    this->Close();    
-}
-//---------------------------------------------------------------------------
+
 
