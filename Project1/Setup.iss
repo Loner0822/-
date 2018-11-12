@@ -2,7 +2,7 @@
 ; 有关创建 Inno Setup 脚本文件的详细资料请查阅帮助文档！
 
 #define MyAppName "集中监测标准知识库"
-#define MyAppVersion "1.00.00"
+#define MyAppVersion "1.0"
 #define MyAppPublisher "中北信号"
 #define MyAppExeName "KBS.exe"
 
@@ -17,7 +17,7 @@ AppVersion={#MyAppVersion}
 AppPublisher={#MyAppPublisher}
 DefaultDirName={pf}\{#MyAppName}
 DefaultGroupName={#MyAppName}
-OutputBaseFilename=集中监测标准知识库安装包
+OutputBaseFilename=中北信号集中监测标准知识库安装包
 SetupIconFile=D:\工作\2018.10.09(图标)\公司图标2.ico
 Compression=lzma
 SolidCompression=yes
@@ -32,8 +32,8 @@ UninstalledMost=%1 已顺利地从您的电脑中删除。
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked; OnlyBelowVersion: 0,6.1
 
 [Files]
-Source: "D:\工作\集中监测标准知识库(打包)\KBS.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "D:\工作\集中监测标准知识库(打包)\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "D:\工作\集中监测标准知识库\KBS.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "D:\工作\集中监测标准知识库\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 ; 注意: 不要在任何共享系统文件上使用“Flags: ignoreversion”
 
 [Run]
@@ -52,25 +52,24 @@ Name: {app}; Type: filesandordirs
 [Icons]
 Name: "{group}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"
 Name: "{group}\{cm:UninstallProgram,{#MyAppName}}"; Filename: "{uninstallexe}"
-Name: "{commondesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}";
+Name: "{commondesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: desktopicon
 
 [Run]
 Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, "&", "&&")}}"; Flags: nowait postinstall skipifsilent
 
-
 [registry]
-Root:HKCU;Subkey:"JZJCBZZSK";Flags:uninsdeletekeyifempty
-Root:HKCU;Subkey:"JZJCBZZSK";ValueType:string;ValueName:"InstallPath";ValueData:"{app}";Flags:uninsdeletekey
-Root:HKCU;Subkey:"JZJCBZZSK";ValueType:string;ValueName:"AppName";ValueData:"{#MyAppName}";Flags:uninsdeletekey
+Root:HKCU;Subkey:"JZJCBZZSK0";Flags:uninsdeletekeyifempty
+Root:HKCU;Subkey:"JZJCBZZSK0";ValueType:string;ValueName:"InstallPath";ValueData:"{app}";Flags:uninsdeletekey
+Root:HKCU;Subkey:"JZJCBZZSK0";ValueType:string;ValueName:"AppName";ValueData:"{#MyAppName}";Flags:uninsdeletekey
 
 [code]
 function InitializeSetup(): Boolean;
 var sInstallPath: String;
 var sAppName: String;
 begin 
-      if RegValueExists(HKEY_CURRENT_USER,'JZJCBZZSK', 'InstallPath') then
+      if RegValueExists(HKEY_CURRENT_USER,'JZJCBZZSK0', 'InstallPath') then
                begin 
-                   RegQueryStringValue(HKEY_CURRENT_USER, 'JZJCBZZSK', 'AppName', sAppName);
+                   RegQueryStringValue(HKEY_CURRENT_USER, 'JZJCBZZSK0', 'AppName', sAppName);
                    MsgBox('该计算机已经安装同类型软件《'+sAppName+'》,请先卸载然后安装,安装程序将关闭。',mbError,MB_OK);
                    result:=false;
                end else
@@ -81,7 +80,5 @@ end;
 procedure CurUninstallStepChanged(CurUninstallStep : TUninstallStep);
 begin
      if CurUninstallStep= usUninstall then
-     RegDeleteKeyIncludingSubkeys(HKEY_CURRENT_USER,'JZJCBZZSK');
+     RegDeleteKeyIncludingSubkeys(HKEY_CURRENT_USER,'JZJCBZZSK0');
 end;
-
-

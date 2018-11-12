@@ -1,11 +1,11 @@
 ; 脚本由 Inno Setup 脚本向导 生成！
 ; 有关创建 Inno Setup 脚本文件的详细资料请查阅帮助文档！
 
-#define MyAppName "MY_APP_NAME"
-#define MyAppVersion "MY_APP_VERSION"
-#define MyAppPublisher "MY_APP_PUBLISHER"
-#define MyAppExeName "MY_APP_EXE_NAME"
-#define MyAppId "APP_ID"
+#define MyAppName ""
+#define MyAppVersion ""
+#define MyAppPublisher ""
+#define MyAppExeName ""
+#define MyAppId ""
 
 [Setup]
 ; 注: AppId的值为单独标识该应用程序。
@@ -19,7 +19,7 @@ AppPublisher={#MyAppPublisher}
 DefaultDirName={pf}\{#MyAppName}
 DefaultGroupName={#MyAppName}
 OutputBaseFilename=Setup
-SetupIconFile=SOURCE_PATH\ZBXH.ico
+;SetupIconFile=\ZBXH.ico
 Compression=lzma
 SolidCompression=yes
 
@@ -34,21 +34,19 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 Name: "quicklaunchicon"; Description: "{cm:CreateQuickLaunchIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 
 [Files]
-Source: "SOURCE_EXE_PATH"; DestDir: "{app}"; Flags: ignoreversion
-Source: "SOURCE_PATH\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: ""; DestDir: "{app}"; Flags: ignoreversion
+Source: "\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 ; 注意: 不要在任何共享系统文件上使用“Flags: ignoreversion”
 
 [Run]
 ; 安装完调用
 Filename: "{app}\RegOcx.exe";
 Filename: "{app}\ZskAz.exe";
-Filename: "{app}\DesktopAz.bat"
 
 [UninstallRun]
 ; 卸载前调用
 Filename: "{app}\kill.bat";Flags:RunHidden SkipIfDoesntExist;
 Filename: "{app}\ZskXz.exe";Flags:RunHidden SkipIfDoesntExist;
-Filename: "{app}\DesktopXz.bat";Flags:RunHidden SkipIfDoesntExist;
 
 [UninstallDelete]
 Name: {app}; Type: filesandordirs
@@ -62,18 +60,18 @@ Name: "{userappdata}\Microsoft\Internet Explorer\Quick Launch\{#MyAppName}"; Fil
 Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, "&", "&&")}}"; Flags: nowait postinstall skipifsilent
 
 [registry]
-Root:HKCU;Subkey:"REGISTRY_SUBKEY";Flags:uninsdeletekeyifempty
-Root:HKCU;Subkey:"REGISTRY_SUBKEY";ValueType:string;ValueName:"InstallPath";ValueData:"{app}";Flags:uninsdeletekey
-Root:HKCU;Subkey:"REGISTRY_SUBKEY";ValueType:string;ValueName:"AppName";ValueData:"{#MyAppName}";Flags:uninsdeletekey
+Root:HKCU;Subkey:"";Flags:uninsdeletekeyifempty
+Root:HKCU;Subkey:"";ValueType:string;ValueName:"InstallPath";ValueData:"{app}";Flags:uninsdeletekey
+Root:HKCU;Subkey:"";ValueType:string;ValueName:"AppName";ValueData:"{#MyAppName}";Flags:uninsdeletekey
 
 [code]
 function InitializeSetup(): Boolean;
 var sInstallPath: String;
 var sAppName: String;
 begin 
-      if RegValueExists(HKEY_CURRENT_USER,'REGISTRY_SUBKEY', 'InstallPath') then
+      if RegValueExists(HKEY_CURRENT_USER,'', 'InstallPath') then
                begin 
-                   RegQueryStringValue(HKEY_CURRENT_USER, 'REGISTRY_SUBKEY', 'AppName', sAppName);
+                   RegQueryStringValue(HKEY_CURRENT_USER, '', 'AppName', sAppName);
                    MsgBox('该计算机已经安装同类型软件《'+sAppName+'》,请先卸载然后安装,安装程序将关闭。',mbError,MB_OK);
                    result:=false;
                end else
@@ -84,5 +82,5 @@ end;
 procedure CurUninstallStepChanged(CurUninstallStep : TUninstallStep);
 begin
      if CurUninstallStep= usUninstall then
-     RegDeleteKeyIncludingSubkeys(HKEY_CURRENT_USER,'REGISTRY_SUBKEY');
+     RegDeleteKeyIncludingSubkeys(HKEY_CURRENT_USER,'');
 end;

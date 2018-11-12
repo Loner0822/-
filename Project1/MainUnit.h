@@ -14,6 +14,9 @@
 #include <StdCtrls.hpp>
 #include <ToolWin.hpp>
 #include <Menus.hpp>
+#include <ActnCtrls.hpp>
+#include <ActnMan.hpp>
+#include "AdvToolBtn.hpp"
 //---------------------------------------------------------------------------
 #include <set>
 #include <Classes.hpp>
@@ -26,6 +29,8 @@
 #include "DataUnit.h"
 #include "TreeUnit.h"
 #include "PenUnit.h"
+#include "SymbFrame.h"
+#include "RangeUnit.h"
 #include "ExtraUnit.h"
 #include <AdvGrid.hpp>
 #include <BaseGrid.hpp>
@@ -59,10 +64,8 @@ __published:	// IDE-managed Components
     TPopupMenu *PopupMenu;
     TMenuItem *N1;
     TGroupBox *GroupBox4;
-    TSigViewer *SigViewer1;
     TPanel *Panel1;
     TSplitter *Splitter3;
-    TPanel *Panel;
     TMainMenu *MainMenu1;
     TMenuItem *N2;
     TMenuItem *N3;
@@ -76,6 +79,14 @@ __published:	// IDE-managed Components
     TMenuItem *A1;
     TMenuItem *U1;
     TMenuItem *D1;
+    TButton *Button2;
+    TSigViewer *SigViewer1;
+    TPanel *Panel;
+    TToolBar *ToolBar3;
+    TButton *Button3;
+    TToolBar *ToolBar1;
+    TButton *Button1;
+    TLabel *Label1;
 	void __fastcall FormCreate(TObject *Sender);
     void __fastcall TreeViewChange(TObject *Sender, TTreeNode *Node);
 	
@@ -146,6 +157,8 @@ __published:	// IDE-managed Components
 
     void __fastcall TreeViewCustomDrawItem(TCustomTreeView *Sender,
           TTreeNode *Node, TCustomDrawState State, bool &DefaultDraw);
+    void __fastcall Button2Click(TObject *Sender);
+    void __fastcall Button1Click(TObject *Sender);
 private:	// User declarations
 public:		// User declarations
     __fastcall TForm1(TComponent* Owner);
@@ -170,6 +183,8 @@ public:		// User declarations
     void DeleteNature();
 
     void AdvStringGrid2Refresh();
+    int Now_Node;
+    String Route;
 };
 //---------------------------------------------------------------------------
 extern PACKAGE TForm1 *Form1;

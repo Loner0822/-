@@ -19,7 +19,7 @@ AppPublisher={#MyAppPublisher}
 DefaultDirName={pf}\{#MyAppName}
 DefaultGroupName={#MyAppName}
 OutputBaseFilename=Setup
-SetupIconFile=SOURCE_PATH\ZBXH.ico
+;SetupIconFile=SOURCE_PATH\ZBXH.ico
 Compression=lzma
 SolidCompression=yes
 
@@ -42,13 +42,11 @@ Source: "SOURCE_PATH\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs c
 ; 安装完调用
 Filename: "{app}\RegOcx.exe";
 Filename: "{app}\ZskAz.exe";
-Filename: "{app}\DesktopAz.bat"
 
 [UninstallRun]
 ; 卸载前调用
 Filename: "{app}\kill.bat";Flags:RunHidden SkipIfDoesntExist;
 Filename: "{app}\ZskXz.exe";Flags:RunHidden SkipIfDoesntExist;
-Filename: "{app}\DesktopXz.bat";Flags:RunHidden SkipIfDoesntExist;
 
 [UninstallDelete]
 Name: {app}; Type: filesandordirs

@@ -490,7 +490,7 @@ void TBuildSoftware::deletefile( String patch)
 
 void TBuildSoftware::SoftwarePublish() {
     // 读取当前公司信息
-    String softwarename = this->GetSoftwareName();
+    /*String softwarename = this->GetSoftwareName();
     String unitname = this->GetUnitName();
 
     // 找到下属公司
@@ -525,11 +525,11 @@ void TBuildSoftware::SoftwarePublish() {
         AdoQ->Next();
     }
     delete AdoQ;
-    Form3->ShowModal();
+    Form3->ShowModal(); */
 }
 
 void TBuildSoftware::Package(String unitName) {
-    this->exePath = ExtractFilePath(Application->ExeName);
+    /*this->exePath = ExtractFilePath(Application->ExeName);
     this->m_softwareName = unitName;
     this->m_FilePath = this->exePath + "Package";
     // 复制到Package目录下
@@ -625,7 +625,7 @@ void TBuildSoftware::Package(String unitName) {
     GetExitCodeProcess( pi.hProcess, &ret );
     CopyFile((this->m_FilePath + "\\Output\\Setup.exe").c_str(), (this->exePath + "\\Output\\Setup.exe").c_str(), 0);
     DeleteFolder(this->m_FilePath);
-    RemoveDir(this->m_FilePath);
+    RemoveDir(this->m_FilePath); */
 }
 
 void __fastcall TBuildSoftware::CopyFolder(String srcPath, String aimPath) {

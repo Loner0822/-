@@ -10,6 +10,7 @@ USEFORM("SystemUnit.cpp", Form2);
 USEFORM("CompanyUnit.cpp", Form3);
 USEFORM("EditUnit.cpp", Form4);
 USEFORM("include\SymbFrame.cpp", SymbolFrame); /* TFrame: File Type */
+USEFORM("RangeUnit.cpp", Form5);
 //---------------------------------------------------------------------------
 WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 {
@@ -34,6 +35,7 @@ WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
          Application->CreateForm(__classid(TForm3), &Form3);
          Application->CreateForm(__classid(TForm4), &Form4);
          Application->CreateForm(__classid(TExtraForm), &ExtraForm);
+         Application->CreateForm(__classid(TForm5), &Form5);
          Application->Run();
     }
     catch (Exception &exception)
