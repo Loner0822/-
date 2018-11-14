@@ -1342,8 +1342,8 @@ void __fastcall TForm1::AdvStringGrid1CanEditCell(TObject *Sender,
 
 void __fastcall TForm1::AdvStringGrid1RowMove(TObject *Sender, int ARow,
       bool &Allow) {
-    if (AdvStringGrid1->Cells[1][ARow] != node[Now_Node].Data.JdText)
-        Allow = 0;
+    //if (AdvStringGrid1->Cells[1][ARow] != node[Now_Node].Data.JdText)
+        //Allow = 0;
 }
 //---------------------------------------------------------------------------
 

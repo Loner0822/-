@@ -34,7 +34,6 @@
             this.数据备份ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.数据恢复ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.数据同步ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.数据清除ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.退出ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.treeView1 = new System.Windows.Forms.TreeView();
@@ -42,6 +41,7 @@
             this.mapHelper1 = new MapHelper.MapHelper();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.删除ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.编辑ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -64,8 +64,7 @@
             this.数据管理ToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.数据备份ToolStripMenuItem,
             this.数据恢复ToolStripMenuItem,
-            this.数据同步ToolStripMenuItem,
-            this.数据清除ToolStripMenuItem});
+            this.数据同步ToolStripMenuItem});
             this.数据管理ToolStripMenuItem.Name = "数据管理ToolStripMenuItem";
             this.数据管理ToolStripMenuItem.Size = new System.Drawing.Size(94, 28);
             this.数据管理ToolStripMenuItem.Text = "数据管理";
@@ -90,13 +89,6 @@
             this.数据同步ToolStripMenuItem.Size = new System.Drawing.Size(152, 28);
             this.数据同步ToolStripMenuItem.Text = "数据同步";
             this.数据同步ToolStripMenuItem.Click += new System.EventHandler(this.数据同步ToolStripMenuItem_Click);
-            // 
-            // 数据清除ToolStripMenuItem
-            // 
-            this.数据清除ToolStripMenuItem.Name = "数据清除ToolStripMenuItem";
-            this.数据清除ToolStripMenuItem.Size = new System.Drawing.Size(152, 28);
-            this.数据清除ToolStripMenuItem.Text = "数据清除";
-            this.数据清除ToolStripMenuItem.Click += new System.EventHandler(this.数据清除ToolStripMenuItem_Click);
             // 
             // 退出ToolStripMenuItem
             // 
@@ -167,16 +159,24 @@
             // contextMenuStrip1
             // 
             this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.编辑ToolStripMenuItem,
             this.删除ToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(117, 32);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(153, 82);
             // 
             // 删除ToolStripMenuItem
             // 
             this.删除ToolStripMenuItem.Name = "删除ToolStripMenuItem";
-            this.删除ToolStripMenuItem.Size = new System.Drawing.Size(116, 28);
+            this.删除ToolStripMenuItem.Size = new System.Drawing.Size(152, 28);
             this.删除ToolStripMenuItem.Text = "删除";
             this.删除ToolStripMenuItem.Click += new System.EventHandler(this.删除ToolStripMenuItem_Click);
+            // 
+            // 编辑ToolStripMenuItem
+            // 
+            this.编辑ToolStripMenuItem.Name = "编辑ToolStripMenuItem";
+            this.编辑ToolStripMenuItem.Size = new System.Drawing.Size(152, 28);
+            this.编辑ToolStripMenuItem.Text = "编辑";
+            this.编辑ToolStripMenuItem.Click += new System.EventHandler(this.编辑ToolStripMenuItem_Click);
             // 
             // MainForm
             // 
@@ -206,7 +206,6 @@
         private System.Windows.Forms.ToolStripMenuItem 数据备份ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 数据恢复ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 数据同步ToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem 数据清除ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 退出ToolStripMenuItem;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.TreeView treeView1;
@@ -214,6 +213,7 @@
         private MapHelper.MapHelper mapHelper1;
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
         private System.Windows.Forms.ToolStripMenuItem 删除ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem 编辑ToolStripMenuItem;
 
     }
 }

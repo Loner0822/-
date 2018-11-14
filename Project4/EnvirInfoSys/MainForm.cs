@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -7,6 +8,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Diagnostics;
+
 
 namespace EnvirInfoSys
 {
@@ -24,28 +27,26 @@ namespace EnvirInfoSys
         private string WorkPath = AppDomain.CurrentDomain.BaseDirectory;//当前exe根目录
         private string AccessPath = AppDomain.CurrentDomain.BaseDirectory + "data\\ENVIR_H0001Z000E00.mdb";
         private string IniFilePath = AppDomain.CurrentDomain.BaseDirectory + "parameter.ini";
-        private int UnitID = 0;
+        private int UnitID = -1;
         private int MapLevel;
-     
+        private Dictionary<string, string> GUID_Icon;
+        private Dictionary<string, string> Icon_JDCode;
+        private Dictionary<string, string> FDName_Value;   
+        
 
         private void 数据备份ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-
+            Process p = Process.Start(WorkPath + "DataBF.exe");
         }
 
         private void 数据恢复ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-
+            Process p = Process.Start(WorkPath + "DataHF.exe");
         }
 
         private void 数据同步ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-
-        }
-
-        private void 数据清除ToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-
+            Process p = Process.Start(WorkPath + "DataUP.exe");
         }
 
         private void 退出ToolStripMenuItem_Click(object sender, EventArgs e)
@@ -55,8 +56,15 @@ namespace EnvirInfoSys
 
         private void mapHelper1_Load(object sender, EventArgs e)
         {
-            //控件属性初始化
+            //读入图标对应数据
+            Icon_JDCode = new Dictionary<string, string>();
+            ahp = new AccessHelper(WorkPath + "data\\ZSK_H0001Z000K00.mdb");
+            string sql = "select PGUID, JDCODE from ZSK_OBJECT_H0001Z000K00 where ISDELETE = 0";
+            DataTable dt = ahp.ExecuteDataTable(sql, null);
+            for (int i = 0; i < dt.Rows.Count; ++i)
+                Icon_JDCode.Add(dt.Rows[i]["PGUID"].ToString(), dt.Rows[i]["JDCODE"].ToString());
 
+            //控件属性初始化
             inip = new IniOperator(IniFilePath);
             string slat = inip.ReadString("mapproperties", "centerlat", "");
             string slng = inip.ReadString("mapproperties", "centerlng", "");
@@ -67,11 +75,11 @@ namespace EnvirInfoSys
             mapHelper1.roadmappath = WorkPath + "googlemap\\map"; //必须设置的属性,不能为空
             mapHelper1.satellitemappath = WorkPath + "googlemap\\satellite"; //必须设置的属性,不能为空
             mapHelper1.iconspath = WorkPath + "PNGICONFOLDER"; //必须设置的属性,不能为空
-            mapHelper1.maparr = new string[] { "13", "14", "15", "16" }; //必须设置的属性,不能为空
             
             // 临时
-            
             UnitID = 0;
+            mapHelper1.maparr = new string[] { "13", "14", "15", "16" }; //必须设置的属性,不能为空
+
             Add_TreeNode();
         }
 
@@ -110,13 +118,14 @@ namespace EnvirInfoSys
 
         private void treeView1_AfterSelect(object sender, TreeViewEventArgs e)
         {
+            GUID_Icon = new Dictionary<string, string>();
             List<Dictionary<string, object>> lst = new List<Dictionary<string, object>>();//标注list，从数据库获取
             MapLevel = (int)e.Node.Tag;
-
             ahp = new AccessHelper(AccessPath);
             string sql = "select * from ENVIRICONDATA_H0001Z000E00 where ISDELETE = 0 and MAPLEVEL = '" + MapLevel.ToString() + "'";
             DataTable dt = ahp.ExecuteDataTable(sql, null);
             for (int i = 0; i < dt.Rows.Count; ++ i) {
+                GUID_Icon[dt.Rows[i]["PGUID"].ToString()] = dt.Rows[i]["ICONGUID"].ToString();
                 Dictionary<string, object> dic = new Dictionary<string, object>();//添加每个标注
                 dic.Add("guid", dt.Rows[i]["PGUID"].ToString());//必须加载的标准属性，从数据库查询得到值
                 dic.Add("name", dt.Rows[i]["MAKRENAME"].ToString());//必须加载的标准属性，从数据库查询得到值
@@ -136,22 +145,29 @@ namespace EnvirInfoSys
         private void mapHelper1_IconSelected(string level, string iconPath)
         {
             Icon_GUID = iconPath;//小图标选择事件
+            //MessageBox.Show("1");
         }
 
         private void mapHelper1_MapMouseup(string Mousebutton, bool canedit, double lat, double lng, int x, int y, string markerguid)
         {
             if (markerguid.Equals("") && !Icon_GUID.Equals(""))
             {
-                string name = "123";
-                // 名称标注 弹窗
-                /*EditForm edfm = new EditForm();
-                edfm.title = name;
-                edfm.Left = x;
-                edfm.Top = y;*/
-                mapHelper1.addMarker("" + lat, "" + lng, name, true, Icon_GUID, null);//在up事件中添加新标注
-                //edfm.ShowDialog();
+                string iconguid = Path.GetFileNameWithoutExtension(Icon_GUID);
+                DataForm dtf = new DataForm();
+                dtf.Icon_GUID = iconguid;
+                dtf.Node_GUID = markerguid;
+                dtf.Text = "添加标注";
+                //dtf.Left = x;
+                //dtf.Top = y;
+                if (dtf.ShowDialog() == DialogResult.OK)
+                {
+                    string name = dtf.Node_Name;
+                    FDName_Value = dtf.FDName_Value;
+                    mapHelper1.addMarker("" + lat, "" + lng, name, true, Icon_GUID, null);//在up事件中添加新标注
+                }    
                 Icon_GUID = "";//添加完成后把选择的图标guid清空
             }
+            
         }
 
         private void mapHelper1_MouseDown(object sender, MouseEventArgs e)
@@ -181,6 +197,11 @@ namespace EnvirInfoSys
             Delete_GUID = sguid;
         }
 
+        private void 编辑ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
         private void 删除ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (Delete_GUID != "") {
@@ -193,21 +214,41 @@ namespace EnvirInfoSys
             // 添加完成事件，调用addMarker后触发
             // 数据库  insert
             ahp = new AccessHelper(AccessPath);
-            string iconguid = System.IO.Path.GetFileNameWithoutExtension(iconpath);
+            string iconguid = Path.GetFileNameWithoutExtension(iconpath);
             string sql = "insert into ENVIRICONDATA_H0001Z000E00 (PGUID, S_UDTIME, ICONGUID, MAPLEVEL, MARKELAT, MARKELNG, MAKRENAME, UNITEID) values('" 
                          + markerguid + "', '" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "', '" + iconguid + "', '" + MapLevel.ToString()
                          + "', '" + lat.ToString() + "', '" + lng.ToString() + "', '" + name + "', '" + UnitID.ToString() + "')";
+            ahp.ExecuteSql(sql, null);
+            GUID_Icon[markerguid] = iconguid;
+            string table_name = Icon_JDCode[iconguid];
+            sql = "insert into " + table_name + " (PGUID, S_UDTIME";
+            //bool flag = false;
+            foreach (string key in FDName_Value.Keys) 
+                sql += ", " + key;
+            System.DateTime curTime = new System.DateTime();
+            curTime = System.DateTime.Now;
+            sql += ") values('" + markerguid + "', '" + curTime.ToString("yyyy-MM-dd hh:mm:ss");
+            
+            foreach (string value in FDName_Value.Values)
+                sql += "', '" + value;
+            sql += "')";
             ahp.ExecuteSql(sql, null);
         }
 
         private void mapHelper1_RemoveMarkerFinished(string markerguid, bool ok)
         {
             // 删除完成事件，调用deleteMarker后触发
-            // 数据库  update isdelete = 0
+            // 数据库  update isdelete = 1
             
             ahp = new AccessHelper(AccessPath);
-            string sql = "update ENVIRICONDATA_H0001Z000E00 set ISDELETE = 1 where ISDELETE = 0 and PGUID = '" + Delete_GUID + "'";
+            string sql = "update ENVIRICONDATA_H0001Z000E00 set ISDELETE = 1 where ISDELETE = 0 and PGUID = '" + markerguid + "'";
             ahp.ExecuteSql(sql, null);
+
+            string icon = GUID_Icon[markerguid];
+            string table_name = Icon_JDCode[icon];
+            sql = "update " + table_name + " set ISDELETE = 1 where ISDELEtE = 0 and PGUID = '" + markerguid + "'";
+            ahp.ExecuteSql(sql, null);
+
             Delete_GUID = "";
         }
 
@@ -216,8 +257,6 @@ namespace EnvirInfoSys
             // 更新完成事件，调用ModifyMarker后触发
             // 数据库  update 
         }
-
-      
     }
 
     //标注实体类
