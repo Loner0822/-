@@ -16,7 +16,7 @@ namespace PublishSys
 
         public AccessHelper(string dbpath)
         {
-            conStr = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" + dbpath + ";Persist Security Info=False;";
+            conStr = "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + dbpath + ";Persist Security Info=False;";
             con = new OleDbConnection(conStr);
         }
 

@@ -13,13 +13,17 @@ namespace EnvirInfoSys
 {
     public partial class DataForm : Form
     {
+        InputLanguageCollection langs = InputLanguage.InstalledInputLanguages;
         private AccessHelper ahp = null;
         //private IniOperator inip = null;   
 
-        public string Icon_GUID = "";       //当前选择的图标guid
+        public bool Update_Data = false;
         public string Node_GUID = "";       //当前选择的节点guid
+        public string Icon_GUID = "";       //当前选择的图标guid
         public string Node_Name = "";       //当前选择的节点名称
+        public string JdCode = "";
         public Dictionary<string, string> FDName_Value;
+       
         
         private string WorkPath = AppDomain.CurrentDomain.BaseDirectory;//当前exe根目录
         private string AccessPath1 = AppDomain.CurrentDomain.BaseDirectory + "data\\ENVIR_H0001Z000E00.mdb";
@@ -29,6 +33,8 @@ namespace EnvirInfoSys
         private Dictionary<string, string> Show_Name;
         private Dictionary<string, string> Show_FDName;
         private Dictionary<string, string> inherit_GUID;
+        private Dictionary<string, string> Show_Value;
+        
 
         public DataForm()
         {
@@ -49,7 +55,7 @@ namespace EnvirInfoSys
             List<string> _type = new List<string> (prop_type.Keys);
             
             ahp = new AccessHelper(AccessPath2);
-            string sql = "select PGUID, PROPNAME, FDNAME, SOURCEGUID, PROTYPEGUID from ZSK_PROP_H0001Z000K00 where ISDELETE = 0 and UPGUID = '" + Icon_GUID + "' order by SHOWINDEX";
+            string sql = "select PGUID, PROPNAME, FDNAME, SOURCEGUID, PROTYPEGUID, PROPVALUE from ZSK_PROP_H0001Z000K00 where ISDELETE = 0 and UPGUID = '" + Icon_GUID + "' order by SHOWINDEX";
             DataTable dt = ahp.ExecuteDataTable(sql, null);
             for (int i = 0; i < dt.Rows.Count; ++i)
             {
@@ -61,11 +67,12 @@ namespace EnvirInfoSys
                         Show_Name[dt.Rows[i]["PGUID"].ToString()] = dt.Rows[i]["PROPNAME"].ToString();
                         Show_FDName[dt.Rows[i]["PGUID"].ToString()] = dt.Rows[i]["FDNAME"].ToString();
                         inherit_GUID[dt.Rows[i]["PGUID"].ToString()] = dt.Rows[i]["SOURCEGUID"].ToString();
+                        Show_Value[dt.Rows[i]["PGUID"].ToString()] = dt.Rows[i]["PROPVALUE"].ToString();
                     }                        
                 }
             }
             ahp = new AccessHelper(AccessPath3);
-            sql = "select PGUID, PROPNAME, FDNAME, SOURCEGUID, PROTYPEGUID from ZSK_PROP_H0001Z000K01 where ISDELETE = 0 and UPGUID = '" + Icon_GUID + "' order by SHOWINDEX";
+            sql = "select PGUID, PROPNAME, FDNAME, SOURCEGUID, PROTYPEGUID, PROPVALUE from ZSK_PROP_H0001Z000K01 where ISDELETE = 0 and UPGUID = '" + Icon_GUID + "' order by SHOWINDEX";
             dt = ahp.ExecuteDataTable(sql, null);
             for (int i = 0; i < dt.Rows.Count; ++i)
             {
@@ -77,6 +84,7 @@ namespace EnvirInfoSys
                         Show_Name[dt.Rows[i]["PGUID"].ToString()] = dt.Rows[i]["PROPNAME"].ToString();
                         Show_FDName[dt.Rows[i]["PGUID"].ToString()] = dt.Rows[i]["FDNAME"].ToString();
                         inherit_GUID[dt.Rows[i]["PGUID"].ToString()] = dt.Rows[i]["SOURCEGUID"].ToString();
+                        Show_Value[dt.Rows[i]["PGUID"].ToString()] = dt.Rows[i]["PROPVALUE"].ToString();
                     }
                 }
             }
@@ -176,7 +184,7 @@ namespace EnvirInfoSys
             
             string res = "";
             ahp = new AccessHelper(AccessPath2);
-            sql = "select COMBOSTR from  ZSK_COMBOSTRLIST_H0001Z000K00 where ISDELETE = 0 and UPGUID = '" + cl_guid + "'";
+            sql = "select COMBOSTR from  ZSK_COMBOSTRLIST_H0001Z000K00 where ISDELETE = 0 and UPGUID = '" + cl_guid + "' order by SHOWINDEX";
             dt = ahp.ExecuteDataTable(sql, null);
             for (int i = 0; i < dt.Rows.Count; ++ i)
             {
@@ -187,7 +195,7 @@ namespace EnvirInfoSys
             }
 
             ahp = new AccessHelper(AccessPath3);
-            sql = "select COMBOSTR from  ZSK_COMBOSTRLIST_H0001Z000K01 where ISDELETE = 0 and UPGUID = '" + cl_guid + "'";
+            sql = "select COMBOSTR from  ZSK_COMBOSTRLIST_H0001Z000K01 where ISDELETE = 0 and UPGUID = '" + cl_guid + "' order by SHOWINDEX";
             dt = ahp.ExecuteDataTable(sql, null);
             for (int i = 0; i < dt.Rows.Count; ++i)
             {
@@ -201,22 +209,28 @@ namespace EnvirInfoSys
 
         private void DataForm_Shown(object sender, EventArgs e)
         {
-            System.Diagnostics.Stopwatch watch = new System.Diagnostics.Stopwatch();
-            watch.Start();
+            /*foreach (InputLanguage lang in langs)
+            {
+                //如果是中文输入法
+                if (lang.LayoutName.IndexOf("中文") >= 0)
+                {
+                    InputLanguage.CurrentInputLanguage = lang;
+                }
+            }*/
             PropertyManageCls pmc = new PropertyManageCls(); // 创建属性集合实例 
             Dictionary<string, string> prop_type = new Dictionary<string,string>();
             Show_Name = new Dictionary<string, string>();
             Show_FDName = new Dictionary<string, string>();
+            Show_Value = new Dictionary<string, string>();
             inherit_GUID = new Dictionary<string, string>();
             
             prop_type = Get_Prop_Type();
             List<string> prop_list;
             prop_list = Get_Prop_List(prop_type);
-            List<string> type_guid = new List<string> (prop_type.Keys);
+            //List<string> type_guid = new List<string> (prop_type.Keys);
 
-
-            
-            //for (int i = 0; i < len; ++i) 
+            #region 可能有固定属性的情况
+            /*//for (int i = 0; i < len; ++i) 
             {
                 int i = 0;
                 string the_type = prop_type[type_guid[i]];
@@ -254,10 +268,51 @@ namespace EnvirInfoSys
                     }
                     pmc.Add(p);
                 }
+            }*/
+            #endregion
+
+            for (int i = 0; i < prop_list.Count; ++i)
+            { 
+                Property p = new Property(Show_Name[prop_list[i]], "", false, true);
+                p.DisplayName = Show_Name[prop_list[i]];
+                p.Category = "基础属性";
+                p.FdName = Show_FDName[prop_list[i]];
+                if (Update_Data == false)
+                    p.Value = Show_Value[prop_list[i]];
+                else 
+                {
+                    ahp = new AccessHelper(AccessPath1);
+                    string sql = "select " + Show_FDName[prop_list[i]] + " from " + JdCode + " where ISDELETE = 0 and PGUID = '" + Node_GUID + "'";
+                    DataTable dt = ahp.ExecuteDataTable(sql, null);
+                    p.Value = dt.Rows[0][Show_FDName[prop_list[i]]];
+                }
+                
+                string datatype = Get_Data_Type(prop_list[i]);
+                switch (datatype)
+                {
+                    case "文本":
+                    case "数字":
+                        break;
+                    case "可选项":
+                        string kxfw = Get_fw(prop_list[i]);
+                        p.Converter = new DropDownListConverter(kxfw.Split(','));
+                        break;
+                    case "时间":
+                        p.Editor = new PropertyGridDateTimePickerItem();
+                        break;
+                    case "日期":
+                        p.Editor = new PropertyGridDateItem();
+                        break;
+                    case "多选":
+                        string fw = Get_fw(prop_list[i]);
+                        p.Editor = new PropertyGridMultiSelect(fw);
+                        break;
+                    default:
+                        MessageBox.Show(Show_Name[prop_list[i]] + "属性找不到数据类型");
+                        break;
+                }
+                pmc.Add(p);
             }
-            watch.Stop();
-            TimeSpan timespan = watch.Elapsed;
-            double ms = timespan.TotalMilliseconds;
             propertyGrid1.SelectedObject = pmc; // 加载属性
         }
 
@@ -265,11 +320,12 @@ namespace EnvirInfoSys
         {
             FDName_Value = new Dictionary<string, string>();
             PropertyManageCls pmc = (PropertyManageCls)propertyGrid1.SelectedObject;
-            
+            bool find_name = false;
             foreach (Property item in pmc)
             {
                 if (item.DisplayName == "名称")
                 {
+                    find_name = true;
                     if (item.Value.ToString() == "")
                     {
                         MessageBox.Show("请填入名称!");
@@ -285,6 +341,11 @@ namespace EnvirInfoSys
                 {
                     FDName_Value.Add(item.FdName, item.Value.ToString());
                 }
+            }
+            if (find_name == false)
+            {
+                MessageBox.Show("没有名称属性!");
+                return;
             }
             this.DialogResult = DialogResult.OK;
             return;

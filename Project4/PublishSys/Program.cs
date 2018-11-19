@@ -14,9 +14,20 @@ namespace PublishSys
         [STAThread]
         static void Main()
         {
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new PubForm());
+            bool isRuned;
+            System.Threading.Mutex mutex = new System.Threading.Mutex(true, "OnlyRunOneInstanceFB", out isRuned);
+            if (isRuned)
+            {
+
+                Application.EnableVisualStyles();
+                Application.SetCompatibleTextRenderingDefault(false);
+                Application.Run(new PubForm());
+                mutex.ReleaseMutex();
+            }
+            else
+            {
+                MessageBox.Show("程序已启动!", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
         }
     }
 }

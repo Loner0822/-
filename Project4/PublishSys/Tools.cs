@@ -35,7 +35,7 @@ namespace PublishSys
                 p.StartInfo.CreateNoWindow = true;
                 p.Start();
                 // /Q/F 选项表示不必用户确认，直接执行 del 命令
-                p.StandardInput.WriteLine("del " + dir + "\\*.* /Q/F&exit");
+                p.StandardInput.WriteLine("del \"" + dir + "\\*.*\" /Q/F&exit");
                 //string strOuput = p.StandardOutput.ReadToEnd();
                 p.WaitForExit();
                 p.Close();
@@ -47,7 +47,7 @@ namespace PublishSys
                         Directory.Delete(dir);
                     }
                     //删除文件夹之后，需暂停一会儿，否则，文件夹状态还是存在的
-                    Thread.Sleep(200);
+                    //Thread.Sleep(200);
                 }
 
                 if (Directory.Exists(dir))
@@ -107,7 +107,7 @@ namespace PublishSys
                     {
                         Directory.CreateDirectory(desfolderdir);
                     }
-                    File.Copy(file, srcfileName);
+                    File.Copy(file, srcfileName, true);
                 }
             }//foreach 
         }
