@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace PublishSys
+namespace EnvirInfoSys
 {
     public partial class ucPictureBox : UserControl
     {

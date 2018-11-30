@@ -28,8 +28,67 @@ namespace PublishSys
 
         private void PubForm_Load(object sender, EventArgs e)
         {
+            DataGridViewTextBoxColumn id_num = new DataGridViewTextBoxColumn();
+            id_num.Name = "ID";
+            id_num.DataPropertyName = "ID";
+            id_num.HeaderText = "序号";
+            dataGridView1.Columns.Add(id_num);
+            DataGridViewTextBoxColumn PubUnit = new DataGridViewTextBoxColumn();
+            PubUnit.Name = "PubUnit";
+            PubUnit.DataPropertyName = "PubUnit";
+            PubUnit.HeaderText = "发布单位";
+            dataGridView1.Columns.Add(PubUnit);
+            DataGridViewTextBoxColumn PubTime = new DataGridViewTextBoxColumn();
+            PubTime.Name = "PubTime";
+            PubTime.DataPropertyName = "PubTime";
+            PubTime.HeaderText = "发布时间";
+            dataGridView1.Columns.Add(PubTime);
+            DataGridViewTextBoxColumn PubSys = new DataGridViewTextBoxColumn();
+            PubSys.Name = "PubSys";
+            PubSys.DataPropertyName = "PubSys";
+            PubSys.HeaderText = "发布系统";
+            dataGridView1.Columns.Add(PubSys);
+            DataGridViewTextBoxColumn PubVer = new DataGridViewTextBoxColumn();
+            PubVer.Name = "PubVer";
+            PubVer.DataPropertyName = "PubVer";
+            PubVer.HeaderText = "系统版本";
+            dataGridView1.Columns.Add(PubVer);
+
+            DataGridViewTextBoxColumn PubGUID = new DataGridViewTextBoxColumn();
+            PubGUID.Name = "PubPGUID";
+            PubGUID.DataPropertyName = "PubGUID";
+            PubGUID.HeaderText = "GUID";
+            PubGUID.Visible = false;
+            dataGridView1.Columns.Add(PubGUID);
+
+            dataGridView1.Columns[0].Width = 60;
+            dataGridView1.Columns[1].Width = 100;
+            dataGridView1.Columns[2].Width = 100;
+            dataGridView1.Columns[3].Width = 160;
+            dataGridView1.Columns[4].Width = 80;
+            dataGridView1.Columns[5].Width = 0;
+
+            ahp = new AccessHelper(WorkPath + "data\\PublishData.mdb");
+            string sql = "select * from PUBLISH_H0001Z000E00 where ISDELETE = 0 order by S_UDTIME";
+            DataTable dt = ahp.ExecuteDataTable(sql, null);
+            for (int i = 0; i < dt.Rows.Count; ++i)
+            {
+                DataGridViewRow dgvr = new DataGridViewRow();
+                dgvr.CreateCells(dataGridView1);
+                dgvr.Cells[0].Value = i + 1;
+                dgvr.Cells[1].Value = dt.Rows[i]["UNITNAME"].ToString();
+                dgvr.Cells[2].Value = dt.Rows[i]["S_UDTIME"].ToString();
+                dgvr.Cells[3].Value = dt.Rows[i]["UNITNAME"].ToString() + "环境信息化系统";
+                dgvr.Cells[4].Value = dt.Rows[i]["VERSION"].ToString();
+                dgvr.Cells[5].Value = dt.Rows[i]["PGUID"].ToString();
+                dataGridView1.Rows.Add(dgvr);
+            }
+            ahp.CloseConn();
+
             button1.Enabled = false;
             button2.Enabled = false;
+            textBox2.Enabled = false;
+            textBox3.Enabled = false;
             this.treeView1.HideSelection = false;
             this.treeView1.DrawMode = TreeViewDrawMode.OwnerDrawText;
             this.treeView1.DrawNode += new DrawTreeNodeEventHandler(treeView1_DrawNode);
@@ -54,6 +113,7 @@ namespace PublishSys
                 UnitID_Level.Add(id, level);
                 d_list.Add(new District(id, pid, level, name));
             }
+            ahp.CloseConn();
             Add_Tree_Node(d_list);
             treeView1.ExpandAll();
         }
@@ -68,6 +128,7 @@ namespace PublishSys
                     Add_Child_Node(d_list, pNode);
                 }
             }
+            treeView1.SelectedNode = treeView1.Nodes[0];
         }
 
         private void Add_Child_Node(List<District> d_list, TreeNode pNode)
@@ -83,7 +144,6 @@ namespace PublishSys
                     Add_Child_Node(d_list, cNode);
                 }
             }
-            treeView1.SelectedNode = treeView1.Nodes[0];
         }
 
         private void treeView1_DrawNode(object sender, DrawTreeNodeEventArgs e)
@@ -96,6 +156,32 @@ namespace PublishSys
         {
             button1.Enabled = true;
             button2.Enabled = true;
+            textBox2.Enabled = true;
+            textBox3.Enabled = true;
+            TreeNode pNode = treeView1.SelectedNode;
+            ahp = new AccessHelper(WorkPath + "Publish\\data\\经纬度注册.mdb");
+            string sql = "select LAT, LNG from ORGCENTERDATA where ISDELETE = 0 and UNITEID = '" + pNode.Tag.ToString() + "'";
+            DataTable dt = ahp.ExecuteDataTable(sql, null);
+            ahp.CloseConn();
+            if (dt.Rows.Count > 0 && dt.Rows[0]["LNG"].ToString() != string.Empty && dt.Rows[0]["LAT"].ToString() != string.Empty)
+            {
+                textBox2.Text = dt.Rows[0]["LNG"].ToString();
+                textBox3.Text = dt.Rows[0]["LAT"].ToString();
+            }
+            else
+            {
+                textBox2.Text = "";
+                textBox3.Text = "";
+                if (MessageBox.Show("是否从网上获取 " + pNode.Text + " 的经纬度?", "提示", MessageBoxButtons.OKCancel) == DialogResult.OK)
+                {
+                    string[] Point = mapHelper1.AddressToLocation(pNode.Text);
+                    textBox2.Focus();
+                    textBox2.Text = Point[1];
+                    textBox3.Focus();
+                    textBox3.Text = Point[0];
+                    textBox2.Focus();
+                }
+            }
         }
 
         private void 下载地图ToolStripMenuItem_Click(object sender, EventArgs e)
@@ -155,25 +241,73 @@ namespace PublishSys
 
         private void button1_Click(object sender, EventArgs e)
         {
-            //LoadMapForm lmf = new LoadMapForm();
-            //lmf.ShowDialog();
-            
-            MapForm mfm = new MapForm();
             TreeNode pNode = treeView1.SelectedNode;
+            if (textBox2.Text == "")
+            {
+                MessageBox.Show("请填写当前单位经度!");
+                textBox2.Focus();
+                return;
+            }
+            if (textBox3.Text == "")
+            {
+                MessageBox.Show("请填写当前单位纬度!");
+                textBox3.Focus();
+                return;
+            }
+            // LoadMapForm lmf = new LoadMapForm();
+            // lmf.ShowDialog();
+            /*ahp = new AccessHelper(WorkPath + "Publish\\data\\经纬度注册.mdb");
+            string sql = "select LAT, LNG from ORGCENTERDATA where ISDELETE = 0 and UNITEID = '" + pNode.Tag.ToString() + "'";
+            
+            DataTable dt = ahp.ExecuteDataTable(sql, null);
+            ahp.CloseConn();
+            if (dt.Rows.Count > 0)
+            {
+                inip = new IniOperator(WorkPath + "Publish\\parameter.ini");
+                inip.WriteString("mapproperties", "centerlng", dt.Rows[0]["LNG"].ToString());
+                inip.WriteString("mapproperties", "centerlat", dt.Rows[0]["LAT"].ToString());
+            }
+            else 
+            {
+                inip = new IniOperator(WorkPath + "Publish\\parameter.ini");
+                inip.WriteString("mapproperties", "centerlng", "0");
+                inip.WriteString("mapproperties", "centerlat", "0");
+            }*/
+            inip = new IniOperator(WorkPath + "Publish\\parameter.ini");
+            inip.WriteString("mapproperties", "centerlng", textBox2.Text);
+            inip.WriteString("mapproperties", "centerlat", textBox3.Text);
+
+            MapForm mfm = new MapForm();
+            //TreeNode pNode = treeView1.SelectedNode;
             mfm.unitid = pNode.Tag.ToString();
-            //mfm.unitname = pNode.Text;
+            mfm.Text = "地图对应";
+            // mfm.unitname = pNode.Text;
             mfm.ShowDialog();                
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
-            if (MessageBox.Show("确认是否已经导入过地图文件", "提示", MessageBoxButtons.OKCancel) != DialogResult.OK)
+            if (textBox2.Text == "")
+            {
+                MessageBox.Show("请填写当前单位经度!");
+                textBox2.Focus();
                 return;
-            Process p1 = Process.Start(WorkPath + "Publish\\CreatePng.exe", "0 -1");
-            p1.WaitForExit();
+            }
+            if (textBox3.Text == "")
+            {
+                MessageBox.Show("请填写当前单位纬度!");
+                textBox3.Focus();
+                return;
+            }
 
             TreeNode pNode = treeView1.SelectedNode;
             inip = new IniOperator(WorkPath + "Publish\\RegInfo.ini");
+
+            if (MessageBox.Show("即将发布《" + pNode.Text + "环境信息化系统" + textBox1.Text + "》\n" + "确认是否已经导入过地图文件", "提示", MessageBoxButtons.OKCancel) != DialogResult.OK)
+                return;
+            //Process p1 = Process.Start(WorkPath + "Publish\\CreatePng.exe", "0 -1");
+            //p1.WaitForExit();
+            
             inip.WriteString("Public", "UnitName", pNode.Text);
             inip.WriteString("Public", "UnitLevel", UnitID_Level[pNode.Tag.ToString()]);
             inip.WriteString("Public", "UnitID", pNode.Tag.ToString());
@@ -192,9 +326,99 @@ namespace PublishSys
 
             Process p = Process.Start(WorkPath + "PackUp.exe");
             p.WaitForExit();
+            if (p.ExitCode == -1)
+            {
+                MessageBox.Show("发布失败!");
+                return;
+            }
+
+            string Now_Time = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+            string pguid = Guid.NewGuid().ToString("B");
+            ahp = new AccessHelper(WorkPath + "data\\PublishData.mdb");
+            string sql = "insert into PUBLISH_H0001Z000E00 (PGUID, S_UDTIME, UNITID, UNITNAME, VERSION, SYSTEMNAME) values ('" +
+                        pguid + "', '" + Now_Time + "', '" +
+                        pNode.Tag.ToString() + "', '" + pNode.Text + "', '" + textBox1.Text + "', '" + pNode.Text + "环境信息化系统')";
+            //sql = "insert into PUBLISH_H0001Z000E00 (PGUID, S_UDTIME, UNITID, UNITNAME, VERSION, SYSTEMNAME) values ('{cab7d79f-342d-49e4-aaac-86a9369ada82}', '2018-11-24 08:15:10', '1', '中华人民共和国', '1.00.00', '123')";
+            ahp.ExecuteSql(sql, null);
+            ahp.CloseConn();
+            
 
             MessageBox.Show("发布成功!");
+            int cnt = dataGridView1.Rows.Count;
+            DataGridViewRow dgvr = new DataGridViewRow();
+            dgvr.CreateCells(dataGridView1);
+            dgvr.Cells[0].Value = cnt + 1;
+            dgvr.Cells[1].Value = pNode.Text;
+            dgvr.Cells[2].Value = Now_Time;
+            dgvr.Cells[3].Value = pNode.Text + "环境信息化系统";
+            dgvr.Cells[4].Value = textBox1.Text;
+            dgvr.Cells[5].Value = pguid;
+            dataGridView1.Rows.Add(dgvr);
         }
+
+        private void textBox2_Leave(object sender, EventArgs e)
+        {
+            TreeNode pNode = treeView1.SelectedNode;
+            ahp = new AccessHelper(WorkPath + "Publish\\data\\经纬度注册.mdb");
+            string sql = "select PGUID from ORGCENTERDATA where ISDELETE = 0 and UNITEID = '" + pNode.Tag.ToString() + "'";
+            DataTable dt = ahp.ExecuteDataTable(sql, null);
+            if (dt.Rows.Count > 0)
+            {
+                sql = "update ORGCENTERDATA set S_UDTIME = '" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "', LNG = '" + textBox2.Text + "' where ISDELETE = 0 and UNITEID = '" + pNode.Tag.ToString() + "'";
+                ahp.ExecuteSql(sql, null);
+            }
+            else
+            {
+                sql = "insert into ORGCENTERDATA (PGUID, S_UDTIME, UNITEID, LNG) values('" + pNode.Tag.ToString() + "', '" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "', '" + pNode.Tag.ToString() + "', '" + textBox2.Text + "')";
+                ahp.ExecuteSql(sql, null);
+            }
+            ahp.CloseConn();
+        }
+
+        private void textBox3_Leave(object sender, EventArgs e)
+        {
+            TreeNode pNode = treeView1.SelectedNode;
+            ahp = new AccessHelper(WorkPath + "Publish\\data\\经纬度注册.mdb");
+            string sql = "select PGUID from ORGCENTERDATA where ISDELETE = 0 and UNITEID = '" + pNode.Tag.ToString() + "'";
+            DataTable dt = ahp.ExecuteDataTable(sql, null);
+            if (dt.Rows.Count > 0)
+            {
+                sql = "update ORGCENTERDATA set S_UDTIME = '" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "', LAT = '" + textBox3.Text + "' where ISDELETE = 0 and UNITEID = '" + pNode.Tag.ToString() + "'";
+                ahp.ExecuteSql(sql, null);
+            }
+            else
+            {
+                sql = "insert into ORGCENTERDATA (PGUID, S_UDTIME, UNITEID, LAT) values('" + pNode.Tag.ToString() + "', '" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "', '" + pNode.Tag.ToString() + "', '" + textBox3.Text + "')";
+                ahp.ExecuteSql(sql, null);
+            }
+            ahp.CloseConn();
+        }
+
+        private void 删除ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ahp = new AccessHelper(WorkPath + "data\\PublishData.mdb");
+            string pguid = string.Empty, sql = string.Empty;
+            for (int i = dataGridView1.SelectedRows.Count - 1; i >= 0; --i)
+            {
+                // 数据库操作
+                int cur_row = dataGridView1.SelectedRows[i].Index;
+                pguid = dataGridView1.Rows[cur_row].Cells[5].Value.ToString();
+                sql = "update PUBLISH_H0001Z000E00 set ISDELETE = 1 where ISDELETE = 0 and PGUID = '" + pguid + "'";
+                ahp.ExecuteSql(sql);
+                dataGridView1.Rows.Remove(dataGridView1.SelectedRows[i]);
+            }
+            ahp.CloseConn();     
+            for (int i = 0; i < dataGridView1.Rows.Count; ++i)
+                dataGridView1.Rows[i].Cells[0].Value = i + 1;
+        }
+
+        private void 数据同步ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Process p = Process.Start(WorkPath + "DataUP.exe", "PublishSys.exe 0");
+            p.WaitForExit();
+        }
+
+
     }
 
     public class District

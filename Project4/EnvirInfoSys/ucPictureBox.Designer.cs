@@ -1,4 +1,4 @@
-﻿namespace PublishSys
+﻿namespace EnvirInfoSys
 {
     partial class ucPictureBox
     {

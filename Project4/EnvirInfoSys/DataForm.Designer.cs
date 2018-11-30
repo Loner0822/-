@@ -80,6 +80,7 @@
             // propertyGrid1
             // 
             this.propertyGrid1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.propertyGrid1.Enabled = false;
             this.propertyGrid1.HelpVisible = false;
             this.propertyGrid1.ImeMode = System.Windows.Forms.ImeMode.Hangul;
             this.propertyGrid1.Location = new System.Drawing.Point(0, 0);

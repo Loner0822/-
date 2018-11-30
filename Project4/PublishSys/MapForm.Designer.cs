@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MapForm));
             this.panel1 = new System.Windows.Forms.Panel();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.treeView1 = new System.Windows.Forms.TreeView();
@@ -49,6 +50,7 @@
             this.panel7 = new System.Windows.Forms.Panel();
             this.button2 = new System.Windows.Forms.Button();
             this.panel8 = new System.Windows.Forms.Panel();
+            this.button3 = new System.Windows.Forms.Button();
             this.label4 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
@@ -64,6 +66,8 @@
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
+            this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.panel1.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.panel2.SuspendLayout();
@@ -148,9 +152,9 @@
             // 
             this.panel4.Controls.Add(this.groupBox3);
             this.panel4.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel4.Location = new System.Drawing.Point(3, 180);
+            this.panel4.Location = new System.Drawing.Point(3, 160);
             this.panel4.Name = "panel4";
-            this.panel4.Size = new System.Drawing.Size(1534, 575);
+            this.panel4.Size = new System.Drawing.Size(1534, 595);
             this.panel4.TabIndex = 2;
             // 
             // groupBox3
@@ -159,7 +163,7 @@
             this.groupBox3.Dock = System.Windows.Forms.DockStyle.Fill;
             this.groupBox3.Location = new System.Drawing.Point(0, 0);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(1534, 575);
+            this.groupBox3.Size = new System.Drawing.Size(1534, 595);
             this.groupBox3.TabIndex = 0;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "地图对应";
@@ -171,7 +175,7 @@
             this.panel11.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel11.Location = new System.Drawing.Point(3, 24);
             this.panel11.Name = "panel11";
-            this.panel11.Size = new System.Drawing.Size(1528, 548);
+            this.panel11.Size = new System.Drawing.Size(1528, 568);
             this.panel11.TabIndex = 4;
             // 
             // panel12
@@ -182,7 +186,7 @@
             this.panel12.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel12.Location = new System.Drawing.Point(0, 63);
             this.panel12.Name = "panel12";
-            this.panel12.Size = new System.Drawing.Size(1528, 485);
+            this.panel12.Size = new System.Drawing.Size(1528, 505);
             this.panel12.TabIndex = 3;
             // 
             // groupBox5
@@ -191,7 +195,7 @@
             this.groupBox5.Dock = System.Windows.Forms.DockStyle.Fill;
             this.groupBox5.Location = new System.Drawing.Point(231, 0);
             this.groupBox5.Name = "groupBox5";
-            this.groupBox5.Size = new System.Drawing.Size(1297, 485);
+            this.groupBox5.Size = new System.Drawing.Size(1297, 505);
             this.groupBox5.TabIndex = 5;
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "地图显示";
@@ -202,7 +206,7 @@
             this.panel5.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel5.Location = new System.Drawing.Point(3, 24);
             this.panel5.Name = "panel5";
-            this.panel5.Size = new System.Drawing.Size(1291, 458);
+            this.panel5.Size = new System.Drawing.Size(1291, 478);
             this.panel5.TabIndex = 6;
             // 
             // mapHelper1
@@ -218,16 +222,17 @@
             this.mapHelper1.Name = "mapHelper1";
             this.mapHelper1.roadmappath = null;
             this.mapHelper1.satellitemappath = null;
-            this.mapHelper1.Size = new System.Drawing.Size(1291, 458);
+            this.mapHelper1.Size = new System.Drawing.Size(1291, 478);
             this.mapHelper1.TabIndex = 0;
             this.mapHelper1.webpath = null;
             this.mapHelper1.MapRightClick += new MapHelper.MapHelper.DlMapRightClick(this.mapHelper1_MapRightClick);
+            this.mapHelper1.MapTypeChanged += new MapHelper.MapHelper.DlMapTypeChanged(this.mapHelper1_MapTypeChanged);
             // 
             // splitter3
             // 
             this.splitter3.Location = new System.Drawing.Point(221, 0);
             this.splitter3.Name = "splitter3";
-            this.splitter3.Size = new System.Drawing.Size(10, 485);
+            this.splitter3.Size = new System.Drawing.Size(10, 505);
             this.splitter3.TabIndex = 4;
             this.splitter3.TabStop = false;
             // 
@@ -238,7 +243,7 @@
             this.panel6.Dock = System.Windows.Forms.DockStyle.Left;
             this.panel6.Location = new System.Drawing.Point(0, 0);
             this.panel6.Name = "panel6";
-            this.panel6.Size = new System.Drawing.Size(221, 485);
+            this.panel6.Size = new System.Drawing.Size(221, 505);
             this.panel6.TabIndex = 3;
             // 
             // groupBox6
@@ -247,7 +252,7 @@
             this.groupBox6.Dock = System.Windows.Forms.DockStyle.Fill;
             this.groupBox6.Location = new System.Drawing.Point(0, 0);
             this.groupBox6.Name = "groupBox6";
-            this.groupBox6.Size = new System.Drawing.Size(221, 435);
+            this.groupBox6.Size = new System.Drawing.Size(221, 455);
             this.groupBox6.TabIndex = 3;
             this.groupBox6.TabStop = false;
             this.groupBox6.Text = "已下载地图列表";
@@ -262,20 +267,20 @@
             "15"});
             this.checkedListBox1.Location = new System.Drawing.Point(3, 24);
             this.checkedListBox1.Name = "checkedListBox1";
-            this.checkedListBox1.Size = new System.Drawing.Size(215, 408);
+            this.checkedListBox1.Size = new System.Drawing.Size(215, 428);
             this.checkedListBox1.TabIndex = 2;
-            this.checkedListBox1.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.checkedListBox1_ItemCheck);
             this.checkedListBox1.SelectedIndexChanged += new System.EventHandler(this.checkedListBox1_SelectedIndexChanged);
-            this.checkedListBox1.SelectedValueChanged += new System.EventHandler(this.checkedListBox1_SelectedValueChanged);
+            this.checkedListBox1.Leave += new System.EventHandler(this.checkedListBox1_Leave);
             // 
             // panel7
             // 
             this.panel7.Controls.Add(this.button2);
             this.panel7.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel7.Location = new System.Drawing.Point(0, 435);
+            this.panel7.Location = new System.Drawing.Point(0, 455);
             this.panel7.Name = "panel7";
             this.panel7.Size = new System.Drawing.Size(221, 50);
             this.panel7.TabIndex = 0;
+            this.panel7.Visible = false;
             // 
             // button2
             // 
@@ -291,6 +296,7 @@
             // panel8
             // 
             this.panel8.BackColor = System.Drawing.SystemColors.Control;
+            this.panel8.Controls.Add(this.button3);
             this.panel8.Controls.Add(this.label4);
             this.panel8.Controls.Add(this.label3);
             this.panel8.Controls.Add(this.label2);
@@ -304,6 +310,16 @@
             this.panel8.Name = "panel8";
             this.panel8.Size = new System.Drawing.Size(1528, 63);
             this.panel8.TabIndex = 2;
+            // 
+            // button3
+            // 
+            this.button3.Location = new System.Drawing.Point(1203, 17);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(120, 30);
+            this.button3.TabIndex = 8;
+            this.button3.Text = "导入边界线";
+            this.button3.UseVisualStyleBackColor = true;
+            this.button3.Click += new System.EventHandler(this.button3_Click);
             // 
             // label4
             // 
@@ -343,6 +359,7 @@
             // 
             // textBox3
             // 
+            this.textBox3.Enabled = false;
             this.textBox3.Location = new System.Drawing.Point(376, 18);
             this.textBox3.Name = "textBox3";
             this.textBox3.Size = new System.Drawing.Size(100, 28);
@@ -351,6 +368,7 @@
             // 
             // textBox2
             // 
+            this.textBox2.Enabled = false;
             this.textBox2.Location = new System.Drawing.Point(202, 18);
             this.textBox2.Name = "textBox2";
             this.textBox2.Size = new System.Drawing.Size(100, 28);
@@ -361,7 +379,7 @@
             // 
             this.button1.Location = new System.Drawing.Point(1038, 17);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(107, 30);
+            this.button1.Size = new System.Drawing.Size(120, 30);
             this.button1.TabIndex = 1;
             this.button1.Text = "浏览";
             this.button1.UseVisualStyleBackColor = true;
@@ -369,6 +387,7 @@
             // 
             // textBox1
             // 
+            this.textBox1.Enabled = false;
             this.textBox1.Location = new System.Drawing.Point(638, 18);
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new System.Drawing.Size(394, 28);
@@ -378,7 +397,7 @@
             // 
             this.splitter2.Cursor = System.Windows.Forms.Cursors.HSplit;
             this.splitter2.Dock = System.Windows.Forms.DockStyle.Top;
-            this.splitter2.Location = new System.Drawing.Point(3, 170);
+            this.splitter2.Location = new System.Drawing.Point(3, 150);
             this.splitter2.Name = "splitter2";
             this.splitter2.Size = new System.Drawing.Size(1534, 10);
             this.splitter2.TabIndex = 1;
@@ -390,7 +409,7 @@
             this.panel3.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel3.Location = new System.Drawing.Point(3, 24);
             this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(1534, 146);
+            this.panel3.Size = new System.Drawing.Size(1534, 126);
             this.panel3.TabIndex = 0;
             // 
             // groupBox4
@@ -399,7 +418,7 @@
             this.groupBox4.Dock = System.Windows.Forms.DockStyle.Fill;
             this.groupBox4.Location = new System.Drawing.Point(0, 0);
             this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(1534, 146);
+            this.groupBox4.Size = new System.Drawing.Size(1534, 126);
             this.groupBox4.TabIndex = 0;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "图符对应";
@@ -410,7 +429,7 @@
             this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.flowLayoutPanel1.Location = new System.Drawing.Point(3, 24);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-            this.flowLayoutPanel1.Size = new System.Drawing.Size(1528, 119);
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(1528, 99);
             this.flowLayoutPanel1.TabIndex = 0;
             this.flowLayoutPanel1.WrapContents = false;
             // 
@@ -428,6 +447,14 @@
             this.toolStripMenuItem2.Text = "更新当前点经纬度到地图中心点";
             this.toolStripMenuItem2.Click += new System.EventHandler(this.toolStripMenuItem2_Click);
             // 
+            // timer1
+            // 
+            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
+            // 
+            // openFileDialog1
+            // 
+            this.openFileDialog1.Filter = "(*.txt)|*.txt";
+            // 
             // MapForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 18F);
@@ -436,10 +463,12 @@
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.splitter1);
             this.Controls.Add(this.panel1);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "MapForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "MapForm";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MapForm_FormClosing);
             this.Shown += new System.EventHandler(this.MapForm_Shown);
             this.panel1.ResumeLayout(false);
             this.groupBox1.ResumeLayout(false);
@@ -500,5 +529,8 @@
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem2;
         private MapHelper.MapHelper mapHelper1;
+        private System.Windows.Forms.Timer timer1;
+        private System.Windows.Forms.Button button3;
+        private System.Windows.Forms.OpenFileDialog openFileDialog1;
     }
 }

@@ -18,6 +18,7 @@ namespace EnvirInfoSys
         //private IniOperator inip = null;   
 
         public bool Update_Data = false;
+        public bool CanEdit = true;
         public string Node_GUID = "";       //当前选择的节点guid
         public string Icon_GUID = "";       //当前选择的图标guid
         public string Node_Name = "";       //当前选择的节点名称
@@ -229,6 +230,11 @@ namespace EnvirInfoSys
             prop_list = Get_Prop_List(prop_type);
             //List<string> type_guid = new List<string> (prop_type.Keys);
 
+            if (CanEdit == false)
+                propertyGrid1.Enabled = false;
+            else
+                propertyGrid1.Enabled = true;
+
             #region 可能有固定属性的情况
             /*//for (int i = 0; i < len; ++i) 
             {
@@ -284,7 +290,10 @@ namespace EnvirInfoSys
                     ahp = new AccessHelper(AccessPath1);
                     string sql = "select " + Show_FDName[prop_list[i]] + " from " + JdCode + " where ISDELETE = 0 and PGUID = '" + Node_GUID + "'";
                     DataTable dt = ahp.ExecuteDataTable(sql, null);
-                    p.Value = dt.Rows[0][Show_FDName[prop_list[i]]];
+                    if (dt.Rows.Count > 0)
+                        p.Value = dt.Rows[0][Show_FDName[prop_list[i]]];
+                    else
+                        p.Value = "";
                 }
                 
                 string datatype = Get_Data_Type(prop_list[i]);

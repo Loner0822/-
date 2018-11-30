@@ -18,6 +18,7 @@ namespace PublishSys
         {
             conStr = "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + dbpath + ";Persist Security Info=False;";
             con = new OleDbConnection(conStr);
+            con.Open();
         }
 
         #region 公用方法
@@ -70,7 +71,7 @@ namespace PublishSys
                     {
                         cmd.Parameters.AddRange(pms);
                     }
-                    con.Open();
+                    //con.Open();
                     return cmd.ExecuteNonQuery();
                 }
             }
@@ -86,7 +87,7 @@ namespace PublishSys
                     {
                         cmd.Parameters.AddRange(pms);
                     }
-                    con.Open();
+                    //con.Open();
                     return cmd.ExecuteScalar();
                 }
             }
@@ -104,7 +105,7 @@ namespace PublishSys
                         cmd.Parameters.AddRange(pms);
                     }
 
-                    con.Open();
+                    //con.Open();
                     return cmd.ExecuteReader(CommandBehavior.CloseConnection);
                 }
             }
@@ -163,7 +164,7 @@ namespace PublishSys
             DataSet ds = new DataSet();
             //using (OleDbConnection con = new OleDbConnection(conStr))
             {
-                con.Open();
+                //con.Open();
                 dt = con.GetOleDbSchemaTable(OleDbSchemaGuid.Tables, new object[] { null, null, null, "TABLE" });
 
                 for (int i = 0; i < dt.Rows.Count; i++)

@@ -17,7 +17,7 @@ namespace PackUp
         public static extern IntPtr FindWindow(string lpClassName, string lpWindowName);
         
 
-        static void Main(string[] args)
+        static int Main(string[] args)
         {
             Console.Title = "Packup";
             IntPtr intptr = FindWindow("ConsoleWindowClass", "Packup");
@@ -58,8 +58,11 @@ namespace PackUp
             string TargetPath = DesktopPath + "\\" + my_app_publisher + my_app_name + ".exe";
             TargetPath = TargetPath.Replace("\0", "");
 
-            File.Copy(WorkPath + "Output\\Setup.exe", TargetPath, true);
-      
+            if (File.Exists(WorkPath + "Output\\Setup.exe"))
+                File.Copy(WorkPath + "Output\\Setup.exe", TargetPath, true);
+            else
+                return -1;
+            return 0;      
         }
     }
 }
