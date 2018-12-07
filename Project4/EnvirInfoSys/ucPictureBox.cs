@@ -31,10 +31,11 @@ namespace EnvirInfoSys
             set
             {
                 _iconname = value;
-                toolTip1.SetToolTip(checkBox1, _iconname);
-                this.checkBox1.Text = _iconname[0].ToString();
+                toolTip1.SetToolTip(label1, _iconname);
+                this.label1.Text = _iconname;
             }
         }
+
         public string IconPguid
         {
             get
@@ -46,6 +47,7 @@ namespace EnvirInfoSys
                 _iconpguid = value;
             }
         }
+
         public string IconPath
         {
             get
@@ -58,6 +60,7 @@ namespace EnvirInfoSys
                 this.pictureBox1.Load(_iconpath);
             }
         }
+
         public bool IconCheck
         {
             get
@@ -67,18 +70,32 @@ namespace EnvirInfoSys
             set
             {
                 _iconcheck = value;
-                this.checkBox1.Checked = _iconcheck;
+                if (_iconcheck)
+                    this.pictureBox1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+                else
+                    this.pictureBox1.BorderStyle = System.Windows.Forms.BorderStyle.None;
             }
         }
 
-        public delegate void CheckBoxChangedHandle(object sender, EventArgs e, string iconguid, bool ischecked);
-        public event CheckBoxChangedHandle CheckBoxChanged;
-        private void checkBox1_CheckedChanged(object sender, EventArgs e)
+        public delegate void ClickHandle(object sender, EventArgs e, string iconguid);
+        public event ClickHandle Single_Click;
+        private void PB_Click(object sender, EventArgs e)
         {
-            _iconcheck = this.checkBox1.Checked;
-            if (CheckBoxChanged != null)
+            MouseEventArgs Mouse_e = (MouseEventArgs)e;  
+            if (Single_Click != null && Mouse_e.Button == System.Windows.Forms.MouseButtons.Left)
             {
-                CheckBoxChanged(sender, new EventArgs(), _iconpguid, _iconcheck);
+                Single_Click((object)this, new EventArgs(), _iconpguid);
+            }
+        }
+
+        public delegate void DoubleClickHandle(object sender, EventArgs e, string iconguid);
+        public event DoubleClickHandle Double_Click;
+        private void PB_DoubleClick(object sender, EventArgs e)
+        {
+            MouseEventArgs Mouse_e = (MouseEventArgs)e;
+            if (Double_Click != null && Mouse_e.Button == System.Windows.Forms.MouseButtons.Left)
+            {
+                Double_Click((object)this, new EventArgs(), _iconpguid);
             }
         }
 

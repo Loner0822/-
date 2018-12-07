@@ -101,6 +101,7 @@
             this.Name = "DataForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "属性定义";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.DataForm_FormClosed);
             this.Shown += new System.EventHandler(this.DataForm_Shown);
             this.panel3.ResumeLayout(false);
             this.panel1.ResumeLayout(false);

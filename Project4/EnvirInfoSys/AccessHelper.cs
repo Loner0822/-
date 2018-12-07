@@ -12,10 +12,13 @@ namespace EnvirInfoSys
     public class AccessHelper
     {
         private string conStr = "";
+        public OleDbConnection con;
 
         public AccessHelper(string dbpath)
         {
             conStr = "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + dbpath + ";Persist Security Info=False;";
+            con = new OleDbConnection(conStr);
+            con.Open();
         }
 
         #region 公用方法
@@ -60,7 +63,7 @@ namespace EnvirInfoSys
 
         public int ExecuteSql(string sql, params OleDbParameter[] pms)
         {
-            using (OleDbConnection con = new OleDbConnection(conStr))
+            //using (OleDbConnection con = new OleDbConnection(conStr))
             {
                 using (OleDbCommand cmd = new OleDbCommand(sql, con))
                 {
@@ -68,7 +71,7 @@ namespace EnvirInfoSys
                     {
                         cmd.Parameters.AddRange(pms);
                     }
-                    con.Open();
+                    //con.Open();
                     return cmd.ExecuteNonQuery();
                 }
             }
@@ -76,7 +79,7 @@ namespace EnvirInfoSys
 
         public object ExecuteScalar(string sql, params OleDbParameter[] pms)
         {
-            using (OleDbConnection con = new OleDbConnection(conStr))
+            //using (OleDbConnection con = new OleDbConnection(conStr))
             {
                 using (OleDbCommand cmd = new OleDbCommand(sql, con))
                 {
@@ -84,7 +87,7 @@ namespace EnvirInfoSys
                     {
                         cmd.Parameters.AddRange(pms);
                     }
-                    con.Open();
+                    //con.Open();
                     return cmd.ExecuteScalar();
                 }
             }
@@ -92,7 +95,7 @@ namespace EnvirInfoSys
 
         public OleDbDataReader ExecuteReader(string sql, params OleDbParameter[] pms)
         {
-            OleDbConnection con = new OleDbConnection(conStr);
+            //using (OleDbConnection con = new OleDbConnection(conStr))
             try
             {
                 using (OleDbCommand cmd = new OleDbCommand(sql, con))
@@ -102,7 +105,7 @@ namespace EnvirInfoSys
                         cmd.Parameters.AddRange(pms);
                     }
 
-                    con.Open();
+                    //con.Open();
                     return cmd.ExecuteReader(CommandBehavior.CloseConnection);
                 }
             }
@@ -122,22 +125,24 @@ namespace EnvirInfoSys
         {
             DataTable dt = new DataTable();
 
-            using (OleDbDataAdapter oda = new OleDbDataAdapter(sql, conStr))
+            using (OleDbDataAdapter oda = new OleDbDataAdapter(sql, con))
             {
                 if (pms != null)
                 {
                     oda.SelectCommand.Parameters.AddRange(pms);
                 }
                 oda.Fill(dt);
+
             }
             return dt;
+
         }
 
         public DataSet Query(string sql, params OleDbParameter[] pms)
         {
             DataSet ds = new DataSet();
 
-            using (OleDbDataAdapter oda = new OleDbDataAdapter(sql, conStr))
+            using (OleDbDataAdapter oda = new OleDbDataAdapter(sql, con))
             {
                 if (pms != null)
                 {
@@ -157,9 +162,9 @@ namespace EnvirInfoSys
         {
             DataTable dt;
             DataSet ds = new DataSet();
-            using (OleDbConnection con = new OleDbConnection(conStr))
+            //using (OleDbConnection con = new OleDbConnection(conStr))
             {
-                con.Open();
+                //con.Open();
                 dt = con.GetOleDbSchemaTable(OleDbSchemaGuid.Tables, new object[] { null, null, null, "TABLE" });
 
                 for (int i = 0; i < dt.Rows.Count; i++)
@@ -184,6 +189,15 @@ namespace EnvirInfoSys
         {
             DataTable dt = this.ExecuteDataTable("SELECT TOP 1 * FROM " + tableName + " WHERE 1<>1");
             return dt.Columns.Contains(colFileld);
+        }
+
+        public void CloseConn()
+        {
+            if (con != null)
+            {
+                con.Close();
+                con.Dispose();
+            }
         }
     }
 }

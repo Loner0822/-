@@ -12,7 +12,7 @@ namespace EnvirInfoSys
 {
     public partial class BorderForm : Form
     {
-        public LineData borData = null;
+        public ToPointData borData = new ToPointData();
         public bool IsPoint = false;
         public bool IsLine = false;
 
@@ -46,39 +46,39 @@ namespace EnvirInfoSys
                 }
             }
 
-            if (borData.Type == "实线")
+            if (borData.line_data.Type == "实线")
                 radioButton1.Checked = true;
             else
                 radioButton2.Checked = true;
 
-            textBox2.Text = borData.Width.ToString();
+            textBox2.Text = borData.line_data.Width.ToString();
 
-            textBox1.BackColor = ColorTranslator.FromHtml(borData.Color);
+            textBox1.BackColor = ColorTranslator.FromHtml(borData.line_data.Color);
 
-            label5.Text = borData.Opacity.ToString("f");
-            trackBar1.Value = (int) (borData.Opacity * 20);
+            label5.Text = borData.line_data.Opacity.ToString("f");
+            trackBar1.Value = (int) (borData.line_data.Opacity * 20);
 
         }
 
         private void radioButton1_CheckedChanged(object sender, EventArgs e)
         {
             if (radioButton1.Checked == true)
-                borData.Type = "实线";
+                borData.line_data.Type = "实线";
             else
-                borData.Type = "虚线";
+                borData.line_data.Type = "虚线";
         }
 
         private void radioButton2_CheckedChanged(object sender, EventArgs e)
         {
             if (radioButton2.Checked == false)
-                borData.Type = "实线";
+                borData.line_data.Type = "实线";
             else
-                borData.Type = "虚线";
+                borData.line_data.Type = "虚线";
         }
 
         private void textBox2_Leave(object sender, EventArgs e)
         {
-            borData.Width = int.Parse(textBox2.Text);
+            borData.line_data.Width = int.Parse(textBox2.Text);
         }
 
         private void textBox2_KeyPress(object sender, KeyPressEventArgs e)
@@ -94,14 +94,14 @@ namespace EnvirInfoSys
             if (colorDialog1.ShowDialog() == DialogResult.OK)
             {
                 textBox1.BackColor = colorDialog1.Color;
-                borData.Color = ColorTranslator.ToHtml(colorDialog1.Color);
+                borData.line_data.Color = ColorTranslator.ToHtml(colorDialog1.Color);
             }
         }
 
         private void trackBar1_ValueChanged(object sender, EventArgs e)
         {
             label5.Text = (trackBar1.Value / 20.0).ToString("f");
-            borData.Opacity = trackBar1.Value / 20.0;
+            borData.line_data.Opacity = trackBar1.Value / 20.0;
         }
 
         private void textBox3_Leave(object sender, EventArgs e)

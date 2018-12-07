@@ -14,7 +14,9 @@ namespace EnvirInfoSys
     public partial class DataForm : Form
     {
         InputLanguageCollection langs = InputLanguage.InstalledInputLanguages;
-        private AccessHelper ahp = null;
+        private AccessHelper ahp1 = null;
+        private AccessHelper ahp2 = null;
+        private AccessHelper ahp3 = null;
         //private IniOperator inip = null;   
 
         public bool Update_Data = false;
@@ -54,10 +56,9 @@ namespace EnvirInfoSys
         {
             List<string> res = new List<string> ();
             List<string> _type = new List<string> (prop_type.Keys);
-            
-            ahp = new AccessHelper(AccessPath2);
+           
             string sql = "select PGUID, PROPNAME, FDNAME, SOURCEGUID, PROTYPEGUID, PROPVALUE from ZSK_PROP_H0001Z000K00 where ISDELETE = 0 and UPGUID = '" + Icon_GUID + "' order by SHOWINDEX";
-            DataTable dt = ahp.ExecuteDataTable(sql, null);
+            DataTable dt = ahp2.ExecuteDataTable(sql, null);
             for (int i = 0; i < dt.Rows.Count; ++i)
             {
                 //for (int j = 0; j < _type.Count; ++ j)
@@ -72,9 +73,9 @@ namespace EnvirInfoSys
                     }                        
                 }
             }
-            ahp = new AccessHelper(AccessPath3);
+            
             sql = "select PGUID, PROPNAME, FDNAME, SOURCEGUID, PROTYPEGUID, PROPVALUE from ZSK_PROP_H0001Z000K01 where ISDELETE = 0 and UPGUID = '" + Icon_GUID + "' order by SHOWINDEX";
-            dt = ahp.ExecuteDataTable(sql, null);
+            dt = ahp3.ExecuteDataTable(sql, null);
             for (int i = 0; i < dt.Rows.Count; ++i)
             {
                 //for (int j = 0; j < _type.Count; ++j)
@@ -100,25 +101,25 @@ namespace EnvirInfoSys
             if (inherit_GUID[propguid] != "") 
             {
                 propguid = inherit_GUID[propguid];
-                ahp = new AccessHelper(AccessPath2);
+                
                 sql = "select UPGUID from ZSK_PROP_H0001Z000K00 where ISDELETE = 0 and PGUID = '" + propguid + "'";
-                dt = ahp.ExecuteDataTable(sql, null);
+                dt = ahp2.ExecuteDataTable(sql, null);
                 if (dt.Rows.Count != 0)
                 {
                     dt_guid = dt.Rows[0]["UPGUID"].ToString() + "_" + propguid;
                 }
-                ahp = new AccessHelper(AccessPath3);
+                
                 sql = "select UPGUID from ZSK_PROP_H0001Z000K01 where ISDELETE = 0 and PGUID = '" + propguid + "'";
-                dt = ahp.ExecuteDataTable(sql, null);
+                dt = ahp3.ExecuteDataTable(sql, null);
                 if (dt.Rows.Count != 0)
                 {
                     dt_guid = dt.Rows[0]["UPGUID"].ToString() + "_" + propguid;
                 }
             }
             
-            ahp = new AccessHelper(AccessPath2);
+            
             sql = "select DATATYPE from ZSK_DATATYPE_H0001Z000K00 where ISDELETE = 0 and UPGUID = '" + dt_guid + "'";
-            dt = ahp.ExecuteDataTable(sql, null);
+            dt = ahp2.ExecuteDataTable(sql, null);
             if (dt.Rows.Count != 0)
             {
                 if (dt.Rows[0]["DATATYPE"].ToString() != "可选项")
@@ -126,7 +127,7 @@ namespace EnvirInfoSys
                 else
                 {
                     sql = "select PROPVALUE from ZSK_LIMIT_H0001Z000K00 where ISDELETE = 0 and UPGUID = '" + dt_guid + "'";
-                    dt2 = ahp.ExecuteDataTable(sql, null);
+                    dt2 = ahp2.ExecuteDataTable(sql, null);
                     if (dt2.Rows.Count != 0) {
                         if (dt2.Rows[0]["PROPVALUE"].ToString() == "否")
                             return "可选项";
@@ -136,9 +137,8 @@ namespace EnvirInfoSys
                 }
             }
 
-            ahp = new AccessHelper(AccessPath3);
             sql = "select DATATYPE from  ZSK_DATATYPE_H0001Z000K01 where ISDELETE = 0 and UPGUID = '" + dt_guid + "'";
-            dt = ahp.ExecuteDataTable(sql, null);
+            dt = ahp3.ExecuteDataTable(sql, null);
             if (dt.Rows.Count != 0)
             {
                 if (dt.Rows[0]["DATATYPE"].ToString() != "可选项")
@@ -146,7 +146,7 @@ namespace EnvirInfoSys
                 else
                 {
                     sql = "select PROPVALUE from ZSK_LIMIT_H0001Z000K01 where ISDELETE = 0 and UPGUID = '" + dt_guid + "'";
-                    dt2 = ahp.ExecuteDataTable(sql, null);
+                    dt2 = ahp3.ExecuteDataTable(sql, null);
                     if (dt2.Rows.Count != 0)
                     {
                         if (dt2.Rows[0]["PROPVALUE"].ToString() == "否")
@@ -167,16 +167,14 @@ namespace EnvirInfoSys
             if (inherit_GUID[propguid] != "")
             {
                 propguid = inherit_GUID[propguid];
-                ahp = new AccessHelper(AccessPath2);
                 sql = "select UPGUID from ZSK_PROP_H0001Z000K00 where ISDELETE = 0 and PGUID = '" + propguid + "'";
-                dt = ahp.ExecuteDataTable(sql, null);
+                dt = ahp2.ExecuteDataTable(sql, null);
                 if (dt.Rows.Count != 0)
                 {
                     cl_guid = dt.Rows[0]["UPGUID"].ToString() + "_" + propguid;
                 }
-                ahp = new AccessHelper(AccessPath3);
                 sql = "select UPGUID from ZSK_PROP_H0001Z000K01 where ISDELETE = 0 and PGUID = '" + propguid + "'";
-                dt = ahp.ExecuteDataTable(sql, null);
+                dt = ahp3.ExecuteDataTable(sql, null);
                 if (dt.Rows.Count != 0)
                 {
                     cl_guid = dt.Rows[0]["UPGUID"].ToString() + "_" + propguid;
@@ -184,9 +182,8 @@ namespace EnvirInfoSys
             }
             
             string res = "";
-            ahp = new AccessHelper(AccessPath2);
             sql = "select COMBOSTR from  ZSK_COMBOSTRLIST_H0001Z000K00 where ISDELETE = 0 and UPGUID = '" + cl_guid + "' order by SHOWINDEX";
-            dt = ahp.ExecuteDataTable(sql, null);
+            dt = ahp2.ExecuteDataTable(sql, null);
             for (int i = 0; i < dt.Rows.Count; ++ i)
             {
                 if (i == 0)
@@ -195,9 +192,8 @@ namespace EnvirInfoSys
                     res += "," + dt.Rows[i]["COMBOSTR"].ToString();
             }
 
-            ahp = new AccessHelper(AccessPath3);
             sql = "select COMBOSTR from  ZSK_COMBOSTRLIST_H0001Z000K01 where ISDELETE = 0 and UPGUID = '" + cl_guid + "' order by SHOWINDEX";
-            dt = ahp.ExecuteDataTable(sql, null);
+            dt = ahp3.ExecuteDataTable(sql, null);
             for (int i = 0; i < dt.Rows.Count; ++i)
             {
                 if (i == 0)
@@ -210,6 +206,9 @@ namespace EnvirInfoSys
 
         private void DataForm_Shown(object sender, EventArgs e)
         {
+            ahp1 = new AccessHelper(AccessPath1);
+            ahp2 = new AccessHelper(AccessPath2);
+            ahp3 = new AccessHelper(AccessPath3);
             /*foreach (InputLanguage lang in langs)
             {
                 //如果是中文输入法
@@ -287,9 +286,8 @@ namespace EnvirInfoSys
                     p.Value = Show_Value[prop_list[i]];
                 else 
                 {
-                    ahp = new AccessHelper(AccessPath1);
                     string sql = "select " + Show_FDName[prop_list[i]] + " from " + JdCode + " where ISDELETE = 0 and PGUID = '" + Node_GUID + "'";
-                    DataTable dt = ahp.ExecuteDataTable(sql, null);
+                    DataTable dt = ahp1.ExecuteDataTable(sql, null);
                     if (dt.Rows.Count > 0)
                         p.Value = dt.Rows[0][Show_FDName[prop_list[i]]];
                     else
@@ -358,6 +356,13 @@ namespace EnvirInfoSys
             }
             this.DialogResult = DialogResult.OK;
             return;
+        }
+
+        private void DataForm_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            ahp1.CloseConn();
+            ahp2.CloseConn();
+            ahp3.CloseConn();
         }
     }
 }
