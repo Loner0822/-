@@ -49,6 +49,7 @@ namespace EnvirInfoSys
             Dictionary<string, string> res = new Dictionary<string, string>();
             res.Add("{26E232C8-595F-44E5-8E0F-8E0FC1BD7D24}", "固定属性");
             res.Add("{B55806E6-9D63-4666-B6EB-AAB80814648E}", "基础属性");
+            res.Add("{A86C80C1-DC07-414F-826F-B52B8FC14A9C}", "扩展属性");
             return res;
         }
 
@@ -235,9 +236,8 @@ namespace EnvirInfoSys
                 propertyGrid1.Enabled = true;
 
             #region 可能有固定属性的情况
-            /*//for (int i = 0; i < len; ++i) 
+            /*for (int i = 0; i < len; ++i) 
             {
-                int i = 0;
                 string the_type = prop_type[type_guid[i]];
                 for (int j = 0; j < prop_list.Count; ++j)
                 {

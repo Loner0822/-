@@ -60,6 +60,11 @@
             this.图符管理设置ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.密码管理ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.退出ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.contextMenuStrip2 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.设置当前点为中心点ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.contextMenuStrip3 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.导入当前单位边界线ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.contextMenuStrip1.SuspendLayout();
             this.panel3.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -67,6 +72,8 @@
             this.groupBox4.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
+            this.contextMenuStrip2.SuspendLayout();
+            this.contextMenuStrip3.SuspendLayout();
             this.SuspendLayout();
             // 
             // contextMenuStrip1
@@ -171,6 +178,7 @@
             this.mapHelper1.MarkerDragBegin += new MapHelper.MapHelper.DlMarkerDragBegin(this.mapHelper1_MarkerDragBegin);
             this.mapHelper1.MarkerDragEnd += new MapHelper.MapHelper.DlMarkerDragEnd(this.mapHelper1_MarkerDragEnd);
             this.mapHelper1.MapMouseup += new MapHelper.MapHelper.DlMapMouseup(this.mapHelper1_MapMouseup);
+            this.mapHelper1.MapRightClick += new MapHelper.MapHelper.DlMapRightClick(this.mapHelper1_MapRightClick);
             this.mapHelper1.MapDblClick += new MapHelper.MapHelper.DlMapDblClick(this.mapHelper1_MapDblClick);
             this.mapHelper1.RemoveMarkerFinished += new MapHelper.MapHelper.DlRemoveMarkerFinished(this.mapHelper1_RemoveMarkerFinished);
             this.mapHelper1.MarkerRightClick += new MapHelper.MapHelper.DlMarkerRightClick(this.mapHelper1_MarkerRightClick);
@@ -178,8 +186,6 @@
             this.mapHelper1.MapTypeChanged += new MapHelper.MapHelper.DlMapTypeChanged(this.mapHelper1_MapTypeChanged);
             this.mapHelper1.MapMouseWheel += new MapHelper.MapHelper.DlMouseWheel(this.mapHelper1_MapMouseWheel);
             this.mapHelper1.PointerDone += new MapHelper.MapHelper.DlPointerDone(this.mapHelper1_PointerDone);
-            this.mapHelper1.MapMouseMove += new MapHelper.MapHelper.DlMapMouseMove(this.mapHelper1_MapMouseMove);
-            this.mapHelper1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.mapHelper1_MouseDown);
             // 
             // groupBox2
             // 
@@ -248,6 +254,7 @@
             this.treeView1.Size = new System.Drawing.Size(271, 610);
             this.treeView1.TabIndex = 0;
             this.treeView1.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeView1_AfterSelect);
+            this.treeView1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.treeView1_MouseDown);
             // 
             // menuStrip1
             // 
@@ -352,6 +359,38 @@
             this.退出ToolStripMenuItem.Size = new System.Drawing.Size(85, 28);
             this.退出ToolStripMenuItem.Text = "退出(&Q)";
             // 
+            // contextMenuStrip2
+            // 
+            this.contextMenuStrip2.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.设置当前点为中心点ToolStripMenuItem});
+            this.contextMenuStrip2.Name = "contextMenuStrip2";
+            this.contextMenuStrip2.Size = new System.Drawing.Size(243, 32);
+            // 
+            // 设置当前点为中心点ToolStripMenuItem
+            // 
+            this.设置当前点为中心点ToolStripMenuItem.Name = "设置当前点为中心点ToolStripMenuItem";
+            this.设置当前点为中心点ToolStripMenuItem.Size = new System.Drawing.Size(242, 28);
+            this.设置当前点为中心点ToolStripMenuItem.Text = "设置当前点为中心点";
+            this.设置当前点为中心点ToolStripMenuItem.Click += new System.EventHandler(this.设置当前点为中心点ToolStripMenuItem_Click);
+            // 
+            // contextMenuStrip3
+            // 
+            this.contextMenuStrip3.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.导入当前单位边界线ToolStripMenuItem});
+            this.contextMenuStrip3.Name = "contextMenuStrip3";
+            this.contextMenuStrip3.Size = new System.Drawing.Size(243, 32);
+            // 
+            // 导入当前单位边界线ToolStripMenuItem
+            // 
+            this.导入当前单位边界线ToolStripMenuItem.Name = "导入当前单位边界线ToolStripMenuItem";
+            this.导入当前单位边界线ToolStripMenuItem.Size = new System.Drawing.Size(242, 28);
+            this.导入当前单位边界线ToolStripMenuItem.Text = "导入当前单位边界线";
+            this.导入当前单位边界线ToolStripMenuItem.Click += new System.EventHandler(this.导入当前单位边界线ToolStripMenuItem_Click);
+            // 
+            // openFileDialog1
+            // 
+            this.openFileDialog1.FileName = "openFileDialog1";
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 18F);
@@ -376,6 +415,8 @@
             this.groupBox1.ResumeLayout(false);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
+            this.contextMenuStrip2.ResumeLayout(false);
+            this.contextMenuStrip3.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -413,6 +454,11 @@
         private System.Windows.Forms.ToolStripMenuItem 图符对应设置ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 图符管理设置ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 密码管理ToolStripMenuItem;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStrip2;
+        private System.Windows.Forms.ToolStripMenuItem 设置当前点为中心点ToolStripMenuItem;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStrip3;
+        private System.Windows.Forms.ToolStripMenuItem 导入当前单位边界线ToolStripMenuItem;
+        private System.Windows.Forms.OpenFileDialog openFileDialog1;
 
     }
 }

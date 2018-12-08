@@ -61,6 +61,7 @@ namespace EnvirInfoSys
         private Dictionary<string, string> GL_JDCODE;
         private Dictionary<string, string> GL_UPGUID;
         private Dictionary<string, string> GL_MAP;
+        private Dictionary<string, string> GL_NAME_PGUID;
 
         /// <summary>
         /// 地图数据
@@ -161,7 +162,6 @@ namespace EnvirInfoSys
 
         private void MainForm_Load(object sender, EventArgs e)
         {
-            
             // 加载主界面
             FileReader.inip = new IniOperator(WorkPath + "RegInfo.ini");
             string UnitName = FileReader.inip.ReadString("Public", "UnitName", "");
@@ -170,6 +170,7 @@ namespace EnvirInfoSys
             AppName = AppName.Replace("\0", "");
             this.Text = UnitName + AppName;
             FileReader.often_ahp = new AccessHelper(AccessPath);
+            FileReader.line_ahp = new AccessHelper(WorkPath + "data\\经纬度注册.mdb");
 
             // 读取单位数据
             FileReader.inip = new IniOperator(WorkPath + "RegInfo.ini");
@@ -206,34 +207,7 @@ namespace EnvirInfoSys
             mapHelper1.maparr = folds;
 
             // 边界线导入
-            borList = new List<double[]>();
-            borderDic = new Dictionary<string, object>();
-            borData = new LineData();
-            borData.Load_Line("边界线");
-            borderDic.Add("type", borData.Type);
-            borderDic.Add("width", borData.Width);
-            borderDic.Add("color", borData.Color);
-            borderDic.Add("opacity", borData.Opacity);
-            FileReader.once_ahp = new AccessHelper(WorkPath + "data\\经纬度注册.mdb");
-            sql = "select LNG_LAT from BORDERDATA where ISDELETE = 0 and UNITID = '" + UnitID + "'";
-            dt = FileReader.once_ahp.ExecuteDataTable(sql, null);
-            if (dt.Rows.Count > 0)
-            {
-                string alldata = dt.Rows[0]["LNG_LAT"].ToString();
-                string[] div_data = alldata.Split(';');
-                foreach (string str in div_data)
-                {
-                    if (str != "")
-                    {
-                        string[] div_str = str.Split(new Char[] { ' ', ',', ':', '\t', '\r', '\n' });
-                        borList.Add(new double[] { double.Parse(div_str[0]), double.Parse(div_str[1]) });
-                    }
-                }
-                borderDic.Add("path", borList);
-            }
-            else
-                borderDic = null;
-            FileReader.once_ahp.CloseConn();
+            Load_Border(UnitID);
 
             // 加载管辖类型
             sql = "select PGUID, FLNAME from ENVIRGXFL_H0001Z000E00 where ISDELETE = 0 and UPGUID = '-1' order by SHOWINDEX";
@@ -394,6 +368,7 @@ namespace EnvirInfoSys
             GL_JDCODE = new Dictionary<string, string>();
             GL_UPGUID = new Dictionary<string, string>();
             GL_MAP = new Dictionary<string, string>();
+            GL_NAME_PGUID = new Dictionary<string, string>();
 
             FileReader.once_ahp = new AccessHelper(WorkPath + "data\\ZSK_H0001Z000K01.mdb");
             string sql = "select PGUID, JDNAME, JDCODE, UPGUID from ZSK_OBJECT_H0001Z000K01 where ISDELETE = 0 order by LEVELNUM, SHOWINDEX";
@@ -406,6 +381,7 @@ namespace EnvirInfoSys
                 GL_NAME[pguid] = dt.Rows[i]["JDNAME"].ToString();
                 GL_JDCODE[pguid] = dt.Rows[i]["JDCODE"].ToString();
                 GL_UPGUID[pguid] = dt.Rows[i]["UPGUID"].ToString();
+                GL_NAME_PGUID[dt.Rows[i]["JDNAME"].ToString()] = pguid;
             }
             FileReader.once_ahp.CloseConn();
 
@@ -424,18 +400,23 @@ namespace EnvirInfoSys
                     GL_MAP.Add(pguid, dt1.Rows[0]["MAPLEVEL"].ToString());
                 else
                     GL_MAP.Add(pguid, string.Empty);
-
-                if (dt.Rows[i]["UPGUID"].ToString() == string.Empty)
-                {
-                    TreeNode pNode = new TreeNode();
-                    pNode.Text = GL_NAME[dt.Rows[i]["PGUID"].ToString()];
-                    pNode.Tag = dt.Rows[i]["PGUID"].ToString();
-                    treeView1.Nodes.Add(pNode);
-                    Add_Unit_Node(pNode);
-                }
             }
             FileReader.once_ahp.CloseConn();
-            treeView1.ExpandAll();
+
+            FileReader.once_ahp = new AccessHelper(WorkPath + "data\\PersonMange.mdb");
+            sql = "select PGUID, ORGNAME, ULEVEL from RG_单位注册 where ISDELETE = 0 and PGUID = '" + UnitID + "'";
+            dt = FileReader.once_ahp.ExecuteDataTable(sql, null);
+            if (dt.Rows.Count > 0)
+            {
+                TreeNode pNode = new TreeNode();
+                pNode.Name = UnitID;
+                pNode.Text = dt.Rows[0]["ORGNAME"].ToString();
+                pNode.Tag = GL_NAME_PGUID[dt.Rows[0]["ULEVEL"].ToString()];
+                treeView1.Nodes.Add(pNode);
+                Add_Unit_Node(pNode);
+                treeView1.ExpandAll();
+            }
+            FileReader.once_ahp.CloseConn();
         }
 
         private void Load_Guan_Xia()
@@ -511,7 +492,7 @@ namespace EnvirInfoSys
                     }
                 }
                 dic.Add("topoint", toDic);
-                lst.Add(dic);                                                               //给list添加一个标注
+                lst.Add(dic);                       //给list添加一个标注
             }
             cur_lst = lst;
 
@@ -555,17 +536,47 @@ namespace EnvirInfoSys
 
         private void Add_Unit_Node(TreeNode pa)
         {
-            foreach (var item in GL_UPGUID)
+            string sql = "select PGUID, ORGNAME, ULEVEL from RG_单位注册 where ISDELETE = 0 and UPPGUID = '" + pa.Name + "'";
+            DataTable dt = FileReader.once_ahp.ExecuteDataTable(sql, null);
+            for (int i = 0; i < dt.Rows.Count; ++i)
             {
-                if (item.Value == pa.Tag.ToString())
-                {
-                    TreeNode pNode = new TreeNode();
-                    pNode.Text = GL_NAME[item.Key];
-                    pNode.Tag = item.Key;
-                    pa.Nodes.Add(pNode);
-                    Add_Unit_Node(pNode);
-                }
+                TreeNode pNode = new TreeNode();
+                pNode.Name = dt.Rows[i]["PGUID"].ToString();
+                pNode.Text = dt.Rows[i]["ORGNAME"].ToString();
+                pNode.Tag = GL_NAME_PGUID[dt.Rows[i]["ULEVEL"].ToString()];
+                pa.Nodes.Add(pNode);
+                Add_Unit_Node(pNode);
             }
+        }
+
+        private void Load_Border(string u_guid)
+        {
+            borList = new List<double[]>();
+            borderDic = new Dictionary<string, object>();
+            borData = new LineData();
+            borData.Load_Line("边界线");
+            borderDic.Add("type", borData.Type);
+            borderDic.Add("width", borData.Width);
+            borderDic.Add("color", borData.Color);
+            borderDic.Add("opacity", borData.Opacity);
+            string sql = "select LNG_LAT from BORDERDATA where ISDELETE = 0 and UNITID = '" + u_guid + "'";
+            DataTable dt = FileReader.line_ahp.ExecuteDataTable(sql, null);
+            if (dt.Rows.Count > 0)
+            {
+                string alldata = dt.Rows[0]["LNG_LAT"].ToString();
+                string[] div_data = alldata.Split(';');
+                foreach (string str in div_data)
+                {
+                    if (str != "")
+                    {
+                        string[] div_str = str.Split(new Char[] { ' ', ',', ':', '\t', '\r', '\n' });
+                        borList.Add(new double[] { double.Parse(div_str[1]), double.Parse(div_str[0])});
+                    }
+                }
+                borderDic.Add("path", borList);
+            }
+            else
+                borderDic = null;
         }
 
         private void treeView1_DrawNode(object sender, DrawTreeNodeEventArgs e)
@@ -581,15 +592,25 @@ namespace EnvirInfoSys
 
             TreeNode pNode = treeView1.SelectedNode;
             levelguid = pNode.Tag.ToString();
+            Load_Border(pNode.Name);
 
-            if (Before_ShowMap == true)
+            string sql = "select LAT, LNG from ORGCENTERDATA where ISDELETE = 0 and UNITEID = '" + pNode.Name + "'";
+            DataTable dt = FileReader.line_ahp.ExecuteDataTable(sql, null);
+            if (dt.Rows.Count > 0)
             {
-                double[] tmp_point = mapHelper1.GetMapCenter();
-                mapHelper1.centerlat = tmp_point[0]; //30.067;//必须设置的属性,不能为空
-                mapHelper1.centerlng = tmp_point[1]; //118.5784; //必须设置的属性,不能为空
+                mapHelper1.centerlat = double.Parse(dt.Rows[0]["LAT"].ToString());
+                mapHelper1.centerlng = double.Parse(dt.Rows[0]["LNG"].ToString());
             }
             else
-                Before_ShowMap = true;
+            {
+                if (Before_ShowMap == true)
+                {
+                    double[] tmp_point = mapHelper1.GetMapCenter();
+                    mapHelper1.centerlat = tmp_point[0]; //30.067;//必须设置的属性,不能为空
+                    mapHelper1.centerlng = tmp_point[1]; //118.5784; //必须设置的属性,不能为空
+                }
+            }
+            Before_ShowMap = true;
 
             ToolStripMenuItem Fa_TSMI = new ToolStripMenuItem();
             foreach (ToolStripMenuItem tsmi in menuStrip1.Items)
@@ -690,11 +711,6 @@ namespace EnvirInfoSys
             }
         }
 
-        private void mapHelper1_MouseDown(object sender, MouseEventArgs e)
-        {
-            //
-        }
-
         private void mapHelper1_MarkerDragEnd(string markerguid, bool canedit, double lat, double lng)
         {
             //  MessageBox.Show("移动：" + markerguid);
@@ -714,12 +730,81 @@ namespace EnvirInfoSys
             FileReader.often_ahp.ExecuteSql(sql, null);
         }
 
+        private double center_lat;
+        private double center_lng;
         private void mapHelper1_MapRightClick(bool canedit, double lat, double lng, int x, int y)
         {
-           // contextMenuStrip1.Show(x, y);
+            center_lat = lat;
+            center_lng = lng;
+            contextMenuStrip2.Show(MousePosition.X, MousePosition.Y);
         }
 
-        
+        private void treeView1_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button == System.Windows.Forms.MouseButtons.Right)
+            {
+                TreeNode pNode = treeView1.GetNodeAt(e.X, e.Y);
+                if (pNode != null)
+                {
+                    treeView1.SelectedNode = pNode;
+                    contextMenuStrip3.Show(MousePosition.X, MousePosition.Y);
+                }
+            }
+        }
+
+        private void 设置当前点为中心点ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("确认设置当前点为中心点?");
+            TreeNode pNode = treeView1.SelectedNode;
+            string sql = "select PGUID from ORGCENTERDATA where ISDELETE = 0 and UNITEID = '" + pNode.Name + "'";
+            DataTable dt = FileReader.line_ahp.ExecuteDataTable(sql, null);
+            if (dt.Rows.Count > 0)
+            {
+                sql = "update ORGCENTERDATA set S_UDTIME = '" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")
+                    + "', LAT = '" + center_lat.ToString() + "', LNG = '" + center_lng.ToString() + "'";
+                FileReader.line_ahp.ExecuteSql(sql, null);
+            }
+            else
+            {
+                sql = "insert into ORGCENTERDATA (PGUID, S_UDTIME, UNITEID, LAT, LNG) values('" + pNode.Name + "', '" + 
+                    DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "', '" + pNode.Name + "', '" + center_lat.ToString() + 
+                    "', '" + center_lng.ToString() + "')";
+                FileReader.line_ahp.ExecuteSql(sql, null);
+            }
+        }
+
+        private void 导入当前单位边界线ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            TreeNode pNode = treeView1.SelectedNode;
+            if (openFileDialog1.ShowDialog() != DialogResult.OK)
+                return;
+            string file = openFileDialog1.FileName;
+            string[] strAll = File.ReadAllLines(file);
+            string ds_lng_lat = "";
+            foreach (string str in strAll)
+            {
+                string[] split = str.Split(new Char[] { ' ', ',', ':', '\t', '\r', '\n' });
+                borList.Add(new double[] { double.Parse(split[0]), double.Parse(split[1]) });
+                ds_lng_lat += split[0] + "," + split[1] + ";";
+            }
+            string sql = "select PGUID from BORDERDATA where ISDELETE = 0 and UNITID = '" + pNode.Name + "'";
+            DataTable dt = FileReader.line_ahp.ExecuteDataTable(sql, null);
+            if (dt.Rows.Count > 0)
+            {
+                sql = "update BORDERDATA set S_UDTIME = '" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "', LNG_LAT = '"
+                    + ds_lng_lat + "' where ISDELETE = 0 and UNITID = '" + pNode.Name + "'";
+                FileReader.line_ahp.ExecuteSql(sql, null);
+            }
+            else
+            {
+                sql = "insert into BORDERDATA (PGUID, S_UDTIME, UNITID, LNG_LAT) values ('" + Guid.NewGuid().ToString("B")
+                    + "', '" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "', '" + pNode.Name + "', '" + ds_lng_lat + "')";
+                FileReader.line_ahp.ExecuteSql(sql, null);
+            }
+            treeView1.SelectedNode = null;
+            treeView1.SelectedNode = pNode;
+        }
+
         private void mapHelper1_MarkerRightClick(int sx, int sy, double lat, double lng, string level, string sguid, string name, bool canedit, string message)
         {
             i_lat = lat;
@@ -993,6 +1078,7 @@ namespace EnvirInfoSys
                         }
                         else
                             mapHelper1.ShowMap(cur_Level, cur_Level.ToString(), false, map_type, null, borderDic, null);
+
                         TreeNode resNode = null;
                         foreach (TreeNode tn in treeView1.Nodes)
                         {
@@ -1068,7 +1154,7 @@ namespace EnvirInfoSys
         {
             if (pNode == null)
                 return null;
-            if (pNode.Tag.ToString() == levelguid)
+            if (pNode.Tag.ToString() == levelguid && Check_relative(pNode))
                 return pNode;
             TreeNode resNode = null;
             foreach (TreeNode tn in pNode.Nodes)
@@ -1078,6 +1164,18 @@ namespace EnvirInfoSys
                     break;
             }
             return resNode;
+        }
+
+        bool Check_relative(TreeNode pNode)
+        {
+            TreeNode now_Node = treeView1.SelectedNode;
+            if (pNode == now_Node)
+                return true;
+            if (pNode == now_Node.Parent)
+                return true;
+            if (pNode.Parent == now_Node)
+                return true;
+            return false;
         }
 
         private void mapHelper1_MapTypeChanged(string mapType)
@@ -1103,21 +1201,17 @@ namespace EnvirInfoSys
                 candrag = true;
         }
 
-        private void mapHelper1_MapMouseMove(double lat, double lng)
-        {
-            
-        }
-
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             FileReader.often_ahp.CloseConn();
+            FileReader.line_ahp.CloseConn();
         }
 
         private void MainForm_FormClosed(object sender, FormClosedEventArgs e)
         {
             FileReader.often_ahp.CloseConn();
+            FileReader.line_ahp.CloseConn();
         }
-
 
     }
 
@@ -1128,6 +1222,7 @@ namespace EnvirInfoSys
     {
         public static AccessHelper once_ahp = null;
         public static AccessHelper often_ahp = null;
+        public static AccessHelper line_ahp = null;
         public static IniOperator inip = null;
     }
 

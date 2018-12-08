@@ -22,7 +22,7 @@ namespace PublishSys
         private AccessHelper ahp = null;
         private IniOperator inip = null;
         private string WorkPath = AppDomain.CurrentDomain.BaseDirectory;//当前exe根目录
-        private string AccessPath = AppDomain.CurrentDomain.BaseDirectory + "data\\PersonMange.mdb";
+        private string AccessPath = AppDomain.CurrentDomain.BaseDirectory + "\\Publish\\data\\PersonMange.mdb";
         private Dictionary<string, string> UnitID_Level;
 
 
@@ -61,7 +61,7 @@ namespace PublishSys
             PubGUID.Visible = false;
             dataGridView1.Columns.Add(PubGUID);
 
-            dataGridView1.Columns[0].Width = 60;
+            dataGridView1.Columns[0].Width = 40;
             dataGridView1.Columns[1].Width = 100;
             dataGridView1.Columns[2].Width = 100;
             dataGridView1.Columns[3].Width = 160;

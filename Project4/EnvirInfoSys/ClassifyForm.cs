@@ -157,8 +157,7 @@ namespace EnvirInfoSys
                 string name = dt.Rows[i]["JDNAME"].ToString();
                 if (File.Exists(icon_path + pguid + ".png"))
                 {
-                    //ucPB.IconCheck = true;
-                    sql = "select PGUID from ENVIRGXDY_H0001Z000E00 where ISDELETE = 0 and ICONGUID = '" + pguid + "' and FLGUID = '" + flguid + "' and UNITID = '" + unitid + "'";
+                    sql = "select PGUID from ENVIRGXDY_H0001Z000E00 where ISDELETE = 0 and ICONGUID = '" + pguid + "' and FLGUID = '" + flguid + "'";
                     DataTable dt1 = ahp1.ExecuteDataTable(sql, null);
                     if (dt1.Rows.Count > 0)
                     {
