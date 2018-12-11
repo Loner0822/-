@@ -11,7 +11,7 @@ using System.Windows.Forms;
 
 namespace EnvirInfoSys
 {
-    public partial class ClassifyForm : Form
+    public partial class Classify_1Form : Form
     {
         private string WorkPath = AppDomain.CurrentDomain.BaseDirectory;    //当前exe根目录
         private AccessHelper ahp1 = null;       // ENVIR_H0001Z000E00.mdb
@@ -27,13 +27,15 @@ namespace EnvirInfoSys
         private Dictionary<string, string> inherit_GUID;    // 继承属性GUID
         private Dictionary<string, string> Show_Value;      // 属性值
 
-        public ClassifyForm()
+        public Classify_1Form()
         {
             InitializeComponent();
         }
 
-        private void ClassifyForm_Load(object sender, EventArgs e)
+        private void Classify_1Form_Load(object sender, EventArgs e)
         {
+            tabControl2.TabPages[0].Parent = null;
+
             // 初始化表格控件
             dataGridView1.RowHeadersVisible = false;
             dataGridView1.AllowUserToResizeRows = false;
@@ -60,11 +62,25 @@ namespace EnvirInfoSys
             dataGridView1.Columns["index"].Width = 37;
             dataGridView1.Columns["type"].Width = 63;
 
+            // 初始化图符库
             tabControl1.Controls.Clear();
             ahp2 = new AccessHelper(WorkPath + "data\\ZSK_H0001Z000K00.mdb");
-            
-            string sql = "select UPGUID, PROPVALUE from ZSK_PROP_H0001Z000K00 where ISDELETE = 0 and PROPNAME = '图符库' order by PROPVALUE, SHOWINDEX";
-            DataTable dt = ahp2.ExecuteDataTable(sql, null);
+            ahp4 = new AccessHelper(WorkPath + "data\\ZSK_H0001Z000E00.mdb");
+            Build_Icon_Library("H0001Z000K00");
+            Build_Icon_Library("H0001Z000E00");
+            ahp2.CloseConn();
+            ahp4.CloseConn();
+        }
+
+        private void Build_Icon_Library(string database)
+        {
+            AccessHelper ahp = null;
+            if (database == "H0001Z000K00")
+                ahp = ahp2;
+            else
+                ahp = ahp4;
+            string sql = "select UPGUID, PROPVALUE from ZSK_PROP_" + database + " where ISDELETE = 0 and PROPNAME = '图符库' order by PROPVALUE, SHOWINDEX";
+            DataTable dt = ahp.ExecuteDataTable(sql, null);
             for (int i = 0; i < dt.Rows.Count; ++i)
             {
                 string Name = dt.Rows[i]["PROPVALUE"].ToString();
@@ -82,7 +98,7 @@ namespace EnvirInfoSys
                     {
                         flag = true;
                         FlowLayoutPanel flp = (FlowLayoutPanel)tabControl1.TabPages[j].Controls[0];
-                        Add_Icon(flp, pguid);
+                        Add_Icon(flp, pguid, database);
                     }
                 }
                 if (flag == false)
@@ -95,21 +111,25 @@ namespace EnvirInfoSys
                     flp.WrapContents = true;
                     flp.AutoScroll = true;
                     flp.MouseDown += dataGridView_MouseDown;
-                    Add_Icon(flp, pguid);
+                    Add_Icon(flp, pguid, database);
                     tabControl1.TabPages[_index].Name = Name;
                     tabControl1.TabPages[_index].BackColor = SystemColors.Control;
                     tabControl1.TabPages[_index].Controls.Add(flp);
                 }
             }
-            ahp2.CloseConn();
         }
 
-        private void Add_Icon(FlowLayoutPanel flp, string pguid)
+        private void Add_Icon(FlowLayoutPanel flp, string pguid, string database)
         {
+            AccessHelper ahp = null;
+            if (database == "H0001Z000K00")
+                ahp = ahp2;
+            else
+                ahp = ahp4;
             string icon_path = WorkPath + "ICONDER\\b_PNGICON\\";
             ucPictureBox ucPB = new ucPictureBox();
-            string sql = "select JDNAME from ZSK_OBJECT_H0001Z000K00 where ISDELETE = 0 and PGUID = '" + pguid + "'";
-            DataTable dt1 = ahp2.ExecuteDataTable(sql, null);
+            string sql = "select JDNAME from ZSK_OBJECT_" + database + " where ISDELETE = 0 and PGUID = '" + pguid + "'";
+            DataTable dt1 = ahp.ExecuteDataTable(sql, null);
             if (dt1.Rows.Count > 0)
             {
                  ucPB.Parent = flp;
@@ -124,7 +144,7 @@ namespace EnvirInfoSys
             }
         }
 
-        private void ClassifyForm_Shown(object sender, EventArgs e)
+        private void Classify_1Form_Shown(object sender, EventArgs e)
         {
             ahp1 = new AccessHelper(WorkPath + "data\\ENVIR_H0001Z000E00.mdb");
             ahp2 = new AccessHelper(WorkPath + "data\\ZSK_H0001Z000K00.mdb");
@@ -147,10 +167,25 @@ namespace EnvirInfoSys
 
         private void Show_Icon_List(string flguid)
         {
+            Get_Icon_From_Access(flguid, "H0001Z000K00");
+            Get_Icon_From_Access(flguid, "H0001Z000E00");
+            if (flowLayoutPanel1.Controls.Count > 0)
+            {
+                ucPictureBox tmp = (ucPictureBox)flowLayoutPanel1.Controls[0];
+                Icon_SingleClick(flowLayoutPanel1.Controls[0], new EventArgs(), tmp.IconPguid);
+            }
+        }
+
+        private void Get_Icon_From_Access(string flguid, string database)
+        {
+            AccessHelper ahp;
+            if (database == "H0001Z000K00")
+                ahp = ahp2;
+            else
+                ahp = ahp4;
             string icon_path = WorkPath + "ICONDER\\b_PNGICON\\";
-            string sql = "select PGUID, JDNAME from ZSK_OBJECT_H0001Z000K00 where ISDELETE = 0 order by LEVELNUM, SHOWINDEX";
-            DataTable dt = ahp2.ExecuteDataTable(sql, null);
-            string first_guid = "";
+            string sql = "select PGUID, JDNAME from ZSK_OBJECT_" + database + " where ISDELETE = 0 order by LEVELNUM, SHOWINDEX";
+            DataTable dt = ahp.ExecuteDataTable(sql, null);
             for (int i = 0; i < dt.Rows.Count; ++i)
             {
                 string pguid = dt.Rows[i]["PGUID"].ToString();
@@ -161,8 +196,6 @@ namespace EnvirInfoSys
                     DataTable dt1 = ahp1.ExecuteDataTable(sql, null);
                     if (dt1.Rows.Count > 0)
                     {
-                        if (first_guid == "")
-                            first_guid = pguid;
                         ucPictureBox ucPB = new ucPictureBox();
                         ucPB.Parent = this.flowLayoutPanel1;
                         ucPB.Name = pguid;
@@ -175,8 +208,6 @@ namespace EnvirInfoSys
                     }
                 }
             }
-            if (flowLayoutPanel1.Controls.Count > 0)
-                Icon_SingleClick(flowLayoutPanel1.Controls[0], new EventArgs(), first_guid);
         }
 
         private void dataGridView1_SelectionChanged(object sender, EventArgs e)
@@ -256,7 +287,8 @@ namespace EnvirInfoSys
             string pguid = dataGridView1.SelectedRows[0].Cells["guid"].Value.ToString();
             foreach (ucPictureBox item in flowLayoutPanel1.Controls)
             {
-                string sql = "update ENVIRGXDY_H0001Z000E00 set ISDELETE = 1, S_UDTIME = '" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "' where ICONGUID = '" + item.IconPguid + "' and FLGUID = '" + pguid + "'";
+                string sql = "update ENVIRGXDY_H0001Z000E00 set ISDELETE = 1, S_UDTIME = '" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")
+                    + "' where ICONGUID = '" + item.IconPguid + "' and FLGUID = '" + pguid + "' and UNITID = '" + unitid + "'";
                 ahp1.ExecuteSql(sql, null);
             }
             flowLayoutPanel1.Controls.Clear();
@@ -289,11 +321,13 @@ namespace EnvirInfoSys
                 new_PB.Double_Click += Icon_DoubleClick;
                 flowLayoutPanel1.Controls.Add(new_PB);
 
-                string sql = "select PGUID from ENVIRGXDY_H0001Z000E00 where ICONGUID = '" + item.IconPguid + "' and FLGUID = '" + pguid + "'";
+                string sql = "select PGUID from ENVIRGXDY_H0001Z000E00 where ICONGUID = '"
+                    + item.IconPguid + "' and FLGUID = '" + pguid + "' and UNITID = '" + unitid + "'";
                 DataTable dt = ahp1.ExecuteDataTable(sql, null);
                 if (dt.Rows.Count > 0)
                 {
-                    sql = "update ENVIRGXDY_H0001Z000E00 set ISDELETE = 0, S_UDTIME = '" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "' where ICONGUID = '" + item.IconPguid + "' and FLGUID = '" + pguid + "'";
+                    sql = "update ENVIRGXDY_H0001Z000E00 set ISDELETE = 0, S_UDTIME = '" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")
+                        + "' where ICONGUID = '" + item.IconPguid + "' and FLGUID = '" + pguid + "' and UNITID = '" + unitid + "'";
                     ahp1.ExecuteSql(sql, null);
                 }
                 else
@@ -343,7 +377,8 @@ namespace EnvirInfoSys
                 flowLayoutPanel1.Controls.Remove(Remove_PB);
 
                 // 删除对应
-                string sql = "update ENVIRGXDY_H0001Z000E00 set ISDELETE = 1, S_UDTIME = '" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "' where ICONGUID = '" + iconguid + "' and FLGUID = '" + pguid + "'";
+                string sql = "update ENVIRGXDY_H0001Z000E00 set ISDELETE = 1, S_UDTIME = '" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")
+                    + "' where ICONGUID = '" + iconguid + "' and FLGUID = '" + pguid + "' and UNITID = '" + unitid + "'";
                 ahp1.ExecuteSql(sql, null);
             }
             else
@@ -363,11 +398,13 @@ namespace EnvirInfoSys
                 new_PB.Double_Click += Icon_DoubleClick;
                 flowLayoutPanel1.Controls.Add(new_PB);
                 
-                string sql = "select PGUID from ENVIRGXDY_H0001Z000E00 where ICONGUID = '" + iconguid + "' and FLGUID = '" + pguid + "'";
+                string sql = "select PGUID from ENVIRGXDY_H0001Z000E00 where ICONGUID = '" + iconguid
+                    + "' and FLGUID = '" + pguid + "' and UNITID = '" + unitid + "'";
                 DataTable dt = ahp1.ExecuteDataTable(sql, null);
                 if (dt.Rows.Count > 0)
                 {
-                    sql = "update ENVIRGXDY_H0001Z000E00 set ISDELETE = 0, S_UDTIME = '" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "' where ICONGUID = '" + iconguid + "' and FLGUID = '" + pguid + "'";
+                    sql = "update ENVIRGXDY_H0001Z000E00 set ISDELETE = 0, S_UDTIME = '" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")
+                        + "' where ICONGUID = '" + iconguid + "' and FLGUID = '" + pguid + "' and UNITID = '" + unitid + "'";
                     ahp1.ExecuteSql(sql, null);
                 }
                 else
@@ -397,7 +434,7 @@ namespace EnvirInfoSys
             Get_Property_Data(dataGridView3, iconguid, typeguid);
 
             // 加载扩展属性
-            typeguid = "{A86C80C1-DC07-414F-826F-B52B8FC14A9C}";
+            typeguid = "{D7DE9C5E-253C-491C-A380-06E41C68D2C8}";
             Get_Property_Data(dataGridView4, iconguid, typeguid);
         }
 
@@ -569,11 +606,12 @@ namespace EnvirInfoSys
             }
         }
 
-        private void ClassifyForm_FormClosing(object sender, FormClosingEventArgs e)
+        private void Classify_1Form_FormClosing(object sender, FormClosingEventArgs e)
         {
             ahp1.CloseConn();
             ahp2.CloseConn();
             ahp3.CloseConn();
+            ahp4.CloseConn();
         }
 
     }

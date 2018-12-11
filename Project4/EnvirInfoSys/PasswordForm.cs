@@ -25,9 +25,9 @@ namespace EnvirInfoSys
 
         private void PasswordForm_Shown(object sender, EventArgs e)
         {
-            groupBox3.Visible = false;
+            //groupBox3.Visible = false;
             ahp = new AccessHelper(WorkPath + "data\\PASSWORD_H0001Z000E00.mdb");
-            pw_mode = "";
+            pw_mode = radioButton3.Text;
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -46,8 +46,9 @@ namespace EnvirInfoSys
                     textBox1.Text = "";
                     textBox2.Text = "";
                     MessageBox.Show("新密码与密码确认不匹配!");
+                    return;
                 }
-                sql = "update PASSWORD_H0001Z000E00 set PWMD5 = '" + GetMd5_16byte(new_pw)
+                sql = "update PASSWORD_H0001Z000E00 set S_UDTIME = '" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "', PWMD5 = '" + GetMd5_16byte(new_pw)
                     + "' where ISDELETE = 0 and PWNAME = '" + pw_mode + "' and UNITID = '" + unitid + "'";
                 ahp.ExecuteSql(sql, null);
                 MessageBox.Show("修改成功!");
@@ -76,6 +77,10 @@ namespace EnvirInfoSys
         private void radioButton_CheckedChanged(object sender, EventArgs e)
         {
             RadioButton tmp = (RadioButton)sender;
+            if (tmp.Text == "管理员密码")
+                groupBox3.Visible = true;
+            else
+                groupBox3.Visible = false;
             pw_mode = tmp.Text;
             string sql = "select AUTHORITY from PASSWORD_H0001Z000E00 where ISDELETE = 0 and PWNAME = '"
                 + pw_mode + "' and UNITID = '" + unitid + "'";
@@ -102,9 +107,6 @@ namespace EnvirInfoSys
                         checkedListBox1.SetItemChecked(i, false);
                 }
             }
-            
-                    
-
         }
        
         private void checkedListBox1_Leave(object sender, EventArgs e)
@@ -114,7 +116,7 @@ namespace EnvirInfoSys
                 if (checkedListBox1.GetItemChecked(i))
                     authority += checkedListBox1.Items[i].ToString() + ";";
 
-            string sql = "update PASSWORD_H0001Z000E00 set AUTHORITY = '" + authority 
+            string sql = "update PASSWORD_H0001Z000E00 set S_UDTIME = '" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "', AUTHORITY = '" + authority 
                 + "' where ISDELETE = 0 and PWNAME = '" + pw_mode + "' and UNITID = '" + unitid + "'";
             ahp.ExecuteSql(sql, null);
         }
@@ -122,6 +124,15 @@ namespace EnvirInfoSys
         private void PasswordForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             groupBox1.Focus();
+            string sql = "select AUTHORITY from PASSWORD_H0001Z000E00 where ISDELETE = 0 and PWNAME = '管理员密码' and UNITID = '" + unitid + "'";
+            if (ahp == null)
+                ahp = new AccessHelper(WorkPath + "data\\PASSWORD_H0001Z000E00.mdb");
+            DataTable dt = ahp.ExecuteDataTable(sql, null);
+            if (dt.Rows.Count > 0)
+            {
+                string author_list = dt.Rows[0]["AUTHORITY"].ToString();
+                FileReader.Authority = author_list.Split(';');
+            }
             ahp.CloseConn();
         }
 

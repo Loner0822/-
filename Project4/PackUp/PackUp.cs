@@ -16,7 +16,6 @@ namespace PackUp
         [DllImport("user32.dll", EntryPoint = "FindWindow", SetLastError = true)]
         public static extern IntPtr FindWindow(string lpClassName, string lpWindowName);
         
-
         static int Main(string[] args)
         {
             Console.Title = "Packup";
@@ -55,7 +54,7 @@ namespace PackUp
             p.WaitForExit();
 
             string DesktopPath = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
-            string TargetPath = DesktopPath + "\\" + my_app_publisher + my_app_name + ".exe";
+            string TargetPath = DesktopPath + "\\" + my_app_publisher + my_app_name + my_app_version + ".exe";
             TargetPath = TargetPath.Replace("\0", "");
 
             if (File.Exists(WorkPath + "Output\\Setup.exe"))

@@ -30,7 +30,6 @@ namespace PublishSys
         private AccessHelper ahp4 = null;       // ZSK_H0001Z000E00.mdb
         private AccessHelper ahp5 = null;       // 经纬度注册.mdb
         private AccessHelper ahp6 = null;       // ENVIRDYDATA_H0001Z000E00.mdb
-        //private AccessHelper ahp7 = null;                                       ENVIRDYDATA_H0001Z000E00.mdb
 
         public string unitid = "";
         private string[] folds = null;
@@ -105,20 +104,16 @@ namespace PublishSys
 
             checkedListBox1.Items.Clear();
 
-            // 导入管理级别
+            // 导入组织结构
             Load_Unit_Level();
             if (treeView1.Nodes.Count <= 0)
             {
-                MessageBox.Show("未导入管理级别数据，即将关闭窗口");
+                MessageBox.Show("未导入组织结构数据，即将关闭窗口");
                 this.Close();
                 return;
             }
 
             // 图符对应初始化
-            //Show_Icon_List();
-
-            //if (treeView1.Nodes.Count > 0)
-                //treeView1.SelectedNode = treeView1.Nodes[0];
 
             // 地图对应初始化
             button3.Enabled = false;
@@ -136,7 +131,7 @@ namespace PublishSys
             borList = new List<double[]>();
             borderDic = new Dictionary<string, object>();
             borderDic.Add("type", "实线");
-            borderDic.Add("width", 2);
+            borderDic.Add("width", 1);
             borderDic.Add("color", "#000000");
             borderDic.Add("opacity", 1);
             string sql = "select LNG_LAT from BORDERDATA where ISDELETE = 0 and UNITID = '" + unitid + "'";
@@ -165,6 +160,7 @@ namespace PublishSys
                 treeView1.SelectedNode = treeView1.Nodes[0];
             }
 
+            tabControl3.TabPages[0].Parent = null;
             timer1.Enabled = true;
         }
 
@@ -183,7 +179,6 @@ namespace PublishSys
                 ucPB.IconPath = icon_path + pguid + ".png";
                 ucPB.Single_Click += Icon_SingleClick;
                 ucPB.Double_Click += Icon_DoubleClick;
-                //ucPB.MouseDown += dataGridView_MouseDown;
                 ucPB.IconCheck = false;
             }
         }
@@ -288,7 +283,7 @@ namespace PublishSys
                 }
                 else
                 {
-                    sql = "insert into ICONDUIYING_H0001Z000E00 (PGUID, ISDELETE, S_UDTIME, LEVELGUID, ICONGUID, UNITEID) values （'"
+                    sql = "insert into ICONDUIYING_H0001Z000E00 (PGUID, S_UDTIME, LEVELGUID, ICONGUID, UNITEID) values ('"
                         + Guid.NewGuid().ToString("B") + "', '" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "', '" + levelguid
                         + "', '" + iconguid + "', '" + unitid + "')";
                     ahp6.ExecuteSql(sql, null);
@@ -419,7 +414,7 @@ namespace PublishSys
                 }
                 else
                 {
-                    sql = "insert into ICONDUIYING_H0001Z000E00 (PGUID, ISDELETE, S_UDTIME, LEVELGUID, ICONGUID, UNITEID) values （'"
+                    sql = "insert into ICONDUIYING_H0001Z000E00 (PGUID, S_UDTIME, LEVELGUID, ICONGUID, UNITEID) values ('"
                         + Guid.NewGuid().ToString("B") + "', '" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "', '" + levelguid
                         + "', '" + item.IconPguid + "', '" + unitid + "')";
                     ahp6.ExecuteSql(sql, null);
@@ -461,20 +456,17 @@ namespace PublishSys
         {
             string mapPath = WorkPath + "Publish\\googlemap\\map";
             string starPath = WorkPath + "Publish\\googlemap\\satellite";
+            string deletePath = "";
             if (Directory.Exists(mapPath))
             {
-                Process p = Process.Start(WorkPath + "DeleteDir.exe", mapPath);
-                p.WaitForExit();
-                //Directory.Delete(mapPath, true);
-                //Tools.DeleteFolder(mapPath, null);
+                deletePath += mapPath + ",";
             }
             if (Directory.Exists(starPath))
             {
-                Process p = Process.Start(WorkPath + "DeleteDir.exe", starPath);
-                p.WaitForExit();
-                //Tools.DeleteFolder(starPath, null);
+                deletePath += starPath;
             }
-            //isT = true;
+            Process p = Process.Start(WorkPath + "DeleteDir.exe", deletePath);
+            p.WaitForExit();
         }
 
         private Dictionary<string, string> GL_NAME;
@@ -539,7 +531,6 @@ namespace PublishSys
             for (int i = 0; i < checkedListBox1.Items.Count; ++i)
                 if (checkedListBox1.GetItemChecked(i))
                     checkedListBox1.SetItemChecked(i, false);
-            ahp6 = new AccessHelper(WorkPath + "Publish\\data\\ENVIRDYDATA_H0001Z000E00.mdb");
             sql = "select MAPLEVEL from MAPDUIYING_H0001Z000E00 where ISDELETE = 0 and LEVELGUID = '" + levelguid + "' and UNITEID = '" + unitid + "'";
             dt = ahp6.ExecuteDataTable(sql, null);
             if (dt.Rows.Count > 0)
@@ -601,7 +592,6 @@ namespace PublishSys
             if (!Directory.Exists(gpath))
             {
                 MessageBox.Show("请下载或导入混合图(无偏移)");
-                //this.Close();
                 textBox1.Text = "";
                 return;
             }
@@ -609,7 +599,6 @@ namespace PublishSys
             if (!Directory.Exists(gpath))
             {
                 MessageBox.Show("请下载或导入街道图");
-                //this.Close();
                 textBox1.Text = "";
                 return;
             }
@@ -618,7 +607,6 @@ namespace PublishSys
             if (!Check_Map_LngLat())
             {
                 MessageBox.Show("当前下载地图与经纬度不对应");
-                //this.Close();
                 textBox1.Text = "";
                 return;
             }
@@ -657,7 +645,6 @@ namespace PublishSys
         {
             button3.Enabled = true;
             int index = checkedListBox1.SelectedIndex;
-            //List<Dictionary<string, object>> lst = new List<Dictionary<string, object>>();//标注list，从数据库获取
             mapHelper1.ShowMap(int.Parse(checkedListBox1.Items[index].ToString()), "", false, map_type, null, borderDic, null);
         }
 
@@ -685,7 +672,6 @@ namespace PublishSys
                 // 获取地图文件夹的上级目录
                 // 允许用户选择地图文件夹的总目录、其下的：roadmap、satellite或者satellite_en子目录
                 string tmp = folderBrowserDialog1.SelectedPath;
-                //inip.WriteString("mapproperties", unitid, tmp);
                 Show_Map_List(tmp);
             }
         }
@@ -725,7 +711,6 @@ namespace PublishSys
             inip = new IniOperator(WorkPath + "Publish\\parameter.ini");
             inip.WriteString("mapproperties", "centerlat", slat);
             inip.WriteString("mapproperties", "centerlng", slng);
-            ahp5 = new AccessHelper(WorkPath + "Publish\\data\\经纬度注册.mdb");
             string sql = "update ORGCENTERDATA set S_UDTIME = '" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "', LNG = '" + slng + "', LAT = '" + slat + "' where ISDELETE = 0 and UNITEID = '" + unitid + "'";
             ahp5.ExecuteSql(sql, null);
 
@@ -766,7 +751,6 @@ namespace PublishSys
             {
                 sql = "update MAPDUIYING_H0001Z000E00 set S_UDTIME = '" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "', MAPLEVEL = '" + maplevel + "' where ISDELETE = 0 and LEVELGUID = '" + levelguid + "' and UNITEID = '" + unitid + "'";
                 ahp6.ExecuteSql(sql, null);
-                //ahp.CloseConn();
             }
             else
             {
@@ -774,7 +758,6 @@ namespace PublishSys
                     + Guid.NewGuid().ToString("B") + "', '" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "', '"
                     + levelguid + "', '" + maplevel + "', '" + unitid + "')";
                 ahp6.ExecuteSql(sql, null);
-                //ahp.CloseConn();
             }
         }
 
@@ -800,7 +783,6 @@ namespace PublishSys
             }
 
             // 获取当前需导入地图列表
-            ahp6 = new AccessHelper(WorkPath + "Publish\\data\\ENVIRDYDATA_H0001Z000E00.mdb");
             string sql = "select MAPLEVEL from MAPDUIYING_H0001Z000E00 where ISDELETE = 0 and UNITEID = '" + unitid + "'";
             DataTable dt = ahp6.ExecuteDataTable(sql, null);
             for (int i = 0; i < dt.Rows.Count; ++i)
@@ -837,11 +819,6 @@ namespace PublishSys
             string mapPath = WorkPath + "Publish\\googlemap\\map";
             string starPath = WorkPath + "Publish\\googlemap\\satellite";
 
-            //HintForm htfm = new HintForm();
-            //htfm.hinttext = "正在更新地图...";
-            //htfm.Show();
-            //htfm.Refresh();
-
             string Copy_File = string.Empty;
             string Delete_File = string.Empty;
 
@@ -857,34 +834,24 @@ namespace PublishSys
             string smapPath = rootPath + "\\roadmap";
             for (int i = 0; i < add_mplst.Count; i++)
             {
-                //htfm.hinttext = "正在拷贝街道图...层级" + add_mplst[i];
-                //htfm.Get_New_Text();
                 string destPath = mapPath + "\\" + add_mplst[i];
                 if (!Directory.Exists(destPath))
                 {
                     Directory.CreateDirectory(destPath);
                 }
                 string sourPath = smapPath + "\\" + add_mplst[i];
-                //Tools.CopyDirectory(sourPath, destPath, panel3, 0);
-                //Process p = Process.Start(WorkPath + "CopyDir.exe", sourPath + " " + destPath + " 1");
-                //p.WaitForExit();
                 Copy_File += sourPath + "：" + destPath + ",";
             }
 
             smapPath = rootPath + "\\satellite_en";
             for (int i = 0; i < add_mplst.Count; i++)
             {
-                //htfm.hinttext = "正在拷贝卫星图...层级" + add_mplst[i];
-                //htfm.Get_New_Text();
                 string destPath = starPath + "\\" + add_mplst[i];
                 if (!Directory.Exists(destPath))
                 {
                     Directory.CreateDirectory(destPath);
                 }
                 string sourPath = smapPath + "\\" + add_mplst[i];
-                //Tools.CopyDirectory(sourPath, destPath, panel3, 0);
-                //Process p = Process.Start(WorkPath + "CopyDir.exe", sourPath + " " + destPath + " 1");
-                //p.WaitForExit();
                 Copy_File += sourPath + "：" + destPath + ",";
             }
             Process p;
@@ -897,37 +864,36 @@ namespace PublishSys
 
             for (int i = 0; i < del_mplst.Count; ++i)
             {
-                //htfm.hinttext = "正在删除街道图...层级" + del_mplst[i];
-                //htfm.Get_New_Text();
                 string destPath = mapPath + "\\" + del_mplst[i];
                 while (Directory.Exists(destPath))
                 {
-                    //Directory.Delete(destPath, true);
-                    //Process p = Process.Start(WorkPath + "DeleteDir.exe", destPath);
-                    //p.WaitForExit();
                     Delete_File += destPath + ",";
                 }
             }
 
             for (int i = 0; i < del_mplst.Count; ++i)
             {
-                //htfm.hinttext = "正在删除卫星图...层级" + del_mplst[i];
-                //htfm.Get_New_Text();
                 string destPath = starPath + "\\" + del_mplst[i];
                 while (Directory.Exists(destPath))
                 {
-                    //Directory.Delete(destPath, true);
-                    //Process p = Process.Start(WorkPath + "DeleteDir.exe", destPath);
-                    //p.WaitForExit();
                     Delete_File += destPath + ",";
                 }
             }
             p = Process.Start(WorkPath + "DeleteDir.exe", Delete_File);
             inip = new IniOperator(WorkPath + "Publish\\RegInfo.ini");
             inip.WriteString("Public", "UnitID", unitid);
-            //htfm.Close();
             MessageBox.Show("地图更新成功!");
 
+            ahp1.CloseConn();
+            ahp2.CloseConn();
+            ahp3.CloseConn();
+            ahp4.CloseConn();
+            ahp5.CloseConn();
+            ahp6.CloseConn();
+        }
+
+        private void MapForm_FormClosed(object sender, FormClosedEventArgs e)
+        {
             ahp1.CloseConn();
             ahp2.CloseConn();
             ahp3.CloseConn();
@@ -944,13 +910,7 @@ namespace PublishSys
             string Read_id = inip.ReadString("Public", "UnitID", "");
             if (Read_id != unitid)
             {
-                //HintForm htfm = new HintForm();
-                //htfm.hinttext = "正在清除地图缓存，请稍后...";
-                //htfm.Show();
-                //Thread t1 = new Thread(new ThreadStart(Delete_Path));
-                //t1.Start();
                 Delete_Path();
-                //htfm.Close();
             }
         }
 
@@ -968,7 +928,7 @@ namespace PublishSys
             borList = new List<double[]>();
             borderDic = new Dictionary<string, object>();
             borderDic.Add("type", "实线");
-            borderDic.Add("width", 2);
+            borderDic.Add("width", 1);
             borderDic.Add("color", "#000000");
             borderDic.Add("opacity", 1);
             string[] strAll = File.ReadAllLines(file);
@@ -976,12 +936,11 @@ namespace PublishSys
             foreach (string str in strAll)
             {
                 string[] split = str.Split(new Char[] { ' ', ',', ':', '\t', '\r', '\n' });
-                borList.Add(new double[] { double.Parse(split[0]), double.Parse(split[1]) });
+                borList.Add(new double[] { double.Parse(split[1]), double.Parse(split[0]) });
                 ds_lng_lat += split[0] + "," + split[1] + ";";
             }
             borderDic.Add("path", borList);
             int index = checkedListBox1.SelectedIndex;
-            ahp5 = new AccessHelper(WorkPath + "Publish\\data\\经纬度注册.mdb");
             string sql = "select PGUID from BORDERDATA where ISDELETE = 0 and UNITID = '" + unitid + "'";
             DataTable dt = ahp5.ExecuteDataTable(sql, null);
             if (dt.Rows.Count > 0)
@@ -997,8 +956,7 @@ namespace PublishSys
                 ahp5.ExecuteSql(sql, null);
             }
             mapHelper1.ShowMap(int.Parse(checkedListBox1.Items[index].ToString()), "", false, map_type, null, borderDic, null);
-        }
-
+        }        
     }
 
     public class CompStr : IComparer<string>

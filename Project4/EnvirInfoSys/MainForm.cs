@@ -54,7 +54,7 @@ namespace EnvirInfoSys
         private Dictionary<string, string> Icon_Name;
 
         /// <summary>
-        /// 管理级别数据(数据库获取)
+        /// 组织结构数据(数据库获取)
         /// </summary>
         private string[] GL_PGUID;
         private Dictionary<string, string> GL_NAME;
@@ -67,16 +67,18 @@ namespace EnvirInfoSys
         /// 地图数据
         /// </summary>
         private int cur_Level;
-        private string levelguid = "";     // 当前管理级别guid
+        private string levelguid = "";     // 当前组织结构guid
         private string map_type = "g_map";
         private bool Permission = false;
         private bool Before_ShowMap = false;
         private string[] folds = null;
         private List<Dictionary<string, object>> cur_lst;
+
         // 边界线
         Dictionary<string, object> borderDic = null;
         private List<double[]> borList = null;
         private LineData borData = null;
+        private LineData lineData = null;
 
         /// <summary>
         /// 管辖分类
@@ -105,18 +107,58 @@ namespace EnvirInfoSys
             p.WaitForExit();
         }
 
+        private void 下载单位注册数据ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Process p = Process.Start(WorkPath + "OrgDataDown.exe");
+            p.WaitForExit();
+            treeView1.Nodes.Clear();
+            Load_Unit_Level();
+            treeView1.SelectedNode = treeView1.Nodes[0];
+        }
+
         private void IP设置ToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            for (int i = 0; i < FileReader.Authority.Length; ++i)
+            {
+                if (FileReader.Authority[i] == "服务器IP设置权限")
+                {
+                    CheckPwForm ckpwf = new CheckPwForm();
+                    ckpwf.unitid = UnitID;
+                    if (ckpwf.ShowDialog() != System.Windows.Forms.DialogResult.OK)
+                    {
+                        MessageBox.Show("未能获取管理员权限");
+                        return;
+                    }
+                    break;
+                }
+            }
             Process p = Process.Start(WorkPath + "SetIP.exe");
             p.WaitForExit();
         }
 
         private void 边界线属性设置ToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            for (int i = 0; i < FileReader.Authority.Length; ++i)
+            {
+                if (FileReader.Authority[i] == "边界线属性设置权限")
+                {
+                    CheckPwForm ckpwf = new CheckPwForm();
+                    ckpwf.unitid = UnitID;
+                    if (ckpwf.ShowDialog() != System.Windows.Forms.DialogResult.OK)
+                    {
+                        MessageBox.Show("未能获取管理员权限");
+                        return;
+                    }
+                    break;
+                }
+            }
             BorderForm bdfm = new BorderForm();
             bdfm.IsPoint = false;
             bdfm.IsLine = false;
             bdfm.borData.Load_Line("边界线");
+            if (bdfm.borData.line_data == null)
+                bdfm.borData.line_data = borData;
+            
             if (bdfm.ShowDialog() == DialogResult.OK)
             {
                 borData = bdfm.borData.line_data;
@@ -134,7 +176,21 @@ namespace EnvirInfoSys
 
         private void 管辖分类设置ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            ClassifyForm clcfm = new ClassifyForm();
+            for (int i = 0; i < FileReader.Authority.Length; ++i)
+            {
+                if (FileReader.Authority[i] == "管辖分类设置权限")
+                {
+                    CheckPwForm ckpwf = new CheckPwForm();
+                    ckpwf.unitid = UnitID;
+                    if (ckpwf.ShowDialog() != System.Windows.Forms.DialogResult.OK)
+                    {
+                        MessageBox.Show("未能获取管理员权限");
+                        return;
+                    }
+                    break;
+                }
+            }
+            Classify_1Form clcfm = new Classify_1Form();
             clcfm.unitid = UnitID;
             clcfm.gxguid = GXguid;
             clcfm.ShowDialog();
@@ -149,26 +205,97 @@ namespace EnvirInfoSys
             Load_Guan_Xia();
         }
 
+        private void 图符对应设置ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            for (int i = 0; i < FileReader.Authority.Length; ++i)
+            {
+                if (FileReader.Authority[i] == "图符对应设置权限")
+                {
+                    CheckPwForm ckpwf = new CheckPwForm();
+                    ckpwf.unitid = UnitID;
+                    if (ckpwf.ShowDialog() != System.Windows.Forms.DialogResult.OK)
+                    {
+                        MessageBox.Show("未能获取管理员权限");
+                        return;
+                    }
+                    break;
+                }
+            }
+            Classify_2Form clcfm = new Classify_2Form();
+            clcfm.unitid = UnitID;
+            clcfm.ShowDialog();
+            TreeNode pNode = treeView1.SelectedNode;
+            treeView1.SelectedNode = null;
+            treeView1.SelectedNode = pNode;
+        }
+
+        private void 图符管理设置ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            for (int i = 0; i < FileReader.Authority.Length; ++i)
+            {
+                if (FileReader.Authority[i] == "图符扩展设置权限")
+                {
+                    CheckPwForm ckpwf = new CheckPwForm();
+                    ckpwf.unitid = UnitID;
+                    if (ckpwf.ShowDialog() != System.Windows.Forms.DialogResult.OK)
+                    {
+                        MessageBox.Show("未能获取管理员权限");
+                        return;
+                    }
+                    break;
+                }
+            }
+            Process p = Process.Start(WorkPath + "tfkzdy.exe");
+            p.WaitForExit();
+        }
+
         private void 密码管理ToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            CheckPwForm ckpwf = new CheckPwForm();
+            ckpwf.unitid = UnitID;
+            if (ckpwf.ShowDialog() != System.Windows.Forms.DialogResult.OK)
+            {
+                MessageBox.Show("未能获取管理员权限");
+                return;
+            }
             PasswordForm psfm = new PasswordForm();
             psfm.ShowDialog();
         }
 
         private void 退出ToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            DialogResult dr;
+            dr = MessageBox.Show("是否将本次数据上传服务器?", "提示", MessageBoxButtons.YesNoCancel,
+                MessageBoxIcon.Asterisk);
+            if (dr == System.Windows.Forms.DialogResult.Yes)
+            {
+                Process p = Process.Start(WorkPath + "DataUP.exe", "EnvirInfoSys.exe 0");
+                p.WaitForExit();
+            }
+            else if (dr == System.Windows.Forms.DialogResult.Cancel)
+            {
+                return;
+            }
+            FileReader.often_ahp.CloseConn();
+            FileReader.line_ahp.CloseConn();
             System.Environment.Exit(0);
         }
 
         private void MainForm_Load(object sender, EventArgs e)
         {
+            borData = new LineData();
+            lineData = new LineData();
+            borData.Get_NewLine();
+            lineData.Get_NewLine();
+
             // 加载主界面
             FileReader.inip = new IniOperator(WorkPath + "RegInfo.ini");
             string UnitName = FileReader.inip.ReadString("Public", "UnitName", "");
             UnitName = UnitName.Replace("\0", "");
             string AppName = FileReader.inip.ReadString("Public", "AppName", "");
             AppName = AppName.Replace("\0", "");
-            this.Text = UnitName + AppName;
+            string VerNum = FileReader.inip.ReadString("版本号", "VerNum", "");
+            this.Text = UnitName + AppName + VerNum;
             FileReader.often_ahp = new AccessHelper(AccessPath);
             FileReader.line_ahp = new AccessHelper(WorkPath + "data\\经纬度注册.mdb");
 
@@ -176,7 +303,7 @@ namespace EnvirInfoSys
             FileReader.inip = new IniOperator(WorkPath + "RegInfo.ini");
             UnitID = FileReader.inip.ReadString("Public", "UnitID", "-1");
 
-            // 加载管理级别
+            // 加载组织结构
             folds = Get_Map_List();
             Load_Unit_Level();
 
@@ -207,6 +334,7 @@ namespace EnvirInfoSys
             mapHelper1.maparr = folds;
 
             // 边界线导入
+            
             Load_Border(UnitID);
 
             // 加载管辖类型
@@ -228,6 +356,16 @@ namespace EnvirInfoSys
             groupBox1.Visible = false;
             groupBox2.Visible = false;
 
+            // 加载管理员权限
+            AccessHelper ahp = new AccessHelper(WorkPath + "data\\PASSWORD_H0001Z000E00.mdb");
+            sql = "select AUTHORITY from PASSWORD_H0001Z000E00 where ISDELETE = 0 and PWNAME = '管理员密码' and UNITID = '" + UnitID + "'";
+            dt = ahp.ExecuteDataTable(sql, null);
+            string author_list = "";
+            if (dt.Rows.Count > 0)
+                author_list = dt.Rows[0]["AUTHORITY"].ToString();
+            FileReader.Authority = author_list.Split(';');
+            ahp.CloseConn();
+
             // 显示登陆界面
             LoginForm lgf = new LoginForm();
             lgf.Text += " " + this.Text;
@@ -246,6 +384,11 @@ namespace EnvirInfoSys
                     边界线属性设置ToolStripMenuItem.Visible = true;
                     管辖分类设置ToolStripMenuItem.Visible = true;
                     修改箭头样式ToolStripMenuItem.Visible = true;
+
+                    设置当前点为中心点ToolStripMenuItem.Visible = true;
+                    导入当前单位边界线ToolStripMenuItem.Visible = true;
+                    图符对应设置ToolStripMenuItem.Visible = true;
+                    图符管理设置ToolStripMenuItem.Visible = true;
                 }
                 if (lgf.Mode == 2)
                 {
@@ -259,6 +402,11 @@ namespace EnvirInfoSys
                     边界线属性设置ToolStripMenuItem.Visible = false;
                     管辖分类设置ToolStripMenuItem.Visible = false;
                     修改箭头样式ToolStripMenuItem.Visible = false;
+
+                    设置当前点为中心点ToolStripMenuItem.Visible = false;
+                    导入当前单位边界线ToolStripMenuItem.Visible = false;
+                    图符对应设置ToolStripMenuItem.Visible = false;
+                    图符管理设置ToolStripMenuItem.Visible = false;
                 }
             }
             else
@@ -514,7 +662,7 @@ namespace EnvirInfoSys
         private void timer1_Tick(object sender, EventArgs e)
         {
             Point screenPoint = Control.MousePosition;
-            if (screenPoint.X > groupBox1.Width + 10 && screenPoint.Y > 200)
+            if (screenPoint.X > groupBox1.Width + 50 && screenPoint.Y > 200)
             {
                 this.groupBox1.Visible = false;
             }
@@ -531,7 +679,6 @@ namespace EnvirInfoSys
             {
                 this.groupBox2.Visible = false;
             }
-
         }
 
         private void Add_Unit_Node(TreeNode pa)
@@ -553,8 +700,10 @@ namespace EnvirInfoSys
         {
             borList = new List<double[]>();
             borderDic = new Dictionary<string, object>();
-            borData = new LineData();
-            borData.Load_Line("边界线");
+            LineData new_borData = new LineData();
+            new_borData.Load_Line("边界线");
+            if (new_borData.Type != null)
+                borData = new_borData;
             borderDic.Add("type", borData.Type);
             borderDic.Add("width", borData.Width);
             borderDic.Add("color", borData.Color);
@@ -594,14 +743,26 @@ namespace EnvirInfoSys
             levelguid = pNode.Tag.ToString();
             Load_Border(pNode.Name);
 
-            string sql = "select LAT, LNG from ORGCENTERDATA where ISDELETE = 0 and UNITEID = '" + pNode.Name + "'";
-            DataTable dt = FileReader.line_ahp.ExecuteDataTable(sql, null);
+            bool flag = false;
+
+            string sql = "select MARKELAT, MARKELNG from ENVIRICONDATA_H0001Z000E00 where ISDELETE = 0 and MAKRENAME like '%" + pNode.Text + "%'";
+            DataTable dt = FileReader.often_ahp.ExecuteDataTable(sql, null);
+            if (dt.Rows.Count > 0)
+            {
+                mapHelper1.centerlat = double.Parse(dt.Rows[0]["MARKELAT"].ToString());
+                mapHelper1.centerlng = double.Parse(dt.Rows[0]["MARKELNG"].ToString());
+                flag = true;
+            }
+
+            sql = "select LAT, LNG from ORGCENTERDATA where ISDELETE = 0 and UNITEID = '" + pNode.Name + "'";
+            dt = FileReader.line_ahp.ExecuteDataTable(sql, null);
             if (dt.Rows.Count > 0)
             {
                 mapHelper1.centerlat = double.Parse(dt.Rows[0]["LAT"].ToString());
                 mapHelper1.centerlng = double.Parse(dt.Rows[0]["LNG"].ToString());
+                flag = true;
             }
-            else
+            else if (flag != true)
             {
                 if (Before_ShowMap == true)
                 {
@@ -611,6 +772,11 @@ namespace EnvirInfoSys
                 }
             }
             Before_ShowMap = true;
+
+            if (flag == false)
+            {
+                MessageBox.Show("无对应中心点经纬度数据，无法定位到" + pNode.Text + "，请在地图上相应位置右键进行设置");
+            }
 
             ToolStripMenuItem Fa_TSMI = new ToolStripMenuItem();
             foreach (ToolStripMenuItem tsmi in menuStrip1.Items)
@@ -639,7 +805,7 @@ namespace EnvirInfoSys
             }
             
             // 处理cur_level
-            bool flag = false;
+            flag = false;
             string[] maps = GL_MAP[levelguid].Split(',');
             for (int i = 0; i < maps.Length; ++i)
             {
@@ -689,10 +855,13 @@ namespace EnvirInfoSys
                 bdfm.IsPoint = true;
                 bdfm.IsLine = false;
                 bdfm.borData.Load_Line(Operator_GUID);
+                if (bdfm.borData.line_data == null)
+                    bdfm.borData.line_data = lineData;
                 bdfm.borData.lat = lat;
                 bdfm.borData.lng = lng;
                 if (bdfm.ShowDialog() == DialogResult.OK)
                 {
+                    lineData = bdfm.borData.line_data;
                     if (handle == 2)
                         mapHelper1.deleteMarker(Operator_GUID + "_line");
                     Dictionary<string, object> dic = bdfm.borData.ToDic();//添加每个标注
@@ -754,14 +923,18 @@ namespace EnvirInfoSys
 
         private void 设置当前点为中心点ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("确认设置当前点为中心点?");
             TreeNode pNode = treeView1.SelectedNode;
+            DialogResult dr = MessageBox.Show("是否设置当前位置为" + pNode.Text + "中心点经纬度", "提示", MessageBoxButtons.OKCancel);
+            if (dr != System.Windows.Forms.DialogResult.OK)
+                return;
+            
             string sql = "select PGUID from ORGCENTERDATA where ISDELETE = 0 and UNITEID = '" + pNode.Name + "'";
             DataTable dt = FileReader.line_ahp.ExecuteDataTable(sql, null);
             if (dt.Rows.Count > 0)
             {
                 sql = "update ORGCENTERDATA set S_UDTIME = '" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")
-                    + "', LAT = '" + center_lat.ToString() + "', LNG = '" + center_lng.ToString() + "'";
+                    + "', LAT = '" + center_lat.ToString() + "', LNG = '" + center_lng.ToString()
+                    + "' where ISDELETE = 0 and UNITEID = '" + pNode.Name + "'";
                 FileReader.line_ahp.ExecuteSql(sql, null);
             }
             else
@@ -912,6 +1085,8 @@ namespace EnvirInfoSys
             bdfm.IsPoint = true;
             bdfm.IsLine = true;
             bdfm.borData.Load_Line(Operator_GUID);
+            if (bdfm.borData.line_data == null)
+                bdfm.borData.line_data = lineData;
             string sql = "select POINTLAT, POINTLNG from ENVIRICONDATA_H0001Z000E00 where ISDELETE = 0 and PGUID = '" + Operator_GUID + "'";
             DataTable dt = FileReader.often_ahp.ExecuteDataTable(sql, null);
             if (dt.Rows.Count > 0) 
@@ -927,6 +1102,7 @@ namespace EnvirInfoSys
             
             if (bdfm.ShowDialog() == DialogResult.OK)
             {
+                lineData = bdfm.borData.line_data;
                 mapHelper1.deleteMarker(Operator_GUID + "_line");
                 Dictionary<string, object> dic = bdfm.borData.ToDic();//添加每个标注
                 mapHelper1.DrawPointLine(Operator_GUID, i_lat, i_lng, dic);
@@ -939,6 +1115,7 @@ namespace EnvirInfoSys
                         break;
                     }
                 }
+                borData = bdfm.borData.line_data;
             }
         }
 
@@ -1139,7 +1316,7 @@ namespace EnvirInfoSys
 
         private void mapHelper1_MapDblClick(string button, bool canedit, double lat, double lng, int x, int y, string markerguid)
         {
-            Thread.Sleep(100);
+            //Thread.Sleep(100);
             if (radioButton1.Checked && button == "left")
             {
                 Map_Resize(true);
@@ -1203,8 +1380,18 @@ namespace EnvirInfoSys
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            FileReader.often_ahp.CloseConn();
-            FileReader.line_ahp.CloseConn();
+            DialogResult dr;
+            dr = MessageBox.Show("是否将本次数据上传服务器?", "提示", MessageBoxButtons.YesNoCancel,
+                MessageBoxIcon.Asterisk);
+            if (dr == System.Windows.Forms.DialogResult.Yes)
+            {
+                Process p = Process.Start(WorkPath + "DataUP.exe", "EnvirInfoSys.exe 1");
+                p.WaitForExit();
+            }
+            else if (dr == System.Windows.Forms.DialogResult.Cancel)
+            {
+                e.Cancel = true;
+            }
         }
 
         private void MainForm_FormClosed(object sender, FormClosedEventArgs e)
@@ -1224,6 +1411,7 @@ namespace EnvirInfoSys
         public static AccessHelper often_ahp = null;
         public static AccessHelper line_ahp = null;
         public static IniOperator inip = null;
+        public static string[] Authority = null;
     }
 
     /// <summary>
@@ -1253,6 +1441,14 @@ namespace EnvirInfoSys
         public string Color { set; get; }
         public double Opacity { set; get; }
 
+        public void Get_NewLine()
+        {
+            this.Type = "实线";
+            this.Width = 1;
+            this.Color = "#000000";
+            this.Opacity = 1;
+        }
+
         public void Load_Line(string markerguid)
         {
             //LineData res_data = new LineData();
@@ -1267,10 +1463,10 @@ namespace EnvirInfoSys
             }
             else
             {
-                this.Type = "实线";
-                this.Width = 2;
-                this.Color = "#000000";
-                this.Opacity = 1;
+                this.Type = null;
+                this.Width = 0;
+                this.Color = null;
+                this.Opacity = 0;
             }
         }
 
@@ -1332,10 +1528,7 @@ namespace EnvirInfoSys
             }
             else
             {
-                res_data.Type = "实线";
-                res_data.Width = 2;
-                res_data.Color = "#000000";
-                res_data.Opacity = 1;
+                res_data = null;
             }
             this.line_data = res_data;
         }

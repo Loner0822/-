@@ -194,7 +194,9 @@ namespace PublishSys
             if (con != null)
             {
                 con.Close();
+                con.ConnectionString = "";
                 con.Dispose();
+                con = null;
             }
         }
     }

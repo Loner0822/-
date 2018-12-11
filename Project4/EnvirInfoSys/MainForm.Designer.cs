@@ -52,6 +52,7 @@
             this.数据备份ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.数据恢复ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.数据同步ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.下载单位注册数据ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.系统设置ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.服务器IP设置ToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.边界线属性设置ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -244,7 +245,7 @@
             this.groupBox1.Size = new System.Drawing.Size(277, 637);
             this.groupBox1.TabIndex = 2;
             this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "管理级别";
+            this.groupBox1.Text = "组织结构";
             // 
             // treeView1
             // 
@@ -273,7 +274,8 @@
             this.数据管理ToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.数据备份ToolStripMenuItem,
             this.数据恢复ToolStripMenuItem,
-            this.数据同步ToolStripMenuItem});
+            this.数据同步ToolStripMenuItem,
+            this.下载单位注册数据ToolStripMenuItem});
             this.数据管理ToolStripMenuItem.Name = "数据管理ToolStripMenuItem";
             this.数据管理ToolStripMenuItem.Size = new System.Drawing.Size(124, 28);
             this.数据管理ToolStripMenuItem.Text = "数据管理(&M)";
@@ -281,23 +283,30 @@
             // 数据备份ToolStripMenuItem
             // 
             this.数据备份ToolStripMenuItem.Name = "数据备份ToolStripMenuItem";
-            this.数据备份ToolStripMenuItem.Size = new System.Drawing.Size(177, 28);
+            this.数据备份ToolStripMenuItem.Size = new System.Drawing.Size(251, 28);
             this.数据备份ToolStripMenuItem.Text = "数据备份(&B)";
             this.数据备份ToolStripMenuItem.Click += new System.EventHandler(this.数据备份ToolStripMenuItem_Click);
             // 
             // 数据恢复ToolStripMenuItem
             // 
             this.数据恢复ToolStripMenuItem.Name = "数据恢复ToolStripMenuItem";
-            this.数据恢复ToolStripMenuItem.Size = new System.Drawing.Size(177, 28);
+            this.数据恢复ToolStripMenuItem.Size = new System.Drawing.Size(251, 28);
             this.数据恢复ToolStripMenuItem.Text = "数据恢复(&R)";
             this.数据恢复ToolStripMenuItem.Click += new System.EventHandler(this.数据恢复ToolStripMenuItem_Click);
             // 
             // 数据同步ToolStripMenuItem
             // 
             this.数据同步ToolStripMenuItem.Name = "数据同步ToolStripMenuItem";
-            this.数据同步ToolStripMenuItem.Size = new System.Drawing.Size(177, 28);
+            this.数据同步ToolStripMenuItem.Size = new System.Drawing.Size(251, 28);
             this.数据同步ToolStripMenuItem.Text = "数据同步(&U)";
             this.数据同步ToolStripMenuItem.Click += new System.EventHandler(this.数据同步ToolStripMenuItem_Click);
+            // 
+            // 下载单位注册数据ToolStripMenuItem
+            // 
+            this.下载单位注册数据ToolStripMenuItem.Name = "下载单位注册数据ToolStripMenuItem";
+            this.下载单位注册数据ToolStripMenuItem.Size = new System.Drawing.Size(251, 28);
+            this.下载单位注册数据ToolStripMenuItem.Text = "下载单位注册数据(&O)";
+            this.下载单位注册数据ToolStripMenuItem.Click += new System.EventHandler(this.下载单位注册数据ToolStripMenuItem_Click);
             // 
             // 系统设置ToolStripMenuItem
             // 
@@ -339,12 +348,14 @@
             this.图符对应设置ToolStripMenuItem.Name = "图符对应设置ToolStripMenuItem";
             this.图符对应设置ToolStripMenuItem.Size = new System.Drawing.Size(229, 28);
             this.图符对应设置ToolStripMenuItem.Text = "图符对应设置(&C)";
+            this.图符对应设置ToolStripMenuItem.Click += new System.EventHandler(this.图符对应设置ToolStripMenuItem_Click);
             // 
             // 图符管理设置ToolStripMenuItem
             // 
             this.图符管理设置ToolStripMenuItem.Name = "图符管理设置ToolStripMenuItem";
             this.图符管理设置ToolStripMenuItem.Size = new System.Drawing.Size(229, 28);
-            this.图符管理设置ToolStripMenuItem.Text = "图符管理设置(&I)";
+            this.图符管理设置ToolStripMenuItem.Text = "图符扩展设置(&I)";
+            this.图符管理设置ToolStripMenuItem.Click += new System.EventHandler(this.图符管理设置ToolStripMenuItem_Click);
             // 
             // 密码管理ToolStripMenuItem
             // 
@@ -358,19 +369,20 @@
             this.退出ToolStripMenuItem.Name = "退出ToolStripMenuItem";
             this.退出ToolStripMenuItem.Size = new System.Drawing.Size(85, 28);
             this.退出ToolStripMenuItem.Text = "退出(&Q)";
+            this.退出ToolStripMenuItem.Click += new System.EventHandler(this.退出ToolStripMenuItem_Click);
             // 
             // contextMenuStrip2
             // 
             this.contextMenuStrip2.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.设置当前点为中心点ToolStripMenuItem});
             this.contextMenuStrip2.Name = "contextMenuStrip2";
-            this.contextMenuStrip2.Size = new System.Drawing.Size(243, 32);
+            this.contextMenuStrip2.Size = new System.Drawing.Size(297, 32);
             // 
             // 设置当前点为中心点ToolStripMenuItem
             // 
             this.设置当前点为中心点ToolStripMenuItem.Name = "设置当前点为中心点ToolStripMenuItem";
-            this.设置当前点为中心点ToolStripMenuItem.Size = new System.Drawing.Size(242, 28);
-            this.设置当前点为中心点ToolStripMenuItem.Text = "设置当前点为中心点";
+            this.设置当前点为中心点ToolStripMenuItem.Size = new System.Drawing.Size(296, 28);
+            this.设置当前点为中心点ToolStripMenuItem.Text = "设置当前单位的地图中心点";
             this.设置当前点为中心点ToolStripMenuItem.Click += new System.EventHandler(this.设置当前点为中心点ToolStripMenuItem_Click);
             // 
             // contextMenuStrip3
@@ -459,6 +471,7 @@
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip3;
         private System.Windows.Forms.ToolStripMenuItem 导入当前单位边界线ToolStripMenuItem;
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
+        private System.Windows.Forms.ToolStripMenuItem 下载单位注册数据ToolStripMenuItem;
 
     }
 }

@@ -11,48 +11,36 @@ using System.Windows.Forms;
 
 namespace EnvirInfoSys
 {
-    public partial class LoginForm : Form
+    public partial class CheckPwForm : Form
     {
-        public int Mode;
         public string unitid = "";
         private string Workpath = AppDomain.CurrentDomain.BaseDirectory;
 
-        public LoginForm()
+        public CheckPwForm()
         {
             InitializeComponent();
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            string pwname = "";
             string pwd = GetMd5_16byte(textBox1.Text);
             AccessHelper ahp = new AccessHelper(Workpath + "data\\PASSWORD_H0001Z000E00.mdb");
-            string sql = "select PWNAME from PASSWORD_H0001Z000E00 where ISDELETE = 0 and PWMD5 = '"
+            string sql = "select PGUID from PASSWORD_H0001Z000E00 where ISDELETE = 0 and PWNAME = '管理员密码' and PWMD5 = '"
                 + pwd + "' and UNITID = '" + unitid + "'";
             DataTable dt = ahp.ExecuteDataTable(sql, null);
+            ahp.CloseConn();
             if (dt.Rows.Count > 0)
             {
-                pwname = dt.Rows[0]["PWNAME"].ToString();
-            }
-            if (pwname == "编辑模式")
-            {
+
                 this.DialogResult = DialogResult.OK;
-                Mode = 1;
                 this.Close();
             }
-            else if (pwname == "查看模式")
-            {
-                this.DialogResult = DialogResult.OK;
-                Mode = 2;
-                this.Close();
-            }
-            else 
+            else
             {
                 MessageBox.Show("密码错误!");
                 textBox1.Focus();
                 textBox1.SelectAll();
             }
-            ahp.CloseConn();
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -72,6 +60,5 @@ namespace EnvirInfoSys
             md5Pwd = md5Pwd.ToLower();
             return md5Pwd;
         }
-
     }
 }

@@ -128,7 +128,8 @@ namespace PublishSys
                     Add_Child_Node(d_list, pNode);
                 }
             }
-            treeView1.SelectedNode = treeView1.Nodes[0];
+            if (treeView1.Nodes.Count > 0)
+                treeView1.SelectedNode = treeView1.Nodes[0];
         }
 
         private void Add_Child_Node(List<District> d_list, TreeNode pNode)
@@ -192,7 +193,7 @@ namespace PublishSys
 
         private void 下载图符ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Process p = Process.Start(WorkPath + "Publish\\DataUp.exe", "");
+            Process p = Process.Start(WorkPath + "Publish\\IconDataDown.exe", "");
             p.WaitForExit();
         }
 
@@ -207,11 +208,8 @@ namespace PublishSys
 
         private void 导入单位ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            openFileDialog1.ShowDialog();
-            string file = openFileDialog1.FileName;
-            if (!Check_File(file))
-                return;
-            File.Copy(file, AccessPath, true);
+            Process p = Process.Start(WorkPath + "Publish\\OrgDataDown.exe");
+            p.WaitForExit();
             treeView1.Nodes.Clear();
             Get_TreeView();
         }
@@ -236,6 +234,7 @@ namespace PublishSys
 
         private void 退出ToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            ahp.CloseConn();
             System.Environment.Exit(0);
         }
 
@@ -254,25 +253,7 @@ namespace PublishSys
                 textBox3.Focus();
                 return;
             }
-            // LoadMapForm lmf = new LoadMapForm();
-            // lmf.ShowDialog();
-            /*ahp = new AccessHelper(WorkPath + "Publish\\data\\经纬度注册.mdb");
-            string sql = "select LAT, LNG from ORGCENTERDATA where ISDELETE = 0 and UNITEID = '" + pNode.Tag.ToString() + "'";
-            
-            DataTable dt = ahp.ExecuteDataTable(sql, null);
-            ahp.CloseConn();
-            if (dt.Rows.Count > 0)
-            {
-                inip = new IniOperator(WorkPath + "Publish\\parameter.ini");
-                inip.WriteString("mapproperties", "centerlng", dt.Rows[0]["LNG"].ToString());
-                inip.WriteString("mapproperties", "centerlat", dt.Rows[0]["LAT"].ToString());
-            }
-            else 
-            {
-                inip = new IniOperator(WorkPath + "Publish\\parameter.ini");
-                inip.WriteString("mapproperties", "centerlng", "0");
-                inip.WriteString("mapproperties", "centerlat", "0");
-            }*/
+
             inip = new IniOperator(WorkPath + "Publish\\parameter.ini");
             inip.WriteString("mapproperties", "centerlng", textBox2.Text);
             inip.WriteString("mapproperties", "centerlat", textBox3.Text);
@@ -324,6 +305,24 @@ namespace PublishSys
             inip.WriteString("packup", "source_path", WorkPath + "Publish");
             inip.WriteString("packup", "registry_subkey", "环境信息化系统");
 
+            ahp = new AccessHelper(WorkPath + "Publish\\data\\PASSWORD_H0001Z000E00.mdb");
+            string sql = "update PASSWORD_H0001Z000E00 set S_UDTIME = '" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")
+                + "', UNITID = '" + pNode.Tag.ToString() + "' where PWNAME = '管理员密码'";
+            ahp.ExecuteSql(sql, null);
+            sql = "update PASSWORD_H0001Z000E00 set S_UDTIME = '" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")
+                + "', UNITID = '" + pNode.Tag.ToString() + "' where PWNAME = '编辑模式'";
+            ahp.ExecuteSql(sql, null);
+            sql = "update PASSWORD_H0001Z000E00 set S_UDTIME = '" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")
+                + "', UNITID = '" + pNode.Tag.ToString() + "' where PWNAME = '查看模式'";
+            ahp.ExecuteSql(sql, null);
+            ahp.CloseConn();
+
+            ahp = new AccessHelper(WorkPath + "Publish\\data\\ZSK_AppInfo.mdb");
+            sql = "update APPINFO set S_UDTIME = '" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")+ "', UNITID = '"
+                + pNode.Tag.ToString() + "' where ISDELETE = 0 and PGUID = '{8C3B99C5-26D3-48B2-A676-250189FCEA2F}'";
+            ahp.ExecuteSql(sql, null);
+            ahp.CloseConn();
+
             Process p = Process.Start(WorkPath + "PackUp.exe");
             p.WaitForExit();
             if (p.ExitCode == -1)
@@ -335,7 +334,7 @@ namespace PublishSys
             string Now_Time = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
             string pguid = Guid.NewGuid().ToString("B");
             ahp = new AccessHelper(WorkPath + "data\\PublishData.mdb");
-            string sql = "insert into PUBLISH_H0001Z000E00 (PGUID, S_UDTIME, UNITID, UNITNAME, VERSION, SYSTEMNAME) values ('" +
+            sql = "insert into PUBLISH_H0001Z000E00 (PGUID, S_UDTIME, UNITID, UNITNAME, VERSION, SYSTEMNAME) values ('" +
                         pguid + "', '" + Now_Time + "', '" +
                         pNode.Tag.ToString() + "', '" + pNode.Text + "', '" + textBox1.Text + "', '" + pNode.Text + "环境信息化系统')";
             //sql = "insert into PUBLISH_H0001Z000E00 (PGUID, S_UDTIME, UNITID, UNITNAME, VERSION, SYSTEMNAME) values ('{cab7d79f-342d-49e4-aaac-86a9369ada82}', '2018-11-24 08:15:10', '1', '中华人民共和国', '1.00.00', '123')";
@@ -403,7 +402,7 @@ namespace PublishSys
                 // 数据库操作
                 int cur_row = dataGridView1.SelectedRows[i].Index;
                 pguid = dataGridView1.Rows[cur_row].Cells[5].Value.ToString();
-                sql = "update PUBLISH_H0001Z000E00 set ISDELETE = 1 where ISDELETE = 0 and PGUID = '" + pguid + "'";
+                sql = "update PUBLISH_H0001Z000E00 set ISDELETE = 1, S_UDTIME = '" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "' where ISDELETE = 0 and PGUID = '" + pguid + "'";
                 ahp.ExecuteSql(sql);
                 dataGridView1.Rows.Remove(dataGridView1.SelectedRows[i]);
             }
@@ -417,7 +416,6 @@ namespace PublishSys
             Process p = Process.Start(WorkPath + "DataUP.exe", "PublishSys.exe 0");
             p.WaitForExit();
         }
-
 
     }
 

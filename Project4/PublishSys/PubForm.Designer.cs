@@ -102,7 +102,7 @@
             // 
             this.导入单位ToolStripMenuItem.Name = "导入单位ToolStripMenuItem";
             this.导入单位ToolStripMenuItem.Size = new System.Drawing.Size(166, 28);
-            this.导入单位ToolStripMenuItem.Text = "导入单位注册数据";
+            this.导入单位ToolStripMenuItem.Text = "下载单位注册数据";
             this.导入单位ToolStripMenuItem.Click += new System.EventHandler(this.导入单位ToolStripMenuItem_Click);
             // 
             // 数据管理ToolStripMenuItem
