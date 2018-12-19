@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace EnvirInfoSys
+namespace EnvirInfoSys_Demo
 {
     public class AccessHelper
     {

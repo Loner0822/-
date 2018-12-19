@@ -3,15 +3,21 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
-using System.IO;
-using System.Linq;
 using System.Text;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using DevExpress.XtraEditors;
+using System.IO;
+using DevExpress.XtraGrid.Views.Grid.ViewInfo;
+using DevExpress.Utils.DragDrop;
+using DevExpress.XtraGrid;
+using DevExpress.XtraGrid.Views.Grid;
+using DevExpress.XtraTab;
 
-namespace EnvirInfoSys
+namespace EnvirInfoSys_Demo
 {
-    public partial class Classify_1Form : Form
+    public partial class Classify_1Form : DevExpress.XtraEditors.XtraForm
     {
         private string WorkPath = AppDomain.CurrentDomain.BaseDirectory;    //当前exe根目录
         private AccessHelper ahp1 = null;       // ENVIR_H0001Z000E00.mdb
@@ -26,50 +32,143 @@ namespace EnvirInfoSys
         private Dictionary<string, string> Show_FDName;     // 属性表名
         private Dictionary<string, string> inherit_GUID;    // 继承属性GUID
         private Dictionary<string, string> Show_Value;      // 属性值
+        private DataTable GX_dt;
 
         public Classify_1Form()
         {
             InitializeComponent();
         }
 
+        public void SetUpGrid(GridControl grid, DataTable table)
+        {
+            GridView view = grid.MainView as GridView;
+            grid.DataSource = table;
+            view.OptionsBehavior.Editable = false;
+        }
+
+        public DataTable FillTable()
+        {
+            GX_dt = new DataTable();
+            GX_dt.Columns.Add("guid", typeof(string));
+            GX_dt.Columns.Add("序号", typeof(int));
+            GX_dt.Columns.Add("显示名称", typeof(string));
+
+            // 读取管辖类型
+            string sql = "select PGUID, FLNAME from ENVIRGXFL_H0001Z000E00 where ISDELETE = 0 and UPGUID = '" + gxguid + "' order by SHOWINDEX";
+            DataTable dt = ahp1.ExecuteDataTable(sql, null);
+            for (int i = 0; i < dt.Rows.Count; ++i)
+                GX_dt.Rows.Add(new object[] { dt.Rows[i]["PGUID"].ToString(), i + 1, dt.Rows[i]["FLNAME"].ToString() });
+            gridControl1.DataSource = GX_dt;
+            gridView1.Columns[0].Visible = false;
+            gridView1.Columns[1].Width = 50;
+            return GX_dt;
+        }
+
+        public void HandleBehaviorDragDropEvents()
+        {
+            DragDropBehavior gridControlBehavior = behaviorManager1.GetBehavior<DragDropBehavior>(this.gridView1);
+            gridControlBehavior.DragDrop += Behavior_DragDrop;
+            gridControlBehavior.DragOver += Behavior_DragOver;
+            gridControlBehavior.EndDragDrop += Behavior_EndDragDrop;
+        }
+
+        private void Behavior_DragDrop(object sender, DevExpress.Utils.DragDrop.DragDropEventArgs e)
+        {
+            GridView targetGrid = e.Target as GridView;
+            GridView sourceGrid = e.Source as GridView;
+            if (e.Action == DragDropActions.None || targetGrid != sourceGrid)
+                return;
+            DataTable sourceTable = sourceGrid.GridControl.DataSource as DataTable;
+
+            Point hitPoint = targetGrid.GridControl.PointToClient(Cursor.Position);
+            GridHitInfo hitInfo = targetGrid.CalcHitInfo(hitPoint);
+
+            int[] sourceHandles = e.GetData<int[]>();
+
+            int targetRowHandle = hitInfo.RowHandle;
+            int targetRowIndex = targetGrid.GetDataSourceRowIndex(targetRowHandle);
+
+            List<DataRow> draggedRows = new List<DataRow>();
+            foreach (int sourceHandle in sourceHandles)
+            {
+                int oldRowIndex = sourceGrid.GetDataSourceRowIndex(sourceHandle);
+                DataRow oldRow = sourceTable.Rows[oldRowIndex];
+                draggedRows.Add(oldRow);
+            }
+
+            int newRowIndex;
+
+            switch (e.InsertType)
+            {
+                case InsertType.Before:
+                    newRowIndex = targetRowIndex > sourceHandles[sourceHandles.Length - 1] ? targetRowIndex - 1 : targetRowIndex;
+                    for (int i = draggedRows.Count - 1; i >= 0; i--)
+                    {
+                        DataRow oldRow = draggedRows[i];
+                        DataRow newRow = sourceTable.NewRow();
+                        newRow.ItemArray = oldRow.ItemArray;
+                        sourceTable.Rows.Remove(oldRow);
+                        sourceTable.Rows.InsertAt(newRow, newRowIndex);
+                    }
+                    break;
+                case InsertType.After:
+                    newRowIndex = targetRowIndex < sourceHandles[0] ? targetRowIndex + 1 : targetRowIndex;
+                    for (int i = 0; i < draggedRows.Count; i++)
+                    {
+                        DataRow oldRow = draggedRows[i];
+                        DataRow newRow = sourceTable.NewRow();
+                        newRow.ItemArray = oldRow.ItemArray;
+                        sourceTable.Rows.Remove(oldRow);
+                        sourceTable.Rows.InsertAt(newRow, newRowIndex);
+                    }
+                    break;
+                default:
+                    newRowIndex = -1;
+                    break;
+            }
+            int insertedIndex = targetGrid.GetRowHandle(newRowIndex);
+            targetGrid.FocusedRowHandle = insertedIndex;
+            targetGrid.SelectRow(targetGrid.FocusedRowHandle);
+        }
+
+        private void Behavior_DragOver(object sender, DragOverEventArgs e)
+        {
+            DragOverGridEventArgs args = DragOverGridEventArgs.GetDragOverGridEventArgs(e);
+            e.InsertType = args.InsertType;
+            e.InsertIndicatorLocation = args.InsertIndicatorLocation;
+            e.Action = args.Action;
+            Cursor.Current = args.Cursor;
+            args.Handled = true;
+        }
+
+        private void Behavior_EndDragDrop(object sender, EndDragDropEventArgs e)
+        {
+            for (int i = 0; i < gridView1.RowCount; ++i)
+            {
+                DataRow dr = gridView1.GetDataRow(i);
+                dr["序号"] = i + 1;
+                string sql = "update ENVIRGXFL_H0001Z000E00 set S_UDTIME = '" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")
+                    + "', SHOWINDEX = " + (i + 1).ToString() + " where ISDELETE = 0 and UPGUID = '" + gxguid
+                    + "' and PGUID = '" + dr["guid"].ToString() + "'";
+                ahp1.ExecuteSql(sql, null);
+            }
+        }
+
         private void Classify_1Form_Load(object sender, EventArgs e)
         {
-            tabControl2.TabPages[0].Parent = null;
-
-            // 初始化表格控件
-            dataGridView1.RowHeadersVisible = false;
-            dataGridView1.AllowUserToResizeRows = false;
-            DataGridViewTextBoxColumn index = new DataGridViewTextBoxColumn();
-            index.Name = "index";
-            index.HeaderText = "序号";
-            dataGridView1.Columns.Add(index);
-            dataGridView1.Columns["index"].SortMode = DataGridViewColumnSortMode.NotSortable;
-            dataGridView1.Columns["index"].ReadOnly = true;
-            dataGridView1.Columns["index"].Frozen = true;
-            DataGridViewTextBoxColumn GX_type = new DataGridViewTextBoxColumn();
-            GX_type.Name = "type";
-            GX_type.DataPropertyName = "type";
-            GX_type.HeaderText = "显示名称";
-            dataGridView1.Columns.Add(GX_type);
-            dataGridView1.Columns["type"].SortMode = DataGridViewColumnSortMode.NotSortable;
-            DataGridViewTextBoxColumn GX_guid = new DataGridViewTextBoxColumn();
-            GX_guid.Name = "guid";
-            GX_guid.DataPropertyName = "guid";
-            GX_guid.HeaderText = "PGUID";
-            GX_guid.Visible = false;
-            dataGridView1.Columns.Add(GX_guid);
-            dataGridView1.Columns["guid"].SortMode = DataGridViewColumnSortMode.NotSortable;
-            dataGridView1.Columns["index"].Width = 37;
-            dataGridView1.Columns["type"].Width = 63;
+            
+            ahp1 = new AccessHelper(WorkPath + "data\\ENVIR_H0001Z000E00.mdb");
+            ahp2 = new AccessHelper(WorkPath + "data\\ZSK_H0001Z000K00.mdb");
+            ahp3 = new AccessHelper(WorkPath + "data\\ZSK_H0001Z000K01.mdb");
+            ahp4 = new AccessHelper(WorkPath + "data\\ZSK_H0001Z000E00.mdb");
+            SetUpGrid(this.gridControl1, FillTable());
+            HandleBehaviorDragDropEvents();
+            xtraTabControl2.TabPages[0].PageVisible = false;
 
             // 初始化图符库
-            tabControl1.Controls.Clear();
-            ahp2 = new AccessHelper(WorkPath + "data\\ZSK_H0001Z000K00.mdb");
-            ahp4 = new AccessHelper(WorkPath + "data\\ZSK_H0001Z000E00.mdb");
+            xtraTabControl1.Controls.Clear();
             Build_Icon_Library("H0001Z000K00");
             Build_Icon_Library("H0001Z000E00");
-            ahp2.CloseConn();
-            ahp4.CloseConn();
         }
 
         private void Build_Icon_Library(string database)
@@ -92,29 +191,29 @@ namespace EnvirInfoSys
                 if (Name == "备用")
                     continue;
                 bool flag = false;
-                for (int j = 0; j < tabControl1.TabPages.Count; ++j)
+                for (int j = 0; j < xtraTabControl1.TabPages.Count; ++j)
                 {
-                    if (tabControl1.TabPages[j].Name == Name)
+                    if (xtraTabControl1.TabPages[j].Name == Name)
                     {
                         flag = true;
-                        FlowLayoutPanel flp = (FlowLayoutPanel)tabControl1.TabPages[j].Controls[0];
+                        FlowLayoutPanel flp = (FlowLayoutPanel)xtraTabControl1.TabPages[j].Controls[0];
                         Add_Icon(flp, pguid, database);
                     }
                 }
                 if (flag == false)
                 {
-                    tabControl1.TabPages.Add(Name);
-                    _index = tabControl1.TabPages.Count - 1;
+                    xtraTabControl1.TabPages.Add(Name);
+                    _index = xtraTabControl1.TabPages.Count - 1;
                     FlowLayoutPanel flp = new FlowLayoutPanel();
                     flp.Dock = DockStyle.Fill;
                     flp.FlowDirection = FlowDirection.LeftToRight;
                     flp.WrapContents = true;
                     flp.AutoScroll = true;
-                    flp.MouseDown += dataGridView_MouseDown;
+                    flp.MouseDown += flowLayoutPanel_MouseDown;
                     Add_Icon(flp, pguid, database);
-                    tabControl1.TabPages[_index].Name = Name;
-                    tabControl1.TabPages[_index].BackColor = SystemColors.Control;
-                    tabControl1.TabPages[_index].Controls.Add(flp);
+                    xtraTabControl1.TabPages[_index].Name = Name;
+                    xtraTabControl1.TabPages[_index].BackColor = SystemColors.Control;
+                    xtraTabControl1.TabPages[_index].Controls.Add(flp);
                 }
             }
         }
@@ -132,47 +231,14 @@ namespace EnvirInfoSys
             DataTable dt1 = ahp.ExecuteDataTable(sql, null);
             if (dt1.Rows.Count > 0)
             {
-                 ucPB.Parent = flp;
-                 ucPB.Name = pguid;
-                 ucPB.IconName = dt1.Rows[0]["JDNAME"].ToString();
-                 ucPB.IconPguid = pguid;
-                 ucPB.IconPath = icon_path + pguid + ".png";
-                 ucPB.Single_Click += Icon_SingleClick;
-                 ucPB.Double_Click += Icon_DoubleClick;
-                 //ucPB.MouseDown += dataGridView_MouseDown;
-                 ucPB.IconCheck = false;
-            }
-        }
-
-        private void Classify_1Form_Shown(object sender, EventArgs e)
-        {
-            ahp1 = new AccessHelper(WorkPath + "data\\ENVIR_H0001Z000E00.mdb");
-            ahp2 = new AccessHelper(WorkPath + "data\\ZSK_H0001Z000K00.mdb");
-            ahp3 = new AccessHelper(WorkPath + "data\\ZSK_H0001Z000K01.mdb");
-            ahp4 = new AccessHelper(WorkPath + "data\\ZSK_H0001Z000E00.mdb");
-            
-            // 读取管辖类型
-            string sql = "select PGUID, FLNAME from ENVIRGXFL_H0001Z000E00 where ISDELETE = 0 and UPGUID = '" + gxguid + "' order by SHOWINDEX";
-            DataTable dt = ahp1.ExecuteDataTable(sql, null);
-            for (int i = 0; i < dt.Rows.Count; ++i)
-            {
-                DataGridViewRow dgvr = new DataGridViewRow();
-                dgvr.CreateCells(dataGridView1);
-                dgvr.Cells[0].Value = i + 1;
-                dgvr.Cells[1].Value = dt.Rows[i]["FLNAME"].ToString();
-                dgvr.Cells[2].Value = dt.Rows[i]["PGUID"].ToString();
-                dataGridView1.Rows.Add(dgvr);
-            }
-        }
-
-        private void Show_Icon_List(string flguid)
-        {
-            Get_Icon_From_Access(flguid, "H0001Z000K00");
-            Get_Icon_From_Access(flguid, "H0001Z000E00");
-            if (flowLayoutPanel1.Controls.Count > 0)
-            {
-                ucPictureBox tmp = (ucPictureBox)flowLayoutPanel1.Controls[0];
-                Icon_SingleClick(flowLayoutPanel1.Controls[0], new EventArgs(), tmp.IconPguid);
+                ucPB.Parent = flp;
+                ucPB.Name = pguid;
+                ucPB.IconName = dt1.Rows[0]["JDNAME"].ToString();
+                ucPB.IconPguid = pguid;
+                ucPB.IconPath = icon_path + pguid + ".png";
+                ucPB.Single_Click += Icon_SingleClick;
+                ucPB.Double_Click += Icon_DoubleClick;
+                ucPB.IconCheck = false;
             }
         }
 
@@ -210,81 +276,191 @@ namespace EnvirInfoSys
             }
         }
 
-        private void dataGridView1_SelectionChanged(object sender, EventArgs e)
+        private void xtraTabControl1_SelectedPageChanged(object sender, TabPageChangedEventArgs e)
         {
-            if (dataGridView1.CurrentRow != null)
+            XtraTabPage tbpg = xtraTabControl1.SelectedTabPage;
+            if (tbpg.Controls.Count > 0)
             {
-                int cur_index = dataGridView1.SelectedRows[0].Index;
-                if (cur_index != 0 && dataGridView1.Rows[cur_index - 1].Cells["type"].Value == null)
-                {
-                    dataGridView1.CurrentCell = dataGridView1.Rows[cur_index - 1].Cells["type"];
-                    dataGridView1.BeginEdit(false);
-                }
-                if (dataGridView1.SelectedRows[0].Cells["guid"].Value != null)
-                {
-                    flowLayoutPanel1.Controls.Clear();
-                    string pguid = dataGridView1.SelectedRows[0].Cells["guid"].Value.ToString();
-                    Show_Icon_List(pguid);
-                }
+                FlowLayoutPanel flp = (FlowLayoutPanel)tbpg.Controls[0];
+                foreach (ucPictureBox ucPB in flp.Controls)
+                    ucPB.IconCheck = false;
             }
         }
 
-        private void dataGridView1_CellEndEdit(object sender, DataGridViewCellEventArgs e)
+
+        private void Icon_SingleClick(object sender, EventArgs e, string iconguid)
         {
-            int cur_index = e.RowIndex;
-            if (cur_index < 0)
+            ucPictureBox tmp = (ucPictureBox)sender;
+            if (tmp.IconCheck == true)
                 return;
-            if (dataGridView1.Rows[cur_index].Cells["guid"].Value != null)
+            if (tmp.Parent == this.flowLayoutPanel1)
             {
-                if (dataGridView1.Rows[cur_index].Cells["type"].Value == null)
-                {
-                    MessageBox.Show("该值不可为空!");
-                    return;
-                }
-                // 修改
-                string sql = "update ENVIRGXFL_H0001Z000E00 set S_UDTIME = '" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "', FLNAME = '"
-                    + dataGridView1.Rows[cur_index].Cells["type"].Value.ToString() + "' where ISDELETE = 0 and PGUID = '" + dataGridView1.Rows[cur_index].Cells["guid"].Value.ToString() + "'";
-                ahp1.ExecuteSql(sql, null);
-                dataGridView1.Rows[cur_index].Cells["index"].Value = cur_index + 1;
+                foreach (ucPictureBox ucPB in this.flowLayoutPanel1.Controls)
+                    ucPB.IconCheck = false;
+                tmp.IconCheck = true;
+                // 显示属性
+                Show_Icon_Property(iconguid);
             }
             else
             {
-                if (dataGridView1.Rows[cur_index].Cells["type"].Value == null)
-                {
-                    MessageBox.Show("该值不可为空!");
-                    return;
-                }
-                // 添加
-                string pguid = Guid.NewGuid().ToString("B");
-                //dataGridView1.Rows[cur_index].Cells[1].Value = pguid;
-                string sql = "insert into ENVIRGXFL_H0001Z000E00 (PGUID, S_UDTIME, FLNAME, UPGUID, SHOWINDEX) values ('" + pguid + "', '"
-                    + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "', '" + dataGridView1.Rows[cur_index].Cells["type"].Value.ToString()
-                    + "', '" + gxguid + "', " + cur_index.ToString() + ")";
+                FlowLayoutPanel flp = (FlowLayoutPanel)tmp.Parent;
+                foreach (ucPictureBox ucPB in flp.Controls)
+                    ucPB.IconCheck = false;
+                tmp.IconCheck = true;
+            }
+        }
+
+        private void Icon_DoubleClick(object sender, EventArgs e, string iconguid)
+        {
+
+            string pguid = gridView1.GetFocusedDataRow()["guid"].ToString();
+            ucPictureBox tmp = (ucPictureBox)sender;
+            if (tmp.Parent == this.flowLayoutPanel1)
+            {
+                Control Remove_PB = (Control)tmp;
+                flowLayoutPanel1.Controls.Remove(Remove_PB);
+
+                // 删除对应
+                string sql = "update ENVIRGXDY_H0001Z000E00 set ISDELETE = 1, S_UDTIME = '" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")
+                    + "' where ICONGUID = '" + iconguid + "' and FLGUID = '" + pguid + "' and UNITID = '" + unitid + "'";
                 ahp1.ExecuteSql(sql, null);
-                dataGridView1.Rows[cur_index].Cells["guid"].Value = pguid;
-                dataGridView1.Rows[cur_index].Cells["index"].Value = cur_index + 1;
             }
-        }
-
-        private void flowLayoutPanel1_MouseDown(object sender, MouseEventArgs e)
-        {
-            if (e.Button == System.Windows.Forms.MouseButtons.Right)
+            else
             {
-                contextMenuStrip2.Show(MousePosition.X, MousePosition.Y);
-            }
-        }
+                foreach (ucPictureBox ucPB in this.flowLayoutPanel1.Controls)
+                    if (ucPB.IconPguid == tmp.IconPguid)
+                    {
+                        XtraMessageBox.Show("已添加该图符!");
+                        return;
+                    }
+                ucPictureBox new_PB = new ucPictureBox();
+                new_PB.IconName = tmp.IconName;
+                new_PB.IconPguid = tmp.IconPguid;
+                new_PB.IconPath = tmp.IconPath;
+                new_PB.IconCheck = false;
+                new_PB.Single_Click += Icon_SingleClick;
+                new_PB.Double_Click += Icon_DoubleClick;
+                flowLayoutPanel1.Controls.Add(new_PB);
 
-        private void dataGridView_MouseDown(object sender, MouseEventArgs e)
-        {
-            if (e.Button == System.Windows.Forms.MouseButtons.Right)
+                string sql = "select PGUID from ENVIRGXDY_H0001Z000E00 where ICONGUID = '" + iconguid
+                    + "' and FLGUID = '" + pguid + "' and UNITID = '" + unitid + "'";
+                DataTable dt = ahp1.ExecuteDataTable(sql, null);
+                if (dt.Rows.Count > 0)
+                {
+                    sql = "update ENVIRGXDY_H0001Z000E00 set ISDELETE = 0, S_UDTIME = '" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")
+                        + "' where ICONGUID = '" + iconguid + "' and FLGUID = '" + pguid + "' and UNITID = '" + unitid + "'";
+                    ahp1.ExecuteSql(sql, null);
+                }
+                else
+                {
+                    sql = "insert into ENVIRGXDY_H0001Z000E00 (PGUID, S_UDTIME, ICONGUID, FLGUID, UNITID) values ('" + Guid.NewGuid().ToString("B")
+                        + "', '" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "', '" + iconguid + "', '" + pguid + "', '" + unitid + "')";
+                    ahp1.ExecuteSql(sql, null);
+                }
+            }
+            if (flowLayoutPanel1.Controls.Count > 0)
             {
-                contextMenuStrip3.Show(MousePosition.X, MousePosition.Y);
+                ucPictureBox first_PB = (ucPictureBox)flowLayoutPanel1.Controls[0];
+                string first_guid = first_PB.IconPguid;
+                Icon_SingleClick(flowLayoutPanel1.Controls[0], new EventArgs(), first_guid);
             }
         }
 
-        private void 清空ToolStripMenuItem_Click(object sender, EventArgs e)
+        private void Show_Icon_Property(string iconguid)
         {
-            string pguid = dataGridView1.SelectedRows[0].Cells["guid"].Value.ToString();
+            string typeguid = "";
+            // 加载固定属性
+            typeguid = "{26E232C8-595F-44E5-8E0F-8E0FC1BD7D24}";
+            Get_Property_Data(gridControl2, gridView2, iconguid, typeguid);
+
+            // 加载基础属性
+            typeguid = "{B55806E6-9D63-4666-B6EB-AAB80814648E}";
+            Get_Property_Data(gridControl3, gridView3, iconguid, typeguid);
+
+            // 加载扩展属性
+            typeguid = "{D7DE9C5E-253C-491C-A380-06E41C68D2C8}";
+            Get_Property_Data(gridControl4, gridView4, iconguid, typeguid);
+        }
+
+        private void Get_Property_Data(GridControl gc, GridView gv, string iconguid, string typeguid)
+        {
+            Prop_GUID = new List<string>();
+            Show_Name = new Dictionary<string, string>();
+            Show_FDName = new Dictionary<string, string>();
+            inherit_GUID = new Dictionary<string, string>();
+            Show_Value = new Dictionary<string, string>();
+
+            gc.DataSource = null;
+            gv.Columns.Clear();
+            DataTable sum_dt = new DataTable();
+            string sql = "select PGUID, PROPNAME, FDNAME, SOURCEGUID, PROPVALUE from ZSK_PROP_H0001Z000K00 where ISDELETE = 0 and UPGUID = '"
+                + iconguid + "' and PROTYPEGUID = '" + typeguid + "' order by SHOWINDEX";
+            DataTable dt = ahp2.ExecuteDataTable(sql, null);
+            Add_Prop(dt);
+
+            sql = "select PGUID, PROPNAME, FDNAME, SOURCEGUID, PROPVALUE from ZSK_PROP_H0001Z000K01 where ISDELETE = 0 and UPGUID = '"
+                + iconguid + "' and PROTYPEGUID = '" + typeguid + "' order by SHOWINDEX";
+            dt = ahp3.ExecuteDataTable(sql, null);
+            Add_Prop(dt);
+
+            sql = "select PGUID, PROPNAME, FDNAME, SOURCEGUID, PROPVALUE from ZSK_PROP_H0001Z000E00 where ISDELETE = 0 and UPGUID = '"
+                + iconguid + "' and PROTYPEGUID = '" + typeguid + "' order by SHOWINDEX";
+            dt = ahp4.ExecuteDataTable(sql, null);
+            Add_Prop(dt);
+
+            List<string> propValue = new List<string>();
+            bool flag = false;
+            for (int i = 0; i < Prop_GUID.Count; ++i)
+            {
+                string pguid = Prop_GUID[i];
+                flag = true;
+                sum_dt.Columns.Add(Show_Name[pguid]);
+                propValue.Add(Show_Value[pguid]);
+            }
+            DataRow newRow = sum_dt.NewRow();
+            if (flag)
+            {
+                for (int i = 0; i < propValue.Count; ++i)
+                    newRow[i] = propValue[i];
+            }
+            sum_dt.Rows.Add(newRow);
+            gc.DataSource = sum_dt;
+        }
+
+        private void Add_Prop(DataTable proptable)
+        {
+            for (int i = 0; i < proptable.Rows.Count; ++i)
+            {
+                Prop_GUID.Add(proptable.Rows[i]["PGUID"].ToString());
+                Show_Name[proptable.Rows[i]["PGUID"].ToString()] = proptable.Rows[i]["PROPNAME"].ToString();
+                Show_FDName[proptable.Rows[i]["PGUID"].ToString()] = proptable.Rows[i]["FDNAME"].ToString();
+                inherit_GUID[proptable.Rows[i]["PGUID"].ToString()] = proptable.Rows[i]["SOURCEGUID"].ToString();
+                Show_Value[proptable.Rows[i]["PGUID"].ToString()] = proptable.Rows[i]["PROPVALUE"].ToString();
+            }
+        }
+
+        private void gridView1_FocusedRowChanged(object sender, DevExpress.XtraGrid.Views.Base.FocusedRowChangedEventArgs e)
+        {
+            flowLayoutPanel1.Controls.Clear();
+            string pguid = gridView1.GetFocusedDataRow()["guid"].ToString();
+            Show_Icon_List(pguid);
+        }
+
+        private void Show_Icon_List(string flguid)
+        {
+            Get_Icon_From_Access(flguid, "H0001Z000K00");
+            Get_Icon_From_Access(flguid, "H0001Z000E00");
+            if (flowLayoutPanel1.Controls.Count > 0)
+            {
+                ucPictureBox tmp = (ucPictureBox)flowLayoutPanel1.Controls[0];
+                Icon_SingleClick(flowLayoutPanel1.Controls[0], new EventArgs(), tmp.IconPguid);
+            }
+        }
+
+        // 清空
+        private void barButtonItem1_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
+        {
+            string pguid = gridView1.GetFocusedDataRow()["guid"].ToString();
             foreach (ucPictureBox item in flowLayoutPanel1.Controls)
             {
                 string sql = "update ENVIRGXDY_H0001Z000E00 set ISDELETE = 1, S_UDTIME = '" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")
@@ -293,12 +469,12 @@ namespace EnvirInfoSys
             }
             flowLayoutPanel1.Controls.Clear();
         }
-
-        private void 全选ToolStripMenuItem_Click(object sender, EventArgs e)
+        // 全选
+        private void barButtonItem2_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
-            string pguid = dataGridView1.SelectedRows[0].Cells["guid"].Value.ToString();
-            int _index = tabControl1.SelectedIndex;
-            FlowLayoutPanel flp = (FlowLayoutPanel)tabControl1.TabPages[_index].Controls[0];
+            string pguid = gridView1.GetFocusedDataRow()["guid"].ToString();
+            int _index = xtraTabControl1.SelectedTabPageIndex;
+            FlowLayoutPanel flp = (FlowLayoutPanel)xtraTabControl1.TabPages[_index].Controls[0];
             foreach (ucPictureBox item in flp.Controls)
             {
                 bool flag = false;
@@ -345,264 +521,81 @@ namespace EnvirInfoSys
             }
         }
 
-        private void Icon_SingleClick(object sender, EventArgs e, string iconguid)
+        // 添加
+        private void barButtonItem3_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
-            ucPictureBox tmp = (ucPictureBox)sender;
-            if (tmp.IconCheck == true)
-                return;
-            if (tmp.Parent == this.flowLayoutPanel1)
+            int cnt = gridView1.RowCount + 1;
+            DataRow dr = GX_dt.NewRow();
+            string pguid = Guid.NewGuid().ToString("B");
+            dr["guid"] = pguid;
+            EditForm edfm = new EditForm();
+            if (edfm.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
-                foreach (ucPictureBox ucPB in this.flowLayoutPanel1.Controls)
-                    ucPB.IconCheck = false;
-                tmp.IconCheck = true;
-                // 显示属性
-                Show_Icon_Property(iconguid);
-            }
-            else
-            {
-                FlowLayoutPanel flp = (FlowLayoutPanel)tmp.Parent;
-                foreach (ucPictureBox ucPB in flp.Controls)
-                    ucPB.IconCheck = false;
-                tmp.IconCheck = true;
-            }
-        }
-
-        private void Icon_DoubleClick(object sender, EventArgs e, string iconguid)
-        {
-            string pguid = dataGridView1.SelectedRows[0].Cells["guid"].Value.ToString();
-            ucPictureBox tmp = (ucPictureBox)sender;
-            if (tmp.Parent == this.flowLayoutPanel1)
-            {
-                Control Remove_PB = (Control)tmp;
-                flowLayoutPanel1.Controls.Remove(Remove_PB);
-
-                // 删除对应
-                string sql = "update ENVIRGXDY_H0001Z000E00 set ISDELETE = 1, S_UDTIME = '" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")
-                    + "' where ICONGUID = '" + iconguid + "' and FLGUID = '" + pguid + "' and UNITID = '" + unitid + "'";
+                dr["显示名称"] = edfm.EditText;
+                dr["序号"] = cnt;
+                string sql = "insert into ENVIRGXFL_H0001Z000E00 (PGUID, S_UDTIME, FLNAME, UPGUID, SHOWINDEX) values ('" + pguid + "', '"
+                    + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "', '" + edfm.EditText + "', '" + gxguid + "', " + cnt.ToString() + ")";
                 ahp1.ExecuteSql(sql, null);
-            }
-            else
-            {
-                foreach (ucPictureBox ucPB in this.flowLayoutPanel1.Controls)
-                    if (ucPB.IconPguid == tmp.IconPguid)
-                    {
-                        MessageBox.Show("已添加该图符!");
-                        return;
-                    }
-                ucPictureBox new_PB = new ucPictureBox();
-                new_PB.IconName = tmp.IconName;
-                new_PB.IconPguid = tmp.IconPguid;
-                new_PB.IconPath = tmp.IconPath;
-                new_PB.IconCheck = false;
-                new_PB.Single_Click += Icon_SingleClick;
-                new_PB.Double_Click += Icon_DoubleClick;
-                flowLayoutPanel1.Controls.Add(new_PB);
-                
-                string sql = "select PGUID from ENVIRGXDY_H0001Z000E00 where ICONGUID = '" + iconguid
-                    + "' and FLGUID = '" + pguid + "' and UNITID = '" + unitid + "'";
-                DataTable dt = ahp1.ExecuteDataTable(sql, null);
-                if (dt.Rows.Count > 0)
-                {
-                    sql = "update ENVIRGXDY_H0001Z000E00 set ISDELETE = 0, S_UDTIME = '" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")
-                        + "' where ICONGUID = '" + iconguid + "' and FLGUID = '" + pguid + "' and UNITID = '" + unitid + "'";
-                    ahp1.ExecuteSql(sql, null);
-                }
-                else
-                {
-                    sql = "insert into ENVIRGXDY_H0001Z000E00 (PGUID, S_UDTIME, ICONGUID, FLGUID, UNITID) values ('" + Guid.NewGuid().ToString("B")
-                        + "', '" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "', '" + iconguid + "', '" + pguid + "', '" + unitid + "')";
-                    ahp1.ExecuteSql(sql, null);
-                }
-            }
-            if (flowLayoutPanel1.Controls.Count > 0)
-            {
-                ucPictureBox first_PB = (ucPictureBox)flowLayoutPanel1.Controls[0];
-                string first_guid = first_PB.IconPguid;
-                Icon_SingleClick(flowLayoutPanel1.Controls[0], new EventArgs(), first_guid);
+                GX_dt.Rows.Add(dr);
+                gridView1.FocusedRowHandle = cnt - 1;
             }
         }
 
-        private void Show_Icon_Property(string iconguid)
+        // 删除
+        private void barButtonItem4_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
-            string typeguid = "";
-            // 加载固定属性
-            typeguid = "{26E232C8-595F-44E5-8E0F-8E0FC1BD7D24}";
-            Get_Property_Data(dataGridView2, iconguid, typeguid);
-            
-            // 加载基础属性
-            typeguid = "{B55806E6-9D63-4666-B6EB-AAB80814648E}";
-            Get_Property_Data(dataGridView3, iconguid, typeguid);
-
-            // 加载扩展属性
-            typeguid = "{D7DE9C5E-253C-491C-A380-06E41C68D2C8}";
-            Get_Property_Data(dataGridView4, iconguid, typeguid);
-        }
-
-        private void Get_Property_Data(DataGridView dgv, string iconguid, string typeguid)
-        {
-            Prop_GUID = new List<string> ();
-            Show_Name = new Dictionary<string, string>();
-            Show_FDName = new Dictionary<string, string>();
-            inherit_GUID = new Dictionary<string, string>();
-            Show_Value = new Dictionary<string, string>();
-            dgv.Columns.Clear();
-            string sql = "select PGUID, PROPNAME, FDNAME, SOURCEGUID, PROPVALUE from ZSK_PROP_H0001Z000K00 where ISDELETE = 0 and UPGUID = '"
-                + iconguid + "' and PROTYPEGUID = '" + typeguid + "' order by SHOWINDEX";
-            DataTable dt = ahp2.ExecuteDataTable(sql, null);
-            Add_Prop(dt);
-
-            sql = "select PGUID, PROPNAME, FDNAME, SOURCEGUID, PROPVALUE from ZSK_PROP_H0001Z000K01 where ISDELETE = 0 and UPGUID = '"
-                + iconguid + "' and PROTYPEGUID = '" + typeguid + "' order by SHOWINDEX";
-            dt = ahp3.ExecuteDataTable(sql, null);
-            Add_Prop(dt);
-
-            sql = "select PGUID, PROPNAME, FDNAME, SOURCEGUID, PROPVALUE from ZSK_PROP_H0001Z000E00 where ISDELETE = 0 and UPGUID = '"
-                + iconguid + "' and PROTYPEGUID = '" + typeguid + "' order by SHOWINDEX";
-            dt = ahp4.ExecuteDataTable(sql, null);
-            Add_Prop(dt);
-
-            List<string> propValue = new List<string>();
-            bool flag = false;
-            for (int i = 0; i < Prop_GUID.Count; ++i)
-            {
-                string pguid = Prop_GUID[i];
-                
-                flag = true;
-                DataGridViewTextBoxColumn propNode = new DataGridViewTextBoxColumn();
-                propNode.Name = pguid;
-                propNode.HeaderText = Show_Name[pguid];
-                dgv.Columns.Add(propNode);
-                propValue.Add(Show_Value[pguid]);
-            }
-            if (flag)
-                dgv.Rows.Add(propValue.ToArray());
-        }
-
-        private void Add_Prop(DataTable proptable)
-        {
-            for (int i = 0; i < proptable.Rows.Count; ++i)
-            {
-                Prop_GUID.Add(proptable.Rows[i]["PGUID"].ToString());
-                Show_Name[proptable.Rows[i]["PGUID"].ToString()] = proptable.Rows[i]["PROPNAME"].ToString();
-                Show_FDName[proptable.Rows[i]["PGUID"].ToString()] = proptable.Rows[i]["FDNAME"].ToString();
-                inherit_GUID[proptable.Rows[i]["PGUID"].ToString()] = proptable.Rows[i]["SOURCEGUID"].ToString();
-                Show_Value[proptable.Rows[i]["PGUID"].ToString()] = proptable.Rows[i]["PROPVALUE"].ToString();
-            }
-        }
-
-        private void tabControl1_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            TabPage tbpg = tabControl1.SelectedTab;
-            FlowLayoutPanel flp = (FlowLayoutPanel)tbpg.Controls[0];
-            foreach (ucPictureBox ucPB in flp.Controls)
-                ucPB.IconCheck = false;
-        }
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-            Close();
-        }
-
-        private void 删除ToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            int cur_index = dataGridView1.SelectedRows[0].Index;
-            if (cur_index >= dataGridView1.Rows.Count - 1)
-                return;
-            if (dataGridView1.CurrentRow != null)
-            {
-                string pguid = dataGridView1.Rows[cur_index].Cells["guid"].Value.ToString();
-                dataGridView1.Rows.RemoveAt(cur_index);
-                for (int i = cur_index; i < dataGridView1.Rows.Count - 1; ++i)
-                    dataGridView1.Rows[i].Cells["index"].Value = i + 1;
-                string sql = "update ENVIRGXFL_H0001Z000E00 set ISDELETE = 1, S_UDTIME = '" +
+            int cur_index = gridView1.FocusedRowHandle;
+            string pguid = gridView1.GetFocusedDataRow()["guid"].ToString();
+            string sql = "update ENVIRGXFL_H0001Z000E00 set ISDELETE = 1, S_UDTIME = '" +
                     DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") +
                     "' where ISDELETE = 0 and PGUID = '" + pguid + "'";
+            ahp1.ExecuteSql(sql, null);
+            sql = "update ENVIRGXDY_H0001Z000E00 set ISDELETE = 1, S_UDTIME = '" +
+                DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") +
+                "' where ISDELETE = 0 and FLGUID = '" + pguid + "'";
+            ahp1.ExecuteSql(sql, null);
+            gridView1.DeleteSelectedRows();
+            for (int i = cur_index; i < gridView1.RowCount; ++i)
+                gridView1.GetDataRow(i)["序号"] = i + 1;
+
+        }
+        // 编辑
+        private void barButtonItem5_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
+        {
+            EditForm edfm = new EditForm();
+            edfm.EditText = gridView1.GetFocusedDataRow()["显示名称"].ToString();
+            if (edfm.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                gridView1.GetFocusedDataRow()["显示名称"] = edfm.EditText;
+                string sql = "update ENVIRGXFL_H0001Z000E00 set S_UDTIME = '" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")
+                    + "', FLNAME = '" + edfm.EditText + "' where ISDELETE = 0 and PGUID = '"
+                    + gridView1.GetFocusedDataRow()["guid"].ToString() + "'";
                 ahp1.ExecuteSql(sql, null);
-                sql = "update ENVIRGXDY_H0001Z000E00 set ISDELETE = 1, S_UDTIME = '" +
-                    DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") +
-                    "' where ISDELETE = 0 and FLGUID = '" + pguid + "'";
-                ahp1.ExecuteSql(sql, null);
             }
         }
 
-        private void 置顶ToolStripMenuItem_Click(object sender, EventArgs e)
+
+        private void flowLayoutPanel1_MouseDown(object sender, MouseEventArgs e)
         {
-            int cur_index = dataGridView1.SelectedRows[0].Index;
-            if (cur_index >= dataGridView1.Rows.Count - 1)
-                return;
-            if (dataGridView1.CurrentRow != null)
+            if (e.Button == System.Windows.Forms.MouseButtons.Right)
             {
-                string tmp_guid = dataGridView1.Rows[cur_index].Cells["guid"].Value.ToString();
-                string tmp_type = dataGridView1.Rows[cur_index].Cells["type"].Value.ToString();
-                for (int i = cur_index - 1; i >= 0; --i)
-                {
-                    dataGridView1.Rows[i + 1].Cells["guid"].Value = dataGridView1.Rows[i].Cells["guid"].Value;
-                    dataGridView1.Rows[i + 1].Cells["type"].Value = dataGridView1.Rows[i].Cells["type"].Value;
-                }
-                dataGridView1.Rows[0].Cells["guid"].Value = tmp_guid;
-                dataGridView1.Rows[0].Cells["type"].Value = tmp_type;
-                dataGridView1.CurrentCell = dataGridView1.Rows[0].Cells["index"];
-                for (int i = 0; i <= cur_index; ++i)
-                {
-                    string sql = "update ENVIRGXFL_H0001Z000E00 set SHOWINDEX = '" + 
-                        dataGridView1.Rows[i].Cells["index"].Value.ToString() +
-                        "', S_UDTIME = '" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + 
-                        "' where ISDELETE = 0 and PGUID ='" +
-                        dataGridView1.Rows[i].Cells["guid"].Value.ToString() + "'";
-                    ahp1.ExecuteSql(sql, null);
-                }
+                popupMenu1.ShowPopup(barManager1, MousePosition);
             }
         }
 
-        private void 上移ToolStripMenuItem_Click(object sender, EventArgs e)
+        private void flowLayoutPanel_MouseDown(object sender, MouseEventArgs e)
         {
-            int cur_index = dataGridView1.SelectedRows[0].Index;
-            if (cur_index >= dataGridView1.Rows.Count - 1 || cur_index <= 0)
-                return;
-            if (dataGridView1.CurrentRow != null)
+            if (e.Button == System.Windows.Forms.MouseButtons.Right)
             {
-                string tmp_guid = dataGridView1.Rows[cur_index].Cells["guid"].Value.ToString();
-                string tmp_type = dataGridView1.Rows[cur_index].Cells["type"].Value.ToString();
-                dataGridView1.Rows[cur_index].Cells["guid"].Value = dataGridView1.Rows[cur_index - 1].Cells["guid"].Value;
-                dataGridView1.Rows[cur_index].Cells["type"].Value = dataGridView1.Rows[cur_index - 1].Cells["type"].Value;
-                dataGridView1.Rows[cur_index - 1].Cells["guid"].Value = tmp_guid;
-                dataGridView1.Rows[cur_index - 1].Cells["type"].Value = tmp_type;
-                dataGridView1.CurrentCell = dataGridView1.Rows[cur_index - 1].Cells["index"];
-                for (int i = cur_index - 1; i <= cur_index; ++i)
-                {
-                    string sql = "update ENVIRGXFL_H0001Z000E00 set SHOWINDEX = '" +
-                        dataGridView1.Rows[i].Cells["index"].Value.ToString() +
-                        "', S_UDTIME = '" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + 
-                        "' where ISDELETE = 0 and PGUID ='" +
-                        dataGridView1.Rows[i].Cells["guid"].Value.ToString() + "'";
-                    ahp1.ExecuteSql(sql, null);
-                }
+                popupMenu2.ShowPopup(barManager1, MousePosition);
             }
         }
 
-        private void 下移ToolStripMenuItem_Click(object sender, EventArgs e)
+        private void gridView1_MouseDown(object sender, MouseEventArgs e)
         {
-            int cur_index = dataGridView1.SelectedRows[0].Index;
-            if (cur_index >= dataGridView1.Rows.Count - 2)
-                return;
-            if (dataGridView1.CurrentRow != null)
+            if (e.Button == System.Windows.Forms.MouseButtons.Right)
             {
-                string tmp_guid = dataGridView1.Rows[cur_index].Cells["guid"].Value.ToString();
-                string tmp_type = dataGridView1.Rows[cur_index].Cells["type"].Value.ToString();
-                dataGridView1.Rows[cur_index].Cells["guid"].Value = dataGridView1.Rows[cur_index + 1].Cells["guid"].Value;
-                dataGridView1.Rows[cur_index].Cells["type"].Value = dataGridView1.Rows[cur_index + 1].Cells["type"].Value;
-                dataGridView1.Rows[cur_index + 1].Cells["guid"].Value = tmp_guid;
-                dataGridView1.Rows[cur_index + 1].Cells["type"].Value = tmp_type;
-                dataGridView1.CurrentCell = dataGridView1.Rows[cur_index + 1].Cells["index"];
-                for (int i = cur_index; i <= cur_index + 1; ++i)
-                {
-                    string sql = "update ENVIRGXFL_H0001Z000E00 set SHOWINDEX = '" +
-                        dataGridView1.Rows[i].Cells["index"].Value.ToString() +
-                        "', S_UDTIME = '" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") +
-                        "' where ISDELETE = 0 and PGUID ='" +
-                        dataGridView1.Rows[i].Cells["guid"].Value.ToString() + "'";
-                    ahp1.ExecuteSql(sql, null);
-                }
+                popupMenu3.ShowPopup(barManager1, MousePosition);
             }
         }
 
@@ -613,6 +606,5 @@ namespace EnvirInfoSys
             ahp3.CloseConn();
             ahp4.CloseConn();
         }
-
     }
 }

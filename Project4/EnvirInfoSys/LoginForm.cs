@@ -3,15 +3,16 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Security.Cryptography;
 using System.Text;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using DevExpress.XtraEditors;
+using System.Security.Cryptography;
 
-namespace EnvirInfoSys
+namespace EnvirInfoSys_Demo
 {
-    public partial class LoginForm : Form
+    public partial class LoginForm : DevExpress.XtraEditors.XtraForm
     {
         public int Mode;
         public string unitid = "";
@@ -22,17 +23,25 @@ namespace EnvirInfoSys
             InitializeComponent();
         }
 
+        private void LoginForm_Shown(object sender, EventArgs e)
+        {
+            textEdit1.Focus();
+        }
+
         private void button1_Click(object sender, EventArgs e)
         {
             string pwname = "";
-            string pwd = GetMd5_16byte(textBox1.Text);
+            string pwd = GetMd5_16byte(textEdit1.Text);
             AccessHelper ahp = new AccessHelper(Workpath + "data\\PASSWORD_H0001Z000E00.mdb");
             string sql = "select PWNAME from PASSWORD_H0001Z000E00 where ISDELETE = 0 and PWMD5 = '"
                 + pwd + "' and UNITID = '" + unitid + "'";
             DataTable dt = ahp.ExecuteDataTable(sql, null);
-            if (dt.Rows.Count > 0)
+            ahp.CloseConn();
+            for (int i = 0; i < dt.Rows.Count; ++i)
             {
-                pwname = dt.Rows[0]["PWNAME"].ToString();
+                pwname = dt.Rows[i]["PWNAME"].ToString();
+                if (pwname != "管理员密码")
+                    break;
             }
             if (pwname == "编辑模式")
             {
@@ -46,13 +55,12 @@ namespace EnvirInfoSys
                 Mode = 2;
                 this.Close();
             }
-            else 
+            else
             {
-                MessageBox.Show("密码错误!");
-                textBox1.Focus();
-                textBox1.SelectAll();
+                XtraMessageBox.Show("密码错误!");
+                textEdit1.Focus();
+                textEdit1.SelectAll();
             }
-            ahp.CloseConn();
         }
 
         private void button2_Click(object sender, EventArgs e)

@@ -8,7 +8,7 @@ using System.Drawing;
 using System.Runtime.InteropServices;
 using ucPropertyGrid;
 
-namespace EnvirInfoSys
+namespace EnvirInfoSys_Demo
 {
     // <summary>
     /// 实现弹窗

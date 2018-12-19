@@ -3,15 +3,16 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Security.Cryptography;
 using System.Text;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using DevExpress.XtraEditors;
+using System.Security.Cryptography;
 
-namespace EnvirInfoSys
+namespace EnvirInfoSys_Demo
 {
-    public partial class CheckPwForm : Form
+    public partial class CheckPwForm : DevExpress.XtraEditors.XtraForm
     {
         public string unitid = "";
         private string Workpath = AppDomain.CurrentDomain.BaseDirectory;
@@ -23,7 +24,7 @@ namespace EnvirInfoSys
 
         private void button1_Click(object sender, EventArgs e)
         {
-            string pwd = GetMd5_16byte(textBox1.Text);
+            string pwd = GetMd5_16byte(textEdit1.Text);
             AccessHelper ahp = new AccessHelper(Workpath + "data\\PASSWORD_H0001Z000E00.mdb");
             string sql = "select PGUID from PASSWORD_H0001Z000E00 where ISDELETE = 0 and PWNAME = '管理员密码' and PWMD5 = '"
                 + pwd + "' and UNITID = '" + unitid + "'";
@@ -31,15 +32,14 @@ namespace EnvirInfoSys
             ahp.CloseConn();
             if (dt.Rows.Count > 0)
             {
-
                 this.DialogResult = DialogResult.OK;
                 this.Close();
             }
             else
             {
-                MessageBox.Show("密码错误!");
-                textBox1.Focus();
-                textBox1.SelectAll();
+                XtraMessageBox.Show("密码错误!");
+                textEdit1.Focus();
+                textEdit1.SelectAll();
             }
         }
 
@@ -59,6 +59,11 @@ namespace EnvirInfoSys
             md5Pwd = md5Pwd.Replace("-", "");
             md5Pwd = md5Pwd.ToLower();
             return md5Pwd;
+        }
+
+        private void CheckPwForm_Shown(object sender, EventArgs e)
+        {
+            textEdit1.Focus();
         }
     }
 }

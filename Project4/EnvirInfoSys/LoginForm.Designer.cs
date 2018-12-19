@@ -1,4 +1,4 @@
-﻿namespace EnvirInfoSys
+﻿namespace EnvirInfoSys_Demo
 {
     partial class LoginForm
     {
@@ -29,64 +29,68 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(LoginForm));
-            this.label1 = new System.Windows.Forms.Label();
-            this.textBox1 = new System.Windows.Forms.TextBox();
-            this.button1 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
+            this.simpleButton1 = new DevExpress.XtraEditors.SimpleButton();
+            this.simpleButton2 = new DevExpress.XtraEditors.SimpleButton();
+            this.textEdit1 = new DevExpress.XtraEditors.TextEdit();
+            this.labelControl1 = new DevExpress.XtraEditors.LabelControl();
+            ((System.ComponentModel.ISupportInitialize)(this.textEdit1.Properties)).BeginInit();
             this.SuspendLayout();
             // 
-            // label1
+            // simpleButton1
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(65, 37);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(62, 18);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "密码：";
+            this.simpleButton1.Location = new System.Drawing.Point(96, 128);
+            this.simpleButton1.Name = "simpleButton1";
+            this.simpleButton1.Size = new System.Drawing.Size(112, 34);
+            this.simpleButton1.TabIndex = 8;
+            this.simpleButton1.Text = "确定";
+            this.simpleButton1.Click += new System.EventHandler(this.button1_Click);
             // 
-            // textBox1
+            // simpleButton2
             // 
-            this.textBox1.Location = new System.Drawing.Point(133, 34);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.PasswordChar = '*';
-            this.textBox1.Size = new System.Drawing.Size(188, 28);
-            this.textBox1.TabIndex = 1;
+            this.simpleButton2.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.simpleButton2.Location = new System.Drawing.Point(236, 128);
+            this.simpleButton2.Name = "simpleButton2";
+            this.simpleButton2.Size = new System.Drawing.Size(112, 34);
+            this.simpleButton2.TabIndex = 9;
+            this.simpleButton2.Text = "取消";
+            this.simpleButton2.Click += new System.EventHandler(this.button2_Click);
             // 
-            // button1
+            // textEdit1
             // 
-            this.button1.Location = new System.Drawing.Point(88, 108);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(90, 30);
-            this.button1.TabIndex = 2;
-            this.button1.Text = "确认";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.textEdit1.Location = new System.Drawing.Point(156, 48);
+            this.textEdit1.Name = "textEdit1";
+            this.textEdit1.Properties.PasswordChar = '*';
+            this.textEdit1.Size = new System.Drawing.Size(192, 30);
+            this.textEdit1.TabIndex = 10;
             // 
-            // button2
+            // labelControl1
             // 
-            this.button2.Location = new System.Drawing.Point(211, 108);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(90, 30);
-            this.button2.TabIndex = 3;
-            this.button2.Text = "取消";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
+            this.labelControl1.Location = new System.Drawing.Point(96, 52);
+            this.labelControl1.Name = "labelControl1";
+            this.labelControl1.Size = new System.Drawing.Size(54, 22);
+            this.labelControl1.TabIndex = 11;
+            this.labelControl1.Text = "密码：";
             // 
             // LoginForm
             // 
-            this.AcceptButton = this.button1;
-            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 18F);
+            this.AcceptButton = this.simpleButton1;
+            this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 22F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(388, 177);
+            this.CancelButton = this.simpleButton2;
+            this.ClientSize = new System.Drawing.Size(438, 209);
             this.ControlBox = false;
-            this.Controls.Add(this.button2);
-            this.Controls.Add(this.button1);
-            this.Controls.Add(this.textBox1);
-            this.Controls.Add(this.label1);
+            this.Controls.Add(this.labelControl1);
+            this.Controls.Add(this.textEdit1);
+            this.Controls.Add(this.simpleButton2);
+            this.Controls.Add(this.simpleButton1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "LoginForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "请登录";
+            this.Shown += new System.EventHandler(this.LoginForm_Shown);
+            ((System.ComponentModel.ISupportInitialize)(this.textEdit1.Properties)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -94,9 +98,9 @@
 
         #endregion
 
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.TextBox textBox1;
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.Button button2;
+        private DevExpress.XtraEditors.SimpleButton simpleButton1;
+        private DevExpress.XtraEditors.SimpleButton simpleButton2;
+        private DevExpress.XtraEditors.TextEdit textEdit1;
+        private DevExpress.XtraEditors.LabelControl labelControl1;
     }
 }

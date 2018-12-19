@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EnvirInfoSys
+namespace EnvirInfoSys_Demo
 {
     /// <summary>
     /// 日志操作类

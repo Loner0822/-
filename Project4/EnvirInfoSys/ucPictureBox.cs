@@ -3,14 +3,15 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Data;
-using System.Linq;
 using System.Text;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using DevExpress.XtraEditors;
 
-namespace EnvirInfoSys
+namespace EnvirInfoSys_Demo
 {
-    public partial class ucPictureBox : UserControl
+    public partial class ucPictureBox : DevExpress.XtraEditors.XtraUserControl
     {
         private string _iconname = string.Empty;
         private string _iconpguid = string.Empty;
@@ -81,7 +82,7 @@ namespace EnvirInfoSys
         public event ClickHandle Single_Click;
         private void PB_Click(object sender, EventArgs e)
         {
-            MouseEventArgs Mouse_e = (MouseEventArgs)e;  
+            MouseEventArgs Mouse_e = (MouseEventArgs)e;
             if (Single_Click != null && Mouse_e.Button == System.Windows.Forms.MouseButtons.Left)
             {
                 Single_Click((object)this, new EventArgs(), _iconpguid);
@@ -98,6 +99,5 @@ namespace EnvirInfoSys
                 Double_Click((object)this, new EventArgs(), _iconpguid);
             }
         }
-
     }
 }

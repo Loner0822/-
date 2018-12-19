@@ -1,16 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
+using DevExpress.UserSkins;
+using DevExpress.Skins;
+using DevExpress.LookAndFeel;
+using DevExpress.XtraEditors;
+using System.Text;
 
-namespace EnvirInfoSys
+namespace EnvirInfoSys_Demo
 {
     static class Program
     {
         /// <summary>
-        /// 应用程序的主入口点。
+        /// The main entry point for the application.
         /// </summary>
         [STAThread]
         static void Main()
@@ -24,22 +27,27 @@ namespace EnvirInfoSys
                 // 处理UI线程异常
                 Application.ThreadException += new System.Threading.ThreadExceptionEventHandler(Application_ThreadException);
 
+                DevExpress.Skins.SkinManager.EnableFormSkins();
+                DevExpress.Skins.SkinManager.EnableMdiFormSkins();
+                DevExpress.XtraEditors.Controls.Localizer.Active = new MessageboxClass();
+
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
+                UserLookAndFeel.Default.SetSkinStyle("DevExpress Style");
+                BonusSkins.Register();
                 Application.Run(new MainForm());
                 mutex.ReleaseMutex();
             }
             else
             {
-                MessageBox.Show("程序已启动!", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                XtraMessageBox.Show("程序已启动!", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
-            
         }
 
         static void Application_ThreadException(object sender, System.Threading.ThreadExceptionEventArgs e)
         {
             string msg = GetExceptionMsg(e.Exception, e.ToString());
-            MessageBox.Show(msg, "系统错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            XtraMessageBox.Show(msg, "系统错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
 
         /// <summary>
@@ -58,9 +66,7 @@ namespace EnvirInfoSys
                 sb.AppendLine("【异常类型】：" + ex.GetType().Name);
                 sb.AppendLine("【异常信息】：" + ex.Message);
                 sb.AppendLine("【堆栈调用】：" + ex.StackTrace);
-
                 sb.AppendLine("【异常方法】：" + ex.TargetSite);
-
             }
             else
             {
@@ -68,12 +74,9 @@ namespace EnvirInfoSys
             }
             sb.AppendLine("***************************************************************");
 
-
-
             LogHelper.WriteErrorLog(sb.ToString()); // 记录错误日志
 
             return sb.ToString();
         }
-
     }
 }

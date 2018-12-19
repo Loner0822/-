@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DevExpress.XtraEditors;
+using System;
 using System.Collections.Generic;
 using System.Drawing.Design;
 using System.Linq;
@@ -7,7 +8,7 @@ using System.Windows.Forms;
 using System.Windows.Forms.Design;
 using ucPropertyGrid;
 
-namespace EnvirInfoSys
+namespace EnvirInfoSys_Demo
 {
     /// <summary>
     /// 在PropertyGrid 上显示日期控件
@@ -86,7 +87,7 @@ System.IServiceProvider provider, object value)
 
             catch (Exception ex)
             {
-                MessageBox.Show("当前日期格式错误！\n标准格式：" + DateTime.Now.ToLongDateString(), "提示", MessageBoxButtons.OK, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1);
+                XtraMessageBox.Show("当前日期格式错误！\n标准格式：" + DateTime.Now.ToLongDateString(), "提示", MessageBoxButtons.OK, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1);
 
                 System.Console.WriteLine("PropertyGridDateItem Error : " + ex.Message);
 

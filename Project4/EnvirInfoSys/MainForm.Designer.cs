@@ -1,16 +1,16 @@
-﻿namespace EnvirInfoSys
+﻿namespace EnvirInfoSys_Demo
 {
     partial class MainForm
     {
         /// <summary>
-        /// 必需的设计器变量。
+        /// Required designer variable.
         /// </summary>
         private System.ComponentModel.IContainer components = null;
 
         /// <summary>
-        /// 清理所有正在使用的资源。
+        /// Clean up any resources being used.
         /// </summary>
-        /// <param name="disposing">如果应释放托管资源，为 true；否则为 false。</param>
+        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
         protected override void Dispose(bool disposing)
         {
             if (disposing && (components != null))
@@ -20,143 +20,539 @@
             base.Dispose(disposing);
         }
 
-        #region Windows 窗体设计器生成的代码
+        #region Windows Form Designer generated code
 
         /// <summary>
-        /// 设计器支持所需的方法 - 不要
-        /// 使用代码编辑器修改此方法的内容。
+        /// Required method for Designer support - do not modify
+        /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
-            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.编辑ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.删除ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.添加指向位置ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.删除指向位置ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.修改指向位置ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.修改箭头样式ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.timer1 = new System.Windows.Forms.Timer(this.components);
-            this.panel3 = new System.Windows.Forms.Panel();
-            this.groupBox3 = new System.Windows.Forms.GroupBox();
-            this.mapHelper1 = new MapHelper.MapHelper();
-            this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.dockManager1 = new DevExpress.XtraBars.Docking.DockManager(this.components);
+            this.dockPanel3 = new DevExpress.XtraBars.Docking.DockPanel();
+            this.dockPanel3_Container = new DevExpress.XtraBars.Docking.ControlContainer();
+            this.barManager1 = new DevExpress.XtraBars.BarManager(this.components);
+            this.bar1 = new DevExpress.XtraBars.Bar();
+            this.bar2 = new DevExpress.XtraBars.Bar();
+            this.barSubItem1 = new DevExpress.XtraBars.BarSubItem();
+            this.barButtonItem4 = new DevExpress.XtraBars.BarButtonItem();
+            this.barButtonItem5 = new DevExpress.XtraBars.BarButtonItem();
+            this.barButtonItem6 = new DevExpress.XtraBars.BarButtonItem();
+            this.barButtonItem19 = new DevExpress.XtraBars.BarButtonItem();
+            this.barSubItem2 = new DevExpress.XtraBars.BarSubItem();
+            this.barButtonItem7 = new DevExpress.XtraBars.BarButtonItem();
+            this.barButtonItem8 = new DevExpress.XtraBars.BarButtonItem();
+            this.barButtonItem9 = new DevExpress.XtraBars.BarButtonItem();
+            this.barButtonItem10 = new DevExpress.XtraBars.BarButtonItem();
+            this.barButtonItem11 = new DevExpress.XtraBars.BarButtonItem();
+            this.barButtonItem12 = new DevExpress.XtraBars.BarButtonItem();
+            this.barButtonItem1 = new DevExpress.XtraBars.BarButtonItem();
+            this.barButtonItem2 = new DevExpress.XtraBars.BarButtonItem();
+            this.skinBarSubItem1 = new DevExpress.XtraBars.SkinBarSubItem();
+            this.barButtonItem3 = new DevExpress.XtraBars.BarButtonItem();
+            this.bar3 = new DevExpress.XtraBars.Bar();
+            this.barDockControlTop = new DevExpress.XtraBars.BarDockControl();
+            this.barDockControlBottom = new DevExpress.XtraBars.BarDockControl();
+            this.barDockControlLeft = new DevExpress.XtraBars.BarDockControl();
+            this.barDockControlRight = new DevExpress.XtraBars.BarDockControl();
+            this.barButtonItem13 = new DevExpress.XtraBars.BarButtonItem();
+            this.barButtonItem14 = new DevExpress.XtraBars.BarButtonItem();
+            this.barButtonItem15 = new DevExpress.XtraBars.BarButtonItem();
+            this.barButtonItem16 = new DevExpress.XtraBars.BarButtonItem();
+            this.barButtonItem17 = new DevExpress.XtraBars.BarButtonItem();
+            this.barButtonItem18 = new DevExpress.XtraBars.BarButtonItem();
+            this.dockPanel1 = new DevExpress.XtraBars.Docking.DockPanel();
+            this.dockPanel1_Container = new DevExpress.XtraBars.Docking.ControlContainer();
+            this.treeList1 = new DevExpress.XtraTreeList.TreeList();
+            this.dockPanel2 = new DevExpress.XtraBars.Docking.DockPanel();
+            this.dockPanel2_Container = new DevExpress.XtraBars.Docking.ControlContainer();
+            this.groupControl2 = new DevExpress.XtraEditors.GroupControl();
             this.radioButton2 = new System.Windows.Forms.RadioButton();
             this.radioButton1 = new System.Windows.Forms.RadioButton();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.treeView1 = new System.Windows.Forms.TreeView();
-            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
-            this.数据管理ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.数据备份ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.数据恢复ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.数据同步ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.下载单位注册数据ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.系统设置ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.服务器IP设置ToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
-            this.边界线属性设置ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.管辖分类设置ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.图符对应设置ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.图符管理设置ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.密码管理ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.退出ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.contextMenuStrip2 = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.设置当前点为中心点ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.contextMenuStrip3 = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.导入当前单位边界线ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
-            this.contextMenuStrip1.SuspendLayout();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
+            this.panel3 = new System.Windows.Forms.Panel();
+            this.label1 = new System.Windows.Forms.Label();
+            this.panel2 = new System.Windows.Forms.Panel();
+            this.mapHelper1 = new MapHelper.MapHelper();
+            this.groupControl1 = new DevExpress.XtraEditors.GroupControl();
+            this.popupMenu1 = new DevExpress.XtraBars.PopupMenu(this.components);
+            this.popupMenu2 = new DevExpress.XtraBars.PopupMenu(this.components);
+            this.xtraOpenFileDialog1 = new DevExpress.XtraEditors.XtraOpenFileDialog(this.components);
+            ((System.ComponentModel.ISupportInitialize)(this.dockManager1)).BeginInit();
+            this.dockPanel3.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.barManager1)).BeginInit();
+            this.dockPanel1.SuspendLayout();
+            this.dockPanel1_Container.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.treeList1)).BeginInit();
+            this.dockPanel2.SuspendLayout();
+            this.dockPanel2_Container.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.groupControl2)).BeginInit();
+            this.groupControl2.SuspendLayout();
+            this.panel1.SuspendLayout();
             this.panel3.SuspendLayout();
-            this.groupBox3.SuspendLayout();
-            this.groupBox2.SuspendLayout();
-            this.groupBox4.SuspendLayout();
-            this.groupBox1.SuspendLayout();
-            this.menuStrip1.SuspendLayout();
-            this.contextMenuStrip2.SuspendLayout();
-            this.contextMenuStrip3.SuspendLayout();
+            this.panel2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.groupControl1)).BeginInit();
+            this.groupControl1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.popupMenu1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.popupMenu2)).BeginInit();
             this.SuspendLayout();
             // 
-            // contextMenuStrip1
+            // dockManager1
             // 
-            this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.编辑ToolStripMenuItem,
-            this.删除ToolStripMenuItem,
-            this.添加指向位置ToolStripMenuItem,
-            this.删除指向位置ToolStripMenuItem,
-            this.修改指向位置ToolStripMenuItem,
-            this.修改箭头样式ToolStripMenuItem});
-            this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(189, 172);
+            this.dockManager1.Form = this;
+            this.dockManager1.HiddenPanels.AddRange(new DevExpress.XtraBars.Docking.DockPanel[] {
+            this.dockPanel3});
+            this.dockManager1.MenuManager = this.barManager1;
+            this.dockManager1.RootPanels.AddRange(new DevExpress.XtraBars.Docking.DockPanel[] {
+            this.dockPanel1,
+            this.dockPanel2});
+            this.dockManager1.TopZIndexControls.AddRange(new string[] {
+            "DevExpress.XtraBars.BarDockControl",
+            "DevExpress.XtraBars.StandaloneBarDockControl",
+            "System.Windows.Forms.StatusBar",
+            "System.Windows.Forms.MenuStrip",
+            "System.Windows.Forms.StatusStrip",
+            "DevExpress.XtraBars.Ribbon.RibbonStatusBar",
+            "DevExpress.XtraBars.Ribbon.RibbonControl",
+            "DevExpress.XtraBars.Navigation.OfficeNavigationBar",
+            "DevExpress.XtraBars.Navigation.TileNavPane",
+            "DevExpress.XtraBars.TabFormControl",
+            "DevExpress.XtraBars.FluentDesignSystem.FluentDesignFormControl"});
             // 
-            // 编辑ToolStripMenuItem
+            // dockPanel3
             // 
-            this.编辑ToolStripMenuItem.Name = "编辑ToolStripMenuItem";
-            this.编辑ToolStripMenuItem.Size = new System.Drawing.Size(188, 28);
-            this.编辑ToolStripMenuItem.Text = "属性编辑";
-            this.编辑ToolStripMenuItem.Click += new System.EventHandler(this.编辑ToolStripMenuItem_Click);
+            this.dockPanel3.Controls.Add(this.dockPanel3_Container);
+            this.dockPanel3.Dock = DevExpress.XtraBars.Docking.DockingStyle.Left;
+            this.dockPanel3.ID = new System.Guid("975ab300-e73e-4477-b76f-097c77559a58");
+            this.dockPanel3.Location = new System.Drawing.Point(0, 40);
+            this.dockPanel3.Name = "dockPanel3";
+            this.dockPanel3.OriginalSize = new System.Drawing.Size(200, 200);
+            this.dockPanel3.SavedDock = DevExpress.XtraBars.Docking.DockingStyle.Left;
+            this.dockPanel3.SavedIndex = 0;
+            this.dockPanel3.SavedSizeFactor = 1D;
+            this.dockPanel3.Size = new System.Drawing.Size(200, 616);
+            this.dockPanel3.Text = "dockPanel3";
+            this.dockPanel3.Visibility = DevExpress.XtraBars.Docking.DockVisibility.Hidden;
             // 
-            // 删除ToolStripMenuItem
+            // dockPanel3_Container
             // 
-            this.删除ToolStripMenuItem.Name = "删除ToolStripMenuItem";
-            this.删除ToolStripMenuItem.Size = new System.Drawing.Size(188, 28);
-            this.删除ToolStripMenuItem.Text = "删除当前标注";
-            this.删除ToolStripMenuItem.Click += new System.EventHandler(this.删除ToolStripMenuItem_Click);
+            this.dockPanel3_Container.Location = new System.Drawing.Point(6, 33);
+            this.dockPanel3_Container.Name = "dockPanel3_Container";
+            this.dockPanel3_Container.Size = new System.Drawing.Size(185, 577);
+            this.dockPanel3_Container.TabIndex = 0;
             // 
-            // 添加指向位置ToolStripMenuItem
+            // barManager1
             // 
-            this.添加指向位置ToolStripMenuItem.Name = "添加指向位置ToolStripMenuItem";
-            this.添加指向位置ToolStripMenuItem.Size = new System.Drawing.Size(188, 28);
-            this.添加指向位置ToolStripMenuItem.Text = "添加指向位置";
-            this.添加指向位置ToolStripMenuItem.Click += new System.EventHandler(this.添加指向位置ToolStripMenuItem_Click);
+            this.barManager1.Bars.AddRange(new DevExpress.XtraBars.Bar[] {
+            this.bar1,
+            this.bar2,
+            this.bar3});
+            this.barManager1.DockControls.Add(this.barDockControlTop);
+            this.barManager1.DockControls.Add(this.barDockControlBottom);
+            this.barManager1.DockControls.Add(this.barDockControlLeft);
+            this.barManager1.DockControls.Add(this.barDockControlRight);
+            this.barManager1.DockManager = this.dockManager1;
+            this.barManager1.Form = this;
+            this.barManager1.Items.AddRange(new DevExpress.XtraBars.BarItem[] {
+            this.barSubItem1,
+            this.barSubItem2,
+            this.barButtonItem1,
+            this.barButtonItem2,
+            this.barButtonItem4,
+            this.barButtonItem5,
+            this.barButtonItem6,
+            this.barButtonItem7,
+            this.barButtonItem8,
+            this.barButtonItem9,
+            this.barButtonItem10,
+            this.barButtonItem11,
+            this.barButtonItem12,
+            this.skinBarSubItem1,
+            this.barButtonItem3,
+            this.barButtonItem13,
+            this.barButtonItem14,
+            this.barButtonItem15,
+            this.barButtonItem16,
+            this.barButtonItem17,
+            this.barButtonItem18,
+            this.barButtonItem19});
+            this.barManager1.MainMenu = this.bar2;
+            this.barManager1.MaxItemId = 31;
+            this.barManager1.StatusBar = this.bar3;
             // 
-            // 删除指向位置ToolStripMenuItem
+            // bar1
             // 
-            this.删除指向位置ToolStripMenuItem.Name = "删除指向位置ToolStripMenuItem";
-            this.删除指向位置ToolStripMenuItem.Size = new System.Drawing.Size(188, 28);
-            this.删除指向位置ToolStripMenuItem.Text = "删除指向位置";
-            this.删除指向位置ToolStripMenuItem.Click += new System.EventHandler(this.删除指向位置ToolStripMenuItem_Click);
+            this.bar1.BarName = "Tools";
+            this.bar1.DockCol = 0;
+            this.bar1.DockRow = 1;
+            this.bar1.DockStyle = DevExpress.XtraBars.BarDockStyle.Top;
+            this.bar1.OptionsBar.DrawBorder = false;
+            this.bar1.OptionsBar.DrawDragBorder = false;
+            this.bar1.Text = "Tools";
             // 
-            // 修改指向位置ToolStripMenuItem
+            // bar2
             // 
-            this.修改指向位置ToolStripMenuItem.Name = "修改指向位置ToolStripMenuItem";
-            this.修改指向位置ToolStripMenuItem.Size = new System.Drawing.Size(188, 28);
-            this.修改指向位置ToolStripMenuItem.Text = "修改指向位置";
-            this.修改指向位置ToolStripMenuItem.Click += new System.EventHandler(this.修改指向位置ToolStripMenuItem_Click);
+            this.bar2.BarName = "Main menu";
+            this.bar2.DockCol = 0;
+            this.bar2.DockRow = 0;
+            this.bar2.DockStyle = DevExpress.XtraBars.BarDockStyle.Top;
+            this.bar2.LinksPersistInfo.AddRange(new DevExpress.XtraBars.LinkPersistInfo[] {
+            new DevExpress.XtraBars.LinkPersistInfo(this.barSubItem1),
+            new DevExpress.XtraBars.LinkPersistInfo(this.barSubItem2),
+            new DevExpress.XtraBars.LinkPersistInfo(this.barButtonItem1),
+            new DevExpress.XtraBars.LinkPersistInfo(this.barButtonItem2),
+            new DevExpress.XtraBars.LinkPersistInfo(this.skinBarSubItem1),
+            new DevExpress.XtraBars.LinkPersistInfo(this.barButtonItem3)});
+            this.bar2.OptionsBar.DrawBorder = false;
+            this.bar2.OptionsBar.DrawDragBorder = false;
+            this.bar2.OptionsBar.MultiLine = true;
+            this.bar2.OptionsBar.UseWholeRow = true;
+            this.bar2.Text = "Main menu";
             // 
-            // 修改箭头样式ToolStripMenuItem
+            // barSubItem1
             // 
-            this.修改箭头样式ToolStripMenuItem.Name = "修改箭头样式ToolStripMenuItem";
-            this.修改箭头样式ToolStripMenuItem.Size = new System.Drawing.Size(188, 28);
-            this.修改箭头样式ToolStripMenuItem.Text = "修改箭头样式";
-            this.修改箭头样式ToolStripMenuItem.Click += new System.EventHandler(this.修改箭头样式ToolStripMenuItem_Click);
+            this.barSubItem1.Caption = "数据管理(&D)";
+            this.barSubItem1.Id = 0;
+            this.barSubItem1.LinksPersistInfo.AddRange(new DevExpress.XtraBars.LinkPersistInfo[] {
+            new DevExpress.XtraBars.LinkPersistInfo(this.barButtonItem4),
+            new DevExpress.XtraBars.LinkPersistInfo(this.barButtonItem5),
+            new DevExpress.XtraBars.LinkPersistInfo(this.barButtonItem6),
+            new DevExpress.XtraBars.LinkPersistInfo(this.barButtonItem19)});
+            this.barSubItem1.Name = "barSubItem1";
             // 
-            // timer1
+            // barButtonItem4
             // 
-            this.timer1.Enabled = true;
-            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
+            this.barButtonItem4.Caption = "数据备份(&B)";
+            this.barButtonItem4.Id = 5;
+            this.barButtonItem4.Name = "barButtonItem4";
+            this.barButtonItem4.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.barButtonItem4_ItemClick);
+            // 
+            // barButtonItem5
+            // 
+            this.barButtonItem5.Caption = "数据恢复(&R)";
+            this.barButtonItem5.Id = 6;
+            this.barButtonItem5.Name = "barButtonItem5";
+            this.barButtonItem5.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.barButtonItem5_ItemClick);
+            // 
+            // barButtonItem6
+            // 
+            this.barButtonItem6.Caption = "数据同步(&U)";
+            this.barButtonItem6.Id = 7;
+            this.barButtonItem6.Name = "barButtonItem6";
+            this.barButtonItem6.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.barButtonItem6_ItemClick);
+            // 
+            // barButtonItem19
+            // 
+            this.barButtonItem19.Caption = "下载单位注册数据(&D)";
+            this.barButtonItem19.Id = 30;
+            this.barButtonItem19.Name = "barButtonItem19";
+            this.barButtonItem19.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.barButtonItem19_ItemClick);
+            // 
+            // barSubItem2
+            // 
+            this.barSubItem2.Caption = "系统设置(&S)";
+            this.barSubItem2.Id = 1;
+            this.barSubItem2.LinksPersistInfo.AddRange(new DevExpress.XtraBars.LinkPersistInfo[] {
+            new DevExpress.XtraBars.LinkPersistInfo(this.barButtonItem7),
+            new DevExpress.XtraBars.LinkPersistInfo(this.barButtonItem8),
+            new DevExpress.XtraBars.LinkPersistInfo(this.barButtonItem9),
+            new DevExpress.XtraBars.LinkPersistInfo(this.barButtonItem10),
+            new DevExpress.XtraBars.LinkPersistInfo(this.barButtonItem11),
+            new DevExpress.XtraBars.LinkPersistInfo(this.barButtonItem12)});
+            this.barSubItem2.Name = "barSubItem2";
+            // 
+            // barButtonItem7
+            // 
+            this.barButtonItem7.Caption = "服务器IP设置(&S)";
+            this.barButtonItem7.Id = 8;
+            this.barButtonItem7.Name = "barButtonItem7";
+            this.barButtonItem7.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.barButtonItem7_ItemClick);
+            // 
+            // barButtonItem8
+            // 
+            this.barButtonItem8.Caption = "边界线属性设置(&B)";
+            this.barButtonItem8.Id = 9;
+            this.barButtonItem8.Name = "barButtonItem8";
+            this.barButtonItem8.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.barButtonItem8_ItemClick);
+            // 
+            // barButtonItem9
+            // 
+            this.barButtonItem9.Caption = "管辖分类设置(&M)";
+            this.barButtonItem9.Id = 10;
+            this.barButtonItem9.Name = "barButtonItem9";
+            this.barButtonItem9.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.barButtonItem9_ItemClick);
+            // 
+            // barButtonItem10
+            // 
+            this.barButtonItem10.Caption = "图符对应设置(&C)";
+            this.barButtonItem10.Id = 11;
+            this.barButtonItem10.Name = "barButtonItem10";
+            this.barButtonItem10.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.barButtonItem10_ItemClick);
+            // 
+            // barButtonItem11
+            // 
+            this.barButtonItem11.Caption = "图符扩展设置(&I)";
+            this.barButtonItem11.Id = 12;
+            this.barButtonItem11.Name = "barButtonItem11";
+            this.barButtonItem11.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.barButtonItem11_ItemClick);
+            // 
+            // barButtonItem12
+            // 
+            this.barButtonItem12.Caption = "密码管理(&P)";
+            this.barButtonItem12.Id = 13;
+            this.barButtonItem12.Name = "barButtonItem12";
+            this.barButtonItem12.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.barButtonItem12_ItemClick);
+            // 
+            // barButtonItem1
+            // 
+            this.barButtonItem1.Caption = "查看日志(&L)";
+            this.barButtonItem1.Id = 2;
+            this.barButtonItem1.Name = "barButtonItem1";
+            this.barButtonItem1.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.barButtonItem1_ItemClick);
+            // 
+            // barButtonItem2
+            // 
+            this.barButtonItem2.Caption = "查看帮助(&H)";
+            this.barButtonItem2.Id = 3;
+            this.barButtonItem2.Name = "barButtonItem2";
+            this.barButtonItem2.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.barButtonItem2_ItemClick);
+            // 
+            // skinBarSubItem1
+            // 
+            this.skinBarSubItem1.Caption = "更换皮肤(&K)";
+            this.skinBarSubItem1.Id = 19;
+            this.skinBarSubItem1.Name = "skinBarSubItem1";
+            // 
+            // barButtonItem3
+            // 
+            this.barButtonItem3.Caption = "退出(&Q)";
+            this.barButtonItem3.Id = 20;
+            this.barButtonItem3.Name = "barButtonItem3";
+            // 
+            // bar3
+            // 
+            this.bar3.BarName = "Status bar";
+            this.bar3.CanDockStyle = DevExpress.XtraBars.BarCanDockStyle.Bottom;
+            this.bar3.DockCol = 0;
+            this.bar3.DockRow = 0;
+            this.bar3.DockStyle = DevExpress.XtraBars.BarDockStyle.Bottom;
+            this.bar3.OptionsBar.AllowQuickCustomization = false;
+            this.bar3.OptionsBar.DrawDragBorder = false;
+            this.bar3.OptionsBar.UseWholeRow = true;
+            this.bar3.Text = "Status bar";
+            this.bar3.Visible = false;
+            // 
+            // barDockControlTop
+            // 
+            this.barDockControlTop.CausesValidation = false;
+            this.barDockControlTop.Dock = System.Windows.Forms.DockStyle.Top;
+            this.barDockControlTop.Location = new System.Drawing.Point(0, 0);
+            this.barDockControlTop.Manager = this.barManager1;
+            this.barDockControlTop.Size = new System.Drawing.Size(1383, 64);
+            // 
+            // barDockControlBottom
+            // 
+            this.barDockControlBottom.CausesValidation = false;
+            this.barDockControlBottom.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.barDockControlBottom.Location = new System.Drawing.Point(0, 656);
+            this.barDockControlBottom.Manager = this.barManager1;
+            this.barDockControlBottom.Size = new System.Drawing.Size(1383, 25);
+            // 
+            // barDockControlLeft
+            // 
+            this.barDockControlLeft.CausesValidation = false;
+            this.barDockControlLeft.Dock = System.Windows.Forms.DockStyle.Left;
+            this.barDockControlLeft.Location = new System.Drawing.Point(0, 64);
+            this.barDockControlLeft.Manager = this.barManager1;
+            this.barDockControlLeft.Size = new System.Drawing.Size(0, 592);
+            // 
+            // barDockControlRight
+            // 
+            this.barDockControlRight.CausesValidation = false;
+            this.barDockControlRight.Dock = System.Windows.Forms.DockStyle.Right;
+            this.barDockControlRight.Location = new System.Drawing.Point(1383, 64);
+            this.barDockControlRight.Manager = this.barManager1;
+            this.barDockControlRight.Size = new System.Drawing.Size(0, 592);
+            // 
+            // barButtonItem13
+            // 
+            this.barButtonItem13.Caption = "属性编辑";
+            this.barButtonItem13.Id = 24;
+            this.barButtonItem13.Name = "barButtonItem13";
+            this.barButtonItem13.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.barButtonItem13_ItemClick);
+            // 
+            // barButtonItem14
+            // 
+            this.barButtonItem14.Caption = "删除当前标注";
+            this.barButtonItem14.Id = 25;
+            this.barButtonItem14.Name = "barButtonItem14";
+            this.barButtonItem14.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.barButtonItem14_ItemClick);
+            // 
+            // barButtonItem15
+            // 
+            this.barButtonItem15.Caption = "添加指向位置";
+            this.barButtonItem15.Id = 26;
+            this.barButtonItem15.Name = "barButtonItem15";
+            this.barButtonItem15.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.barButtonItem15_ItemClick);
+            // 
+            // barButtonItem16
+            // 
+            this.barButtonItem16.Caption = "修改指向位置";
+            this.barButtonItem16.Id = 27;
+            this.barButtonItem16.Name = "barButtonItem16";
+            this.barButtonItem16.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.barButtonItem16_ItemClick);
+            // 
+            // barButtonItem17
+            // 
+            this.barButtonItem17.Caption = "删除指向位置";
+            this.barButtonItem17.Id = 28;
+            this.barButtonItem17.Name = "barButtonItem17";
+            this.barButtonItem17.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.barButtonItem17_ItemClick);
+            // 
+            // barButtonItem18
+            // 
+            this.barButtonItem18.Caption = "导入当前单位边界线";
+            this.barButtonItem18.Id = 29;
+            this.barButtonItem18.Name = "barButtonItem18";
+            this.barButtonItem18.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.barButtonItem18_ItemClick);
+            // 
+            // dockPanel1
+            // 
+            this.dockPanel1.Controls.Add(this.dockPanel1_Container);
+            this.dockPanel1.Dock = DevExpress.XtraBars.Docking.DockingStyle.Left;
+            this.dockPanel1.ID = new System.Guid("d955ddf5-94b6-49cb-840b-37e2f0994894");
+            this.dockPanel1.Location = new System.Drawing.Point(0, 64);
+            this.dockPanel1.Name = "dockPanel1";
+            this.dockPanel1.Options.ShowCloseButton = false;
+            this.dockPanel1.OriginalSize = new System.Drawing.Size(200, 200);
+            this.dockPanel1.SavedSizeFactor = 0D;
+            this.dockPanel1.Size = new System.Drawing.Size(200, 592);
+            this.dockPanel1.Text = "管辖范围";
+            // 
+            // dockPanel1_Container
+            // 
+            this.dockPanel1_Container.Controls.Add(this.treeList1);
+            this.dockPanel1_Container.Location = new System.Drawing.Point(6, 33);
+            this.dockPanel1_Container.Name = "dockPanel1_Container";
+            this.dockPanel1_Container.Size = new System.Drawing.Size(185, 553);
+            this.dockPanel1_Container.TabIndex = 0;
+            // 
+            // treeList1
+            // 
+            this.treeList1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.treeList1.Location = new System.Drawing.Point(0, 0);
+            this.treeList1.Name = "treeList1";
+            this.treeList1.OptionsBehavior.Editable = false;
+            this.treeList1.Size = new System.Drawing.Size(185, 553);
+            this.treeList1.TabIndex = 0;
+            this.treeList1.ViewStyle = DevExpress.XtraTreeList.TreeListViewStyle.TreeView;
+            this.treeList1.FocusedNodeChanged += new DevExpress.XtraTreeList.FocusedNodeChangedEventHandler(this.treeList1_FocusedNodeChanged);
+            this.treeList1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.treeList1_MouseDown);
+            // 
+            // dockPanel2
+            // 
+            this.dockPanel2.Controls.Add(this.dockPanel2_Container);
+            this.dockPanel2.Dock = DevExpress.XtraBars.Docking.DockingStyle.Right;
+            this.dockPanel2.ID = new System.Guid("43a75b3e-43ce-42c0-9433-27634dc3d893");
+            this.dockPanel2.Location = new System.Drawing.Point(1183, 64);
+            this.dockPanel2.Name = "dockPanel2";
+            this.dockPanel2.Options.ShowCloseButton = false;
+            this.dockPanel2.OriginalSize = new System.Drawing.Size(200, 200);
+            this.dockPanel2.SavedSizeFactor = 0D;
+            this.dockPanel2.Size = new System.Drawing.Size(200, 592);
+            this.dockPanel2.Text = "地图设置";
+            // 
+            // dockPanel2_Container
+            // 
+            this.dockPanel2_Container.Controls.Add(this.groupControl2);
+            this.dockPanel2_Container.Location = new System.Drawing.Point(9, 33);
+            this.dockPanel2_Container.Name = "dockPanel2_Container";
+            this.dockPanel2_Container.Size = new System.Drawing.Size(185, 553);
+            this.dockPanel2_Container.TabIndex = 0;
+            // 
+            // groupControl2
+            // 
+            this.groupControl2.Controls.Add(this.radioButton2);
+            this.groupControl2.Controls.Add(this.radioButton1);
+            this.groupControl2.Dock = System.Windows.Forms.DockStyle.Top;
+            this.groupControl2.Location = new System.Drawing.Point(0, 0);
+            this.groupControl2.Name = "groupControl2";
+            this.groupControl2.Size = new System.Drawing.Size(185, 90);
+            this.groupControl2.TabIndex = 1;
+            this.groupControl2.Text = "放大缩小";
+            // 
+            // radioButton2
+            // 
+            this.radioButton2.AutoSize = true;
+            this.radioButton2.Dock = System.Windows.Forms.DockStyle.Top;
+            this.radioButton2.Location = new System.Drawing.Point(2, 57);
+            this.radioButton2.Name = "radioButton2";
+            this.radioButton2.Size = new System.Drawing.Size(181, 26);
+            this.radioButton2.TabIndex = 3;
+            this.radioButton2.TabStop = true;
+            this.radioButton2.Text = "双击缩小";
+            this.radioButton2.UseVisualStyleBackColor = true;
+            // 
+            // radioButton1
+            // 
+            this.radioButton1.AutoSize = true;
+            this.radioButton1.Dock = System.Windows.Forms.DockStyle.Top;
+            this.radioButton1.Location = new System.Drawing.Point(2, 31);
+            this.radioButton1.Name = "radioButton1";
+            this.radioButton1.Size = new System.Drawing.Size(181, 26);
+            this.radioButton1.TabIndex = 2;
+            this.radioButton1.TabStop = true;
+            this.radioButton1.Text = "双击放大";
+            this.radioButton1.UseVisualStyleBackColor = true;
+            // 
+            // panel1
+            // 
+            this.panel1.Controls.Add(this.flowLayoutPanel1);
+            this.panel1.Controls.Add(this.panel3);
+            this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panel1.Location = new System.Drawing.Point(2, 31);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(979, 59);
+            this.panel1.TabIndex = 1;
+            // 
+            // flowLayoutPanel1
+            // 
+            this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.flowLayoutPanel1.Location = new System.Drawing.Point(0, 0);
+            this.flowLayoutPanel1.Name = "flowLayoutPanel1";
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(819, 59);
+            this.flowLayoutPanel1.TabIndex = 1;
             // 
             // panel3
             // 
-            this.panel3.Controls.Add(this.groupBox3);
-            this.panel3.Controls.Add(this.groupBox2);
-            this.panel3.Controls.Add(this.groupBox1);
-            this.panel3.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel3.Location = new System.Drawing.Point(0, 32);
+            this.panel3.Controls.Add(this.label1);
+            this.panel3.Dock = System.Windows.Forms.DockStyle.Right;
+            this.panel3.Location = new System.Drawing.Point(819, 0);
             this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(1210, 637);
-            this.panel3.TabIndex = 6;
+            this.panel3.Size = new System.Drawing.Size(160, 59);
+            this.panel3.TabIndex = 0;
             // 
-            // groupBox3
+            // label1
             // 
-            this.groupBox3.Controls.Add(this.mapHelper1);
-            this.groupBox3.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.groupBox3.Location = new System.Drawing.Point(277, 0);
-            this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(777, 637);
-            this.groupBox3.TabIndex = 4;
-            this.groupBox3.TabStop = false;
-            this.groupBox3.Text = "地图显示";
+            this.label1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label1.Location = new System.Drawing.Point(0, 0);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(160, 59);
+            this.label1.TabIndex = 1;
+            this.label1.Text = "当前级别：";
+            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // panel2
+            // 
+            this.panel2.Controls.Add(this.mapHelper1);
+            this.panel2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel2.Location = new System.Drawing.Point(2, 90);
+            this.panel2.Name = "panel2";
+            this.panel2.Size = new System.Drawing.Size(979, 500);
+            this.panel2.TabIndex = 2;
             // 
             // mapHelper1
             // 
@@ -165,13 +561,13 @@
             this.mapHelper1.centerlng = 0D;
             this.mapHelper1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.mapHelper1.iconspath = null;
-            this.mapHelper1.Location = new System.Drawing.Point(3, 24);
+            this.mapHelper1.Location = new System.Drawing.Point(0, 0);
             this.mapHelper1.maparr = null;
-            this.mapHelper1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.mapHelper1.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.mapHelper1.Name = "mapHelper1";
             this.mapHelper1.roadmappath = null;
             this.mapHelper1.satellitemappath = null;
-            this.mapHelper1.Size = new System.Drawing.Size(771, 610);
+            this.mapHelper1.Size = new System.Drawing.Size(979, 500);
             this.mapHelper1.TabIndex = 0;
             this.mapHelper1.webpath = null;
             this.mapHelper1.AddMarkerFinished += new MapHelper.MapHelper.DlAddMarkerFinished(this.mapHelper1_AddMarkerFinished);
@@ -186,249 +582,79 @@
             this.mapHelper1.IconSelected += new MapHelper.MapHelper.DlIconSelected(this.mapHelper1_IconSelected);
             this.mapHelper1.MapTypeChanged += new MapHelper.MapHelper.DlMapTypeChanged(this.mapHelper1_MapTypeChanged);
             this.mapHelper1.MapMouseWheel += new MapHelper.MapHelper.DlMouseWheel(this.mapHelper1_MapMouseWheel);
-            this.mapHelper1.PointerDone += new MapHelper.MapHelper.DlPointerDone(this.mapHelper1_PointerDone);
             // 
-            // groupBox2
+            // groupControl1
             // 
-            this.groupBox2.Controls.Add(this.groupBox4);
-            this.groupBox2.Dock = System.Windows.Forms.DockStyle.Right;
-            this.groupBox2.Location = new System.Drawing.Point(1054, 0);
-            this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(156, 637);
-            this.groupBox2.TabIndex = 3;
-            this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "地图设置";
-            this.groupBox2.Visible = false;
+            this.groupControl1.Controls.Add(this.panel2);
+            this.groupControl1.Controls.Add(this.panel1);
+            this.groupControl1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.groupControl1.Location = new System.Drawing.Point(200, 64);
+            this.groupControl1.Name = "groupControl1";
+            this.groupControl1.Size = new System.Drawing.Size(983, 592);
+            this.groupControl1.TabIndex = 24;
+            this.groupControl1.Text = "地图显示";
             // 
-            // groupBox4
+            // popupMenu1
             // 
-            this.groupBox4.Controls.Add(this.radioButton2);
-            this.groupBox4.Controls.Add(this.radioButton1);
-            this.groupBox4.Dock = System.Windows.Forms.DockStyle.Top;
-            this.groupBox4.Location = new System.Drawing.Point(3, 24);
-            this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(150, 76);
-            this.groupBox4.TabIndex = 0;
-            this.groupBox4.TabStop = false;
-            this.groupBox4.Text = "放大缩小";
+            this.popupMenu1.LinksPersistInfo.AddRange(new DevExpress.XtraBars.LinkPersistInfo[] {
+            new DevExpress.XtraBars.LinkPersistInfo(this.barButtonItem13),
+            new DevExpress.XtraBars.LinkPersistInfo(this.barButtonItem14),
+            new DevExpress.XtraBars.LinkPersistInfo(this.barButtonItem15),
+            new DevExpress.XtraBars.LinkPersistInfo(this.barButtonItem16),
+            new DevExpress.XtraBars.LinkPersistInfo(this.barButtonItem17)});
+            this.popupMenu1.Manager = this.barManager1;
+            this.popupMenu1.Name = "popupMenu1";
             // 
-            // radioButton2
+            // popupMenu2
             // 
-            this.radioButton2.AutoSize = true;
-            this.radioButton2.Dock = System.Windows.Forms.DockStyle.Top;
-            this.radioButton2.Location = new System.Drawing.Point(3, 46);
-            this.radioButton2.Name = "radioButton2";
-            this.radioButton2.Size = new System.Drawing.Size(144, 22);
-            this.radioButton2.TabIndex = 1;
-            this.radioButton2.TabStop = true;
-            this.radioButton2.Text = "双击缩小";
-            this.radioButton2.UseVisualStyleBackColor = true;
+            this.popupMenu2.LinksPersistInfo.AddRange(new DevExpress.XtraBars.LinkPersistInfo[] {
+            new DevExpress.XtraBars.LinkPersistInfo(this.barButtonItem18)});
+            this.popupMenu2.Manager = this.barManager1;
+            this.popupMenu2.Name = "popupMenu2";
             // 
-            // radioButton1
+            // xtraOpenFileDialog1
             // 
-            this.radioButton1.AutoSize = true;
-            this.radioButton1.Dock = System.Windows.Forms.DockStyle.Top;
-            this.radioButton1.Location = new System.Drawing.Point(3, 24);
-            this.radioButton1.Name = "radioButton1";
-            this.radioButton1.Size = new System.Drawing.Size(144, 22);
-            this.radioButton1.TabIndex = 0;
-            this.radioButton1.TabStop = true;
-            this.radioButton1.Text = "双击放大";
-            this.radioButton1.UseVisualStyleBackColor = true;
-            // 
-            // groupBox1
-            // 
-            this.groupBox1.Controls.Add(this.treeView1);
-            this.groupBox1.Dock = System.Windows.Forms.DockStyle.Left;
-            this.groupBox1.Location = new System.Drawing.Point(0, 0);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(277, 637);
-            this.groupBox1.TabIndex = 2;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "组织结构";
-            // 
-            // treeView1
-            // 
-            this.treeView1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.treeView1.Location = new System.Drawing.Point(3, 24);
-            this.treeView1.Name = "treeView1";
-            this.treeView1.Size = new System.Drawing.Size(271, 610);
-            this.treeView1.TabIndex = 0;
-            this.treeView1.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeView1_AfterSelect);
-            this.treeView1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.treeView1_MouseDown);
-            // 
-            // menuStrip1
-            // 
-            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.数据管理ToolStripMenuItem,
-            this.系统设置ToolStripMenuItem,
-            this.退出ToolStripMenuItem});
-            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
-            this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(1210, 32);
-            this.menuStrip1.TabIndex = 7;
-            this.menuStrip1.Text = "menuStrip1";
-            // 
-            // 数据管理ToolStripMenuItem
-            // 
-            this.数据管理ToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.数据备份ToolStripMenuItem,
-            this.数据恢复ToolStripMenuItem,
-            this.数据同步ToolStripMenuItem,
-            this.下载单位注册数据ToolStripMenuItem});
-            this.数据管理ToolStripMenuItem.Name = "数据管理ToolStripMenuItem";
-            this.数据管理ToolStripMenuItem.Size = new System.Drawing.Size(124, 28);
-            this.数据管理ToolStripMenuItem.Text = "数据管理(&M)";
-            // 
-            // 数据备份ToolStripMenuItem
-            // 
-            this.数据备份ToolStripMenuItem.Name = "数据备份ToolStripMenuItem";
-            this.数据备份ToolStripMenuItem.Size = new System.Drawing.Size(251, 28);
-            this.数据备份ToolStripMenuItem.Text = "数据备份(&B)";
-            this.数据备份ToolStripMenuItem.Click += new System.EventHandler(this.数据备份ToolStripMenuItem_Click);
-            // 
-            // 数据恢复ToolStripMenuItem
-            // 
-            this.数据恢复ToolStripMenuItem.Name = "数据恢复ToolStripMenuItem";
-            this.数据恢复ToolStripMenuItem.Size = new System.Drawing.Size(251, 28);
-            this.数据恢复ToolStripMenuItem.Text = "数据恢复(&R)";
-            this.数据恢复ToolStripMenuItem.Click += new System.EventHandler(this.数据恢复ToolStripMenuItem_Click);
-            // 
-            // 数据同步ToolStripMenuItem
-            // 
-            this.数据同步ToolStripMenuItem.Name = "数据同步ToolStripMenuItem";
-            this.数据同步ToolStripMenuItem.Size = new System.Drawing.Size(251, 28);
-            this.数据同步ToolStripMenuItem.Text = "数据同步(&U)";
-            this.数据同步ToolStripMenuItem.Click += new System.EventHandler(this.数据同步ToolStripMenuItem_Click);
-            // 
-            // 下载单位注册数据ToolStripMenuItem
-            // 
-            this.下载单位注册数据ToolStripMenuItem.Name = "下载单位注册数据ToolStripMenuItem";
-            this.下载单位注册数据ToolStripMenuItem.Size = new System.Drawing.Size(251, 28);
-            this.下载单位注册数据ToolStripMenuItem.Text = "下载单位注册数据(&O)";
-            this.下载单位注册数据ToolStripMenuItem.Click += new System.EventHandler(this.下载单位注册数据ToolStripMenuItem_Click);
-            // 
-            // 系统设置ToolStripMenuItem
-            // 
-            this.系统设置ToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.服务器IP设置ToolStripMenuItem1,
-            this.边界线属性设置ToolStripMenuItem,
-            this.管辖分类设置ToolStripMenuItem,
-            this.图符对应设置ToolStripMenuItem,
-            this.图符管理设置ToolStripMenuItem,
-            this.密码管理ToolStripMenuItem});
-            this.系统设置ToolStripMenuItem.Name = "系统设置ToolStripMenuItem";
-            this.系统设置ToolStripMenuItem.Overflow = System.Windows.Forms.ToolStripItemOverflow.AsNeeded;
-            this.系统设置ToolStripMenuItem.Size = new System.Drawing.Size(116, 28);
-            this.系统设置ToolStripMenuItem.Text = "系统设置(&S)";
-            // 
-            // 服务器IP设置ToolStripMenuItem1
-            // 
-            this.服务器IP设置ToolStripMenuItem1.Name = "服务器IP设置ToolStripMenuItem1";
-            this.服务器IP设置ToolStripMenuItem1.Size = new System.Drawing.Size(229, 28);
-            this.服务器IP设置ToolStripMenuItem1.Text = "服务器IP设置(&S)";
-            this.服务器IP设置ToolStripMenuItem1.Click += new System.EventHandler(this.IP设置ToolStripMenuItem_Click);
-            // 
-            // 边界线属性设置ToolStripMenuItem
-            // 
-            this.边界线属性设置ToolStripMenuItem.Name = "边界线属性设置ToolStripMenuItem";
-            this.边界线属性设置ToolStripMenuItem.Size = new System.Drawing.Size(229, 28);
-            this.边界线属性设置ToolStripMenuItem.Text = "边界线属性设置(&B)";
-            this.边界线属性设置ToolStripMenuItem.Click += new System.EventHandler(this.边界线属性设置ToolStripMenuItem_Click);
-            // 
-            // 管辖分类设置ToolStripMenuItem
-            // 
-            this.管辖分类设置ToolStripMenuItem.Name = "管辖分类设置ToolStripMenuItem";
-            this.管辖分类设置ToolStripMenuItem.Size = new System.Drawing.Size(229, 28);
-            this.管辖分类设置ToolStripMenuItem.Text = "管辖分类设置(&M)";
-            this.管辖分类设置ToolStripMenuItem.Click += new System.EventHandler(this.管辖分类设置ToolStripMenuItem_Click);
-            // 
-            // 图符对应设置ToolStripMenuItem
-            // 
-            this.图符对应设置ToolStripMenuItem.Name = "图符对应设置ToolStripMenuItem";
-            this.图符对应设置ToolStripMenuItem.Size = new System.Drawing.Size(229, 28);
-            this.图符对应设置ToolStripMenuItem.Text = "图符对应设置(&C)";
-            this.图符对应设置ToolStripMenuItem.Click += new System.EventHandler(this.图符对应设置ToolStripMenuItem_Click);
-            // 
-            // 图符管理设置ToolStripMenuItem
-            // 
-            this.图符管理设置ToolStripMenuItem.Name = "图符管理设置ToolStripMenuItem";
-            this.图符管理设置ToolStripMenuItem.Size = new System.Drawing.Size(229, 28);
-            this.图符管理设置ToolStripMenuItem.Text = "图符扩展设置(&I)";
-            this.图符管理设置ToolStripMenuItem.Click += new System.EventHandler(this.图符管理设置ToolStripMenuItem_Click);
-            // 
-            // 密码管理ToolStripMenuItem
-            // 
-            this.密码管理ToolStripMenuItem.Name = "密码管理ToolStripMenuItem";
-            this.密码管理ToolStripMenuItem.Size = new System.Drawing.Size(229, 28);
-            this.密码管理ToolStripMenuItem.Text = "密码管理(&P)";
-            this.密码管理ToolStripMenuItem.Click += new System.EventHandler(this.密码管理ToolStripMenuItem_Click);
-            // 
-            // 退出ToolStripMenuItem
-            // 
-            this.退出ToolStripMenuItem.Name = "退出ToolStripMenuItem";
-            this.退出ToolStripMenuItem.Size = new System.Drawing.Size(85, 28);
-            this.退出ToolStripMenuItem.Text = "退出(&Q)";
-            this.退出ToolStripMenuItem.Click += new System.EventHandler(this.退出ToolStripMenuItem_Click);
-            // 
-            // contextMenuStrip2
-            // 
-            this.contextMenuStrip2.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.设置当前点为中心点ToolStripMenuItem});
-            this.contextMenuStrip2.Name = "contextMenuStrip2";
-            this.contextMenuStrip2.Size = new System.Drawing.Size(297, 32);
-            // 
-            // 设置当前点为中心点ToolStripMenuItem
-            // 
-            this.设置当前点为中心点ToolStripMenuItem.Name = "设置当前点为中心点ToolStripMenuItem";
-            this.设置当前点为中心点ToolStripMenuItem.Size = new System.Drawing.Size(296, 28);
-            this.设置当前点为中心点ToolStripMenuItem.Text = "设置当前单位的地图中心点";
-            this.设置当前点为中心点ToolStripMenuItem.Click += new System.EventHandler(this.设置当前点为中心点ToolStripMenuItem_Click);
-            // 
-            // contextMenuStrip3
-            // 
-            this.contextMenuStrip3.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.导入当前单位边界线ToolStripMenuItem});
-            this.contextMenuStrip3.Name = "contextMenuStrip3";
-            this.contextMenuStrip3.Size = new System.Drawing.Size(243, 32);
-            // 
-            // 导入当前单位边界线ToolStripMenuItem
-            // 
-            this.导入当前单位边界线ToolStripMenuItem.Name = "导入当前单位边界线ToolStripMenuItem";
-            this.导入当前单位边界线ToolStripMenuItem.Size = new System.Drawing.Size(242, 28);
-            this.导入当前单位边界线ToolStripMenuItem.Text = "导入当前单位边界线";
-            this.导入当前单位边界线ToolStripMenuItem.Click += new System.EventHandler(this.导入当前单位边界线ToolStripMenuItem_Click);
-            // 
-            // openFileDialog1
-            // 
-            this.openFileDialog1.FileName = "openFileDialog1";
+            this.xtraOpenFileDialog1.FileName = "xtraOpenFileDialog1";
             // 
             // MainForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 18F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 22F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1210, 669);
-            this.Controls.Add(this.panel3);
-            this.Controls.Add(this.menuStrip1);
+            this.ClientSize = new System.Drawing.Size(1383, 681);
+            this.Controls.Add(this.groupControl1);
+            this.Controls.Add(this.dockPanel2);
+            this.Controls.Add(this.dockPanel1);
+            this.Controls.Add(this.barDockControlLeft);
+            this.Controls.Add(this.barDockControlRight);
+            this.Controls.Add(this.barDockControlBottom);
+            this.Controls.Add(this.barDockControlTop);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.MainMenuStrip = this.menuStrip1;
+            this.Margin = new System.Windows.Forms.Padding(5);
             this.Name = "MainForm";
             this.Text = "环境信息化系统";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.MainForm_FormClosed);
             this.Load += new System.EventHandler(this.MainForm_Load);
-            this.contextMenuStrip1.ResumeLayout(false);
+            this.Shown += new System.EventHandler(this.MainForm_Shown);
+            ((System.ComponentModel.ISupportInitialize)(this.dockManager1)).EndInit();
+            this.dockPanel3.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.barManager1)).EndInit();
+            this.dockPanel1.ResumeLayout(false);
+            this.dockPanel1_Container.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.treeList1)).EndInit();
+            this.dockPanel2.ResumeLayout(false);
+            this.dockPanel2_Container.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.groupControl2)).EndInit();
+            this.groupControl2.ResumeLayout(false);
+            this.groupControl2.PerformLayout();
+            this.panel1.ResumeLayout(false);
             this.panel3.ResumeLayout(false);
-            this.groupBox3.ResumeLayout(false);
-            this.groupBox2.ResumeLayout(false);
-            this.groupBox4.ResumeLayout(false);
-            this.groupBox4.PerformLayout();
-            this.groupBox1.ResumeLayout(false);
-            this.menuStrip1.ResumeLayout(false);
-            this.menuStrip1.PerformLayout();
-            this.contextMenuStrip2.ResumeLayout(false);
-            this.contextMenuStrip3.ResumeLayout(false);
+            this.panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.groupControl1)).EndInit();
+            this.groupControl1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.popupMenu1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.popupMenu2)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -436,43 +662,56 @@
 
         #endregion
 
-        private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
-        private System.Windows.Forms.ToolStripMenuItem 删除ToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem 编辑ToolStripMenuItem;
-        private System.Windows.Forms.Timer timer1;
-        private System.Windows.Forms.ToolStripMenuItem 添加指向位置ToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem 删除指向位置ToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem 修改指向位置ToolStripMenuItem;
-        private System.Windows.Forms.Panel panel3;
-        private System.Windows.Forms.GroupBox groupBox3;
-        private MapHelper.MapHelper mapHelper1;
-        private System.Windows.Forms.GroupBox groupBox2;
-        private System.Windows.Forms.GroupBox groupBox4;
+        private DevExpress.XtraBars.Docking.DockManager dockManager1;
+        private DevExpress.XtraBars.Docking.DockPanel dockPanel2;
+        private DevExpress.XtraBars.Docking.ControlContainer dockPanel2_Container;
+        private DevExpress.XtraBars.Docking.DockPanel dockPanel1;
+        private DevExpress.XtraBars.Docking.ControlContainer dockPanel1_Container;
+        private DevExpress.XtraBars.Docking.DockPanel dockPanel3;
+        private DevExpress.XtraBars.Docking.ControlContainer dockPanel3_Container;
+        private DevExpress.XtraEditors.GroupControl groupControl2;
         private System.Windows.Forms.RadioButton radioButton2;
         private System.Windows.Forms.RadioButton radioButton1;
-        private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.TreeView treeView1;
-        private System.Windows.Forms.ToolStripMenuItem 修改箭头样式ToolStripMenuItem;
-        private System.Windows.Forms.MenuStrip menuStrip1;
-        private System.Windows.Forms.ToolStripMenuItem 数据管理ToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem 数据备份ToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem 数据恢复ToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem 数据同步ToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem 系统设置ToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem 服务器IP设置ToolStripMenuItem1;
-        private System.Windows.Forms.ToolStripMenuItem 退出ToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem 边界线属性设置ToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem 管辖分类设置ToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem 图符对应设置ToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem 图符管理设置ToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem 密码管理ToolStripMenuItem;
-        private System.Windows.Forms.ContextMenuStrip contextMenuStrip2;
-        private System.Windows.Forms.ToolStripMenuItem 设置当前点为中心点ToolStripMenuItem;
-        private System.Windows.Forms.ContextMenuStrip contextMenuStrip3;
-        private System.Windows.Forms.ToolStripMenuItem 导入当前单位边界线ToolStripMenuItem;
-        private System.Windows.Forms.OpenFileDialog openFileDialog1;
-        private System.Windows.Forms.ToolStripMenuItem 下载单位注册数据ToolStripMenuItem;
-
+        private DevExpress.XtraEditors.GroupControl groupControl1;
+        private System.Windows.Forms.Panel panel2;
+        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
+        private System.Windows.Forms.Panel panel3;
+        private System.Windows.Forms.Label label1;
+        private DevExpress.XtraBars.BarDockControl barDockControlLeft;
+        private DevExpress.XtraBars.BarManager barManager1;
+        private DevExpress.XtraBars.Bar bar1;
+        private DevExpress.XtraBars.Bar bar2;
+        private DevExpress.XtraBars.Bar bar3;
+        private DevExpress.XtraBars.BarDockControl barDockControlTop;
+        private DevExpress.XtraBars.BarDockControl barDockControlBottom;
+        private DevExpress.XtraBars.BarDockControl barDockControlRight;
+        private DevExpress.XtraTreeList.TreeList treeList1;
+        private DevExpress.XtraBars.BarSubItem barSubItem1;
+        private DevExpress.XtraBars.BarButtonItem barButtonItem4;
+        private DevExpress.XtraBars.BarButtonItem barButtonItem5;
+        private DevExpress.XtraBars.BarButtonItem barButtonItem6;
+        private DevExpress.XtraBars.BarSubItem barSubItem2;
+        private DevExpress.XtraBars.BarButtonItem barButtonItem7;
+        private DevExpress.XtraBars.BarButtonItem barButtonItem8;
+        private DevExpress.XtraBars.BarButtonItem barButtonItem9;
+        private DevExpress.XtraBars.BarButtonItem barButtonItem10;
+        private DevExpress.XtraBars.BarButtonItem barButtonItem11;
+        private DevExpress.XtraBars.BarButtonItem barButtonItem12;
+        private DevExpress.XtraBars.BarButtonItem barButtonItem1;
+        private DevExpress.XtraBars.BarButtonItem barButtonItem2;
+        private DevExpress.XtraBars.PopupMenu popupMenu1;
+        private MapHelper.MapHelper mapHelper1;
+        private DevExpress.XtraBars.SkinBarSubItem skinBarSubItem1;
+        private DevExpress.XtraBars.BarButtonItem barButtonItem3;
+        private DevExpress.XtraBars.BarButtonItem barButtonItem13;
+        private DevExpress.XtraBars.BarButtonItem barButtonItem14;
+        private DevExpress.XtraBars.BarButtonItem barButtonItem15;
+        private DevExpress.XtraBars.BarButtonItem barButtonItem16;
+        private DevExpress.XtraBars.BarButtonItem barButtonItem17;
+        private DevExpress.XtraBars.BarButtonItem barButtonItem18;
+        private DevExpress.XtraBars.PopupMenu popupMenu2;
+        private DevExpress.XtraBars.BarButtonItem barButtonItem19;
+        private DevExpress.XtraEditors.XtraOpenFileDialog xtraOpenFileDialog1;
     }
 }
-
