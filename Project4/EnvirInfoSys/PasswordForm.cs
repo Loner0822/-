@@ -11,7 +11,7 @@ using DevExpress.XtraEditors;
 using System.Security.Cryptography;
 using DevExpress.XtraEditors.Controls;
 
-namespace EnvirInfoSys_Demo
+namespace EnvirInfoSys
 {
     public partial class PasswordForm : DevExpress.XtraEditors.XtraForm
     {
@@ -32,7 +32,8 @@ namespace EnvirInfoSys_Demo
             new CheckedListBoxItem("管辖分类设置权限", false),
             new CheckedListBoxItem("图符对应设置权限", false),
             new CheckedListBoxItem("图符扩展设置权限", false),
-            new CheckedListBoxItem("查看日志权限", false)
+            new CheckedListBoxItem("查看日志权限", false),
+            new CheckedListBoxItem("一件一档菜单设置权限", false)
         };
 
         private void PasswordForm_Shown(object sender, EventArgs e)

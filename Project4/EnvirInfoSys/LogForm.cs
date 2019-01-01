@@ -10,7 +10,7 @@ using System.Windows.Forms;
 using DevExpress.XtraEditors;
 using DevExpress.XtraGrid.Views.Grid;
 
-namespace EnvirInfoSys_Demo
+namespace EnvirInfoSys
 {
     public partial class LogForm : DevExpress.XtraEditors.XtraForm
     {

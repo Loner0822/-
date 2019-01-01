@@ -1,4 +1,4 @@
-﻿namespace EnvirInfoSys_Demo
+﻿namespace EnvirInfoSys
 {
     partial class DataForm
     {
@@ -30,8 +30,8 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(DataForm));
             this.panelControl1 = new DevExpress.XtraEditors.PanelControl();
-            this.simpleButton1 = new DevExpress.XtraEditors.SimpleButton();
             this.simpleButton2 = new DevExpress.XtraEditors.SimpleButton();
+            this.simpleButton1 = new DevExpress.XtraEditors.SimpleButton();
             this.propertyGrid1 = new System.Windows.Forms.PropertyGrid();
             ((System.ComponentModel.ISupportInitialize)(this.panelControl1)).BeginInit();
             this.panelControl1.SuspendLayout();
@@ -47,16 +47,6 @@
             this.panelControl1.Size = new System.Drawing.Size(411, 50);
             this.panelControl1.TabIndex = 5;
             // 
-            // simpleButton1
-            // 
-            this.simpleButton1.Anchor = System.Windows.Forms.AnchorStyles.Right;
-            this.simpleButton1.Location = new System.Drawing.Point(168, 7);
-            this.simpleButton1.Name = "simpleButton1";
-            this.simpleButton1.Size = new System.Drawing.Size(112, 34);
-            this.simpleButton1.TabIndex = 0;
-            this.simpleButton1.Text = "确认";
-            this.simpleButton1.Click += new System.EventHandler(this.button1_Click);
-            // 
             // simpleButton2
             // 
             this.simpleButton2.Anchor = System.Windows.Forms.AnchorStyles.Right;
@@ -66,6 +56,16 @@
             this.simpleButton2.Size = new System.Drawing.Size(112, 34);
             this.simpleButton2.TabIndex = 1;
             this.simpleButton2.Text = "取消";
+            // 
+            // simpleButton1
+            // 
+            this.simpleButton1.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this.simpleButton1.Location = new System.Drawing.Point(168, 7);
+            this.simpleButton1.Name = "simpleButton1";
+            this.simpleButton1.Size = new System.Drawing.Size(112, 34);
+            this.simpleButton1.TabIndex = 0;
+            this.simpleButton1.Text = "确认";
+            this.simpleButton1.Click += new System.EventHandler(this.button1_Click);
             // 
             // propertyGrid1
             // 

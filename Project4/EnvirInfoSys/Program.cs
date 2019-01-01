@@ -8,10 +8,12 @@ using DevExpress.LookAndFeel;
 using DevExpress.XtraEditors;
 using System.Text;
 
-namespace EnvirInfoSys_Demo
+namespace EnvirInfoSys
 {
     static class Program
     {
+        
+
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
@@ -33,7 +35,10 @@ namespace EnvirInfoSys_Demo
 
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
-                UserLookAndFeel.Default.SetSkinStyle("DevExpress Style");
+                IniOperator inip = new IniOperator(AppDomain.CurrentDomain.BaseDirectory + "RegInfo.ini");
+                string skinstyle = inip.ReadString("Skins", "skin", "DevExpress Style");
+                UserLookAndFeel.Default.SetSkinStyle(skinstyle);
+
                 BonusSkins.Register();
                 Application.Run(new MainForm());
                 mutex.ReleaseMutex();

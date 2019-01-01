@@ -6,7 +6,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.Windows.Forms.Design;
 
-namespace EnvirInfoSys_Demo
+namespace EnvirInfoSys
 {
     /// <summary>
     /// 在PropertyGrid 上显示日期控件

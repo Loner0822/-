@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace EnvirInfoSys_Demo
+namespace EnvirInfoSys
 {
     public class AccessHelper
     {
@@ -132,7 +132,6 @@ namespace EnvirInfoSys_Demo
                     oda.SelectCommand.Parameters.AddRange(pms);
                 }
                 oda.Fill(dt);
-
             }
             return dt;
 

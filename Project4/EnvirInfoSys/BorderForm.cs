@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace EnvirInfoSys_Demo
+namespace EnvirInfoSys
 {
     public partial class BorderForm : DevExpress.XtraEditors.XtraForm
     {
@@ -78,7 +78,10 @@ namespace EnvirInfoSys_Demo
 
         private void textBox2_Leave(object sender, EventArgs e)
         {
-            borData.line_data.Width = int.Parse(textEdit1.Text);
+            if (textEdit1.Text != "")
+                borData.line_data.Width = int.Parse(textEdit1.Text);
+            else
+                borData.line_data.Width = 0;
         }
 
         private void textBox2_KeyPress(object sender, KeyPressEventArgs e)

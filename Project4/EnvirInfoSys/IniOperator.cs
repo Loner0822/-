@@ -7,7 +7,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EnvirInfoSys_Demo
+namespace EnvirInfoSys
 {
     public class IniOperator
     {

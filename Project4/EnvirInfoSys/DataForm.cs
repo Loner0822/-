@@ -10,7 +10,7 @@ using System.Windows.Forms;
 using DevExpress.XtraEditors;
 using ucPropertyGrid;
 
-namespace EnvirInfoSys_Demo
+namespace EnvirInfoSys
 {
     public partial class DataForm : DevExpress.XtraEditors.XtraForm
     {
@@ -27,7 +27,7 @@ namespace EnvirInfoSys_Demo
         public string Node_Name = "";       //当前选择的节点名称
         public string JdCode = "";
         public Dictionary<string, string> FDName_Value;
-
+        
 
         private string WorkPath = AppDomain.CurrentDomain.BaseDirectory;    //当前exe根目录
         private string AccessPath1 = AppDomain.CurrentDomain.BaseDirectory + "data\\ENVIR_H0001Z000E00.mdb";
@@ -44,6 +44,18 @@ namespace EnvirInfoSys_Demo
         public DataForm()
         {
             InitializeComponent();
+        }
+
+        public void ReNew()
+        {
+            FDName_Value = new Dictionary<string, string>();
+            PropertyManageCls pmc = (PropertyManageCls)propertyGrid1.SelectedObject;
+            foreach (Property item in pmc)
+            {
+                FDName_Value.Add(item.FdName, item.Value.ToString());
+            }
+            this.DialogResult = DialogResult.OK;
+            Close();
         }
 
         private Dictionary<string, string> Get_Prop_Type()
@@ -151,7 +163,6 @@ namespace EnvirInfoSys_Demo
                     }
                 }
             }
-
             return "文本";
         }
 
@@ -193,13 +204,12 @@ namespace EnvirInfoSys_Demo
             return res;
         }
 
-        private void DataForm_Shown(object sender, EventArgs e)
+        public void Load_Prop()
         {
             ahp1 = new AccessHelper(AccessPath1);
             ahp2 = new AccessHelper(AccessPath2);
             ahp3 = new AccessHelper(AccessPath3);
             ahp4 = new AccessHelper(AccessPath4);
-
             PropertyManageCls pmc = new PropertyManageCls(); // 创建属性集合实例 
             Dictionary<string, string> prop_type = new Dictionary<string, string>();
             Show_Name = new Dictionary<string, string>();
@@ -221,7 +231,8 @@ namespace EnvirInfoSys_Demo
             List<string> type_guid = new List<string>(prop_type.Keys);
             for (int i = 0; i < prop_list.Count; ++i)
             {
-                Property p = new Property(Show_Name[prop_list[i]], "", false, true);
+                Property p = new Property(Show_Name[prop_list[i]], "");
+                
                 p.DisplayName = Show_Name[prop_list[i]];
                 int k;
                 if (Show_DB[prop_list[i]] == "H0001Z000K00" || Show_DB[prop_list[i]] == "H0001Z000K01")
@@ -229,7 +240,7 @@ namespace EnvirInfoSys_Demo
                 else
                     k = 2;
                 p.Category = prop_type[type_guid[k]];
-                p.ReadOnly = false;
+                
                 p.FdName = Show_FDName[prop_list[i]];
                 if (Update_Data == false)
                     p.Value = Show_Value[prop_list[i]];
@@ -267,19 +278,25 @@ namespace EnvirInfoSys_Demo
                         //MessageBox.Show(Show_Name[prop_list[i]] + "属性找不到数据类型");
                         break;
                 }
+                p.ReadOnly = false;
                 pmc.Add(p);
             }
             propertyGrid1.SelectedObject = pmc; // 加载属性
+        }
+
+        private void DataForm_Shown(object sender, EventArgs e)
+        {
+            Load_Prop();
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
             FDName_Value = new Dictionary<string, string>();
             PropertyManageCls pmc = (PropertyManageCls)propertyGrid1.SelectedObject;
-            bool find_name = false;
+            //bool find_name = false;
             foreach (Property item in pmc)
             {
-                if (item.DisplayName == "名称")
+                /*if (item.DisplayName == "名称")
                 {
                     find_name = true;
                     if (item.Value.ToString() == "")
@@ -296,23 +313,29 @@ namespace EnvirInfoSys_Demo
                 else
                 {
                     FDName_Value.Add(item.FdName, item.Value.ToString());
-                }
+                }*/
+                FDName_Value.Add(item.FdName, item.Value.ToString());
             }
-            if (find_name == false)
+            /*if (find_name == false)
             {
                 XtraMessageBox.Show("没有名称属性!");
                 return;
-            }
+            }*/
             this.DialogResult = DialogResult.OK;
             return;
         }
 
-        private void DataForm_FormClosed(object sender, FormClosedEventArgs e)
+        public void Close_Conn()
         {
             ahp1.CloseConn();
             ahp2.CloseConn();
             ahp3.CloseConn();
             ahp4.CloseConn();
+        }
+
+        private void DataForm_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            Close_Conn();
         }
     }
 }

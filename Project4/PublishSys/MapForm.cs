@@ -519,7 +519,6 @@ namespace PublishSys
             if (pNode == null)
                 return;
             string levelguid = pNode.Tag.ToString();
-            
             string sql;
             DataTable dt;
             // 图符对应
@@ -546,9 +545,12 @@ namespace PublishSys
                         }
                 }
             }
+ 
             int index = checkedListBox1.SelectedIndex;
             if (index >= 0)
-                mapHelper1.ShowMap(int.Parse(checkedListBox1.Items[index].ToString()), "", false, map_type, null, borderDic, null);
+            {
+                mapHelper1.ShowMap(int.Parse(checkedListBox1.Items[index].ToString()), "", false, map_type, null, borderDic, null, 1, -1);
+            }
         }
 
         private void Add_Unit_Node(TreeNode pa) 
@@ -644,7 +646,7 @@ namespace PublishSys
         {
             button3.Enabled = true;
             int index = checkedListBox1.SelectedIndex;
-            mapHelper1.ShowMap(int.Parse(checkedListBox1.Items[index].ToString()), "", false, map_type, null, borderDic, null);
+            mapHelper1.ShowMap(int.Parse(checkedListBox1.Items[index].ToString()), "", false, map_type, null, borderDic, null, 1, -1);
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -716,7 +718,7 @@ namespace PublishSys
             mapHelper1.centerlat = double.Parse(textBox3.Text); //30.067;//必须设置的属性,不能为空
             mapHelper1.centerlng = double.Parse(textBox2.Text); //118.5784; //必须设置的属性,不能为空
             int index = checkedListBox1.SelectedIndex;
-            mapHelper1.ShowMap(int.Parse(checkedListBox1.Items[index].ToString()), "", false, map_type, null, borderDic, null);
+            mapHelper1.ShowMap(int.Parse(checkedListBox1.Items[index].ToString()), "", false, map_type, null, borderDic, null, 1, -1);
         }
 
         private void mapHelper1_MapRightClick(bool canedit, double lat, double lng, int x, int y)
@@ -954,7 +956,7 @@ namespace PublishSys
                     + "', '" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "', '" + unitid + "', '" + ds_lng_lat + "')";
                 ahp5.ExecuteSql(sql, null);
             }
-            mapHelper1.ShowMap(int.Parse(checkedListBox1.Items[index].ToString()), "", false, map_type, null, borderDic, null);
+            mapHelper1.ShowMap(int.Parse(checkedListBox1.Items[index].ToString()), "", false, map_type, null, borderDic, null, 1, -1);
         }        
     }
 

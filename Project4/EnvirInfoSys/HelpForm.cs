@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using DevExpress.XtraEditors;
 
-namespace EnvirInfoSys_Demo
+namespace EnvirInfoSys
 {
     public partial class HelpForm : DevExpress.XtraEditors.XtraForm
     {

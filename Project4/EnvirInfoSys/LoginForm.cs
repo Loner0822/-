@@ -10,7 +10,7 @@ using System.Windows.Forms;
 using DevExpress.XtraEditors;
 using System.Security.Cryptography;
 
-namespace EnvirInfoSys_Demo
+namespace EnvirInfoSys
 {
     public partial class LoginForm : DevExpress.XtraEditors.XtraForm
     {

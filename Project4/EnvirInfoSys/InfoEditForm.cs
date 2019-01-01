@@ -11,16 +11,16 @@ using DevExpress.XtraEditors;
 
 namespace EnvirInfoSys
 {
-    public partial class EditForm : DevExpress.XtraEditors.XtraForm
+    public partial class InfoEditForm : DevExpress.XtraEditors.XtraForm
     {
         public string EditText = "";
 
-        public EditForm()
+        public InfoEditForm()
         {
             InitializeComponent();
         }
 
-        private void EditForm_Shown(object sender, EventArgs e)
+        private void InfoEditForm_Shown(object sender, EventArgs e)
         {
             textEdit1.Text = EditText;
             textEdit1.Focus();
@@ -42,6 +42,7 @@ namespace EnvirInfoSys
                 this.Close();
             }
         }
+
 
     }
 }

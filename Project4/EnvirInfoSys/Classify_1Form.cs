@@ -15,7 +15,7 @@ using DevExpress.XtraGrid;
 using DevExpress.XtraGrid.Views.Grid;
 using DevExpress.XtraTab;
 
-namespace EnvirInfoSys_Demo
+namespace EnvirInfoSys
 {
     public partial class Classify_1Form : DevExpress.XtraEditors.XtraForm
     {
@@ -442,6 +442,8 @@ namespace EnvirInfoSys_Demo
         private void gridView1_FocusedRowChanged(object sender, DevExpress.XtraGrid.Views.Base.FocusedRowChangedEventArgs e)
         {
             flowLayoutPanel1.Controls.Clear();
+            if (gridView1.GetFocusedDataRow() == null)
+                return;
             string pguid = gridView1.GetFocusedDataRow()["guid"].ToString();
             Show_Icon_List(pguid);
         }

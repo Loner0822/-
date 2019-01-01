@@ -1,4 +1,4 @@
-﻿namespace EnvirInfoSys_Demo
+﻿namespace EnvirInfoSys
 {
     partial class PasswordForm
     {

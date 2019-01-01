@@ -1,4 +1,4 @@
-﻿namespace EnvirInfoSys_Demo
+﻿namespace EnvirInfoSys
 {
     partial class LoginForm
     {
@@ -33,12 +33,13 @@
             this.simpleButton2 = new DevExpress.XtraEditors.SimpleButton();
             this.textEdit1 = new DevExpress.XtraEditors.TextEdit();
             this.labelControl1 = new DevExpress.XtraEditors.LabelControl();
+            this.labelControl2 = new DevExpress.XtraEditors.LabelControl();
             ((System.ComponentModel.ISupportInitialize)(this.textEdit1.Properties)).BeginInit();
             this.SuspendLayout();
             // 
             // simpleButton1
             // 
-            this.simpleButton1.Location = new System.Drawing.Point(96, 128);
+            this.simpleButton1.Location = new System.Drawing.Point(96, 142);
             this.simpleButton1.Name = "simpleButton1";
             this.simpleButton1.Size = new System.Drawing.Size(112, 34);
             this.simpleButton1.TabIndex = 8;
@@ -48,7 +49,7 @@
             // simpleButton2
             // 
             this.simpleButton2.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.simpleButton2.Location = new System.Drawing.Point(236, 128);
+            this.simpleButton2.Location = new System.Drawing.Point(236, 142);
             this.simpleButton2.Name = "simpleButton2";
             this.simpleButton2.Size = new System.Drawing.Size(112, 34);
             this.simpleButton2.TabIndex = 9;
@@ -57,7 +58,7 @@
             // 
             // textEdit1
             // 
-            this.textEdit1.Location = new System.Drawing.Point(156, 48);
+            this.textEdit1.Location = new System.Drawing.Point(156, 42);
             this.textEdit1.Name = "textEdit1";
             this.textEdit1.Properties.PasswordChar = '*';
             this.textEdit1.Size = new System.Drawing.Size(192, 30);
@@ -65,11 +66,19 @@
             // 
             // labelControl1
             // 
-            this.labelControl1.Location = new System.Drawing.Point(96, 52);
+            this.labelControl1.Location = new System.Drawing.Point(96, 46);
             this.labelControl1.Name = "labelControl1";
             this.labelControl1.Size = new System.Drawing.Size(54, 22);
             this.labelControl1.TabIndex = 11;
             this.labelControl1.Text = "密码：";
+            // 
+            // labelControl2
+            // 
+            this.labelControl2.Location = new System.Drawing.Point(75, 95);
+            this.labelControl2.Name = "labelControl2";
+            this.labelControl2.Size = new System.Drawing.Size(298, 22);
+            this.labelControl2.TabIndex = 12;
+            this.labelControl2.Text = "初始密码: 1 - 编辑模式; 2 - 查看模式";
             // 
             // LoginForm
             // 
@@ -79,6 +88,7 @@
             this.CancelButton = this.simpleButton2;
             this.ClientSize = new System.Drawing.Size(438, 209);
             this.ControlBox = false;
+            this.Controls.Add(this.labelControl2);
             this.Controls.Add(this.labelControl1);
             this.Controls.Add(this.textEdit1);
             this.Controls.Add(this.simpleButton2);
@@ -102,5 +112,6 @@
         private DevExpress.XtraEditors.SimpleButton simpleButton2;
         private DevExpress.XtraEditors.TextEdit textEdit1;
         private DevExpress.XtraEditors.LabelControl labelControl1;
+        private DevExpress.XtraEditors.LabelControl labelControl2;
     }
 }

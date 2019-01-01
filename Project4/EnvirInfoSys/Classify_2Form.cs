@@ -13,7 +13,7 @@ using DevExpress.XtraTab;
 using DevExpress.XtraGrid;
 using DevExpress.XtraGrid.Views.Grid;
 
-namespace EnvirInfoSys_Demo
+namespace EnvirInfoSys
 {
     public partial class Classify_2Form : DevExpress.XtraEditors.XtraForm
     {
@@ -31,7 +31,7 @@ namespace EnvirInfoSys_Demo
         private Dictionary<string, string> Show_FDName;     // 属性表名
         private Dictionary<string, string> inherit_GUID;    // 继承属性GUID
         private Dictionary<string, string> Show_Value;      // 属性值
-        private DataTable GX_dt;
+        
 
         public Classify_2Form()
         {
