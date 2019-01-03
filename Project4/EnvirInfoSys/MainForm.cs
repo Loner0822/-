@@ -116,6 +116,7 @@ namespace EnvirInfoSys
         private bool Before_ShowMap = false;
         private string[] folds = null;
         private List<Dictionary<string, object>> cur_lst;
+        private string last_marker = "";
 
         // 边界线
         Dictionary<string, object> borderDic = null;
@@ -141,9 +142,6 @@ namespace EnvirInfoSys
         private InfoForm ifm = new InfoForm();
         private RegForm regfm = new RegForm();
 
-
-
-
         public MainForm()
         {
             InitializeComponent();
@@ -156,6 +154,8 @@ namespace EnvirInfoSys
 
         private void MainForm_Shown(object sender, EventArgs e)
         {
+
+            mapHelper1.wb1.ScriptErrorsSuppressed = true;
             
             borData = new LineData();
             lineData = new LineData();
@@ -334,7 +334,7 @@ namespace EnvirInfoSys
                     string extra_sq12 = "and ICONGUID in (select ICONGUID from [;database=" + WorkPath
                     + "data\\ENVIRDYDATA_H0001Z000E00.mdb" + "].ICONDUIYING_H0001Z000E00 where ISDELETE = 0 and LEVELGUID = '"
                     + levelguid + "' and UNITEID = '" + UnitID + "')";
-                    Get_Marker_From_Access(extra_sq12);
+                    Get_Marker_From_Access(extra_sq12, ILChange);
                 }
                 MenuStripItem_Click(barManager1, new ItemClickEventArgs(now_bbi, bar2.ItemLinks[0]));
             }
@@ -351,7 +351,7 @@ namespace EnvirInfoSys
                 string extra_sq12 = "and ICONGUID in (select ICONGUID from [;database=" + WorkPath
                 + "data\\ENVIRDYDATA_H0001Z000E00.mdb" + "].ICONDUIYING_H0001Z000E00 where ISDELETE = 0 and LEVELGUID = '"
                 + levelguid + "' and UNITEID = '" + UnitID + "')";
-                Get_Marker_From_Access(extra_sq12);
+                Get_Marker_From_Access(extra_sq12, ILChange);
             }
             HideMessage();
         }
@@ -632,7 +632,7 @@ namespace EnvirInfoSys
             string extra_sq12 = "and ICONGUID in (select ICONGUID from [;database=" + WorkPath
                 + "data\\ENVIRDYDATA_H0001Z000E00.mdb" + "].ICONDUIYING_H0001Z000E00 where ISDELETE = 0 and LEVELGUID = '"
                 + levelguid + "' and UNITEID = '" + UnitID + "')";
-            Get_Marker_From_Access(extra_sql1 + extra_sq12);
+            Get_Marker_From_Access(extra_sql1 + extra_sq12, ILChange);
         }
 
         private void Load_Guan_Xia()
@@ -798,6 +798,11 @@ namespace EnvirInfoSys
 
         private void mapHelper1_RemoveMarkerFinished(string markerguid, bool ok)
         {
+            last_marker = "";
+        }
+
+        private void UpdateDelete(string markerguid)
+        {
             // 删除完成事件，调用deleteMarker后触发
             // 数据库  update isdelete = 1
             if (markerguid.IndexOf("_arrow") > 0)
@@ -855,13 +860,15 @@ namespace EnvirInfoSys
             }
         }
 
+        private bool ILChange = true;
         private void treeList1_FocusedNodeChanged(object sender, DevExpress.XtraTreeList.FocusedNodeChangedEventArgs e)
         {
-            
+            ILChange = true;
             Operator_GUID = "";
             select_vector = false;
             if (e.Node == null)
                 return;
+            //string cur_levelguid = levelguid;
             levelguid = GL_NAME_PGUID[e.Node.GetValue("level").ToString()];
 
             // 处理cur_level
@@ -929,7 +936,7 @@ namespace EnvirInfoSys
             }
 
             if (Icon_Name != null)
-                Get_Marker_From_Access(extra_sql1 + extra_sq12);
+                Get_Marker_From_Access(extra_sql1 + extra_sq12, ILChange);
 
             if (flag == false)
             {
@@ -937,7 +944,7 @@ namespace EnvirInfoSys
             }
         }
 
-        private void Get_Marker_From_Access(string extra_sql)
+        private void Get_Marker_From_Access(string extra_sql, bool Unitchange)
         {
             GUID_Icon = new Dictionary<string, string>();
             GUID_Name = new Dictionary<string, string>();
@@ -959,7 +966,7 @@ namespace EnvirInfoSys
                 string icon_path = WorkPath + "googlemap\\mapfiles\\icons\\bicon" + cur_Level + "\\" + dt.Rows[i]["ICONGUID"].ToString() + ".png";
                 dic.Add("iconpath", icon_path);                                             //必须加载的标准属性
                 dic.Add("message", /*sdic*/null);                                           //必须加载，内容随便，此处无用
-                Dictionary<string, object> toDic = new Dictionary<string, object>();
+                /*Dictionary<string, object> toDic = new Dictionary<string, object>();
                 if (dt.Rows[i]["POINTLINE"].ToString() != "0")
                 {
                     sql = "select LINETYPE, LINEWIDTH, LINECOLOR, LINEOPACITY from ENVIRLINE_H0001Z000E00 where ISDELETE = 0 and UPGUID = '"
@@ -975,8 +982,8 @@ namespace EnvirInfoSys
                         toDic.Add("opacity", double.Parse(dt1.Rows[0]["LINEOPACITY"].ToString()));
                         toDic.Add("arrow", dt.Rows[i]["POINTARROW"].ToString() == "1");
                     }
-                }
-                dic.Add("topoint", toDic);
+                }*/
+                dic.Add("topoint", null);
                 lst.Add(dic);                       //给list添加一个标注
             }
             cur_lst = lst;
@@ -985,10 +992,15 @@ namespace EnvirInfoSys
             {
                 if (FLguid == "")
                     FLguid = "-1";
-                flowLayoutPanel1.Controls.Clear();
+                
                 Process p = Process.Start(WorkPath + "CreatePng.exe", "0 " + cur_Level + " " + levelguid + " " + FLguid);
                 p.WaitForExit();
-                Get_Icon_List();
+                if (Unitchange)
+                {
+                    ILChange = false;
+                    flowLayoutPanel1.Controls.Clear();
+                    Get_Icon_List();
+                }
                 if (Directory.GetFiles(WorkPath + "PNGICONFOLDER\\b_" + cur_Level.ToString()).Length <= 0)
                 {
                     flowLayoutPanel1.Visible = false;
@@ -1037,8 +1049,66 @@ namespace EnvirInfoSys
                     pFileStream.Dispose();
                 }
             }
+
+            PictureBox SelectButton = new PictureBox();
+            ToolTip stt = new ToolTip();
+            stt.SetToolTip(SelectButton, "全选");
+            SelectButton.SizeMode = PictureBoxSizeMode.Zoom;
+            SelectButton.BorderStyle = BorderStyle.Fixed3D;
+            SelectButton.Width = 32;
+            SelectButton.Height = 32;
+            SelectButton.Click += SelectAll_Click;
+            SelectButton.Name = "全选";
+            FileStream pfs = new FileStream(WorkPath + "icon\\全选.png", FileMode.Open, FileAccess.Read);
+            SelectButton.Image = Image.FromStream(pfs);
+            flowLayoutPanel1.Controls.Add(SelectButton);
+            pfs.Close();
+            pfs.Dispose();
+
+            SelectButton = new PictureBox();
+            stt = new ToolTip();
+            stt.SetToolTip(SelectButton, "全不选");
+            SelectButton.SizeMode = PictureBoxSizeMode.Zoom;
+            SelectButton.Width = 32;
+            SelectButton.Height = 32;
+            SelectButton.Click += CancelAll_Click;
+            SelectButton.Name = "全不选";
+            pfs = new FileStream(WorkPath + "icon\\全不选.png", FileMode.Open, FileAccess.Read);
+            SelectButton.Image = Image.FromStream(pfs);
+            flowLayoutPanel1.Controls.Add(SelectButton);
+            pfs.Close();
+            pfs.Dispose();
         }
 
+        private void SelectAll_Click(object sender, EventArgs e)
+        {
+            string iconlist = "";
+            foreach (PictureBox item in flowLayoutPanel1.Controls)
+            {
+                if (item.Name == "全不选")
+                    item.BorderStyle = BorderStyle.None;
+                else
+                {
+                    item.BorderStyle = BorderStyle.Fixed3D;
+                    if (item.Name != "全选")
+                        iconlist += "'" + item.Name.Substring(0, 38) + "', ";
+                }
+            }
+            Icon_ShowMap(iconlist);
+        }
+
+        private void CancelAll_Click(object sender, EventArgs e)
+        {
+            foreach (PictureBox item in flowLayoutPanel1.Controls)
+            {
+                if (item.Name == "全不选")
+                    item.BorderStyle = BorderStyle.Fixed3D;
+                else
+                    item.BorderStyle = BorderStyle.None;
+            }
+            Icon_ShowMap("''");
+        }
+     
         private PictureBox currCtl = null; //被拖动控件
         private Point startPoint = new Point(-100, -100); //被拖动控件的起始位置
         private void Icon_MouseDown(object sender, MouseEventArgs e)
@@ -1057,9 +1127,7 @@ namespace EnvirInfoSys
         private void Icon_MouseMove(object sender, MouseEventArgs e)
         {
             if (startPoint.X < 0)
-            {
                 return;
-            }
             if (e.Button.ToString().Equals("Left"))
             {
                 Point mPos = Control.MousePosition;
@@ -1110,16 +1178,44 @@ namespace EnvirInfoSys
             }
 
             string iconlist = "";
+            bool select_all = true;
+            bool cancel_all = true;
             foreach (PictureBox item in flowLayoutPanel1.Controls)
             {
+                if (item.Name == "全选")
+                {
+                    if (select_all)
+                        item.BorderStyle = BorderStyle.Fixed3D;
+                    else
+                        item.BorderStyle = BorderStyle.None;
+                    continue;
+                }
+                if (item.Name == "全不选")
+                {
+                    if (cancel_all)
+                        item.BorderStyle = BorderStyle.Fixed3D;
+                    else
+                        item.BorderStyle = BorderStyle.None;
+                    continue;
+                }
                 if (item.BorderStyle == BorderStyle.Fixed3D)
+                {
                     iconlist += "'" + item.Name.Substring(0, 38) + "', ";
+                    cancel_all = false;
+                }
+                else
+                    select_all = false;
             }
             if (iconlist != string.Empty)
                 iconlist = iconlist.Substring(0, iconlist.Length - 2);
             else
                 iconlist = "''";
-            
+
+            Icon_ShowMap(iconlist);
+        }
+
+        private void Icon_ShowMap(string iconlist)
+        {
             string extra_sql1 = " and ICONGUID in (select ICONGUID from ENVIRGXDY_H0001Z000E00 where ISDELETE = 0 and FLGUID = '"
                 + FLguid + "' and UNITID = '" + UnitID + "')";
             if (FLguid == "-1")
@@ -1149,7 +1245,7 @@ namespace EnvirInfoSys
                 string icon_path = WorkPath + "googlemap\\mapfiles\\icons\\bicon" + cur_Level + "\\" + dt.Rows[i]["ICONGUID"].ToString() + ".png";
                 dic.Add("iconpath", icon_path);                                             //必须加载的标准属性
                 dic.Add("message", /*sdic*/null);                                           //必须加载，内容随便，此处无用
-                Dictionary<string, object> toDic = new Dictionary<string, object>();
+                /*Dictionary<string, object> toDic = new Dictionary<string, object>();
                 if (dt.Rows[i]["POINTLINE"].ToString() != "0")
                 {
                     sql = "select LINETYPE, LINEWIDTH, LINECOLOR, LINEOPACITY from ENVIRLINE_H0001Z000E00 where ISDELETE = 0 and UPGUID = '"
@@ -1165,8 +1261,8 @@ namespace EnvirInfoSys
                         toDic.Add("opacity", double.Parse(dt1.Rows[0]["LINEOPACITY"].ToString()));
                         toDic.Add("arrow", dt.Rows[i]["POINTARROW"].ToString() == "1");
                     }
-                }
-                dic.Add("topoint", toDic);
+                }*/
+                dic.Add("topoint", null);
                 lst.Add(dic);                       //给list添加一个标注
             }
             cur_lst = lst;
@@ -1175,6 +1271,7 @@ namespace EnvirInfoSys
 
         private void mapHelper1_MapMouseOver(double lat, double lng)
         {
+            
             if (!Icon_GUID.Equals(""))
             {
                 ifm.Close();
@@ -1182,10 +1279,12 @@ namespace EnvirInfoSys
                 Polygon poly = new Polygon(Get_Border_Line(pNode["pguid"].ToString()));
                 if (!poly.PointInPolygon(new dPoint(lat, lng)))
                 {
-                    XtraMessageBox.Show("添加图符不在" + pNode["Name"].ToString() + "的范围内");
-                    Icon_GUID = "";         //添加完成后把选择的图标guid清空
-                    mapHelper1.SetBigIconPath("");
-                    return;
+                    if (XtraMessageBox.Show("添加图符不在" + pNode["Name"].ToString() + "的范围内!是否继续添加?", "提示", MessageBoxButtons.OKCancel) != System.Windows.Forms.DialogResult.OK)
+                    {
+                        Icon_GUID = "";         //添加完成后把选择的图标guid清空
+                        mapHelper1.SetBigIconPath("");
+                        return;
+                    }
                 }
                 regfm.unLock = false;
                 regfm.StartPosition = FormStartPosition.Manual;
@@ -1535,7 +1634,40 @@ namespace EnvirInfoSys
 
         private void StopMarkerShine(string pguid)
         {
+            mapHelper1.deleteMarker(pguid + "_line");
             mapHelper1.SetMarkerShine(pguid, false);
+        }
+
+        private void DrawLine(string markerguid)
+        {
+            double tmp_lat = 0, tmp_lng = 0;
+            Dictionary<string, object> dic = new Dictionary<string, object>();
+            string sql = "select LINETYPE, LINEWIDTH, LINECOLOR, LINEOPACITY from ENVIRLINE_H0001Z000E00 where ISDELETE = 0 and UPGUID = '" + markerguid + "'";
+            DataTable dt = FileReader.often_ahp.ExecuteDataTable(sql, null);
+            if (dt.Rows.Count > 0)
+            {
+                dic["type"] = dt.Rows[0]["LINETYPE"].ToString();
+                dic["width"] = int.Parse(dt.Rows[0]["LINEWIDTH"].ToString());
+                dic["color"] = dt.Rows[0]["LINECOLOR"].ToString();
+                dic["opacity"] = double.Parse(dt.Rows[0]["LINEOPACITY"].ToString());
+                dic["arrow"] = false;
+            }
+            else
+                return;
+
+            sql = "select MARKELAT, MARKELNG, POINTLAT, POINTLNG from ENVIRICONDATA_H0001Z000E00 where ISDELETE = 0 and PGUID = '" + markerguid + "'";
+            dt = FileReader.often_ahp.ExecuteDataTable(sql, null);
+            if (dt.Rows.Count > 0 && dt.Rows[0]["POINTLAT"].ToString() != "")
+            {
+                dic["lat"] = double.Parse(dt.Rows[0]["POINTLAT"].ToString());
+                dic["lng"] = double.Parse(dt.Rows[0]["POINTLNG"].ToString());
+                tmp_lat = double.Parse(dt.Rows[0]["MARKELAT"].ToString());
+                tmp_lng = double.Parse(dt.Rows[0]["MARKELNG"].ToString());
+            }
+            else
+                return;
+
+            mapHelper1.DrawPointLine(markerguid, tmp_lat, tmp_lng, dic);
         }
 
         private void mapHelper1_MapMouseup(string Mousebutton, bool canedit, double lat, double lng, int x, int y, string markerguid)
@@ -1544,8 +1676,10 @@ namespace EnvirInfoSys
                 return;
             if (markerguid != string.Empty)
             {
-
+                mapHelper1.deleteMarker(last_marker + "_line");
                 ifm.Close();
+                // DrawLine
+                DrawLine(markerguid);
                 mapHelper1.SetMarkerShine(markerguid, true);
                 ifm = new InfoForm();
                 ifm.Owner = this;
@@ -1562,6 +1696,7 @@ namespace EnvirInfoSys
                 ifm.stopshine += new InfoForm.StopShine(StopMarkerShine);
                 ifm.Show();
             }
+
             /*if (markerguid.Equals("") && !Icon_GUID.Equals(""))
             {
                 string iconguid = Path.GetFileNameWithoutExtension(Icon_GUID);
@@ -1586,6 +1721,7 @@ namespace EnvirInfoSys
             }*/
             if (markerguid.Equals("") && Icon_GUID.Equals("") && select_vector == true)
             {
+                last_marker = markerguid;
                 BorderForm bdfm = new BorderForm();
                 bdfm.IsPoint = true;
                 bdfm.IsLine = false;
@@ -1598,7 +1734,10 @@ namespace EnvirInfoSys
                 {
                     lineData = bdfm.borData.line_data;
                     if (handle == 2)
+                    {
                         mapHelper1.deleteMarker(Operator_GUID + "_line");
+                        UpdateDelete(Operator_GUID + "_line");
+                    }
                     Dictionary<string, object> dic = bdfm.borData.ToDic();//添加每个标注
                     mapHelper1.DrawPointLine(Operator_GUID, i_lat, i_lng, dic);
                     bdfm.borData.Save_Line(Operator_GUID, lat, lng, true);
@@ -1631,6 +1770,9 @@ namespace EnvirInfoSys
 
         private void mapHelper1_MarkerDragBegin(string markerguid, bool candrag)
         {
+            mapHelper1.deleteMarker(last_marker + "_line");
+            DrawLine(markerguid);
+            last_marker = markerguid;
             Operator_GUID = "";
             select_vector = false;
 
@@ -1642,9 +1784,11 @@ namespace EnvirInfoSys
 
         private void mapHelper1_MarkerDragEnd(string markerguid, bool canedit, double lat, double lng)
         {
+            if (markerguid == "")
+                return;
             //  MessageBox.Show("移动：" + markerguid);
             //  数据库 update 坐标
-            
+
             // 判断是否在范围
             bool isIn = false;
             dPoint pnt = new dPoint(lat, lng);
@@ -1663,31 +1807,33 @@ namespace EnvirInfoSys
                     isIn = GL_POLY[guid].PointInPolygon(pnt);
                 }
             }
-            if (isIn)
+            if (!isIn)
             {
-                for (int i = 0; i < cur_lst.Count; ++i)
+                if (XtraMessageBox.Show("移动超出注册范围!是否要完成移动?", "提示", MessageBoxButtons.OKCancel) != System.Windows.Forms.DialogResult.OK)
                 {
-                    if (cur_lst[i]["guid"].ToString() == markerguid)
-                    {
-                        cur_lst[i]["lat"] = lat;
-                        cur_lst[i]["lng"] = lng;
-                        break;
-                    }
+                    if (dt.Rows.Count > 0)
+                        mapHelper1.modifyMarker(markerguid, dt.Rows[0]["MAKRENAME"].ToString(), true, origin_pnt.x, origin_pnt.y, null);
+                    return; 
                 }
-                sql = "update ENVIRICONDATA_H0001Z000E00 set S_UDTIME = '" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")
-                    + "', MARKELAT = '" + lat.ToString() + "', MARKELNG = '" + lng.ToString() + "' where ISDELETE = 0 and PGUID = '"
-                    + markerguid + "'";
-                FileReader.often_ahp.ExecuteSql(sql, null);
-                string icon = GUID_Icon[markerguid];
-                string name = GUID_Name[markerguid];
-                string Event = "移动" + Icon_Name[icon + ".png"] + "标注" + name + "到(" + lng.ToString() + ", " + lat.ToString() + ")";
-                ComputerInfo.WriteLog("移动标注", Event);
             }
-            else
+
+            for (int i = 0; i < cur_lst.Count; ++i)
             {
-                mapHelper1.modifyMarker(markerguid, dt.Rows[0]["MAKRENAME"].ToString(), true, origin_pnt.x, origin_pnt.y, null);
-                XtraMessageBox.Show("移动超出注册范围!");
+                if (cur_lst[i]["guid"].ToString() == markerguid)
+                {
+                    cur_lst[i]["lat"] = lat;
+                    cur_lst[i]["lng"] = lng;
+                    break;
+                }
             }
+            sql = "update ENVIRICONDATA_H0001Z000E00 set S_UDTIME = '" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")
+                + "', MARKELAT = '" + lat.ToString() + "', MARKELNG = '" + lng.ToString() + "' where ISDELETE = 0 and PGUID = '"
+                + markerguid + "'";
+            FileReader.often_ahp.ExecuteSql(sql, null);
+            string icon = GUID_Icon[markerguid];
+            string name = GUID_Name[markerguid];
+            string Event = "移动" + Icon_Name[icon + ".png"] + "标注" + name + "到(" + lng.ToString() + ", " + lat.ToString() + ")";
+            ComputerInfo.WriteLog("移动标注", Event);
         }
 
         
@@ -1701,6 +1847,9 @@ namespace EnvirInfoSys
 
         private void mapHelper1_MarkerRightClick(int sx, int sy, double lat, double lng, string level, string sguid, string name, bool canedit, string message)
         {
+            mapHelper1.deleteMarker(last_marker + "_line");
+            DrawLine(sguid);
+            last_marker = sguid;
             i_lat = lat;
             i_lng = lng;
             for (int i = 0; i < cur_lst.Count; ++i)
@@ -1729,10 +1878,19 @@ namespace EnvirInfoSys
 
         private void Map_Size_Change(int len_gl, int now_gl, int now_map)
         {
+            //TreeListNode pNode = treeList1.FocusedNode;
+            string cur_levelguid = levelguid;
             for (int i = 0; i < len_gl; ++i)
             {
                 string objguid = GL_PGUID[(now_gl + i) % len_gl];
                 string[] maps = GL_MAP[objguid].Split(',');
+
+                /*string sql = "select MAPLEVEL from ENVIRMAPDY_H0001Z000E00 where ISDELETE = 0 and UNITID = '"
+                    + UnitID + "' and PGUID = '" + pNode["pguid"].ToString() + "'";
+                DataTable dt = FileReader.often_ahp.ExecuteDataTable(sql, null);
+                if (dt.Rows.Count > 0)
+                    maps = dt.Rows[0]["MAPLEVEL"].ToString().Split(',');*/
+
                 for (int j = 0; j < maps.Length; ++j)
                     if (maps[j] == folds[now_map])
                     {
@@ -1745,10 +1903,15 @@ namespace EnvirInfoSys
                         {
                             if (FLguid == "")
                                 FLguid = "-1";
-                            flowLayoutPanel1.Controls.Clear();
+                            
                             Process p = Process.Start(WorkPath + "CreatePng.exe", "0 " + cur_Level + " " + levelguid + " " + FLguid);
                             p.WaitForExit();
-                            Get_Icon_List();
+                            if (ILChange)
+                            {
+                                ILChange = false;
+                                flowLayoutPanel1.Controls.Clear();
+                                Get_Icon_List();
+                            }
                             if (Directory.GetFiles(WorkPath + "PNGICONFOLDER\\b_" + cur_Level.ToString()).Length <= 0)
                             {
                                 //flowLayoutPanel1.Visible = false;
@@ -1929,6 +2092,7 @@ namespace EnvirInfoSys
             if (Operator_GUID != "")
             {
                 mapHelper1.deleteMarker(Operator_GUID);
+                UpdateDelete(Operator_GUID);
                 Operator_GUID = "";
             }
         }
@@ -1955,6 +2119,7 @@ namespace EnvirInfoSys
             if (Operator_GUID != "")
             {
                 mapHelper1.deleteMarker(Operator_GUID + "_line");
+                UpdateDelete(Operator_GUID + "_line");
                 Operator_GUID = "";
             }
         }
@@ -2051,6 +2216,7 @@ namespace EnvirInfoSys
                         if (pguid != regfm.regguid)
                         {
                             mapHelper1.deleteMarker(Operator_GUID + "_line");
+                            UpdateDelete(Operator_GUID + "_line");
                             mapHelper1.SetMapCenter(tmp.x, tmp.y);
                             mapHelper1.modifyMarker(Operator_GUID, regfm.textName, true, tmp.x, tmp.y, null);
                         }
@@ -2108,11 +2274,33 @@ namespace EnvirInfoSys
             System.Environment.Exit(0);
         }
 
+        
         private void mapHelper1_LevelChanged(int lastLevel, int currLevel, string showLevel)
         {
             if (ifm != null)
                 ifm.Close();
             DrawBorder();
+            HideMessage();
+        }
+
+        private void simpleButton1_Click(object sender, EventArgs e)
+        {
+            double[] point = mapHelper1.GetMapCenter();
+            TreeListNode pNode = treeList1.FocusedNode;
+            string pguid = pNode.GetValue("pguid").ToString();
+            string sql = "update ORGCENTERDATA set S_UDTIME = '" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")
+                + "', LAT = '" + point[0].ToString() + "', LNG = '" + point[1].ToString()
+                + "' where ISDELETE = 0 and PGUID = '" + pguid + "'";
+            FileReader.line_ahp.ExecuteSql(sql, null);
+        }
+
+        private void barButtonItem22_ItemClick(object sender, ItemClickEventArgs e)
+        {
+            MapLevelForm mplvf = new MapLevelForm();
+            TreeListNode pNode = treeList1.FocusedNode;
+            mplvf.nodeid = pNode["pguid"].ToString();
+            mplvf.unitid = UnitID;
+            mplvf.ShowDialog();
         }
 
     }

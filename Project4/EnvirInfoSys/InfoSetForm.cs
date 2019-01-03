@@ -33,6 +33,11 @@ namespace EnvirInfoSys
 
         private void InfoSetForm_Shown(object sender, EventArgs e)
         {
+            comboBoxEdit1.Enabled = false;
+            simpleButton1.Enabled = false;
+            simpleButton2.Enabled = false;
+            textEdit2.Text = "";
+            textEdit2.Enabled = false;
             ahp = new AccessHelper(WorkPath + "data\\ENVIR_H0001Z000E00.mdb");
             Read_Tree();
         }

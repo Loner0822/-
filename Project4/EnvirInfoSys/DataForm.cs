@@ -231,6 +231,8 @@ namespace EnvirInfoSys
             List<string> type_guid = new List<string>(prop_type.Keys);
             for (int i = 0; i < prop_list.Count; ++i)
             {
+                if (Show_Name[prop_list[i]] == "名称")
+                    continue;
                 Property p = new Property(Show_Name[prop_list[i]], "");
                 
                 p.DisplayName = Show_Name[prop_list[i]];

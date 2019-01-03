@@ -56,6 +56,7 @@
             // 
             // barManager1
             // 
+            this.barManager1.AllowShowToolbarsPopup = false;
             this.barManager1.Bars.AddRange(new DevExpress.XtraBars.Bar[] {
             this.bar2,
             this.bar3,
@@ -172,6 +173,7 @@
             this.listView1.Size = new System.Drawing.Size(176, 413);
             this.listView1.TabIndex = 10;
             this.listView1.UseCompatibleStateImageBehavior = false;
+            this.listView1.Visible = false;
             this.listView1.ItemActivate += new System.EventHandler(this.listView1_ItemActivate);
             this.listView1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.listView1_MouseDown);
             // 
@@ -181,8 +183,10 @@
             this.webBrowser1.Location = new System.Drawing.Point(174, 2);
             this.webBrowser1.MinimumSize = new System.Drawing.Size(20, 20);
             this.webBrowser1.Name = "webBrowser1";
+            this.webBrowser1.ScriptErrorsSuppressed = true;
             this.webBrowser1.Size = new System.Drawing.Size(194, 413);
             this.webBrowser1.TabIndex = 9;
+            this.webBrowser1.Visible = false;
             this.webBrowser1.DocumentCompleted += new System.Windows.Forms.WebBrowserDocumentCompletedEventHandler(this.webBrowser1_DocumentCompleted);
             this.webBrowser1.NewWindow += new System.ComponentModel.CancelEventHandler(this.webBrowser1_NewWindow);
             // 
@@ -198,6 +202,7 @@
             this.propertyGrid1.Size = new System.Drawing.Size(172, 413);
             this.propertyGrid1.TabIndex = 7;
             this.propertyGrid1.ToolbarVisible = false;
+            this.propertyGrid1.Visible = false;
             // 
             // imageList1
             // 
@@ -215,6 +220,7 @@
             // 
             // xtraOpenFileDialog1
             // 
+            this.xtraOpenFileDialog1.FileName = null;
             this.xtraOpenFileDialog1.Filter = "图像文件(*.gif;*.jpg;*.jpeg;*.png;*.psd)|*.gif;*.jpg;*.jpeg;*.png;*.psd|所有文件(*.*)|*.*" +
     "";
             // 
