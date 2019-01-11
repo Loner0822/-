@@ -14,6 +14,7 @@ using DevExpress.Utils.DragDrop;
 using DevExpress.XtraGrid;
 using DevExpress.XtraGrid.Views.Grid;
 using DevExpress.XtraTab;
+using System.Diagnostics;
 
 namespace EnvirInfoSys
 {
@@ -279,6 +280,8 @@ namespace EnvirInfoSys
         private void xtraTabControl1_SelectedPageChanged(object sender, TabPageChangedEventArgs e)
         {
             XtraTabPage tbpg = xtraTabControl1.SelectedTabPage;
+            if (tbpg == null)
+                return;
             if (tbpg.Controls.Count > 0)
             {
                 FlowLayoutPanel flp = (FlowLayoutPanel)tbpg.Controls[0];
@@ -559,8 +562,8 @@ namespace EnvirInfoSys
             gridView1.DeleteSelectedRows();
             for (int i = cur_index; i < gridView1.RowCount; ++i)
                 gridView1.GetDataRow(i)["序号"] = i + 1;
-
         }
+
         // 编辑
         private void barButtonItem5_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
@@ -575,7 +578,6 @@ namespace EnvirInfoSys
                 ahp1.ExecuteSql(sql, null);
             }
         }
-
 
         private void flowLayoutPanel1_MouseDown(object sender, MouseEventArgs e)
         {
@@ -607,6 +609,38 @@ namespace EnvirInfoSys
             ahp2.CloseConn();
             ahp3.CloseConn();
             ahp4.CloseConn();
+        }
+
+        private void barButtonItem7_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
+        {
+            Classify_2Form clcfm = new Classify_2Form();
+            clcfm.unitid = unitid;
+            clcfm.ShowDialog();
+
+            string Event = "修改图符对应设置";
+            ComputerInfo.WriteLog("图符对应设置", Event);
+        }
+
+        private void barButtonItem8_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
+        {
+            Process p = Process.Start(WorkPath + "tfkzdy.exe");
+            p.WaitForExit();
+
+            ahp2.CloseConn();
+            ahp4.CloseConn();
+            ahp2 = new AccessHelper(WorkPath + "data\\ZSK_H0001Z000K00.mdb");
+            ahp4 = new AccessHelper(WorkPath + "data\\ZSK_H0001Z000E00.mdb");
+
+
+
+            xtraTabControl1.Controls.Clear();
+            xtraTabControl1.TabPages.Clear();
+            Build_Icon_Library("H0001Z000K00");
+            Build_Icon_Library("H0001Z000E00");
+
+            flowLayoutPanel1.Controls.Clear();
+            string pguid = gridView1.GetFocusedDataRow()["guid"].ToString();
+            Show_Icon_List(pguid);
         }
     }
 }

@@ -34,13 +34,9 @@
             this.hideContainerRight = new DevExpress.XtraBars.Docking.AutoHideContainer();
             this.dockPanel2 = new DevExpress.XtraBars.Docking.DockPanel();
             this.dockPanel2_Container = new DevExpress.XtraBars.Docking.ControlContainer();
-            this.groupControl3 = new DevExpress.XtraEditors.GroupControl();
-            this.simpleButton1 = new DevExpress.XtraEditors.SimpleButton();
             this.groupControl2 = new DevExpress.XtraEditors.GroupControl();
             this.radioButton2 = new System.Windows.Forms.RadioButton();
             this.radioButton1 = new System.Windows.Forms.RadioButton();
-            this.dockPanel3 = new DevExpress.XtraBars.Docking.DockPanel();
-            this.dockPanel3_Container = new DevExpress.XtraBars.Docking.ControlContainer();
             this.barManager1 = new DevExpress.XtraBars.BarManager(this.components);
             this.bar1 = new DevExpress.XtraBars.Bar();
             this.bar2 = new DevExpress.XtraBars.Bar();
@@ -48,6 +44,7 @@
             this.barButtonItem4 = new DevExpress.XtraBars.BarButtonItem();
             this.barButtonItem5 = new DevExpress.XtraBars.BarButtonItem();
             this.barButtonItem6 = new DevExpress.XtraBars.BarButtonItem();
+            this.barButtonItem23 = new DevExpress.XtraBars.BarButtonItem();
             this.barButtonItem19 = new DevExpress.XtraBars.BarButtonItem();
             this.barSubItem2 = new DevExpress.XtraBars.BarSubItem();
             this.barButtonItem7 = new DevExpress.XtraBars.BarButtonItem();
@@ -55,6 +52,7 @@
             this.barButtonItem9 = new DevExpress.XtraBars.BarButtonItem();
             this.barButtonItem10 = new DevExpress.XtraBars.BarButtonItem();
             this.barButtonItem11 = new DevExpress.XtraBars.BarButtonItem();
+            this.barButtonItem24 = new DevExpress.XtraBars.BarButtonItem();
             this.barButtonItem12 = new DevExpress.XtraBars.BarButtonItem();
             this.barButtonItem1 = new DevExpress.XtraBars.BarButtonItem();
             this.barButtonItem2 = new DevExpress.XtraBars.BarButtonItem();
@@ -72,6 +70,7 @@
             this.barButtonItem17 = new DevExpress.XtraBars.BarButtonItem();
             this.barButtonItem18 = new DevExpress.XtraBars.BarButtonItem();
             this.barButtonItem20 = new DevExpress.XtraBars.BarButtonItem();
+            this.barButtonItem22 = new DevExpress.XtraBars.BarButtonItem();
             this.dockPanel1 = new DevExpress.XtraBars.Docking.DockPanel();
             this.dockPanel1_Container = new DevExpress.XtraBars.Docking.ControlContainer();
             this.treeList1 = new DevExpress.XtraTreeList.TreeList();
@@ -88,16 +87,12 @@
             this.xtraOpenFileDialog1 = new DevExpress.XtraEditors.XtraOpenFileDialog(this.components);
             this.splashScreenManager1 = new DevExpress.XtraSplashScreen.SplashScreenManager(this, typeof(global::EnvirInfoSys.WaitForm1), true, true);
             this.barButtonItem21 = new DevExpress.XtraBars.BarButtonItem();
-            this.barButtonItem22 = new DevExpress.XtraBars.BarButtonItem();
             ((System.ComponentModel.ISupportInitialize)(this.dockManager1)).BeginInit();
             this.hideContainerRight.SuspendLayout();
             this.dockPanel2.SuspendLayout();
             this.dockPanel2_Container.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.groupControl3)).BeginInit();
-            this.groupControl3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.groupControl2)).BeginInit();
             this.groupControl2.SuspendLayout();
-            this.dockPanel3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.barManager1)).BeginInit();
             this.dockPanel1.SuspendLayout();
             this.dockPanel1_Container.SuspendLayout();
@@ -117,8 +112,6 @@
             this.dockManager1.AutoHideContainers.AddRange(new DevExpress.XtraBars.Docking.AutoHideContainer[] {
             this.hideContainerRight});
             this.dockManager1.Form = this;
-            this.dockManager1.HiddenPanels.AddRange(new DevExpress.XtraBars.Docking.DockPanel[] {
-            this.dockPanel3});
             this.dockManager1.MenuManager = this.barManager1;
             this.dockManager1.RootPanels.AddRange(new DevExpress.XtraBars.Docking.DockPanel[] {
             this.dockPanel1});
@@ -157,37 +150,16 @@
             this.dockPanel2.SavedIndex = 1;
             this.dockPanel2.SavedSizeFactor = 1D;
             this.dockPanel2.Size = new System.Drawing.Size(200, 592);
-            this.dockPanel2.Text = "地图设置";
+            this.dockPanel2.Text = "双击设置";
             this.dockPanel2.Visibility = DevExpress.XtraBars.Docking.DockVisibility.AutoHide;
             // 
             // dockPanel2_Container
             // 
-            this.dockPanel2_Container.Controls.Add(this.groupControl3);
             this.dockPanel2_Container.Controls.Add(this.groupControl2);
             this.dockPanel2_Container.Location = new System.Drawing.Point(9, 33);
             this.dockPanel2_Container.Name = "dockPanel2_Container";
             this.dockPanel2_Container.Size = new System.Drawing.Size(185, 553);
             this.dockPanel2_Container.TabIndex = 0;
-            // 
-            // groupControl3
-            // 
-            this.groupControl3.Controls.Add(this.simpleButton1);
-            this.groupControl3.Dock = System.Windows.Forms.DockStyle.Top;
-            this.groupControl3.Location = new System.Drawing.Point(0, 90);
-            this.groupControl3.Name = "groupControl3";
-            this.groupControl3.Size = new System.Drawing.Size(185, 91);
-            this.groupControl3.TabIndex = 2;
-            this.groupControl3.Text = "设置中心点";
-            // 
-            // simpleButton1
-            // 
-            this.simpleButton1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.simpleButton1.Location = new System.Drawing.Point(2, 31);
-            this.simpleButton1.Name = "simpleButton1";
-            this.simpleButton1.Size = new System.Drawing.Size(181, 58);
-            this.simpleButton1.TabIndex = 0;
-            this.simpleButton1.Text = "保存中心点";
-            this.simpleButton1.Click += new System.EventHandler(this.simpleButton1_Click);
             // 
             // groupControl2
             // 
@@ -223,28 +195,6 @@
             this.radioButton1.TabStop = true;
             this.radioButton1.Text = "双击放大";
             this.radioButton1.UseVisualStyleBackColor = true;
-            // 
-            // dockPanel3
-            // 
-            this.dockPanel3.Controls.Add(this.dockPanel3_Container);
-            this.dockPanel3.Dock = DevExpress.XtraBars.Docking.DockingStyle.Left;
-            this.dockPanel3.ID = new System.Guid("975ab300-e73e-4477-b76f-097c77559a58");
-            this.dockPanel3.Location = new System.Drawing.Point(0, 40);
-            this.dockPanel3.Name = "dockPanel3";
-            this.dockPanel3.OriginalSize = new System.Drawing.Size(200, 200);
-            this.dockPanel3.SavedDock = DevExpress.XtraBars.Docking.DockingStyle.Left;
-            this.dockPanel3.SavedIndex = 0;
-            this.dockPanel3.SavedSizeFactor = 1D;
-            this.dockPanel3.Size = new System.Drawing.Size(200, 616);
-            this.dockPanel3.Text = "dockPanel3";
-            this.dockPanel3.Visibility = DevExpress.XtraBars.Docking.DockVisibility.Hidden;
-            // 
-            // dockPanel3_Container
-            // 
-            this.dockPanel3_Container.Location = new System.Drawing.Point(6, 33);
-            this.dockPanel3_Container.Name = "dockPanel3_Container";
-            this.dockPanel3_Container.Size = new System.Drawing.Size(185, 577);
-            this.dockPanel3_Container.TabIndex = 0;
             // 
             // barManager1
             // 
@@ -282,9 +232,11 @@
             this.barButtonItem18,
             this.barButtonItem19,
             this.barButtonItem20,
-            this.barButtonItem22});
+            this.barButtonItem22,
+            this.barButtonItem23,
+            this.barButtonItem24});
             this.barManager1.MainMenu = this.bar2;
-            this.barManager1.MaxItemId = 36;
+            this.barManager1.MaxItemId = 38;
             this.barManager1.StatusBar = this.bar3;
             // 
             // bar1
@@ -324,6 +276,7 @@
             new DevExpress.XtraBars.LinkPersistInfo(this.barButtonItem4),
             new DevExpress.XtraBars.LinkPersistInfo(this.barButtonItem5),
             new DevExpress.XtraBars.LinkPersistInfo(this.barButtonItem6),
+            new DevExpress.XtraBars.LinkPersistInfo(this.barButtonItem23),
             new DevExpress.XtraBars.LinkPersistInfo(this.barButtonItem19)});
             this.barSubItem1.Name = "barSubItem1";
             // 
@@ -348,6 +301,13 @@
             this.barButtonItem6.Name = "barButtonItem6";
             this.barButtonItem6.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.barButtonItem6_ItemClick);
             // 
+            // barButtonItem23
+            // 
+            this.barButtonItem23.Caption = "数据上传(&L)";
+            this.barButtonItem23.Id = 36;
+            this.barButtonItem23.Name = "barButtonItem23";
+            this.barButtonItem23.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.barButtonItem23_ItemClick);
+            // 
             // barButtonItem19
             // 
             this.barButtonItem19.Caption = "下载单位注册数据(&D)";
@@ -363,8 +323,9 @@
             new DevExpress.XtraBars.LinkPersistInfo(this.barButtonItem7),
             new DevExpress.XtraBars.LinkPersistInfo(this.barButtonItem8),
             new DevExpress.XtraBars.LinkPersistInfo(this.barButtonItem9),
-            new DevExpress.XtraBars.LinkPersistInfo(this.barButtonItem10),
-            new DevExpress.XtraBars.LinkPersistInfo(this.barButtonItem11),
+            new DevExpress.XtraBars.LinkPersistInfo(DevExpress.XtraBars.BarLinkUserDefines.None, false, this.barButtonItem10, false),
+            new DevExpress.XtraBars.LinkPersistInfo(DevExpress.XtraBars.BarLinkUserDefines.None, false, this.barButtonItem11, false),
+            new DevExpress.XtraBars.LinkPersistInfo(this.barButtonItem24),
             new DevExpress.XtraBars.LinkPersistInfo(this.barButtonItem12)});
             this.barSubItem2.Name = "barSubItem2";
             // 
@@ -384,7 +345,7 @@
             // 
             // barButtonItem9
             // 
-            this.barButtonItem9.Caption = "管辖分类设置(&M)";
+            this.barButtonItem9.Caption = "图符管理设置(&M)";
             this.barButtonItem9.Id = 10;
             this.barButtonItem9.Name = "barButtonItem9";
             this.barButtonItem9.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.barButtonItem9_ItemClick);
@@ -402,6 +363,13 @@
             this.barButtonItem11.Id = 12;
             this.barButtonItem11.Name = "barButtonItem11";
             this.barButtonItem11.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.barButtonItem11_ItemClick);
+            // 
+            // barButtonItem24
+            // 
+            this.barButtonItem24.Caption = "地图设置(&G)";
+            this.barButtonItem24.Id = 37;
+            this.barButtonItem24.Name = "barButtonItem24";
+            this.barButtonItem24.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.barButtonItem24_ItemClick);
             // 
             // barButtonItem12
             // 
@@ -522,6 +490,7 @@
             this.barButtonItem18.Caption = "导入当前单位边界线";
             this.barButtonItem18.Id = 29;
             this.barButtonItem18.Name = "barButtonItem18";
+            this.barButtonItem18.Visibility = DevExpress.XtraBars.BarItemVisibility.Never;
             this.barButtonItem18.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.barButtonItem18_ItemClick);
             // 
             // barButtonItem20
@@ -531,10 +500,19 @@
             this.barButtonItem20.Name = "barButtonItem20";
             this.barButtonItem20.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.barButtonItem20_ItemClick);
             // 
+            // barButtonItem22
+            // 
+            this.barButtonItem22.Caption = "设置地图对应级别";
+            this.barButtonItem22.Id = 35;
+            this.barButtonItem22.Name = "barButtonItem22";
+            this.barButtonItem22.Visibility = DevExpress.XtraBars.BarItemVisibility.Never;
+            this.barButtonItem22.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.barButtonItem22_ItemClick);
+            // 
             // dockPanel1
             // 
             this.dockPanel1.Controls.Add(this.dockPanel1_Container);
             this.dockPanel1.Dock = DevExpress.XtraBars.Docking.DockingStyle.Left;
+            this.dockPanel1.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.dockPanel1.ID = new System.Guid("d955ddf5-94b6-49cb-840b-37e2f0994894");
             this.dockPanel1.Location = new System.Drawing.Point(0, 64);
             this.dockPanel1.Name = "dockPanel1";
@@ -562,6 +540,7 @@
             this.treeList1.TabIndex = 0;
             this.treeList1.ViewStyle = DevExpress.XtraTreeList.TreeListViewStyle.TreeView;
             this.treeList1.FocusedNodeChanged += new DevExpress.XtraTreeList.FocusedNodeChangedEventHandler(this.treeList1_FocusedNodeChanged);
+            this.treeList1.CustomDrawNodeCell += new DevExpress.XtraTreeList.CustomDrawNodeCellEventHandler(this.treeList1_CustomDrawNodeCell);
             this.treeList1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.treeList1_MouseDown);
             // 
             // panel1
@@ -703,13 +682,6 @@
             this.barButtonItem21.Id = -1;
             this.barButtonItem21.Name = "barButtonItem21";
             // 
-            // barButtonItem22
-            // 
-            this.barButtonItem22.Caption = "设置地图对应级别";
-            this.barButtonItem22.Id = 35;
-            this.barButtonItem22.Name = "barButtonItem22";
-            this.barButtonItem22.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.barButtonItem22_ItemClick);
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 22F);
@@ -735,12 +707,9 @@
             this.hideContainerRight.ResumeLayout(false);
             this.dockPanel2.ResumeLayout(false);
             this.dockPanel2_Container.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.groupControl3)).EndInit();
-            this.groupControl3.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.groupControl2)).EndInit();
             this.groupControl2.ResumeLayout(false);
             this.groupControl2.PerformLayout();
-            this.dockPanel3.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.barManager1)).EndInit();
             this.dockPanel1.ResumeLayout(false);
             this.dockPanel1_Container.ResumeLayout(false);
@@ -765,8 +734,6 @@
         private DevExpress.XtraBars.Docking.ControlContainer dockPanel2_Container;
         private DevExpress.XtraBars.Docking.DockPanel dockPanel1;
         private DevExpress.XtraBars.Docking.ControlContainer dockPanel1_Container;
-        private DevExpress.XtraBars.Docking.DockPanel dockPanel3;
-        private DevExpress.XtraBars.Docking.ControlContainer dockPanel3_Container;
         private DevExpress.XtraEditors.GroupControl groupControl2;
         private System.Windows.Forms.RadioButton radioButton2;
         private System.Windows.Forms.RadioButton radioButton1;
@@ -814,10 +781,10 @@
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
         private DevExpress.XtraBars.BarButtonItem barButtonItem20;
         private DevExpress.XtraSplashScreen.SplashScreenManager splashScreenManager1;
-        private DevExpress.XtraEditors.GroupControl groupControl3;
-        private DevExpress.XtraEditors.SimpleButton simpleButton1;
         private DevExpress.XtraBars.BarButtonItem barButtonItem21;
         private MapHelper.MapHelper mapHelper1;
         private DevExpress.XtraBars.BarButtonItem barButtonItem22;
+        private DevExpress.XtraBars.BarButtonItem barButtonItem23;
+        private DevExpress.XtraBars.BarButtonItem barButtonItem24;
     }
 }

@@ -36,7 +36,7 @@ namespace EnvirInfoSys
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
                 IniOperator inip = new IniOperator(AppDomain.CurrentDomain.BaseDirectory + "RegInfo.ini");
-                string skinstyle = inip.ReadString("Skins", "skin", "DevExpress Style");
+                string skinstyle = inip.ReadString("Individuation", "skin", "DevExpress Style");
                 UserLookAndFeel.Default.SetSkinStyle(skinstyle);
 
                 BonusSkins.Register();

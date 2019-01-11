@@ -159,6 +159,7 @@
             this.textEdit2.Name = "textEdit2";
             this.textEdit2.Size = new System.Drawing.Size(155, 30);
             this.textEdit2.TabIndex = 3;
+            this.textEdit2.EditValueChanged += new System.EventHandler(this.textEdit2_EditValueChanged);
             // 
             // labelControl2
             // 

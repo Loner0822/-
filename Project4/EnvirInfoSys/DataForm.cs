@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using DevExpress.XtraEditors;
 using ucPropertyGrid;
+using System.Reflection;
 
 namespace EnvirInfoSys
 {
@@ -251,7 +252,7 @@ namespace EnvirInfoSys
                     string sql = "select " + Show_FDName[prop_list[i]] + " from " + JdCode + " where ISDELETE = 0 and PGUID = '" + Node_GUID + "'";
                     DataTable dt = ahp1.ExecuteDataTable(sql, null);
                     if (dt.Rows.Count > 0)
-                        p.Value = dt.Rows[0][Show_FDName[prop_list[i]]];
+                        p.Value = dt.Rows[0][Show_FDName[prop_list[i]]].ToString();
                     else
                         p.Value = "";
                 }
@@ -283,7 +284,13 @@ namespace EnvirInfoSys
                 p.ReadOnly = false;
                 pmc.Add(p);
             }
+
             propertyGrid1.SelectedObject = pmc; // 加载属性
+            foreach (Property item in (PropertyManageCls)propertyGrid1.SelectedObject)
+            {
+                item.ReadOnly = false;
+            }
+            
         }
 
         private void DataForm_Shown(object sender, EventArgs e)
@@ -317,6 +324,7 @@ namespace EnvirInfoSys
                     FDName_Value.Add(item.FdName, item.Value.ToString());
                 }*/
                 FDName_Value.Add(item.FdName, item.Value.ToString());
+                //item.ReadOnly = false;
             }
             /*if (find_name == false)
             {
@@ -338,6 +346,14 @@ namespace EnvirInfoSys
         private void DataForm_FormClosed(object sender, FormClosedEventArgs e)
         {
             Close_Conn();
+        }
+
+        private void simpleButton3_Click(object sender, EventArgs e)
+        {
+            foreach (Property item in (PropertyManageCls)propertyGrid1.SelectedObject)
+            {
+                XtraMessageBox.Show(item.ReadOnly.ToString());
+            }
         }
     }
 }

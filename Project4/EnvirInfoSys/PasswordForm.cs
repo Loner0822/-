@@ -29,9 +29,10 @@ namespace EnvirInfoSys
         {
             new CheckedListBoxItem("服务器IP设置权限", false),
             new CheckedListBoxItem("边界线属性设置权限", false),
-            new CheckedListBoxItem("管辖分类设置权限", false),
-            new CheckedListBoxItem("图符对应设置权限", false),
-            new CheckedListBoxItem("图符扩展设置权限", false),
+            new CheckedListBoxItem("图符管理设置权限", false),
+            new CheckedListBoxItem("地图设置权限", false),
+            //new CheckedListBoxItem("图符对应设置权限", false),
+            //new CheckedListBoxItem("图符扩展设置权限", false),
             new CheckedListBoxItem("查看日志权限", false),
             new CheckedListBoxItem("一件一档菜单设置权限", false)
         };
@@ -56,10 +57,19 @@ namespace EnvirInfoSys
             DataTable dt = ahp.ExecuteDataTable(sql, null);
             if (dt.Rows.Count > 0)
             {
-                if (new_pw != confer_pw)
+                if (new_pw == old_pw)
                 {
                     textEdit1.Text = "";
                     textEdit2.Text = "";
+                    textEdit3.Text = "";
+                    XtraMessageBox.Show("新密码与旧密码相同!");
+                    return;
+                }
+                if (new_pw != confer_pw)
+                {
+                    //textEdit1.Text = "";
+                    textEdit2.Text = "";
+                    textEdit3.Text = "";
                     XtraMessageBox.Show("新密码与密码确认不匹配!");
                     return;
                 }

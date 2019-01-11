@@ -239,6 +239,7 @@
             this.MinimizeBox = false;
             this.Name = "InfoForm";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.DataForm_FormClosed);
+            this.Load += new System.EventHandler(this.InfoForm_Load);
             this.Shown += new System.EventHandler(this.InfoForm_Shown);
             ((System.ComponentModel.ISupportInitialize)(this.barManager1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.panelControl1)).EndInit();

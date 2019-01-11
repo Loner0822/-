@@ -48,6 +48,7 @@
             // textEdit1
             // 
             this.textEdit1.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.textEdit1.ImeMode = System.Windows.Forms.ImeMode.Hangul;
             this.textEdit1.Location = new System.Drawing.Point(128, 101);
             this.textEdit1.Name = "textEdit1";
             this.textEdit1.Size = new System.Drawing.Size(150, 30);

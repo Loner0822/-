@@ -12,6 +12,7 @@ using DevExpress.XtraTreeList.Nodes;
 using DevExpress.XtraTreeList;
 using System.Collections;
 using DevExpress.XtraTreeList.Columns;
+using System.IO;
 
 namespace EnvirInfoSys
 {
@@ -101,7 +102,7 @@ namespace EnvirInfoSys
             {
                 comboBoxEdit1.Enabled = true;
                 simpleButton1.Enabled = true;
-                simpleButton2.Enabled = true;
+                simpleButton2.Enabled = false;
                 textEdit2.Enabled = true;
                 switch (e.Node.GetValue("func").ToString())
                 {
@@ -139,18 +140,16 @@ namespace EnvirInfoSys
 
         private void simpleButton1_Click(object sender, EventArgs e)
         {
-            TreeListNode pNode = treeList1.FocusedNode;
-            if (pNode == null)
-                return;
-            switch (pNode.GetValue("func").ToString())
+
+            switch (comboBoxEdit1.SelectedIndex)
             {
-                case "word":
+                case 0:
                     xtraOpenFileDialog1.Filter = "Word文档|*.doc;*.docx";
                     break;
-                case "pdf":
+                case 1:
                     xtraOpenFileDialog1.Filter = "PDF文档|*.pdf";
                     break;
-                case "exe":
+                case 3:
                     xtraOpenFileDialog1.Filter = "应用程序|*.exe";
                     break;
             }
@@ -184,11 +183,32 @@ namespace EnvirInfoSys
                     pNode.SetValue("func", "list");
                     break;
             }
+
+            switch (comboBoxEdit1.SelectedIndex)
+            {
+                case 0:
+                case 1:
+                    string sourcefile = textEdit2.Text;
+                    string guid = markerguid + pNode["pguid"].ToString();
+                    string suf = Path.GetExtension(sourcefile);
+                    string targetfile = WorkPath + "file\\" + guid + suf;
+                    File.Copy(sourcefile, targetfile, true);
+                    string sql = "update ENVIRLIST_H0001Z000E00 set S_UDTIME = '" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") +
+                        "', FUNCTION = '" + pNode.GetValue("func").ToString() + "', ADDRESS = '" + guid + suf +
+                        "' where ISDELETE = 0 and PGUID = '" + pNode.GetValue("pguid") + "'";
+                    ahp.ExecuteSql(sql, null);
+                    break;
+                case 2:
+                case 3:
+                case 4:
+                    sql = "update ENVIRLIST_H0001Z000E00 set S_UDTIME = '" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") +
+                        "', FUNCTION = '" + pNode.GetValue("func").ToString() + "', ADDRESS = '" + textEdit2.Text +
+                        "' where ISDELETE = 0 and PGUID = '" + pNode.GetValue("pguid") + "'";
+                    ahp.ExecuteSql(sql, null);
+                    break;
+            }
+
             
-            string sql = "update ENVIRLIST_H0001Z000E00 set S_UDTIME = '" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") +
-                "', FUNCTION = '" + pNode.GetValue("func").ToString() + "', ADDRESS = '" + textEdit2.Text + 
-                "' where ISDELETE = 0 and PGUID = '" + pNode.GetValue("pguid") + "'";
-            ahp.ExecuteSql(sql, null);
             NeedChange = true;
             XtraMessageBox.Show("保存成功!");
         }
@@ -334,6 +354,12 @@ namespace EnvirInfoSys
                 ++cnt;
                 UpDateNode(tln);
             }
+        }
+
+        private void textEdit2_EditValueChanged(object sender, EventArgs e)
+        {
+            if (textEdit2.Text != "")
+                simpleButton2.Enabled = true;
         }
     }
 

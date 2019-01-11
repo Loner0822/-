@@ -342,9 +342,10 @@ namespace EnvirInfoSys
             Menu_Func = new Dictionary<string, string>();
             Menu_Addr = new Dictionary<string, string>();
             Menu_List = new Dictionary<string, List<string>>();
-
+            ahp1.CloseConn();
+            ahp1 = new AccessHelper(AccessPath1);
             string sql = "select PGUID, UPGUID, FUNCNAME, FUNCTION, ADDRESS from ENVIRLIST_H0001Z000E00 where ISDELETE = 0 and UNITID = '" + 
-                unitid + "' and MARKERID in('" + Node_GUID + "', 'all') order by SHOWINDEX desc";
+                unitid + "' and MARKERID in('" + Node_GUID + "', 'all') and FUNCNAME = '基本信息' order by SHOWINDEX desc";
             DataTable dt = ahp1.ExecuteDataTable(sql, null);
             for (int i = 0; i < dt.Rows.Count; ++i)
             {
@@ -366,12 +367,12 @@ namespace EnvirInfoSys
                 }
             }
 
-            BarButtonItem btnitem = new BarButtonItem();
+            /*BarButtonItem btnitem = new BarButtonItem();
             btnitem.Caption = "设置";
             btnitem.ItemClick += barButtonItem3_ItemClick;
-            bar2.AddItem(btnitem);
+            bar2.AddItem(btnitem);*/
 
-            btnitem = new BarButtonItem();
+            BarButtonItem btnitem = new BarButtonItem();
             btnitem.Caption = "关闭";
             btnitem.ItemClick += barButtonItem4_ItemClick;
             bar2.AddItem(btnitem);
@@ -399,6 +400,7 @@ namespace EnvirInfoSys
         private void Show_Info(string pguid, bool second_bar)
         {
             string func = Menu_Func[pguid];
+            bool Exist = File.Exists(WorkPath + "file\\" + Menu_Addr[pguid]) || File.Exists(Menu_Addr[pguid]);
             switch (func)
             {
                 case "list":
@@ -426,6 +428,18 @@ namespace EnvirInfoSys
                         ToolStripItem_Click(barManager1, new ItemClickEventArgs(bar1.ItemLinks[0].Item, bar1.ItemLinks[0]));
                     break;
                 case "pdf":
+                    bar1.Visible = second_bar;
+                    panelControl1.Visible = true;
+                    propertyGrid1.Visible = false;
+                    listView1.Visible = false;
+                    webBrowser1.Visible = true;
+                    documentviewer.Visible = false;
+                    webBrowser1.Dock = DockStyle.Fill;
+                    if (Exist)
+                        webBrowser1.Navigate(WorkPath + "file\\" + Menu_Addr[pguid]);
+                    else
+                        XtraMessageBox.Show("文件不存在!");
+                    break;
                 case "web":
                     bar1.Visible = second_bar;
                     panelControl1.Visible = true;
@@ -443,14 +457,23 @@ namespace EnvirInfoSys
                     listView1.Visible = false;
                     webBrowser1.Visible = false;
                     documentviewer.Visible = true;
+                 
                     documentviewer.Dock = DockStyle.Fill;
-                    documentviewer.LoadFromFile(Menu_Addr[pguid]);
+                    if (Exist)
+                        documentviewer.LoadFromFile(WorkPath + "file\\" + Menu_Addr[pguid]);
+                    else
+                        XtraMessageBox.Show("文件不存在!");
                     break;
                 case "exe":
                     bar1.Visible = second_bar;
                     panelControl1.Visible = false;
-                    Process p = Process.Start(Menu_Addr[pguid]);
-                    p.WaitForExit();
+                    if (Exist)
+                    {
+                        Process p = Process.Start(Menu_Addr[pguid]);
+                        p.WaitForExit();
+                    }
+                    else
+                        XtraMessageBox.Show("文件不存在!");
                     break;
                 case "info":
                     bar1.Visible = second_bar;
@@ -501,21 +524,7 @@ namespace EnvirInfoSys
 
         private void InfoForm_Shown(object sender, EventArgs e)
         {
-            ahp1 = new AccessHelper(AccessPath1);
-            ahp2 = new AccessHelper(AccessPath2);
-            ahp3 = new AccessHelper(AccessPath3);
-            ahp4 = new AccessHelper(AccessPath4);
-
-            // 属性信息
-            BaseInfo();
-
-            // 加载图片
-            LoadPicture();
-
-            // 数据库获取菜单
-            GetMenuList();
-
-            documentviewer.Parent = panelControl1;
+            
         }
 
         private void barButtonItem3_ItemClick(object sender, ItemClickEventArgs e)
@@ -539,7 +548,10 @@ namespace EnvirInfoSys
             ifsf.unitid = unitid;
             ifsf.markerguid = Node_GUID;
             ifsf.ShowDialog();
+            
             bar2.ItemLinks.Clear();
+            //bar2.ClearLinks();
+            
             GetMenuList();
         }
 
@@ -625,6 +637,25 @@ namespace EnvirInfoSys
             foreach (ListViewItem item in items)
                 File.Delete(WorkPath + "picture\\" + item.Text);
             LoadPicture();            
+        }
+
+        private void InfoForm_Load(object sender, EventArgs e)
+        {
+            ahp1 = new AccessHelper(AccessPath1);
+            ahp2 = new AccessHelper(AccessPath2);
+            ahp3 = new AccessHelper(AccessPath3);
+            ahp4 = new AccessHelper(AccessPath4);
+
+            // 属性信息
+            BaseInfo();
+
+            // 加载图片
+            LoadPicture();
+
+            // 数据库获取菜单
+            GetMenuList();
+
+            documentviewer.Parent = panelControl1;
         }
 
     }

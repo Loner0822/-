@@ -137,6 +137,7 @@
             this.textEdit3.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.textEdit3.Location = new System.Drawing.Point(195, 157);
             this.textEdit3.Name = "textEdit3";
+            this.textEdit3.Properties.PasswordChar = '*';
             this.textEdit3.Size = new System.Drawing.Size(150, 30);
             this.textEdit3.TabIndex = 5;
             // 
@@ -145,6 +146,7 @@
             this.textEdit2.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.textEdit2.Location = new System.Drawing.Point(195, 107);
             this.textEdit2.Name = "textEdit2";
+            this.textEdit2.Properties.PasswordChar = '*';
             this.textEdit2.Size = new System.Drawing.Size(150, 30);
             this.textEdit2.TabIndex = 4;
             // 
