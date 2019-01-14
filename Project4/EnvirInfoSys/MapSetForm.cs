@@ -48,6 +48,7 @@ namespace EnvirInfoSys
         /// </summary>
         private bool Before_ShowMap = false;
         private int cur_level = 0;
+        private int now_level = 0;
         private string levelguid = "";
         private string map_type = "";
 
@@ -148,7 +149,7 @@ namespace EnvirInfoSys
             pfs.Close();
             pfs.Dispose();
 
-            mapHelper1.ShowMap(cur_level, cur_level.ToString(), false, map_type, null, borderDic, null, 1, 400);
+            mapHelper1.ShowMap(cur_level, cur_level.ToString(), false, map_type, null, null, null, 1, 400);
         }
 
         private void Polygon_Click(object sender, EventArgs e)
@@ -283,6 +284,7 @@ namespace EnvirInfoSys
             treeList1.Columns[2].Visible = false; 
             treeList1.Columns[3].Visible = false;
             treeList1.Columns[4].Visible = false;
+            treeList1.Columns[5].Visible = false;
             treeList1.ExpandAll();
             FileReader.once_ahp.CloseConn();
         }
@@ -316,24 +318,76 @@ namespace EnvirInfoSys
             borderDic.Add("width", borData.Width);
             borderDic.Add("color", borData.Color);
             borderDic.Add("opacity", borData.Opacity);
-            string sql = "select LNG_LAT from BORDERDATA where ISDELETE = 0 and UNITID = '" + u_guid + "'";
+            string sql = "select LAT, LNG from BORDERDATA where ISDELETE = 0 and UNITID = '" + u_guid + "' order by SHOWINDEX";
             DataTable dt = FileReader.line_ahp.ExecuteDataTable(sql, null);
-            if (dt.Rows.Count > 0)
-            {
-                string alldata = dt.Rows[0]["LNG_LAT"].ToString();
-                string[] div_data = alldata.Split(';');
-                foreach (string str in div_data)
-                {
-                    if (str != "")
-                    {
-                        string[] div_str = str.Split(new Char[] { ' ', ',', ':', '\t', '\r', '\n' });
-                        borList.Add(new double[] { double.Parse(div_str[1]), double.Parse(div_str[0]) });
-                    }
-                }
-                borderDic.Add("path", borList);
-            }
-            else
+            for (int i = 0; i < dt.Rows.Count; ++i)
+                borList.Add(new double[] { double.Parse(dt.Rows[i]["LAT"].ToString()), double.Parse(dt.Rows[i]["LNG"].ToString()) });
+            if (dt.Rows.Count <= 0)
                 Load_Border(GL_UPGUID[u_guid]);
+            else
+                borderDic.Add("path", borList);
+        }
+
+        private List<double[]> Get_Border_Line(string pguid)
+        {
+            string tmp_guid = pguid;
+            List<double[]> res = new List<double[]>();
+            string sql = "select LAT, LNG from BORDERDATA where ISDELETE = 0 and UNITID = '" + pguid + "' order by SHOWINDEX";
+            DataTable dt = FileReader.line_ahp.ExecuteDataTable(sql, null);
+            for (int i = 0; i < dt.Rows.Count; ++i)
+                res.Add(new double[] { double.Parse(dt.Rows[i]["LAT"].ToString()), double.Parse(dt.Rows[i]["LNG"].ToString()) });
+            while (res.Count < 3)
+            {
+                tmp_guid = GL_UPGUID[tmp_guid];
+                res = Get_Border_Line(tmp_guid);
+            }
+            GL_POLY[pguid] = new Polygon(res);
+            return res;
+        }
+
+        private void DrawBorder()
+        {
+            Dictionary<string, object> dic = new Dictionary<string, object>();
+            string dlabel = "fb66d40b-50fa-4d88-8156-c590328004cb";
+            dic["color"] = borData.Color;
+            dic["weight"] = 0;
+            dic["fillColor"] = "#C0C0C0";
+            dic["fillOpacity"] = 0.5;
+            dic["points"] = borList;
+            if (borList.Count > 0)
+                mapHelper1.DarkOuter(dlabel, dic);
+
+            TreeListNode pNode = treeList1.FocusedNode;
+            string pguid = pNode.GetValue("pguid").ToString();
+            List<double[]> bor_line = Get_Border_Line(pguid);
+            Dictionary<string, object> bdic = new Dictionary<string, object>();
+            bdic["type"] = borData.Type;
+            bdic["width"] = borData.Width;
+            bdic["color"] = borData.Color;
+            bdic["opacity"] = borData.Opacity;
+            bdic["path"] = bor_line;
+            mapHelper1.DrawBorder(pguid, bdic);
+
+            foreach (TreeListNode tln in pNode.Nodes)
+            {
+                pguid = tln.GetValue("pguid").ToString();
+                bor_line = Get_Border_Line(pguid);
+                bdic = new Dictionary<string, object>();
+                bdic["type"] = "实线";
+                bdic["width"] = 1;
+                bdic["color"] = "#8B0000";
+                bdic["opacity"] = 0.75;
+                bdic["path"] = bor_line;
+                mapHelper1.DrawBorder(pguid, bdic);
+            }
+        }
+
+        private void EraseBorder()
+        {
+            TreeListNode pNode = treeList1.FocusedNode;
+            mapHelper1.deleteMarker(pNode["pguid"].ToString());
+            foreach (TreeListNode tln in pNode.Nodes)
+                mapHelper1.deleteMarker(tln["pguid"].ToString());
         }
 
         private void treeList1_FocusedNodeChanged(object sender, DevExpress.XtraTreeList.FocusedNodeChangedEventArgs e)
@@ -391,7 +445,7 @@ namespace EnvirInfoSys
             }
             Before_ShowMap = true;
 
-            mapHelper1.ShowMap(cur_level, cur_level.ToString(), false, map_type, null, borderDic, null, 1, 400);
+            mapHelper1.ShowMap(cur_level, cur_level.ToString(), false, map_type, null, null, null, 1, 400);
         }
 
         private void treeList1_MouseDown(object sender, MouseEventArgs e)
@@ -430,44 +484,53 @@ namespace EnvirInfoSys
 
         private void barButtonItem2_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
+            borList = new List<double[]>();
             TreeListNode pNode = treeList1.FocusedNode;
             if (xtraOpenFileDialog1.ShowDialog() != DialogResult.OK)
                 return;
             string file = xtraOpenFileDialog1.FileName;
             string[] strAll = File.ReadAllLines(file);
-            string ds_lng_lat = "";
-            borList = new List<double[]>();
             foreach (string str in strAll)
             {
-                string[] split = str.Split(new Char[] { ' ', ',', ':', '\t', '\r', '\n' });
+                string[] split = str.Split(new Char[] { ' ', ',', ':', '\t', '\r', '\n', ';' });
                 borList.Add(new double[] { double.Parse(split[1]), double.Parse(split[0]) });
-                ds_lng_lat += split[0] + "," + split[1] + ";";
             }
             borderDic["path"] = borList;
             string sql = "select PGUID from BORDERDATA where ISDELETE = 0 and UNITID = '" + pNode["pguid"].ToString() + "'";
             DataTable dt = FileReader.line_ahp.ExecuteDataTable(sql, null);
+            string Event = "添加" + pNode["Name"].ToString() + "的边界线";
             if (dt.Rows.Count > 0)
             {
-                sql = "update BORDERDATA set S_UDTIME = '" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "', LNG_LAT = '"
-                    + ds_lng_lat + "' where ISDELETE = 0 and UNITID = '" + pNode["pguid"].ToString() + "'";
+                sql = "update BORDERDATA set S_UDTIME = '" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "', ISDELETE = 1 where ISDELETE = 0 and UNITID = '" + pNode["pguid"].ToString() + "'";
                 FileReader.line_ahp.ExecuteSql(sql, null);
-                string Event = "修改" + pNode["Name"].ToString() + "的边界线";
-                ComputerInfo.WriteLog("导入边界线", Event);
+                Event = "修改" + pNode["Name"].ToString() + "的边界线";
             }
-            else
+
+            for (int i = 0; i < borList.Count; ++i)
             {
-                sql = "insert into BORDERDATA (PGUID, S_UDTIME, UNITID, LNG_LAT) values ('" + Guid.NewGuid().ToString("B")
-                    + "', '" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "', '" + pNode["pguid"].ToString() + "', '" + ds_lng_lat + "')";
+                sql = "insert into BORDERDATA (PGUID, S_UDTIME, UNITID, LAT, LNG, SHOWINDEX) values('" + Guid.NewGuid().ToString("B")
+                    + "', '" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "', '" + pNode["pguid"].ToString() + "', '" + borList[i][0]
+                    + "', '" + borList[i][1] + "', '" + i.ToString() + "')";
                 FileReader.line_ahp.ExecuteSql(sql, null);
-                string Event = "添加" + pNode["Name"].ToString() + "的边界线";
-                ComputerInfo.WriteLog("导入边界线", Event);
             }
-            mapHelper1.ShowMap(cur_level, cur_level.ToString(), false, map_type, null, borderDic, null, 1, 400);
+            ComputerInfo.WriteLog("导入边界线", Event);
+            mapHelper1.ShowMap(cur_level, cur_level.ToString(), false, map_type, null, null, null, 1, 400);
         }
 
         private void mapHelper1_MapTypeChanged(string mapType)
         {
             map_type = mapType;
+        }
+
+        private void mapHelper1_LevelChanged(int lastLevel, int currLevel, string showLevel)
+        {
+            now_level = currLevel;
+            DrawBorder();
+        }
+
+        private void mapHelper1_MapDblClick(string button, bool canedit, double lat, double lng, int x, int y, string markerguid)
+        {
+
         }
 
     }

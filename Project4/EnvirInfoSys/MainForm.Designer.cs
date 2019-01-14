@@ -47,13 +47,13 @@
             this.barButtonItem23 = new DevExpress.XtraBars.BarButtonItem();
             this.barButtonItem19 = new DevExpress.XtraBars.BarButtonItem();
             this.barSubItem2 = new DevExpress.XtraBars.BarSubItem();
+            this.barButtonItem12 = new DevExpress.XtraBars.BarButtonItem();
             this.barButtonItem7 = new DevExpress.XtraBars.BarButtonItem();
             this.barButtonItem8 = new DevExpress.XtraBars.BarButtonItem();
-            this.barButtonItem9 = new DevExpress.XtraBars.BarButtonItem();
             this.barButtonItem10 = new DevExpress.XtraBars.BarButtonItem();
             this.barButtonItem11 = new DevExpress.XtraBars.BarButtonItem();
             this.barButtonItem24 = new DevExpress.XtraBars.BarButtonItem();
-            this.barButtonItem12 = new DevExpress.XtraBars.BarButtonItem();
+            this.barButtonItem9 = new DevExpress.XtraBars.BarButtonItem();
             this.barButtonItem1 = new DevExpress.XtraBars.BarButtonItem();
             this.barButtonItem2 = new DevExpress.XtraBars.BarButtonItem();
             this.skinBarSubItem1 = new DevExpress.XtraBars.SkinBarSubItem();
@@ -320,14 +320,21 @@
             this.barSubItem2.Caption = "系统设置(&S)";
             this.barSubItem2.Id = 1;
             this.barSubItem2.LinksPersistInfo.AddRange(new DevExpress.XtraBars.LinkPersistInfo[] {
+            new DevExpress.XtraBars.LinkPersistInfo(this.barButtonItem12),
             new DevExpress.XtraBars.LinkPersistInfo(this.barButtonItem7),
             new DevExpress.XtraBars.LinkPersistInfo(this.barButtonItem8),
-            new DevExpress.XtraBars.LinkPersistInfo(this.barButtonItem9),
             new DevExpress.XtraBars.LinkPersistInfo(DevExpress.XtraBars.BarLinkUserDefines.None, false, this.barButtonItem10, false),
             new DevExpress.XtraBars.LinkPersistInfo(DevExpress.XtraBars.BarLinkUserDefines.None, false, this.barButtonItem11, false),
             new DevExpress.XtraBars.LinkPersistInfo(this.barButtonItem24),
-            new DevExpress.XtraBars.LinkPersistInfo(this.barButtonItem12)});
+            new DevExpress.XtraBars.LinkPersistInfo(this.barButtonItem9)});
             this.barSubItem2.Name = "barSubItem2";
+            // 
+            // barButtonItem12
+            // 
+            this.barButtonItem12.Caption = "密码管理(&P)";
+            this.barButtonItem12.Id = 13;
+            this.barButtonItem12.Name = "barButtonItem12";
+            this.barButtonItem12.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.barButtonItem12_ItemClick);
             // 
             // barButtonItem7
             // 
@@ -342,13 +349,6 @@
             this.barButtonItem8.Id = 9;
             this.barButtonItem8.Name = "barButtonItem8";
             this.barButtonItem8.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.barButtonItem8_ItemClick);
-            // 
-            // barButtonItem9
-            // 
-            this.barButtonItem9.Caption = "图符管理设置(&M)";
-            this.barButtonItem9.Id = 10;
-            this.barButtonItem9.Name = "barButtonItem9";
-            this.barButtonItem9.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.barButtonItem9_ItemClick);
             // 
             // barButtonItem10
             // 
@@ -371,12 +371,12 @@
             this.barButtonItem24.Name = "barButtonItem24";
             this.barButtonItem24.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.barButtonItem24_ItemClick);
             // 
-            // barButtonItem12
+            // barButtonItem9
             // 
-            this.barButtonItem12.Caption = "密码管理(&P)";
-            this.barButtonItem12.Id = 13;
-            this.barButtonItem12.Name = "barButtonItem12";
-            this.barButtonItem12.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.barButtonItem12_ItemClick);
+            this.barButtonItem9.Caption = "图符管理设置(&M)";
+            this.barButtonItem9.Id = 10;
+            this.barButtonItem9.Name = "barButtonItem9";
+            this.barButtonItem9.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.barButtonItem9_ItemClick);
             // 
             // barButtonItem1
             // 

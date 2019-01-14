@@ -345,7 +345,7 @@ namespace EnvirInfoSys
             ahp1.CloseConn();
             ahp1 = new AccessHelper(AccessPath1);
             string sql = "select PGUID, UPGUID, FUNCNAME, FUNCTION, ADDRESS from ENVIRLIST_H0001Z000E00 where ISDELETE = 0 and UNITID = '" + 
-                unitid + "' and MARKERID in('" + Node_GUID + "', 'all') and FUNCNAME = '基本信息' order by SHOWINDEX desc";
+                unitid + "' and MARKERID in('" + Node_GUID + "', 'all') order by SHOWINDEX desc";
             DataTable dt = ahp1.ExecuteDataTable(sql, null);
             for (int i = 0; i < dt.Rows.Count; ++i)
             {
@@ -367,12 +367,12 @@ namespace EnvirInfoSys
                 }
             }
 
-            /*BarButtonItem btnitem = new BarButtonItem();
+            BarButtonItem btnitem = new BarButtonItem();
             btnitem.Caption = "设置";
             btnitem.ItemClick += barButtonItem3_ItemClick;
-            bar2.AddItem(btnitem);*/
+            bar2.AddItem(btnitem);
 
-            BarButtonItem btnitem = new BarButtonItem();
+            btnitem = new BarButtonItem();
             btnitem.Caption = "关闭";
             btnitem.ItemClick += barButtonItem4_ItemClick;
             bar2.AddItem(btnitem);

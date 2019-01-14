@@ -213,6 +213,8 @@
             this.mapHelper1.Size = new System.Drawing.Size(1083, 600);
             this.mapHelper1.TabIndex = 3;
             this.mapHelper1.webpath = null;
+            this.mapHelper1.MapDblClick += new MapHelper.MapHelper.DlMapDblClick(this.mapHelper1_MapDblClick);
+            this.mapHelper1.LevelChanged += new MapHelper.MapHelper.DlLevelChanged(this.mapHelper1_LevelChanged);
             this.mapHelper1.MapTypeChanged += new MapHelper.MapHelper.DlMapTypeChanged(this.mapHelper1_MapTypeChanged);
             // 
             // popupMenu1
