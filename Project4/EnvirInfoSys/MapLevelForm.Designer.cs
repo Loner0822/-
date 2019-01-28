@@ -28,9 +28,10 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MapLevelForm));
             this.panelControl1 = new DevExpress.XtraEditors.PanelControl();
-            this.checkedListBoxControl1 = new DevExpress.XtraEditors.CheckedListBoxControl();
             this.simpleButton1 = new DevExpress.XtraEditors.SimpleButton();
+            this.checkedListBoxControl1 = new DevExpress.XtraEditors.CheckedListBoxControl();
             ((System.ComponentModel.ISupportInitialize)(this.panelControl1)).BeginInit();
             this.panelControl1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.checkedListBoxControl1)).BeginInit();
@@ -45,14 +46,6 @@
             this.panelControl1.Size = new System.Drawing.Size(219, 45);
             this.panelControl1.TabIndex = 1;
             // 
-            // checkedListBoxControl1
-            // 
-            this.checkedListBoxControl1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.checkedListBoxControl1.Location = new System.Drawing.Point(0, 0);
-            this.checkedListBoxControl1.Name = "checkedListBoxControl1";
-            this.checkedListBoxControl1.Size = new System.Drawing.Size(219, 199);
-            this.checkedListBoxControl1.TabIndex = 2;
-            // 
             // simpleButton1
             // 
             this.simpleButton1.Anchor = System.Windows.Forms.AnchorStyles.None;
@@ -63,14 +56,24 @@
             this.simpleButton1.Text = "确认";
             this.simpleButton1.Click += new System.EventHandler(this.simpleButton1_Click);
             // 
+            // checkedListBoxControl1
+            // 
+            this.checkedListBoxControl1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.checkedListBoxControl1.Location = new System.Drawing.Point(0, 0);
+            this.checkedListBoxControl1.Name = "checkedListBoxControl1";
+            this.checkedListBoxControl1.Size = new System.Drawing.Size(219, 199);
+            this.checkedListBoxControl1.TabIndex = 2;
+            // 
             // MapLevelForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 22F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(219, 244);
-            this.ControlBox = false;
             this.Controls.Add(this.checkedListBoxControl1);
             this.Controls.Add(this.panelControl1);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "MapLevelForm";
             this.Text = "地图级别选择";
             this.Load += new System.EventHandler(this.MapLevelForm_Load);

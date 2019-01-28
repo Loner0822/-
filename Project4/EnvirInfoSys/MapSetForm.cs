@@ -20,6 +20,7 @@ namespace EnvirInfoSys
         private string IniFilePath = AppDomain.CurrentDomain.BaseDirectory + "parameter.ini";
         private string[] folds = null;
         public string unitid = "";
+        public string MapPath = "";
 
 
         /// <summary>
@@ -32,13 +33,14 @@ namespace EnvirInfoSys
         private Dictionary<string, string> GL_UPGUID;
         private Dictionary<string, string> GL_MAP;
         private Dictionary<string, string> GL_NAME_PGUID;
-        private Dictionary<string, Polygon> GL_POLY;
+        private Dictionary<string, Dictionary<string, Polygon>> GL_POLY;
 
         /// <summary>
         /// 边界线数据
         /// </summary>
         Dictionary<string, object> borderDic = null;
-        private List<double[]> borList = new List<double[]>();
+        private Dictionary<string, List<double[]>> borList = new Dictionary<string, List<double[]>>();
+
         private LineData borData = null;
         //private LineData lineData = null;
 
@@ -62,8 +64,15 @@ namespace EnvirInfoSys
 
         private void MapSetForm_Load(object sender, EventArgs e)
         {
+            borData = new LineData();
+            borData.Get_NewLine();
+
             // 添加管辖级别
             folds = Get_Map_List();
+            if (folds == null)
+            {
+                return;
+            }
             Load_Unit_Level();
 
             // 地图初始化
@@ -82,8 +91,8 @@ namespace EnvirInfoSys
             }
 
             mapHelper1.webpath = WorkPath + "googlemap"; //必须设置的属性,不能为空
-            mapHelper1.roadmappath = WorkPath + "googlemap\\map"; //必须设置的属性,不能为空
-            mapHelper1.satellitemappath = WorkPath + "googlemap\\satellite"; //必须设置的属性,不能为空
+            mapHelper1.roadmappath = MapPath + "\\roadmap"; //必须设置的属性,不能为空
+            mapHelper1.satellitemappath = MapPath + "\\satellite_en"; //必须设置的属性,不能为空
             mapHelper1.iconspath = WorkPath + "PNGICONFOLDER"; //必须设置的属性,不能为空
             mapHelper1.maparr = folds;
 
@@ -202,16 +211,16 @@ namespace EnvirInfoSys
         private string[] Get_Map_List()
         {
             string[] lists = null;
-            string mappath = WorkPath + "googlemap\\map";
-            if (!Directory.Exists(mappath))
+            if (!Directory.Exists(MapPath + "//roadmap"))
             {
-                XtraMessageBox.Show("未导入地图文件!请重新发布软件");
-                FileReader.often_ahp.CloseConn();
+                XtraMessageBox.Show("未导入地图文件!请在数据管理菜单导入地图");
+                /*FileReader.often_ahp.CloseConn();
                 FileReader.line_ahp.CloseConn();
                 FileReader.log_ahp.CloseConn();
-                System.Environment.Exit(0);
+                System.Environment.Exit(0);*/
+                return null;
             }
-            lists = Directory.GetDirectories(mappath);
+            lists = Directory.GetDirectories(MapPath + "//roadmap");
 
             for (int i = 0; i < lists.Length; i++)
             {
@@ -228,7 +237,7 @@ namespace EnvirInfoSys
             GL_UPGUID = new Dictionary<string, string>();
             GL_MAP = new Dictionary<string, string>();
             GL_NAME_PGUID = new Dictionary<string, string>();
-            GL_POLY = new Dictionary<string, Polygon>();
+            GL_POLY = new Dictionary<string, Dictionary<string, Polygon>>();
 
             FileReader.once_ahp = new AccessHelper(WorkPath + "data\\ZSK_H0001Z000K01.mdb");
             string sql = "select PGUID, JDNAME, JDCODE, UPGUID from ZSK_OBJECT_H0001Z000K01 where ISDELETE = 0 order by LEVELNUM, SHOWINDEX";
@@ -249,7 +258,7 @@ namespace EnvirInfoSys
             for (int i = 0; i < dt.Rows.Count; ++i)
             {
                 string pguid = dt.Rows[i]["PGUID"].ToString();
-                sql = "select MAPLEVEL from MAPDUIYING_H0001Z000E00 where ISDELETE = 0 and LEVELGUID = '" + pguid + "'";
+                sql = "select MAPLEVEL from MAPDUIYING_H0001Z000E00 where ISDELETE = 0 and LEVELGUID = '" + pguid + "' and UNITEID = '" + unitid + "'";
                 DataTable dt1 = FileReader.once_ahp.ExecuteDataTable(sql, null);
                 if (dt1.Rows.Count > 0)
                     GL_MAP.Add(pguid, dt1.Rows[0]["MAPLEVEL"].ToString());
@@ -308,7 +317,7 @@ namespace EnvirInfoSys
 
         private void Load_Border(string u_guid)
         {
-            borList = new List<double[]>();
+            borList = new Dictionary<string, List<double[]>>();
             borderDic = new Dictionary<string, object>();
             LineData new_borData = new LineData();
             new_borData.Load_Line("边界线");
@@ -318,30 +327,59 @@ namespace EnvirInfoSys
             borderDic.Add("width", borData.Width);
             borderDic.Add("color", borData.Color);
             borderDic.Add("opacity", borData.Opacity);
-            string sql = "select LAT, LNG from BORDERDATA where ISDELETE = 0 and UNITID = '" + u_guid + "' order by SHOWINDEX";
+
+            string sql = "select LAT, LNG, BORDERGUID from BORDERDATA where ISDELETE = 0 and UNITID = '" + u_guid + "' order by SHOWINDEX";
             DataTable dt = FileReader.line_ahp.ExecuteDataTable(sql, null);
             for (int i = 0; i < dt.Rows.Count; ++i)
-                borList.Add(new double[] { double.Parse(dt.Rows[i]["LAT"].ToString()), double.Parse(dt.Rows[i]["LNG"].ToString()) });
-            if (dt.Rows.Count <= 0)
+            {
+                string pguid = dt.Rows[i]["BORDERGUID"].ToString();
+                if (borList.ContainsKey(pguid))
+                    borList[pguid].Add(new double[] { double.Parse(dt.Rows[i]["LAT"].ToString()), double.Parse(dt.Rows[i]["LNG"].ToString()) });
+                else
+                {
+                    borList[pguid] = new List<double[]>();
+                    borList[pguid].Add(new double[] { double.Parse(dt.Rows[i]["LAT"].ToString()), double.Parse(dt.Rows[i]["LNG"].ToString()) });
+                }
+            }
+
+            if (!GL_UPGUID.ContainsKey(u_guid))
+                return;
+            
+            /*if (dt.Rows.Count <= 0)
                 Load_Border(GL_UPGUID[u_guid]);
             else
-                borderDic.Add("path", borList);
+                borderDic.Add("path", borList);*/
         }
 
-        private List<double[]> Get_Border_Line(string pguid)
+        private Dictionary<string, List<double[]>> Get_Border_Line(string pguid)
         {
             string tmp_guid = pguid;
-            List<double[]> res = new List<double[]>();
-            string sql = "select LAT, LNG from BORDERDATA where ISDELETE = 0 and UNITID = '" + pguid + "' order by SHOWINDEX";
+            Dictionary<string, List<double[]>> res = new Dictionary<string, List<double[]>>();
+            //List<double[]> res = new List<double[]>();
+            string sql = "select LAT, LNG, BORDERGUID from BORDERDATA where ISDELETE = 0 and UNITID = '" + pguid + "' order by SHOWINDEX";
             DataTable dt = FileReader.line_ahp.ExecuteDataTable(sql, null);
             for (int i = 0; i < dt.Rows.Count; ++i)
-                res.Add(new double[] { double.Parse(dt.Rows[i]["LAT"].ToString()), double.Parse(dt.Rows[i]["LNG"].ToString()) });
-            while (res.Count < 3)
             {
+                string borguid = dt.Rows[i]["BORDERGUID"].ToString();
+                if (res.ContainsKey(borguid))
+                    res[borguid].Add(new double[] { double.Parse(dt.Rows[i]["LAT"].ToString()), double.Parse(dt.Rows[i]["LNG"].ToString()) });
+                else
+                {
+                    res[borguid] = new List<double[]>();
+                    res[borguid].Add(new double[] { double.Parse(dt.Rows[i]["LAT"].ToString()), double.Parse(dt.Rows[i]["LNG"].ToString()) });
+                }
+            }
+            /*while (res.Count <= 0)
+            {
+                if (!GL_UPGUID.ContainsKey(tmp_guid))
+                    return res;
                 tmp_guid = GL_UPGUID[tmp_guid];
                 res = Get_Border_Line(tmp_guid);
-            }
-            GL_POLY[pguid] = new Polygon(res);
+            }*/
+            if (!GL_POLY.ContainsKey(pguid))
+                return res;
+            foreach (var item in res)
+                GL_POLY[pguid][item.Key] = new Polygon(item.Value);
             return res;
         }
 
@@ -349,26 +387,46 @@ namespace EnvirInfoSys
         {
             Dictionary<string, object> dic = new Dictionary<string, object>();
             string dlabel = "fb66d40b-50fa-4d88-8156-c590328004cb";
+            string arealabel = "e62844cb-2839-4b49-853a-250e11ec1901";
             dic["color"] = borData.Color;
             dic["weight"] = 0;
             dic["fillColor"] = "#C0C0C0";
             dic["fillOpacity"] = 0.5;
-            dic["points"] = borList;
-            if (borList.Count > 0)
-                mapHelper1.DarkOuter(dlabel, dic);
+            
+
+            if (borList.Count > 1)
+            {
+                dic["fillColor"] = "#CCFF33";
+                foreach (var item in borList) 
+                {
+                    dic["points"] = item.Value;
+                    //mapHelper1.LightArea(arealabel, dic);
+                }
+            }
+            else
+            {
+                foreach (var item in borList)
+                {
+                    dic["points"] = item.Value;
+                    //mapHelper1.DarkOuter(dlabel, dic);
+                }                
+            }
 
             TreeListNode pNode = treeList1.FocusedNode;
             string pguid = pNode.GetValue("pguid").ToString();
-            List<double[]> bor_line = Get_Border_Line(pguid);
-            Dictionary<string, object> bdic = new Dictionary<string, object>();
-            bdic["type"] = borData.Type;
-            bdic["width"] = borData.Width;
-            bdic["color"] = borData.Color;
-            bdic["opacity"] = borData.Opacity;
-            bdic["path"] = bor_line;
-            mapHelper1.DrawBorder(pguid, bdic);
+            Dictionary<string, List<double[]>> bor_line = Get_Border_Line(pguid);
+            foreach (var item in bor_line)
+            {
+                Dictionary<string, object> bdic = new Dictionary<string, object>();
+                bdic["type"] = borData.Type;
+                bdic["width"] = borData.Width;
+                bdic["color"] = borData.Color;
+                bdic["opacity"] = borData.Opacity;
+                bdic["path"] = item.Value;
+                mapHelper1.DrawBorder(pguid, bdic);
+            }
 
-            foreach (TreeListNode tln in pNode.Nodes)
+            /*foreach (TreeListNode tln in pNode.Nodes)
             {
                 pguid = tln.GetValue("pguid").ToString();
                 bor_line = Get_Border_Line(pguid);
@@ -379,7 +437,7 @@ namespace EnvirInfoSys
                 bdic["opacity"] = 0.75;
                 bdic["path"] = bor_line;
                 mapHelper1.DrawBorder(pguid, bdic);
-            }
+            }*/
         }
 
         private void EraseBorder()
@@ -393,6 +451,7 @@ namespace EnvirInfoSys
         private void treeList1_FocusedNodeChanged(object sender, DevExpress.XtraTreeList.FocusedNodeChangedEventArgs e)
         {
             TreeListNode pNode = treeList1.FocusedNode;
+            borList = new Dictionary<string, List<double[]>>();
             if (e.Node == null)
                 return;
             levelguid = GL_NAME_PGUID[e.Node.GetValue("level").ToString()];
@@ -405,16 +464,19 @@ namespace EnvirInfoSys
             if (maps[0] != string.Empty)
                 cur_level = int.Parse(maps[0]);
             else
-                cur_level = 0;
+                cur_level = int.Parse(folds[0]);
 
             label1.Text = "当前级别：" + GL_NAME[levelguid];
             Load_Border(e.Node.GetValue("pguid").ToString());
-            GL_POLY[e.Node.GetValue("pguid").ToString()] = new Polygon(borList);
+            if (!GL_POLY.ContainsKey(e.Node.GetValue("pguid").ToString()))
+                GL_POLY[e.Node.GetValue("pguid").ToString()] = new Dictionary<string, Polygon>();
+            foreach(var item in borList)
+                GL_POLY[e.Node.GetValue("pguid").ToString()][item.Key] = new Polygon(item.Value);
 
             bool flag = false;
 
             sql = "select MARKELAT, MARKELNG from ENVIRICONDATA_H0001Z000E00 where ISDELETE = 0 and MAKRENAME like '%"
-                + e.Node.GetValue("Name").ToString() + "%'";
+                + e.Node.GetValue("Name").ToString() + "%' and UNITEID = '" + unitid + "'";
             dt = FileReader.often_ahp.ExecuteDataTable(sql, null);
             if (dt.Rows.Count > 0)
             {
@@ -443,9 +505,18 @@ namespace EnvirInfoSys
                     mapHelper1.centerlng = tmp_point[1]; //118.5784; //必须设置的属性,不能为空
                 }
             }
-            Before_ShowMap = true;
 
-            mapHelper1.ShowMap(cur_level, cur_level.ToString(), false, map_type, null, null, null, 1, 400);
+            if (Before_ShowMap == false)
+                mapHelper1.ShowMap(cur_level, cur_level.ToString(), false, map_type, null, null, null, 1, 400);
+            else
+            {
+                mapHelper1.setMapLevel(cur_level, cur_level.ToString());
+                mapHelper1.SetMapCenter(mapHelper1.centerlat, mapHelper1.centerlng);
+                EraseBorder();
+                DrawBorder();
+            }
+
+            Before_ShowMap = true;
         }
 
         private void treeList1_MouseDown(object sender, MouseEventArgs e)
@@ -467,6 +538,7 @@ namespace EnvirInfoSys
         {
             MapLevelForm mplvf = new MapLevelForm();
             TreeListNode pNode = treeList1.FocusedNode;
+            levelguid = GL_NAME_PGUID[pNode["level"].ToString()];
             mplvf.StartPosition = FormStartPosition.Manual;
             mplvf.Left = MapX;
             mplvf.Top = MapY;
@@ -474,6 +546,8 @@ namespace EnvirInfoSys
                 mplvf.Top -= mplvf.Height;
             mplvf.nodeid = pNode["pguid"].ToString();
             mplvf.unitid = unitid;
+            mplvf.mapstring = GL_MAP[levelguid];
+            mplvf.MapPath = MapPath;
             mplvf.ShowDialog();
             if (pNode.ParentNode != null)
                 treeList1.FocusedNode = pNode.ParentNode;
@@ -484,7 +558,7 @@ namespace EnvirInfoSys
 
         private void barButtonItem2_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
-            borList = new List<double[]>();
+            /*borList = new Dictionary<string,List<double[]>>();
             TreeListNode pNode = treeList1.FocusedNode;
             if (xtraOpenFileDialog1.ShowDialog() != DialogResult.OK)
                 return;
@@ -514,7 +588,7 @@ namespace EnvirInfoSys
                 FileReader.line_ahp.ExecuteSql(sql, null);
             }
             ComputerInfo.WriteLog("导入边界线", Event);
-            mapHelper1.ShowMap(cur_level, cur_level.ToString(), false, map_type, null, null, null, 1, 400);
+            mapHelper1.ShowMap(cur_level, cur_level.ToString(), false, map_type, null, null, null, 1, 400);*/
         }
 
         private void mapHelper1_MapTypeChanged(string mapType)
@@ -528,9 +602,109 @@ namespace EnvirInfoSys
             DrawBorder();
         }
 
-        private void mapHelper1_MapDblClick(string button, bool canedit, double lat, double lng, int x, int y, string markerguid)
+        private void barButtonItem3_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
+            TreeListNode pNode = treeList1.FocusedNode;
+            if (xtraOpenFileDialog1.ShowDialog() != DialogResult.OK)
+                return;
+            string file = xtraOpenFileDialog1.FileName;
+            string[] strAll = File.ReadAllLines(file);
+            string newGUID = Guid.NewGuid().ToString("B");
+            borList[newGUID] = new List<double[]>();
+            foreach (string str in strAll)
+            {
+                string[] split = str.Split(new Char[] { ' ', ',', ':', '\t', '\r', '\n', ';' });
+                borList[newGUID].Add(new double[] { double.Parse(split[1]), double.Parse(split[0]) });
+            }
+            borderDic["path"] = borList;
+            for (int i = 0; i < borList[newGUID].Count; ++i)
+            {
+                string sql = "insert into BORDERDATA (PGUID, S_UDTIME, UNITID, LAT, LNG, SHOWINDEX, BORDERGUID) values('" + Guid.NewGuid().ToString("B")
+                    + "', '" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "', '" + pNode["pguid"].ToString() + "', '" + borList[newGUID][i][0]
+                    + "', '" + borList[newGUID][i][1] + "', " + i.ToString() + ", '" + newGUID + "')";
+                FileReader.line_ahp.ExecuteSql(sql, null);
+            }
+            string Event = "添加" + pNode["Name"].ToString() + "的边界线";
+            ComputerInfo.WriteLog("导入边界线", Event);
+            mapHelper1.ShowMap(cur_level, cur_level.ToString(), false, map_type, null, null, null, 1, 400);
+        }
 
+        private void barButtonItem4_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
+        {
+            TreeListNode pNode = treeList1.FocusedNode;
+            string sql = "update BORDERDATA set S_UDTIME = '" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")
+                + "', ISDELETE = 1 where ISDELETE = 0 and UNITID = '" + pNode["pguid"].ToString()
+                + "' and BORDERGUID = '" + border_guid + "'";
+            FileReader.line_ahp.ExecuteSql(sql, null);
+            string Event = "删除" + pNode["Name"].ToString() + "的边界线";
+            ComputerInfo.WriteLog("导入边界线", Event);
+            mapHelper1.ShowMap(cur_level, cur_level.ToString(), false, map_type, null, null, null, 1, 400);
+            borList = new Dictionary<string, List<double[]>>();
+        }
+
+        private void barButtonItem5_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
+        {
+            TreeListNode pNode = treeList1.FocusedNode;
+            if (xtraOpenFileDialog1.ShowDialog() != DialogResult.OK)
+                return;
+            string sql = "update BORDERDATA set S_UDTIME = '" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")
+                + "', ISDELETE = 1 where ISDELETE = 0 and UNITID = '" + pNode["pguid"].ToString()
+                + "' and BORDERGUID = '" + border_guid + "'";
+            FileReader.line_ahp.ExecuteSql(sql, null);
+
+            string file = xtraOpenFileDialog1.FileName;
+            string[] strAll = File.ReadAllLines(file);
+            string newGUID = Guid.NewGuid().ToString("B");
+            borList[newGUID] = new List<double[]>();
+            foreach (string str in strAll)
+            {
+                string[] split = str.Split(new Char[] { ' ', ',', ':', '\t', '\r', '\n', ';' });
+                borList[newGUID].Add(new double[] { double.Parse(split[1]), double.Parse(split[0]) });
+            }
+            borderDic["path"] = borList;
+            for (int i = 0; i < borList[newGUID].Count; ++i)
+            {
+                sql = "insert into BORDERDATA (PGUID, S_UDTIME, UNITID, LAT, LNG, SHOWINDEX, BORDERGUID) values('" + Guid.NewGuid().ToString("B")
+                    + "', '" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "', '" + pNode["pguid"].ToString() + "', '" + borList[newGUID][i][0]
+                    + "', '" + borList[newGUID][i][1] + "', '" + i.ToString() + "', '" + newGUID +  "')";
+                FileReader.line_ahp.ExecuteSql(sql, null);
+            }
+
+            string Event = "更新" + pNode["Name"].ToString() + "的边界线";
+            ComputerInfo.WriteLog("导入边界线", Event);
+            mapHelper1.ShowMap(cur_level, cur_level.ToString(), false, map_type, null, null, null, 1, 400);
+        }
+
+        string border_guid = "";
+        private void mapHelper1_MapRightClick(bool canedit, double lat, double lng, int x, int y)
+        {
+            if (Check_InBorder(new dPoint(lat, lng)))
+            {
+                barButtonItem4.Visibility = DevExpress.XtraBars.BarItemVisibility.Always;
+                barButtonItem5.Visibility = DevExpress.XtraBars.BarItemVisibility.Always;
+            }
+            else
+            {
+                barButtonItem4.Visibility = DevExpress.XtraBars.BarItemVisibility.Never;
+                barButtonItem5.Visibility = DevExpress.XtraBars.BarItemVisibility.Never;
+            }
+            popupMenu2.ShowPopup(barManager1, MousePosition);
+        }
+
+        private bool Check_InBorder(dPoint p)
+        {
+            Polygon tmp = null;
+            foreach (var item in borList)
+            {
+                tmp = new Polygon(item.Value);
+                if (tmp.PointInPolygon(p))
+                {
+                    border_guid = item.Key;
+                    return true;
+                }
+            }
+            border_guid = "";
+            return false;
         }
 
     }

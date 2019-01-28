@@ -112,7 +112,11 @@ namespace EnvirInfoSys
 
                 string sql = "select PGUID, PROPNAME, FDNAME, SOURCEGUID, PROPVALUE from ZSK_PROP_" + database
                     + " where ISDELETE = 0 and UPGUID = '" + Icon_GUID + "' and PROTYPEGUID = '" + _type[i]
-                    + "' order by SHOWINDEX";
+                    + "'";
+                if (i == 2)
+                    sql += " and UNITID = '" + unitid + "'";
+                sql += " order by SHOWINDEX";
+
                 DataTable dt = ahp.ExecuteDataTable(sql, null);
                 for (int j = 0; j < dt.Rows.Count; ++j)
                 {
@@ -172,7 +176,6 @@ namespace EnvirInfoSys
                     }
                 }
             }
-
             return "文本";
         }
 
@@ -229,18 +232,17 @@ namespace EnvirInfoSys
             prop_list = Get_Prop_List(prop_type);
             //List<string> type_guid = new List<string> (prop_type.Keys);
 
-            if (CanEdit == false)
-                propertyGrid1.Enabled = false;
-            else
-                propertyGrid1.Enabled = true;
+            propertyGrid1.Enabled = true;
 
-            string sql = "select MAKRENAME, REGINFO from ENVIRICONDATA_H0001Z000E00 where ISDELETE = 0 and PGUID = '" + Node_GUID + "'";
+            string sql = "select MAKRENAME, REGINFO from ENVIRICONDATA_H0001Z000E00 where ISDELETE = 0 and PGUID = '" + Node_GUID + "' and UNITEID = '" + unitid + "'";
             DataTable dt = ahp1.ExecuteDataTable(sql, null);
             Property fp = new Property("名称", dt.Rows[0]["MAKRENAME"]);
             fp.Category = "\t注册信息";
+            fp.ReadOnly = true;
             pmc.Add(fp);
             fp = new Property("注册地址", dt.Rows[0]["REGINFO"]);
             fp.Category = "\t注册信息";
+            fp.ReadOnly = true;
             pmc.Add(fp);
 
             List<string> type_guid = new List<string>(prop_type.Keys);
@@ -274,7 +276,14 @@ namespace EnvirInfoSys
                 switch (datatype)
                 {
                     case "文本":
+                        break;
                     case "数字":
+                        Dictionary<string, string> dicdata = Get_dw(prop_list[i]);
+                        dicdata["defvalue"] = p.Value.ToString();
+                        if (p.Value.ToString() != "")
+                            p.Value += dicdata["danwei"];
+                        p.isNum = true;
+                        p.Editor = new PropertyGridNumber(dicdata);
                         break;
                     case "可选项":
                         string kxfw = Get_fw(prop_list[i]);
@@ -293,9 +302,59 @@ namespace EnvirInfoSys
                     default:
                         break;
                 }
+                p.ReadOnly = true;
                 pmc.Add(p);
             }
             propertyGrid1.SelectedObject = pmc; // 加载属性
+        }
+
+        private Dictionary<string, string> Get_dw(string propguid)
+        {
+            Dictionary<string, string> res = new Dictionary<string, string>{
+                {"danwei", ""},
+                {"afterdecpoint", ""},
+                {"upper", ""},
+                {"limit", ""},
+                {"defvalue", ""}
+            };
+            string database = Show_DB[propguid];
+            AccessHelper ahp = null; ;
+            string sql;
+            DataTable dt;
+            if (database == "H0001Z000K00")
+                ahp = ahp2;
+            else if (database == "H0001Z000K01")
+                ahp = ahp3;
+            else
+                ahp = ahp4;
+
+            string dt_guid = Icon_GUID + "_" + propguid;
+
+            if (inherit_GUID[propguid] != "")
+            {
+                propguid = inherit_GUID[propguid];
+                sql = "select UPGUID from ZSK_PROP_" + database + " where ISDELETE = 0 and PGUID = '" + propguid + "'";
+                dt = ahp.ExecuteDataTable(sql, null);
+                if (dt.Rows.Count > 0)
+                {
+                    dt_guid = dt.Rows[0]["UPGUID"].ToString() + "_" + propguid;
+                }
+            }
+
+            sql = "select PROPNAME, PROPVALUE from ZSK_LIMIT_" + database + " where ISDELETE = 0 and UPGUID = '" + dt_guid + "'";
+            dt = ahp.ExecuteDataTable(sql, null);
+            for (int i = 0; i < dt.Rows.Count; ++i)
+            {
+                if (dt.Rows[i]["PROPNAME"].ToString() == "单位")
+                    res["danwei"] = dt.Rows[i]["PROPVALUE"].ToString();
+                if (dt.Rows[i]["PROPNAME"].ToString() == "小数位数")
+                    res["afterdecpoint"] = dt.Rows[i]["PROPVALUE"].ToString();
+                if (dt.Rows[i]["PROPNAME"].ToString() == "上限")
+                    res["upper"] = dt.Rows[i]["PROPVALUE"].ToString();
+                if (dt.Rows[i]["PROPNAME"].ToString() == "下限")
+                    res["limit"] = dt.Rows[i]["PROPVALUE"].ToString();           
+            }
+            return res;
         }
 
         private void LoadPicture()
@@ -344,8 +403,8 @@ namespace EnvirInfoSys
             Menu_List = new Dictionary<string, List<string>>();
             ahp1.CloseConn();
             ahp1 = new AccessHelper(AccessPath1);
-            string sql = "select PGUID, UPGUID, FUNCNAME, FUNCTION, ADDRESS from ENVIRLIST_H0001Z000E00 where ISDELETE = 0 and UNITID = '" + 
-                unitid + "' and MARKERID in('" + Node_GUID + "', 'all') order by SHOWINDEX desc";
+            /*string sql = "select PGUID, UPGUID, FUNCNAME, FUNCTION, ADDRESS from ENVIRLIST_H0001Z000E00 where ISDELETE = 0 and UNITID = '" + 
+                unitid + "' and MARKERID in('" + Node_GUID + "', 'all') and FUNCNAME = '基本信息' order by SHOWINDEX desc";
             DataTable dt = ahp1.ExecuteDataTable(sql, null);
             for (int i = 0; i < dt.Rows.Count; ++i)
             {
@@ -365,12 +424,19 @@ namespace EnvirInfoSys
                     Menu_List[upguid] = new List<string>();
                     Menu_List[upguid].Add(pguid);
                 }
-            }
+            }*/
+            string pguid = "2d4c409b-8355-4ec4-b51c-9dd639742de3";
+            string upguid = "";
+            Menu_GUID.Add(pguid);
+            Menu_Upguid[pguid] = upguid;
+            Menu_Name[pguid] = "基本信息";
+            Menu_Func[pguid] = "info";
+            Menu_Addr[pguid] = "";
 
-            BarButtonItem btnitem = new BarButtonItem();
+            BarButtonItem /*btnitem = new BarButtonItem();
             btnitem.Caption = "设置";
             btnitem.ItemClick += barButtonItem3_ItemClick;
-            bar2.AddItem(btnitem);
+            bar2.AddItem(btnitem);*/
 
             btnitem = new BarButtonItem();
             btnitem.Caption = "关闭";
@@ -524,7 +590,13 @@ namespace EnvirInfoSys
 
         private void InfoForm_Shown(object sender, EventArgs e)
         {
-            
+            string pictpath = AppDomain.CurrentDomain.BaseDirectory + "ICONDER\\b_PNGICON\\" + Icon_GUID + ".png";
+            Image image; image = Image.FromFile(pictpath);
+            Bitmap icoBitmap = new Bitmap(image);
+
+            IntPtr hIco = icoBitmap.GetHicon();
+            Icon icon = Icon.FromHandle(hIco);
+            this.Icon = icon;
         }
 
         private void barButtonItem3_ItemClick(object sender, ItemClickEventArgs e)

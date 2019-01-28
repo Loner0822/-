@@ -18,6 +18,8 @@ namespace EnvirInfoSys
         private string[] folds = null;
         public string unitid = "";
         public string nodeid = "";
+        public string MapPath = "";
+        public string mapstring = "";
 
 
         public MapLevelForm()
@@ -28,7 +30,7 @@ namespace EnvirInfoSys
         private void MapLevelForm_Load(object sender, EventArgs e)
         {
             checkedListBoxControl1.Items.Clear();
-            string mappath = WorkPath + "googlemap\\map";
+            string mappath = MapPath + "\\roadmap";
             folds = Directory.GetDirectories(mappath);
 
             for (int i = 0; i < folds.Length; i++)
@@ -38,12 +40,29 @@ namespace EnvirInfoSys
                 checkedListBoxControl1.Items.Add(folds[i]);
             }
 
-            string sql = "select MAPLEVEL from ENVIRMAPDY_H0001Z000E00 where ISDELETE = 0 and PGUID = '" + nodeid + "'";
+            string sql = "select MAPLEVEL from ENVIRMAPDY_H0001Z000E00 where ISDELETE = 0 and PGUID = '" + nodeid + "' and UNITID = '" + unitid + "'";
             DataTable dt = FileReader.often_ahp.ExecuteDataTable(sql, null);
             if (dt.Rows.Count > 0)
             {
                 string lists = dt.Rows[0]["MAPLEVEL"].ToString();
                 string[] checkedlist = lists.Split(',');
+                for (int i = 0; i < checkedlist.Length; ++i)
+                {
+                    for (int j = 0; j < checkedListBoxControl1.Items.Count; ++j)
+                    {
+                        if (checkedListBoxControl1.Items[j].Value.ToString() == checkedlist[i])
+                        {
+                            checkedListBoxControl1.SetItemChecked(j, true);
+                        }
+                    }
+                }
+            }
+            else
+            {
+                //FileReader.once_ahp = new AccessHelper(WorkPath + "data\\ENVIRDYDATA_H0001Z000E00.mdb");
+                //sql = "select "
+                //FileReader.once_ahp.CloseConn();
+                string[] checkedlist = mapstring.Split(',');
                 for (int i = 0; i < checkedlist.Length; ++i)
                 {
                     for (int j = 0; j < checkedListBoxControl1.Items.Count; ++j)
@@ -77,7 +96,7 @@ namespace EnvirInfoSys
                 else
                     Close();
             }
-            string sql = "select PGUID from ENVIRMAPDY_H0001Z000E00 where ISDELETE = 0 and PGUID = '" + nodeid + "'";
+            string sql = "select PGUID from ENVIRMAPDY_H0001Z000E00 where ISDELETE = 0 and PGUID = '" + nodeid + "' and UNITID = '" + unitid + "'";
             DataTable dt = FileReader.often_ahp.ExecuteDataTable(sql, null);
             if (dt.Rows.Count > 0)
             {

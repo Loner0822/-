@@ -24,6 +24,8 @@ namespace PublishSys
         private string WorkPath = AppDomain.CurrentDomain.BaseDirectory;//当前exe根目录
         private string AccessPath = AppDomain.CurrentDomain.BaseDirectory + "\\Publish\\data\\PersonMange.mdb";
         private Dictionary<string, string> UnitID_Level;
+        private string Last_Level = null;
+        private int Curr_Level = 0;
 
 
         private void PubForm_Load(object sender, EventArgs e)
@@ -53,7 +55,6 @@ namespace PublishSys
             PubVer.DataPropertyName = "PubVer";
             PubVer.HeaderText = "系统版本";
             dataGridView1.Columns.Add(PubVer);
-
             DataGridViewTextBoxColumn PubGUID = new DataGridViewTextBoxColumn();
             PubGUID.Name = "PubPGUID";
             PubGUID.DataPropertyName = "PubGUID";
@@ -92,15 +93,20 @@ namespace PublishSys
             this.treeView1.HideSelection = false;
             this.treeView1.DrawMode = TreeViewDrawMode.OwnerDrawText;
             this.treeView1.DrawNode += new DrawTreeNodeEventHandler(treeView1_DrawNode);
+
+            inip = new IniOperator(WorkPath + "PackUp.ini");
+            Last_Level = inip.ReadString("unitlevel", "lastlevel", "县");
+            Last_Level = Last_Level.Replace("\0", "");
             Get_TreeView();
         }
 
-        private void Get_TreeView() {
+        private void Get_TreeView()
+        {
             if (!File.Exists(AccessPath))
                 return;
             UnitID_Level = new Dictionary<string, string>();
             ahp = new AccessHelper(AccessPath);
-            string sql = "select * from RG_单位注册 where ISDELETE = 0 and ULEVEL in ('国', '省', '市', '县')";
+            string sql = "select * from RG_单位注册 where ISDELETE = 0";
             DataTable dt = ahp.ExecuteDataTable(sql, null);
             List<District> d_list = new List<District>();
             for (int i = 0; i < dt.Rows.Count; ++i)
@@ -118,9 +124,12 @@ namespace PublishSys
             treeView1.ExpandAll();
         }
 
-        private void Add_Tree_Node(List<District> d_list) {
-            for (int i = 0; i < d_list.Count; ++i) {
-                if (d_list[i].pid == "0") {
+        private void Add_Tree_Node(List<District> d_list)
+        {
+            for (int i = 0; i < d_list.Count; ++i)
+            {
+                if (d_list[i].pid == "0")
+                {
                     TreeNode pNode = new TreeNode();
                     pNode.Tag = d_list[i].id;
                     pNode.Text = d_list[i].name;
@@ -142,6 +151,8 @@ namespace PublishSys
                     cNode.Tag = d_list[i].id;
                     cNode.Text = d_list[i].name;
                     pNode.Nodes.Add(cNode);
+                    if (d_list[i].level == Last_Level)
+                        continue;
                     Add_Child_Node(d_list, cNode);
                 }
             }
@@ -160,9 +171,15 @@ namespace PublishSys
             textBox2.Enabled = true;
             textBox3.Enabled = true;
             TreeNode pNode = treeView1.SelectedNode;
-            ahp = new AccessHelper(WorkPath + "Publish\\data\\经纬度注册.mdb");
-            string sql = "select LAT, LNG from ORGCENTERDATA where ISDELETE = 0 and UNITEID = '" + pNode.Tag.ToString() + "'";
+            ahp = new AccessHelper(WorkPath + "Publish\\data\\ZSK_H0001Z000K01.mdb");
+            string sql = "select LEVELNUM from ZSK_OBJECT_H0001Z000K01 where ISDELETE = 0 and JDNAME = '" + UnitID_Level[pNode.Tag.ToString()] + "'";
             DataTable dt = ahp.ExecuteDataTable(sql, null);
+            ahp.CloseConn();
+            Curr_Level = int.Parse(dt.Rows[0]["LEVELNUM"].ToString());
+
+            ahp = new AccessHelper(WorkPath + "Publish\\data\\经纬度注册.mdb");
+            sql = "select LAT, LNG from ORGCENTERDATA where ISDELETE = 0 and UNITEID = '" + pNode.Tag.ToString() + "'";
+            dt = ahp.ExecuteDataTable(sql, null);
             ahp.CloseConn();
             if (dt.Rows.Count > 0 && dt.Rows[0]["LNG"].ToString() != string.Empty && dt.Rows[0]["LAT"].ToString() != string.Empty)
             {
@@ -187,13 +204,20 @@ namespace PublishSys
 
         private void 下载地图ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Process p = Process.Start(WorkPath + "mapdownload\\imaps.exe");
-            p.WaitForExit();
+            try
+            {
+                Process p = Process.Start(WorkPath + "mapdownload\\imaps.exe");
+                p.WaitForExit();
+            }
+            catch
+            {
+                MessageBox.Show("未取得管理员权限，无法打开地图下载程序");
+            }
         }
 
         private void 下载图符ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Process p = Process.Start(WorkPath + "Publish\\IconDataDown.exe", "");
+            Process p = Process.Start(WorkPath + "Publish\\IconDataDown.exe", "-1 1 2");
             p.WaitForExit();
         }
 
@@ -261,6 +285,7 @@ namespace PublishSys
             MapForm mfm = new MapForm();
             //TreeNode pNode = treeView1.SelectedNode;
             mfm.unitid = pNode.Tag.ToString();
+            mfm.maxlevel = Curr_Level;
             mfm.Text = "地图对应";
             // mfm.unitname = pNode.Text;
             mfm.ShowDialog();                
@@ -284,7 +309,7 @@ namespace PublishSys
             TreeNode pNode = treeView1.SelectedNode;
             inip = new IniOperator(WorkPath + "Publish\\RegInfo.ini");
 
-            if (MessageBox.Show("即将发布《" + pNode.Text + "环境信息化系统" + textBox1.Text + "》\n" + "确认是否已经导入过地图文件", "提示", MessageBoxButtons.OKCancel) != DialogResult.OK)
+            if (MessageBox.Show("即将发布《" + pNode.Text + "环境信息化系统" + textBox1.Text + "》", "提示", MessageBoxButtons.OKCancel) != DialogResult.OK)
                 return;
             //Process p1 = Process.Start(WorkPath + "Publish\\CreatePng.exe", "0 -1");
             //p1.WaitForExit();
@@ -306,15 +331,78 @@ namespace PublishSys
             inip.WriteString("packup", "registry_subkey", "环境信息化系统");
 
             ahp = new AccessHelper(WorkPath + "Publish\\data\\PASSWORD_H0001Z000E00.mdb");
-            string sql = "update PASSWORD_H0001Z000E00 set S_UDTIME = '" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")
-                + "', UNITID = '" + pNode.Tag.ToString() + "' where PWNAME = '管理员密码'";
-            ahp.ExecuteSql(sql, null);
-            sql = "update PASSWORD_H0001Z000E00 set S_UDTIME = '" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")
+            string sql = "select PGUID from PASSWORD_H0001Z000E00 where ISDELETE = 0 and PWNAME = '管理员密码' and UNITID = '" + pNode.Tag.ToString() + "'";
+            DataTable dt = ahp.ExecuteDataTable(sql, null);
+            if (dt.Rows.Count > 0)
+            {
+                sql = "update PASSWORD_H0001Z000E00 set S_UDTIME = '" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")
+                    + "', PWMD5 = '95d565ef66e7dff9' where PWNAME = '管理员密码' and UNITID = '" + pNode.Tag.ToString() + "'";
+                ahp.ExecuteSql(sql, null);
+            }
+            else
+            {
+                sql = "insert into PASSWORD_H0001Z000E00 (PGUID, S_UDTIME, PWNAME, PWMD5, UNITID) values ('"
+                    + Guid.NewGuid().ToString("B") + "', '" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")
+                    + "', '管理员密码', '95d565ef66e7dff9', '" + pNode.Tag.ToString() + "')";
+                ahp.ExecuteSql(sql, null);
+            }
+
+            sql = "select PGUID from PASSWORD_H0001Z000E00 where ISDELETE = 0 and PWNAME = '编辑模式' and UNITID = '" + pNode.Tag.ToString() + "'";
+            dt = ahp.ExecuteDataTable(sql, null);
+            if (dt.Rows.Count > 0)
+            {
+                sql = "update PASSWORD_H0001Z000E00 set S_UDTIME = '" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")
+                    + "', PWMD5 = 'a0b923820dcc509a' where PWNAME = '编辑模式' and UNITID = '" + pNode.Tag.ToString() + "'";
+                ahp.ExecuteSql(sql, null);
+            }
+            else
+            {
+                sql = "insert into PASSWORD_H0001Z000E00 (PGUID, S_UDTIME, PWNAME, PWMD5, UNITID) values ('"
+                    + Guid.NewGuid().ToString("B") + "', '" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")
+                    + "', '编辑模式', 'a0b923820dcc509a', '" + pNode.Tag.ToString() + "')";
+                ahp.ExecuteSql(sql, null);
+            }
+
+            sql = "select PGUID from PASSWORD_H0001Z000E00 where ISDELETE = 0 and PWNAME = '查看模式' and UNITID = '" + pNode.Tag.ToString() + "'";
+            dt = ahp.ExecuteDataTable(sql, null);
+            if (dt.Rows.Count > 0)
+            {
+                sql = "update PASSWORD_H0001Z000E00 set S_UDTIME = '" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")
+                    + "', PWMD5 = '9d4c2f636f067f89' where PWNAME = '查看模式' and UNITID = '" + pNode.Tag.ToString() + "'";
+                ahp.ExecuteSql(sql, null);
+            }
+            else
+            {
+                sql = "insert into PASSWORD_H0001Z000E00 (PGUID, S_UDTIME, PWNAME, PWMD5, UNITID) values ('"
+                    + Guid.NewGuid().ToString("B") + "', '" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")
+                    + "', '查看模式', '9d4c2f636f067f89', '" + pNode.Tag.ToString() + "')";
+                ahp.ExecuteSql(sql, null);
+            }
+
+            /*sql = "update PASSWORD_H0001Z000E00 set S_UDTIME = '" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")
                 + "', UNITID = '" + pNode.Tag.ToString() + "' where PWNAME = '编辑模式'";
             ahp.ExecuteSql(sql, null);
             sql = "update PASSWORD_H0001Z000E00 set S_UDTIME = '" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")
                 + "', UNITID = '" + pNode.Tag.ToString() + "' where PWNAME = '查看模式'";
-            ahp.ExecuteSql(sql, null);
+            ahp.ExecuteSql(sql, null);*/
+            ahp.CloseConn();
+
+            ahp = new AccessHelper(WorkPath + "Publish\\data\\ENVIR_H0001Z000E00.mdb");
+            sql = "select PGUID from ENVIRGXFL_H0001Z000E00 where ISDELETE = 0 and UPGUID = '-1' and UNITID = '" + pNode.Tag.ToString() + "'";
+            dt = ahp.ExecuteDataTable(sql, null);
+            if (dt.Rows.Count > 0)
+            {
+                sql = "update ENVIRGXFL_H0001Z000E00 set S_UDTIME = '" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") +
+                    "', FLNAME = '管辖', SHOWINDEX = 0 where ISDELETE = 0 and UPGUID = '-1' and UNITID = '" + pNode.Tag.ToString() + "'";
+                ahp.ExecuteSql(sql, null);
+            }
+            else
+            {
+                sql = "insert into ENVIRGXFL_H0001Z000E00 (PGUID, S_UDTIME, FLNAME, UNITID) values ('" + Guid.NewGuid().ToString("B")
+                    + "', '" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "', '管辖', '" + pNode.Tag.ToString() + "')";
+                ahp.ExecuteSql(sql, null);
+            }
+            
             ahp.CloseConn();
 
             ahp = new AccessHelper(WorkPath + "Publish\\data\\ZSK_AppInfo.mdb");
@@ -334,9 +422,9 @@ namespace PublishSys
             string Now_Time = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
             string pguid = Guid.NewGuid().ToString("B");
             ahp = new AccessHelper(WorkPath + "data\\PublishData.mdb");
-            sql = "insert into PUBLISH_H0001Z000E00 (PGUID, S_UDTIME, UNITID, UNITNAME, VERSION, SYSTEMNAME) values ('" +
-                        pguid + "', '" + Now_Time + "', '" +
-                        pNode.Tag.ToString() + "', '" + pNode.Text + "', '" + textBox1.Text + "', '" + pNode.Text + "环境信息化系统')";
+            sql = "insert into PUBLISH_H0001Z000E00 (PGUID, S_UDTIME, UNITID, UNITNAME, VERSION, SYSTEMNAME) values ('"
+                + pguid + "', '" + Now_Time + "', '" + pNode.Tag.ToString() + "', '" + pNode.Text + "', '"
+                + textBox1.Text + "', '" + pNode.Text + "环境信息化系统')";
             //sql = "insert into PUBLISH_H0001Z000E00 (PGUID, S_UDTIME, UNITID, UNITNAME, VERSION, SYSTEMNAME) values ('{cab7d79f-342d-49e4-aaac-86a9369ada82}', '2018-11-24 08:15:10', '1', '中华人民共和国', '1.00.00', '123')";
             ahp.ExecuteSql(sql, null);
             ahp.CloseConn();
@@ -413,7 +501,13 @@ namespace PublishSys
 
         private void 数据同步ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Process p = Process.Start(WorkPath + "DataUP.exe", "PublishSys.exe 0");
+            Process p = Process.Start(WorkPath + "DataUP.exe", "PublishSys.exe 0 2");
+            p.WaitForExit();
+        }
+
+        private void 数据上传ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Process p = Process.Start(WorkPath + "DataUP.exe", "PublishSys.exe 1 1");
             p.WaitForExit();
         }
 

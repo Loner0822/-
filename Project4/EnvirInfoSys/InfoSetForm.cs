@@ -195,7 +195,7 @@ namespace EnvirInfoSys
                     File.Copy(sourcefile, targetfile, true);
                     string sql = "update ENVIRLIST_H0001Z000E00 set S_UDTIME = '" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") +
                         "', FUNCTION = '" + pNode.GetValue("func").ToString() + "', ADDRESS = '" + guid + suf +
-                        "' where ISDELETE = 0 and PGUID = '" + pNode.GetValue("pguid") + "'";
+                        "' where ISDELETE = 0 and PGUID = '" + pNode.GetValue("pguid") + "' and UNITID = '" + unitid + "'";
                     ahp.ExecuteSql(sql, null);
                     break;
                 case 2:
@@ -203,7 +203,7 @@ namespace EnvirInfoSys
                 case 4:
                     sql = "update ENVIRLIST_H0001Z000E00 set S_UDTIME = '" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") +
                         "', FUNCTION = '" + pNode.GetValue("func").ToString() + "', ADDRESS = '" + textEdit2.Text +
-                        "' where ISDELETE = 0 and PGUID = '" + pNode.GetValue("pguid") + "'";
+                        "' where ISDELETE = 0 and PGUID = '" + pNode.GetValue("pguid") + "' and UNITID = '" + unitid + "'";
                     ahp.ExecuteSql(sql, null);
                     break;
             }
@@ -293,7 +293,8 @@ namespace EnvirInfoSys
             {
                 pNode.SetValue("name", ifef.EditText);
                 string sql = "update ENVIRLIST_H0001Z000E00 set S_UDTIME = '" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")
-                    + "', FUNCNAME = '" + ifef.EditText + "' where ISDELETE = 0 and PGUID = '" + pNode.GetValue("pguid").ToString() + "'";
+                    + "', FUNCNAME = '" + ifef.EditText + "' where ISDELETE = 0 and PGUID = '" + pNode.GetValue("pguid").ToString()
+                    + "' and UNITID = '" + unitid + "'";
                 ahp.ExecuteSql(sql, null);
                 treeList1.RefreshDataSource();
             }
@@ -304,7 +305,7 @@ namespace EnvirInfoSys
             TreeListNode pNode = treeList1.FocusedNode;
             string pguid = pNode.GetValue("pguid").ToString();
             treeList1.DeleteNode(pNode);
-            string sql = "update ENVIRLIST_H0001Z000E00 set ISDELETE = 1 where PGUID = '" + pguid + "' or UPGUID = '" + pguid + "'";
+            string sql = "update ENVIRLIST_H0001Z000E00 set ISDELETE = 1 where PGUID = '" + pguid + "' or UPGUID = '" + pguid + "' and UNITID = '" + unitid + "'";
             ahp.ExecuteSql(sql, null);
             treeList1.RefreshDataSource();
         }
@@ -334,7 +335,7 @@ namespace EnvirInfoSys
                 {
                     string pguid = tln.GetValue("pguid").ToString();
                     string sql = "update ENVIRLIST_H0001Z000E00 set S_UDTIME = '" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")
-                    + "', SHOWINDEX = " + cnt.ToString() + " where ISDELETE = 0 and PGUID = '" + pguid + "'";
+                    + "', SHOWINDEX = " + cnt.ToString() + " where ISDELETE = 0 and PGUID = '" + pguid + "' and UNITID = '" + unitid + "'";
                     ahp.ExecuteSql(sql, null);
                     ++cnt;
                     UpDateNode(tln);
@@ -349,7 +350,7 @@ namespace EnvirInfoSys
             {
                 string pguid = tln.GetValue("pguid").ToString();
                 string sql = "update ENVIRLIST_H0001Z000E00 set S_UDTIME = '" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")
-                + "', SHOWINDEX = " + cnt.ToString() + " where ISDELETE = 0 and PGUID = '" + pguid + "'";
+                + "', SHOWINDEX = " + cnt.ToString() + " where ISDELETE = 0 and PGUID = '" + pguid + "' and UNITID = '" + unitid + "'";
                 ahp.ExecuteSql(sql, null);
                 ++cnt;
                 UpDateNode(tln);

@@ -60,6 +60,7 @@
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.删除ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.数据上传ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -110,7 +111,8 @@
             this.数据管理ToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.数据备份ToolStripMenuItem,
             this.数据恢复ToolStripMenuItem,
-            this.数据同步ToolStripMenuItem});
+            this.数据同步ToolStripMenuItem,
+            this.数据上传ToolStripMenuItem});
             this.数据管理ToolStripMenuItem.Name = "数据管理ToolStripMenuItem";
             this.数据管理ToolStripMenuItem.Size = new System.Drawing.Size(94, 28);
             this.数据管理ToolStripMenuItem.Text = "数据管理";
@@ -360,6 +362,13 @@
             this.删除ToolStripMenuItem.Text = "删除";
             this.删除ToolStripMenuItem.Click += new System.EventHandler(this.删除ToolStripMenuItem_Click);
             // 
+            // 数据上传ToolStripMenuItem
+            // 
+            this.数据上传ToolStripMenuItem.Name = "数据上传ToolStripMenuItem";
+            this.数据上传ToolStripMenuItem.Size = new System.Drawing.Size(152, 28);
+            this.数据上传ToolStripMenuItem.Text = "数据上传";
+            this.数据上传ToolStripMenuItem.Click += new System.EventHandler(this.数据上传ToolStripMenuItem_Click);
+            // 
             // PubForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 18F);
@@ -423,6 +432,7 @@
         private System.Windows.Forms.ToolStripMenuItem 数据同步ToolStripMenuItem;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.DataGridView dataGridView1;
+        private System.Windows.Forms.ToolStripMenuItem 数据上传ToolStripMenuItem;
     }
 }
 

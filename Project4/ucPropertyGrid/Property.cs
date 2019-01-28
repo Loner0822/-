@@ -20,6 +20,7 @@ namespace ucPropertyGrid
         private string _propfdname = string.Empty;//字段
         private string _proptatype = string.Empty;//数据类型
         private string _propfkxfw = string.Empty;//可选范围
+        private bool _isnum = false;
 
         public Property(string sName, object sValue)//构造方法
         {
@@ -53,6 +54,17 @@ namespace ucPropertyGrid
             set
             {
                 _propfkxfw = value;
+            }
+        }
+        public bool isNum
+        {
+            get
+            {
+                return _isnum;
+            }
+            set
+            {
+                _isnum = value;
             }
         }
         public string Description  //获得属性描述

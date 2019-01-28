@@ -25,25 +25,19 @@ namespace EnvirInfoSys
 
         public override UITypeEditorEditStyle GetEditStyle(System.ComponentModel.ITypeDescriptorContext context)
         {
-
             return UITypeEditorEditStyle.DropDown;
-
         }
 
 
         public override object EditValue(System.ComponentModel.ITypeDescriptorContext context,
-
 System.IServiceProvider provider, object value)
         {
-
             try
             {
                 //IWindowsFormsEditorService edSvc = (IWindowsFormsEditorService)provider.GetService(typeof(IWindowsFormsEditorService));
                 IWindowsFormsEditorService edSvc = (IWindowsFormsEditorService)provider.GetService(typeof(IWindowsFormsEditorService));
-
                 if (edSvc != null)
                 {
-
                     if (value is string)
                     {
                         if (value.Equals(""))
@@ -57,38 +51,22 @@ System.IServiceProvider provider, object value)
                         dateControl.Format = DateTimePickerFormat.Time;
                         dateControl.ShowUpDown = true;
                         edSvc.DropDownControl(dateControl);
-
-
                         return dateControl.Text;
-
-
                     }
-
                     else if (value is DateTime)
                     {
-
                         dateControl.Text = value.ToString();
                         edSvc.DropDownControl(dateControl);
                         return dateControl.Text;
-
-
                     }
-
                 }
-
             }
-
             catch (Exception ex)
             {
-
                 System.Console.WriteLine("PropertyGridDateItem Error : " + ex.Message);
-
                 return value;
-
             }
-
             return value;
-
         }
 
     }

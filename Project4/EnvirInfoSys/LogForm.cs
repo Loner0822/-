@@ -7,13 +7,13 @@ using System.Text;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using DevExpress.XtraEditors;
 using DevExpress.XtraGrid.Views.Grid;
 
 namespace EnvirInfoSys
 {
     public partial class LogForm : DevExpress.XtraEditors.XtraForm
     {
+        public string unitid = "";
         private DataTable Log_dt;
 
         public LogForm()
@@ -30,7 +30,7 @@ namespace EnvirInfoSys
             Log_dt.Columns.Add("操作类型", typeof(string));
             Log_dt.Columns.Add("操作内容", typeof(string));
 
-            string sql = "select * from LOG_H0001Z000E00 where ISDELETE = 0 order by RUNTIME desc";
+            string sql = "select * from LOG_H0001Z000E00 where ISDELETE = 0 and UNITID = '" + unitid + "'order by RUNTIME desc";
             DataTable dt = FileReader.log_ahp.ExecuteDataTable(sql, null);
             for (int i = 0; i < dt.Rows.Count; ++i)
             {

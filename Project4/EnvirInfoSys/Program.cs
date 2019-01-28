@@ -12,8 +12,6 @@ namespace EnvirInfoSys
 {
     static class Program
     {
-        
-
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
@@ -24,22 +22,26 @@ namespace EnvirInfoSys
             System.Threading.Mutex mutex = new System.Threading.Mutex(true, "OnlyRunOneInstance", out isRuned);
             if (isRuned)
             {
+                DevExpress.Skins.SkinManager.EnableFormSkins();
+                DevExpress.Skins.SkinManager.EnableMdiFormSkins();
+                System.Threading.Thread.CurrentThread.CurrentUICulture = new System.Globalization.CultureInfo("zh-Hans");
+                DevExpress.XtraEditors.Controls.Localizer.Active = new MessageboxClass();
+                DevExpress.Dialogs.Core.Localization.DialogsLocalizer.Active = new BrowserFolder();
+                //DevExpress.XtraGrid.Localization.GridLocalizer.Active = new GridViewer();
+                
+                IniOperator inip = new IniOperator(AppDomain.CurrentDomain.BaseDirectory + "RegInfo.ini");
+                string skinstyle = inip.ReadString("Individuation", "skin", "DevExpress Style");
+                UserLookAndFeel.Default.SetSkinStyle(skinstyle);
+                BonusSkins.Register();
+
                 // 指定程序处理异常的方式：
                 Application.SetUnhandledExceptionMode(UnhandledExceptionMode.CatchException);
                 // 处理UI线程异常
                 Application.ThreadException += new System.Threading.ThreadExceptionEventHandler(Application_ThreadException);
 
-                DevExpress.Skins.SkinManager.EnableFormSkins();
-                DevExpress.Skins.SkinManager.EnableMdiFormSkins();
-                DevExpress.XtraEditors.Controls.Localizer.Active = new MessageboxClass();
-
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
-                IniOperator inip = new IniOperator(AppDomain.CurrentDomain.BaseDirectory + "RegInfo.ini");
-                string skinstyle = inip.ReadString("Individuation", "skin", "DevExpress Style");
-                UserLookAndFeel.Default.SetSkinStyle(skinstyle);
 
-                BonusSkins.Register();
                 Application.Run(new MainForm());
                 mutex.ReleaseMutex();
             }

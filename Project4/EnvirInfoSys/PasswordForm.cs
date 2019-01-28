@@ -15,7 +15,7 @@ namespace EnvirInfoSys
 {
     public partial class PasswordForm : DevExpress.XtraEditors.XtraForm
     {
-        public string unitid = "{9543BC02-F32C-41E4-B4AC-E4098B62AFB8}";
+        public string unitid = "";
         private string WorkPath = AppDomain.CurrentDomain.BaseDirectory; // 当前exe根目录
         private AccessHelper ahp = null;
         private string pw_mode = "";
@@ -34,7 +34,7 @@ namespace EnvirInfoSys
             //new CheckedListBoxItem("图符对应设置权限", false),
             //new CheckedListBoxItem("图符扩展设置权限", false),
             new CheckedListBoxItem("查看日志权限", false),
-            new CheckedListBoxItem("一件一档菜单设置权限", false)
+            //new CheckedListBoxItem("一件一档菜单设置权限", false)
         };
 
         private void PasswordForm_Shown(object sender, EventArgs e)
@@ -53,7 +53,7 @@ namespace EnvirInfoSys
             string confer_pw = textEdit3.Text;
 
             string sql = "select PWMD5 from PASSWORD_H0001Z000E00 where ISDELETE = 0 and PWNAME = '"
-                + pw_mode + "' and PWMD5 = '" + GetMd5_16byte(old_pw) + "'";
+                + pw_mode + "' and PWMD5 = '" + GetMd5_16byte(old_pw) + "' and UNITID = '" + unitid + "'";
             DataTable dt = ahp.ExecuteDataTable(sql, null);
             if (dt.Rows.Count > 0)
             {

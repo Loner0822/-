@@ -145,7 +145,7 @@
             this.panel2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel2.Location = new System.Drawing.Point(232, 0);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(1540, 758);
+            this.panel2.Size = new System.Drawing.Size(1273, 758);
             this.panel2.TabIndex = 2;
             // 
             // groupBox2
@@ -154,7 +154,7 @@
             this.groupBox2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.groupBox2.Location = new System.Drawing.Point(0, 0);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(1540, 758);
+            this.groupBox2.Size = new System.Drawing.Size(1273, 758);
             this.groupBox2.TabIndex = 0;
             this.groupBox2.TabStop = false;
             // 
@@ -166,7 +166,7 @@
             this.tabControl1.Location = new System.Drawing.Point(3, 24);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(1534, 731);
+            this.tabControl1.Size = new System.Drawing.Size(1267, 731);
             this.tabControl1.TabIndex = 3;
             // 
             // tabPage1
@@ -179,7 +179,7 @@
             this.tabPage1.Location = new System.Drawing.Point(4, 28);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(1526, 699);
+            this.tabPage1.Size = new System.Drawing.Size(1259, 699);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "地图对应";
             // 
@@ -189,7 +189,7 @@
             this.groupBox5.Dock = System.Windows.Forms.DockStyle.Fill;
             this.groupBox5.Location = new System.Drawing.Point(234, 66);
             this.groupBox5.Name = "groupBox5";
-            this.groupBox5.Size = new System.Drawing.Size(1289, 630);
+            this.groupBox5.Size = new System.Drawing.Size(1022, 630);
             this.groupBox5.TabIndex = 7;
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "地图显示";
@@ -200,7 +200,7 @@
             this.panel5.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel5.Location = new System.Drawing.Point(3, 24);
             this.panel5.Name = "panel5";
-            this.panel5.Size = new System.Drawing.Size(1283, 603);
+            this.panel5.Size = new System.Drawing.Size(1016, 603);
             this.panel5.TabIndex = 6;
             // 
             // mapHelper1
@@ -216,10 +216,11 @@
             this.mapHelper1.Name = "mapHelper1";
             this.mapHelper1.roadmappath = null;
             this.mapHelper1.satellitemappath = null;
-            this.mapHelper1.Size = new System.Drawing.Size(1283, 603);
+            this.mapHelper1.Size = new System.Drawing.Size(1016, 603);
             this.mapHelper1.TabIndex = 0;
             this.mapHelper1.webpath = null;
             this.mapHelper1.MapRightClick += new MapHelper.MapHelper.DlMapRightClick(this.mapHelper1_MapRightClick);
+            this.mapHelper1.LevelChanged += new MapHelper.MapHelper.DlLevelChanged(this.mapHelper1_LevelChanged);
             this.mapHelper1.MapTypeChanged += new MapHelper.MapHelper.DlMapTypeChanged(this.mapHelper1_MapTypeChanged);
             // 
             // splitter3
@@ -271,12 +272,14 @@
             this.panel8.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel8.Location = new System.Drawing.Point(3, 3);
             this.panel8.Name = "panel8";
-            this.panel8.Size = new System.Drawing.Size(1520, 63);
+            this.panel8.Size = new System.Drawing.Size(1253, 63);
             this.panel8.TabIndex = 4;
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(1203, 17);
+            this.button3.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.button3.Enabled = false;
+            this.button3.Location = new System.Drawing.Point(1128, 15);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(120, 30);
             this.button3.TabIndex = 8;
@@ -286,8 +289,9 @@
             // 
             // label4
             // 
+            this.label4.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(534, 23);
+            this.label4.Location = new System.Drawing.Point(498, 23);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(98, 18);
             this.label4.TabIndex = 7;
@@ -295,6 +299,7 @@
             // 
             // label3
             // 
+            this.label3.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.label3.AutoSize = true;
             this.label3.Location = new System.Drawing.Point(308, 23);
             this.label3.Name = "label3";
@@ -304,6 +309,7 @@
             // 
             // label2
             // 
+            this.label2.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.label2.AutoSize = true;
             this.label2.Location = new System.Drawing.Point(134, 23);
             this.label2.Name = "label2";
@@ -313,6 +319,7 @@
             // 
             // label1
             // 
+            this.label1.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(30, 23);
             this.label1.Name = "label1";
@@ -322,6 +329,7 @@
             // 
             // textBox3
             // 
+            this.textBox3.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.textBox3.Enabled = false;
             this.textBox3.Location = new System.Drawing.Point(376, 18);
             this.textBox3.Name = "textBox3";
@@ -330,6 +338,7 @@
             // 
             // textBox2
             // 
+            this.textBox2.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.textBox2.Enabled = false;
             this.textBox2.Location = new System.Drawing.Point(202, 18);
             this.textBox2.Name = "textBox2";
@@ -338,7 +347,8 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(1038, 17);
+            this.button1.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.button1.Location = new System.Drawing.Point(1002, 16);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(120, 30);
             this.button1.TabIndex = 1;
@@ -348,8 +358,9 @@
             // 
             // textBox1
             // 
+            this.textBox1.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.textBox1.Enabled = false;
-            this.textBox1.Location = new System.Drawing.Point(638, 18);
+            this.textBox1.Location = new System.Drawing.Point(602, 18);
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new System.Drawing.Size(394, 28);
             this.textBox1.TabIndex = 0;
@@ -364,7 +375,7 @@
             this.tabPage2.Location = new System.Drawing.Point(4, 28);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(1526, 699);
+            this.tabPage2.Size = new System.Drawing.Size(1259, 699);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "图符对应";
             // 
@@ -374,7 +385,7 @@
             this.groupBox7.Dock = System.Windows.Forms.DockStyle.Fill;
             this.groupBox7.Location = new System.Drawing.Point(161, 3);
             this.groupBox7.Name = "groupBox7";
-            this.groupBox7.Size = new System.Drawing.Size(634, 693);
+            this.groupBox7.Size = new System.Drawing.Size(367, 693);
             this.groupBox7.TabIndex = 11;
             this.groupBox7.TabStop = false;
             this.groupBox7.Text = "图符属性";
@@ -387,7 +398,7 @@
             this.tabControl3.Location = new System.Drawing.Point(3, 24);
             this.tabControl3.Name = "tabControl3";
             this.tabControl3.SelectedIndex = 0;
-            this.tabControl3.Size = new System.Drawing.Size(628, 666);
+            this.tabControl3.Size = new System.Drawing.Size(361, 666);
             this.tabControl3.TabIndex = 0;
             // 
             // tabPage3
@@ -396,7 +407,7 @@
             this.tabPage3.Location = new System.Drawing.Point(4, 28);
             this.tabPage3.Name = "tabPage3";
             this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage3.Size = new System.Drawing.Size(620, 634);
+            this.tabPage3.Size = new System.Drawing.Size(353, 634);
             this.tabPage3.TabIndex = 0;
             this.tabPage3.Text = "固定属性";
             this.tabPage3.UseVisualStyleBackColor = true;
@@ -414,7 +425,7 @@
             this.dataGridView2.ReadOnly = true;
             this.dataGridView2.RowHeadersVisible = false;
             this.dataGridView2.RowTemplate.Height = 30;
-            this.dataGridView2.Size = new System.Drawing.Size(614, 628);
+            this.dataGridView2.Size = new System.Drawing.Size(347, 628);
             this.dataGridView2.TabIndex = 0;
             // 
             // tabPage4
@@ -423,7 +434,7 @@
             this.tabPage4.Location = new System.Drawing.Point(4, 28);
             this.tabPage4.Name = "tabPage4";
             this.tabPage4.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage4.Size = new System.Drawing.Size(620, 634);
+            this.tabPage4.Size = new System.Drawing.Size(353, 634);
             this.tabPage4.TabIndex = 1;
             this.tabPage4.Text = "基础属性";
             this.tabPage4.UseVisualStyleBackColor = true;
@@ -440,13 +451,13 @@
             this.dataGridView3.ReadOnly = true;
             this.dataGridView3.RowHeadersVisible = false;
             this.dataGridView3.RowTemplate.Height = 30;
-            this.dataGridView3.Size = new System.Drawing.Size(614, 628);
+            this.dataGridView3.Size = new System.Drawing.Size(347, 628);
             this.dataGridView3.TabIndex = 1;
             // 
             // splitter2
             // 
             this.splitter2.Dock = System.Windows.Forms.DockStyle.Right;
-            this.splitter2.Location = new System.Drawing.Point(795, 3);
+            this.splitter2.Location = new System.Drawing.Point(528, 3);
             this.splitter2.Name = "splitter2";
             this.splitter2.Size = new System.Drawing.Size(10, 693);
             this.splitter2.TabIndex = 10;
@@ -456,7 +467,7 @@
             // 
             this.groupBox4.Controls.Add(this.tabControl2);
             this.groupBox4.Dock = System.Windows.Forms.DockStyle.Right;
-            this.groupBox4.Location = new System.Drawing.Point(805, 3);
+            this.groupBox4.Location = new System.Drawing.Point(538, 3);
             this.groupBox4.Name = "groupBox4";
             this.groupBox4.Size = new System.Drawing.Size(718, 693);
             this.groupBox4.TabIndex = 7;
@@ -550,7 +561,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 18F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1772, 758);
+            this.ClientSize = new System.Drawing.Size(1505, 758);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.splitter1);
             this.Controls.Add(this.panel1);

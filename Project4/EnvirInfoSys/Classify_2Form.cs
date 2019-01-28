@@ -25,6 +25,7 @@ namespace EnvirInfoSys
         private AccessHelper ahp5 = null;       // ENVIRDYDATA_H0001Z000E00.mdb
         public string unitid = "";
         public string gxguid = "-1";
+        public int maxlevel = 0;
 
         private List<string> Prop_GUID;                     // 属性GUID
         private Dictionary<string, string> Show_Name;       // 属性名称
@@ -69,7 +70,7 @@ namespace EnvirInfoSys
             GL_UPGUID = new Dictionary<string, string>();
             GL_MAP = new Dictionary<string, string>();
             GL_List = new List<GL_Point>();
-            string sql = "select PGUID, JDNAME, JDCODE, UPGUID from ZSK_OBJECT_H0001Z000K01 where ISDELETE = 0";
+            string sql = "select PGUID, JDNAME, JDCODE, UPGUID from ZSK_OBJECT_H0001Z000K01 where ISDELETE = 0 and LEVELNUM >= " + maxlevel.ToString();
             DataTable dt = ahp3.ExecuteDataTable(sql, null);
             for (int i = 0; i < dt.Rows.Count; ++i)
             {
@@ -90,6 +91,8 @@ namespace EnvirInfoSys
             treeList1.DataSource = GL_List;
             treeList1.HorzScrollVisibility = DevExpress.XtraTreeList.ScrollVisibility.Auto;
             treeList1.ExpandAll();
+            if (treeList1.Nodes.Count > 0)
+                treeList1.FocusedNode = treeList1.Nodes[0];
         }
 
         private void Add_Unit_Node(TreeNode pa)
@@ -164,6 +167,10 @@ namespace EnvirInfoSys
             string icon_path = WorkPath + "ICONDER\\b_PNGICON\\";
             ucPictureBox ucPB = new ucPictureBox();
             string sql = "select JDNAME from ZSK_OBJECT_" + database + " where ISDELETE = 0 and PGUID = '" + pguid + "'";
+
+            if (database == "H0001Z000E00")
+                sql += " and UNITID = '" + unitid + "'";
+            
             DataTable dt1 = ahp.ExecuteDataTable(sql, null);
             if (dt1.Rows.Count > 0)
             {
@@ -186,7 +193,13 @@ namespace EnvirInfoSys
             else
                 ahp = ahp4;
             string icon_path = WorkPath + "ICONDER\\b_PNGICON\\";
-            string sql = "select PGUID, JDNAME from ZSK_OBJECT_" + database + " where ISDELETE = 0 order by LEVELNUM, SHOWINDEX";
+            string sql = "select PGUID, JDNAME from ZSK_OBJECT_" + database + " where ISDELETE = 0";
+
+            if (database == "H0001Z000K00")
+                sql += " order by LEVELNUM, SHOWINDEX";
+            else
+                sql += " and UNITID = '" + unitid + "' order by LEVELNUM, SHOWINDEX";
+            
             DataTable dt = ahp.ExecuteDataTable(sql, null);
             for (int i = 0; i < dt.Rows.Count; ++i)
             {

@@ -27,6 +27,7 @@ namespace EnvirInfoSys
         public string Icon_GUID = "";       //当前选择的图标guid
         public string Node_Name = "";       //当前选择的节点名称
         public string JdCode = "";
+        public string unitid = "";
         public Dictionary<string, string> FDName_Value;
         
 
@@ -40,6 +41,7 @@ namespace EnvirInfoSys
         private Dictionary<string, string> Show_FDName;
         private Dictionary<string, string> inherit_GUID;
         private Dictionary<string, string> Show_Value;
+        private Dictionary<string, string> Real_Value;
         private Dictionary<string, string> Show_DB;
 
         public DataForm()
@@ -104,7 +106,11 @@ namespace EnvirInfoSys
 
                 string sql = "select PGUID, PROPNAME, FDNAME, SOURCEGUID, PROPVALUE from ZSK_PROP_" + database
                     + " where ISDELETE = 0 and UPGUID = '" + Icon_GUID + "' and PROTYPEGUID = '" + _type[i]
-                    + "' order by SHOWINDEX";
+                    + "'";
+                if (i == 2)
+                    sql += " and UNITID = '" + unitid + "'";
+                sql += " order by SHOWINDEX";
+
                 DataTable dt = ahp.ExecuteDataTable(sql, null);
                 for (int j = 0; j < dt.Rows.Count; ++j)
                 {
@@ -139,7 +145,7 @@ namespace EnvirInfoSys
                 propguid = inherit_GUID[propguid];
                 sql = "select UPGUID from ZSK_PROP_" + database + " where ISDELETE = 0 and PGUID = '" + propguid + "'";
                 dt = ahp.ExecuteDataTable(sql, null);
-                if (dt.Rows.Count != 0)
+                if (dt.Rows.Count > 0)
                 {
                     dt_guid = dt.Rows[0]["UPGUID"].ToString() + "_" + propguid;
                 }
@@ -147,7 +153,7 @@ namespace EnvirInfoSys
 
             sql = "select DATATYPE from  ZSK_DATATYPE_" + database + " where ISDELETE = 0 and UPGUID = '" + dt_guid + "'";
             dt = ahp.ExecuteDataTable(sql, null);
-            if (dt.Rows.Count != 0)
+            if (dt.Rows.Count > 0)
             {
                 if (dt.Rows[0]["DATATYPE"].ToString() != "可选项")
                     return dt.Rows[0]["DATATYPE"].ToString();
@@ -205,6 +211,57 @@ namespace EnvirInfoSys
             return res;
         }
 
+        private Dictionary<string, string> Get_dw(string propguid)
+        {
+            Dictionary<string, string> res = new Dictionary<string,string>{
+                {"danwei", ""},
+                {"afterdecpoint", ""},
+                {"upper", ""},
+                {"limit", ""},
+                {"defvalue", ""}
+            };
+            string database = Show_DB[propguid];
+            AccessHelper ahp = null; ;
+            string sql;
+            DataTable dt;
+            if (database == "H0001Z000K00")
+                ahp = ahp2;
+            else if (database == "H0001Z000K01")
+                ahp = ahp3;
+            else
+                ahp = ahp4;
+
+            string dt_guid = Icon_GUID + "_" + propguid;
+
+            if (inherit_GUID[propguid] != "")
+            {
+                propguid = inherit_GUID[propguid];
+                sql = "select UPGUID from ZSK_PROP_" + database + " where ISDELETE = 0 and PGUID = '" + propguid + "'";
+                dt = ahp.ExecuteDataTable(sql, null);
+                if (dt.Rows.Count > 0)
+                {
+                    dt_guid = dt.Rows[0]["UPGUID"].ToString() + "_" + propguid;
+                }
+            }
+
+            sql = "select PROPNAME, PROPVALUE from ZSK_LIMIT_" + database + " where ISDELETE = 0 and UPGUID = '" + dt_guid + "'";
+            dt = ahp.ExecuteDataTable(sql, null);
+            for (int i = 0; i < dt.Rows.Count; ++i)
+            {
+                if (dt.Rows[i]["PROPNAME"].ToString() == "单位")
+                    res["danwei"] = dt.Rows[i]["PROPVALUE"].ToString();
+                if (dt.Rows[i]["PROPNAME"].ToString() == "小数位数")
+                    res["afterdecpoint"] = dt.Rows[i]["PROPVALUE"].ToString();
+                if (dt.Rows[i]["PROPNAME"].ToString() == "上限")
+                    res["upper"] = dt.Rows[i]["PROPVALUE"].ToString();
+                if (dt.Rows[i]["PROPNAME"].ToString() == "下限")
+                    res["limit"] = dt.Rows[i]["PROPVALUE"].ToString();
+                //if (dt.Rows[i]["PROPNAME"].ToString() == "默认数字")
+                    //res["defvalue"] = dt.Rows[i]["PROPVALUE"].ToString();                    
+            }
+            return res;
+        }
+
         public void Load_Prop()
         {
             ahp1 = new AccessHelper(AccessPath1);
@@ -218,6 +275,7 @@ namespace EnvirInfoSys
             Show_Value = new Dictionary<string, string>();
             inherit_GUID = new Dictionary<string, string>();
             Show_DB = new Dictionary<string, string>();
+            Real_Value = new Dictionary<string, string>();
 
             prop_type = Get_Prop_Type();
             List<string> prop_list;
@@ -235,7 +293,6 @@ namespace EnvirInfoSys
                 if (Show_Name[prop_list[i]] == "名称")
                     continue;
                 Property p = new Property(Show_Name[prop_list[i]], "");
-                
                 p.DisplayName = Show_Name[prop_list[i]];
                 int k;
                 if (Show_DB[prop_list[i]] == "H0001Z000K00" || Show_DB[prop_list[i]] == "H0001Z000K01")
@@ -261,7 +318,14 @@ namespace EnvirInfoSys
                 switch (datatype)
                 {
                     case "文本":
+                        break;
                     case "数字":
+                        Dictionary<string, string> dicdata = Get_dw(prop_list[i]);
+                        dicdata["defvalue"] = p.Value.ToString();
+                        if (p.Value.ToString() != "")
+                            p.Value += dicdata["danwei"];
+                        p.isNum = true;
+                        p.Editor = new PropertyGridNumber(dicdata);
                         break;
                     case "可选项":
                         string kxfw = Get_fw(prop_list[i]);
@@ -286,11 +350,6 @@ namespace EnvirInfoSys
             }
 
             propertyGrid1.SelectedObject = pmc; // 加载属性
-            foreach (Property item in (PropertyManageCls)propertyGrid1.SelectedObject)
-            {
-                item.ReadOnly = false;
-            }
-            
         }
 
         private void DataForm_Shown(object sender, EventArgs e)
@@ -323,7 +382,18 @@ namespace EnvirInfoSys
                 {
                     FDName_Value.Add(item.FdName, item.Value.ToString());
                 }*/
-                FDName_Value.Add(item.FdName, item.Value.ToString());
+                if (item.isNum == false)
+                    FDName_Value.Add(item.FdName, item.Value.ToString());
+                else
+                {
+                    string ret_value = string.Empty;
+                    foreach (char ch in item.Value.ToString())
+                    {
+                        if (('0' <= ch && ch <= '9') || ch == '.')
+                            ret_value += ch;
+                    }
+                    FDName_Value.Add(item.FdName, ret_value);
+                }
                 //item.ReadOnly = false;
             }
             /*if (find_name == false)

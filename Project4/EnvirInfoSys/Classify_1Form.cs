@@ -27,6 +27,8 @@ namespace EnvirInfoSys
         private AccessHelper ahp4 = null;       // ZSK_H0001Z000E00.mdb
         public string unitid = "";
         public string gxguid = "-1";
+        public int maxlevel = 0;
+        public bool NeedShowMap = false;
 
         private List<string> Prop_GUID;                     // 属性GUID
         private Dictionary<string, string> Show_Name;       // 属性名称
@@ -55,7 +57,7 @@ namespace EnvirInfoSys
             GX_dt.Columns.Add("显示名称", typeof(string));
 
             // 读取管辖类型
-            string sql = "select PGUID, FLNAME from ENVIRGXFL_H0001Z000E00 where ISDELETE = 0 and UPGUID = '" + gxguid + "' order by SHOWINDEX";
+            string sql = "select PGUID, FLNAME from ENVIRGXFL_H0001Z000E00 where ISDELETE = 0 and UPGUID = '" + gxguid + "' and UNITID = '" + unitid + "' order by SHOWINDEX";
             DataTable dt = ahp1.ExecuteDataTable(sql, null);
             for (int i = 0; i < dt.Rows.Count; ++i)
                 GX_dt.Rows.Add(new object[] { dt.Rows[i]["PGUID"].ToString(), i + 1, dt.Rows[i]["FLNAME"].ToString() });
@@ -150,7 +152,7 @@ namespace EnvirInfoSys
                 dr["序号"] = i + 1;
                 string sql = "update ENVIRGXFL_H0001Z000E00 set S_UDTIME = '" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")
                     + "', SHOWINDEX = " + (i + 1).ToString() + " where ISDELETE = 0 and UPGUID = '" + gxguid
-                    + "' and PGUID = '" + dr["guid"].ToString() + "'";
+                    + "' and PGUID = '" + dr["guid"].ToString() + "' and UNITID = '" + unitid + "'";
                 ahp1.ExecuteSql(sql, null);
             }
         }
@@ -229,6 +231,10 @@ namespace EnvirInfoSys
             string icon_path = WorkPath + "ICONDER\\b_PNGICON\\";
             ucPictureBox ucPB = new ucPictureBox();
             string sql = "select JDNAME from ZSK_OBJECT_" + database + " where ISDELETE = 0 and PGUID = '" + pguid + "'";
+
+            if (database == "H0001Z000E00")
+                sql += " and UNITID = '" + unitid + "'";
+
             DataTable dt1 = ahp.ExecuteDataTable(sql, null);
             if (dt1.Rows.Count > 0)
             {
@@ -251,7 +257,13 @@ namespace EnvirInfoSys
             else
                 ahp = ahp4;
             string icon_path = WorkPath + "ICONDER\\b_PNGICON\\";
-            string sql = "select PGUID, JDNAME from ZSK_OBJECT_" + database + " where ISDELETE = 0 order by LEVELNUM, SHOWINDEX";
+            string sql = "select PGUID, JDNAME from ZSK_OBJECT_" + database + " where ISDELETE = 0";
+            
+            if (database == "H0001Z000K00")
+                sql += " order by LEVELNUM, SHOWINDEX";
+            else
+                sql += " and UNITID = '" + unitid + "' order by LEVELNUM, SHOWINDEX";
+
             DataTable dt = ahp.ExecuteDataTable(sql, null);
             for (int i = 0; i < dt.Rows.Count; ++i)
             {
@@ -259,7 +271,7 @@ namespace EnvirInfoSys
                 string name = dt.Rows[i]["JDNAME"].ToString();
                 if (File.Exists(icon_path + pguid + ".png"))
                 {
-                    sql = "select PGUID from ENVIRGXDY_H0001Z000E00 where ISDELETE = 0 and ICONGUID = '" + pguid + "' and FLGUID = '" + flguid + "'";
+                    sql = "select PGUID from ENVIRGXDY_H0001Z000E00 where ISDELETE = 0 and ICONGUID = '" + pguid + "' and FLGUID = '" + flguid + "' and UNITID = '" + unitid + "'";
                     DataTable dt1 = ahp1.ExecuteDataTable(sql, null);
                     if (dt1.Rows.Count > 0)
                     {
@@ -538,8 +550,8 @@ namespace EnvirInfoSys
             {
                 dr["显示名称"] = edfm.EditText;
                 dr["序号"] = cnt;
-                string sql = "insert into ENVIRGXFL_H0001Z000E00 (PGUID, S_UDTIME, FLNAME, UPGUID, SHOWINDEX) values ('" + pguid + "', '"
-                    + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "', '" + edfm.EditText + "', '" + gxguid + "', " + cnt.ToString() + ")";
+                string sql = "insert into ENVIRGXFL_H0001Z000E00 (PGUID, S_UDTIME, FLNAME, UPGUID, SHOWINDEX, UNITID) values ('" + pguid + "', '"
+                    + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "', '" + edfm.EditText + "', '" + gxguid + "', '" + cnt.ToString() + "', '" + unitid + "')";
                 ahp1.ExecuteSql(sql, null);
                 GX_dt.Rows.Add(dr);
                 gridView1.FocusedRowHandle = cnt - 1;
@@ -553,11 +565,11 @@ namespace EnvirInfoSys
             string pguid = gridView1.GetFocusedDataRow()["guid"].ToString();
             string sql = "update ENVIRGXFL_H0001Z000E00 set ISDELETE = 1, S_UDTIME = '" +
                     DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") +
-                    "' where ISDELETE = 0 and PGUID = '" + pguid + "'";
+                    "' where ISDELETE = 0 and PGUID = '" + pguid + "' and UNITID = '" + unitid + "'";
             ahp1.ExecuteSql(sql, null);
             sql = "update ENVIRGXDY_H0001Z000E00 set ISDELETE = 1, S_UDTIME = '" +
                 DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") +
-                "' where ISDELETE = 0 and FLGUID = '" + pguid + "'";
+                "' where ISDELETE = 0 and FLGUID = '" + pguid + "' and UNITID = '" + unitid + "'";
             ahp1.ExecuteSql(sql, null);
             gridView1.DeleteSelectedRows();
             for (int i = cur_index; i < gridView1.RowCount; ++i)
@@ -574,7 +586,7 @@ namespace EnvirInfoSys
                 gridView1.GetFocusedDataRow()["显示名称"] = edfm.EditText;
                 string sql = "update ENVIRGXFL_H0001Z000E00 set S_UDTIME = '" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")
                     + "', FLNAME = '" + edfm.EditText + "' where ISDELETE = 0 and PGUID = '"
-                    + gridView1.GetFocusedDataRow()["guid"].ToString() + "'";
+                    + gridView1.GetFocusedDataRow()["guid"].ToString() + "' and UNITID = '" + unitid + "'";
                 ahp1.ExecuteSql(sql, null);
             }
         }
@@ -615,6 +627,7 @@ namespace EnvirInfoSys
         {
             Classify_2Form clcfm = new Classify_2Form();
             clcfm.unitid = unitid;
+            clcfm.maxlevel = maxlevel;
             clcfm.ShowDialog();
 
             string Event = "修改图符对应设置";
@@ -623,6 +636,7 @@ namespace EnvirInfoSys
 
         private void barButtonItem8_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
+            NeedShowMap = true;
             Process p = Process.Start(WorkPath + "tfkzdy.exe");
             p.WaitForExit();
 
@@ -639,8 +653,18 @@ namespace EnvirInfoSys
             Build_Icon_Library("H0001Z000E00");
 
             flowLayoutPanel1.Controls.Clear();
+            if (gridView1.GetFocusedDataRow() == null)
+                return;
             string pguid = gridView1.GetFocusedDataRow()["guid"].ToString();
             Show_Icon_List(pguid);
+
+            string FilePath1 = WorkPath + "ICONDER\\b_PNGICON_tmp\\";
+            string FilePath2 = WorkPath + "ICONDER\\s_PNGICON_tmp\\";
+            if (Directory.Exists(FilePath1) || Directory.Exists(FilePath2))
+            {
+                XtraMessageBox.Show("检测到存在更换图符操作，即将重启程序");
+                p = Process.Start(WorkPath + "ReStart.exe", "EnvirInfoSys.exe");
+            }
         }
     }
 }

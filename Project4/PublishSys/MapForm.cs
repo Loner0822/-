@@ -33,6 +33,7 @@ namespace PublishSys
         public string unitid = "";
         private string[] folds = null;
         private string map_type = "g_map";
+        private bool Before_ShowMap = false;
 
         private List<string> Prop_GUID;                     // 属性GUID
         private Dictionary<string, string> Show_Name;       // 属性名称
@@ -44,7 +45,9 @@ namespace PublishSys
 
         // 边界线
         Dictionary<string, object> borderDic = null;
-        private List<double[]> borList = null;
+        private Dictionary<string, List<double[]>> borList = new Dictionary<string, List<double[]>>();
+
+        public int maxlevel = 0;
 
         private void MapForm_Load(object sender, EventArgs e)
         {
@@ -127,31 +130,30 @@ namespace PublishSys
                 Show_Map_List(textBox1.Text);
 
             // 导入边界线
-            borList = new List<double[]>();
+            borList = new Dictionary<string, List<double[]>>();
             borderDic = new Dictionary<string, object>();
             borderDic.Add("type", "实线");
             borderDic.Add("width", 1);
             borderDic.Add("color", "#000000");
             borderDic.Add("opacity", 1);
-            string sql = "select LNG_LAT from BORDERDATA where ISDELETE = 0 and UNITID = '" + unitid + "'";
+            string sql = "select LAT, LNG, BORDERGUID from BORDERDATA where ISDELETE = 0 and UNITID = '" + unitid + "' order by SHOWINDEX";
             DataTable dt = ahp5.ExecuteDataTable(sql, null);
-            if (dt.Rows.Count > 0)
+            for (int i = 0; i < dt.Rows.Count; ++i)
             {
-                string alldata = dt.Rows[0]["LNG_LAT"].ToString();
-                string[] div_data = alldata.Split(';');
-                foreach (string str in div_data)
+                string pguid = dt.Rows[i]["BORDERGUID"].ToString();
+                if (borList.ContainsKey(pguid))
+                    borList[pguid].Add(new double[] { double.Parse(dt.Rows[i]["LAT"].ToString()), double.Parse(dt.Rows[i]["LNG"].ToString()) });
+                else
                 {
-                    if (str != "")
-                    {
-                        string[] div_str = str.Split(new Char[] { ' ', ',', ':', '\t', '\r', '\n' });
-                        borList.Add(new double[] { double.Parse(div_str[1]), double.Parse(div_str[0]) });
-                    }
+                    borList[pguid] = new List<double[]>();
+                    borList[pguid].Add(new double[] { double.Parse(dt.Rows[i]["LAT"].ToString()), double.Parse(dt.Rows[i]["LNG"].ToString()) });
                 }
-                borderDic.Add("path", borList);
             }
+            if (dt.Rows.Count > 0)
+                borderDic.Add("path", borList);
             else
                 borderDic = null;
-
+            
             // 刷新地图、图符对应
             if (treeView1.Nodes.Count > 0)
             {
@@ -248,7 +250,7 @@ namespace PublishSys
                 flowLayoutPanel1.Controls.Remove(Remove_PB);
                 string sql = "update ICONDUIYING_H0001Z000E00 set ISDELETE = 1, S_UDTIME = '"
                     + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "' where ICONGUID = '"
-                    + iconguid + "' and LEVELGUID = '" + levelguid + "'";
+                    + iconguid + "' and LEVELGUID = '" + levelguid + "' and UNITEID = '" + unitid + "'";
                 ahp6.ExecuteSql(sql, null);
             }
             else
@@ -270,14 +272,14 @@ namespace PublishSys
                 new_PB.Double_Click += Icon_DoubleClick;
                 flowLayoutPanel1.Controls.Add(new_PB);
 
-                string sql = "select PGUID from ICONDUIYING_H0001Z000E00 where ICONGUID = '" + iconguid
-                    + "' and LEVELGUID = '" + levelguid + "'";
+                string sql = "select PGUID from ICONDUIYING_H0001Z000E00 where ISDELETE = 0 and ICONGUID = '" + iconguid
+                    + "' and LEVELGUID = '" + levelguid + "' and UNITEID = '" + unitid + "'";
                 DataTable dt = ahp6.ExecuteDataTable(sql, null);
                 if (dt.Rows.Count > 0)
                 {
                     sql = "update ICONDUIYING_H0001Z000E00 set ISDELETE = 0, S_UDTIME = '"
                         + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "' where ICONGUID = '"
-                        + iconguid + "' and LEVELGUID = '" + levelguid + "'";
+                        + iconguid + "' and LEVELGUID = '" + levelguid + "' and UNITEID = '" + unitid + "'";
                     ahp6.ExecuteSql(sql, null);
                 }
                 else
@@ -402,13 +404,13 @@ namespace PublishSys
                 flowLayoutPanel1.Controls.Add(new_PB);
 
                 string sql = "select PGUID from ICONDUIYING_H0001Z000E00 where ICONGUID = '" + item.IconPguid
-                    + "' and LEVELGUID = '" + levelguid + "'";
+                    + "' and LEVELGUID = '" + levelguid + "' and UNITEID = '" + unitid + "'";
                 DataTable dt = ahp6.ExecuteDataTable(sql, null);
                 if (dt.Rows.Count > 0)
                 {
                     sql = "update ICONDUIYING_H0001Z000E00 set ISDELETE = 0, S_UDTIME = '"
                         + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "' where ICONGUID = '"
-                        + item.IconPguid + "' and LEVELGUID = '" + levelguid + "'";
+                        + item.IconPguid + "' and LEVELGUID = '" + levelguid + "' and UNITEID = '" + unitid + "'";
                     ahp6.ExecuteSql(sql, null);
                 }
                 else
@@ -437,7 +439,7 @@ namespace PublishSys
             {
                 string sql = "update ICONDUIYING_H0001Z000E00 set ISDELETE = 1, S_UDTIME = '"
                     + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "' where ICONGUID = '" 
-                    + item.IconPguid + "' and LEVELGUID = '" + levelguid + "'";
+                    + item.IconPguid + "' and LEVELGUID = '" + levelguid + "' and UNITEID = '" + unitid + "'";
                 ahp6.ExecuteSql(sql, null);
             }
             flowLayoutPanel1.Controls.Clear();
@@ -478,8 +480,8 @@ namespace PublishSys
             GL_JDCODE = new Dictionary<string, string>();
             GL_UPGUID = new Dictionary<string, string>();
             GL_MAP = new Dictionary<string, string>();
-            
-            string sql = "select PGUID, JDNAME, JDCODE, UPGUID from ZSK_OBJECT_H0001Z000K01 where ISDELETE = 0";
+
+            string sql = "select PGUID, JDNAME, JDCODE, UPGUID, LEVELNUM from ZSK_OBJECT_H0001Z000K01 where ISDELETE = 0 and LEVELNUM >= " + maxlevel.ToString();
             DataTable dt = ahp3.ExecuteDataTable(sql, null);
             for (int i = 0; i < dt.Rows.Count; ++i) 
             {
@@ -495,7 +497,7 @@ namespace PublishSys
 
             for (int i = 0; i < dt.Rows.Count; ++i)
             {
-                if (dt.Rows[i]["UPGUID"].ToString() == string.Empty)
+                if (dt.Rows[i]["LEVELNUM"].ToString() == maxlevel.ToString())
                 {
                     TreeNode pNode = new TreeNode();
                     pNode.Text = GL_NAME[dt.Rows[i]["PGUID"].ToString()];
@@ -549,7 +551,11 @@ namespace PublishSys
             int index = checkedListBox1.SelectedIndex;
             if (index >= 0)
             {
-                mapHelper1.ShowMap(int.Parse(checkedListBox1.Items[index].ToString()), "", false, map_type, null, borderDic, null, 1, -1);
+                if (Before_ShowMap == false)
+                    mapHelper1.ShowMap(int.Parse(checkedListBox1.Items[index].ToString()), checkedListBox1.Items[index].ToString(), false, map_type, null, null, null, 1, 400);
+                else
+                    mapHelper1.setMapLevel(int.Parse(checkedListBox1.Items[index].ToString()), checkedListBox1.Items[index].ToString().ToString());
+                Before_ShowMap = true;
             }
         }
 
@@ -605,14 +611,16 @@ namespace PublishSys
             }
 
             // 检查所下载地图是否对应当前经纬度
-            if (!Check_Map_LngLat())
+            /*if (!Check_Map_LngLat())
             {
                 MessageBox.Show("当前下载地图与经纬度不对应");
                 textBox1.Text = "";
                 return;
-            }
+            }*/
             inip.WriteString("mapproperties", unitid, textBox1.Text);
 
+            inip = new IniOperator(WorkPath + "Publish\\parameter.ini");
+            inip.WriteString("Individuation", "mappath", textBox1.Text);
             // 获取纯文件夹名
             folds = Directory.GetDirectories(gpath);
             for (int i = 0; i < folds.Length; i++)
@@ -646,7 +654,13 @@ namespace PublishSys
         {
             button3.Enabled = true;
             int index = checkedListBox1.SelectedIndex;
-            mapHelper1.ShowMap(int.Parse(checkedListBox1.Items[index].ToString()), "", false, map_type, null, borderDic, null, 1, -1);
+            if (Before_ShowMap == false)
+                mapHelper1.ShowMap(int.Parse(checkedListBox1.Items[index].ToString()), checkedListBox1.Items[index].ToString(), false, map_type, null, null, null, 1, 400);
+            else
+                mapHelper1.setMapLevel(int.Parse(checkedListBox1.Items[index].ToString()), checkedListBox1.Items[index].ToString());
+
+
+            Before_ShowMap = true;
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -718,7 +732,11 @@ namespace PublishSys
             mapHelper1.centerlat = double.Parse(textBox3.Text); //30.067;//必须设置的属性,不能为空
             mapHelper1.centerlng = double.Parse(textBox2.Text); //118.5784; //必须设置的属性,不能为空
             int index = checkedListBox1.SelectedIndex;
-            mapHelper1.ShowMap(int.Parse(checkedListBox1.Items[index].ToString()), "", false, map_type, null, borderDic, null, 1, -1);
+            if (Before_ShowMap == false)
+                mapHelper1.ShowMap(int.Parse(checkedListBox1.Items[index].ToString()), checkedListBox1.Items[index].ToString(), false, map_type, null, null, null, 1, 400);
+            else
+                mapHelper1.setMapLevel(int.Parse(checkedListBox1.Items[index].ToString()), checkedListBox1.Items[index].ToString());
+            Before_ShowMap = true;
         }
 
         private void mapHelper1_MapRightClick(bool canedit, double lat, double lng, int x, int y)
@@ -807,7 +825,7 @@ namespace PublishSys
             if (del_mplst.Count + add_mplst.Count == 0)
                 return;
 
-            if (MessageBox.Show("是否更新对应地图文件?", "提示", MessageBoxButtons.OKCancel) != DialogResult.OK)
+            /*if (MessageBox.Show("是否更新对应地图文件?", "提示", MessageBoxButtons.OKCancel) != DialogResult.OK)
                 return;
 
             string lat = textBox3.Text.Trim();
@@ -881,10 +899,10 @@ namespace PublishSys
                 }
             }
             p = Process.Start(WorkPath + "DeleteDir.exe", Delete_File);
+            
+            MessageBox.Show("地图更新成功!");*/
             inip = new IniOperator(WorkPath + "Publish\\RegInfo.ini");
             inip.WriteString("Public", "UnitID", unitid);
-            MessageBox.Show("地图更新成功!");
-
             ahp1.CloseConn();
             ahp2.CloseConn();
             ahp3.CloseConn();
@@ -922,41 +940,58 @@ namespace PublishSys
 
         private void button3_Click(object sender, EventArgs e)
         {
+            inip = new IniOperator(WorkPath + "Publish\\RegInfo.ini");
+            inip.WriteString("Public", "UnitID", unitid);
+            inip.WriteString("Individuation", "mappath", textBox1.Text);
+
+            Process p = Process.Start(WorkPath + "Publish\\MapSet.exe");
+            /*int index = checkedListBox1.SelectedIndex;
+            borList = new List<double[]>();
             if (openFileDialog1.ShowDialog() != DialogResult.OK)
                 return;
             string file = openFileDialog1.FileName;
-
-            borList = new List<double[]>();
-            borderDic = new Dictionary<string, object>();
-            borderDic.Add("type", "实线");
-            borderDic.Add("width", 1);
-            borderDic.Add("color", "#000000");
-            borderDic.Add("opacity", 1);
             string[] strAll = File.ReadAllLines(file);
-            string ds_lng_lat = "";
             foreach (string str in strAll)
             {
-                string[] split = str.Split(new Char[] { ' ', ',', ':', '\t', '\r', '\n' });
+                string[] split = str.Split(new Char[] { ' ', ',', ':', '\t', '\r', '\n', ';' });
                 borList.Add(new double[] { double.Parse(split[1]), double.Parse(split[0]) });
-                ds_lng_lat += split[0] + "," + split[1] + ";";
             }
-            borderDic.Add("path", borList);
-            int index = checkedListBox1.SelectedIndex;
+            borderDic["path"] = borList;
             string sql = "select PGUID from BORDERDATA where ISDELETE = 0 and UNITID = '" + unitid + "'";
             DataTable dt = ahp5.ExecuteDataTable(sql, null);
             if (dt.Rows.Count > 0)
             {
-                sql = "update BORDERDATA set S_UDTIME = '" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "', LNG_LAT = '" 
-                    + ds_lng_lat + "' where ISDELETE = 0 and UNITID = '" + unitid + "'";
+                sql = "update BORDERDATA set S_UDTIME = '" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "', ISDELETE = 1 where ISDELETE = 0 and UNITID = '" + unitid + "'";
                 ahp5.ExecuteSql(sql, null);
             }
-            else 
+
+            for (int i = 0; i < borList.Count; ++i)
             {
-                sql = "insert into BORDERDATA (PGUID, S_UDTIME, UNITID, LNG_LAT) values ('" + Guid.NewGuid().ToString("B") 
-                    + "', '" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "', '" + unitid + "', '" + ds_lng_lat + "')";
+                sql = "insert into BORDERDATA (PGUID, S_UDTIME, UNITID, LAT, LNG, SHOWINDEX) values('" + Guid.NewGuid().ToString("B")
+                    + "', '" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "', '" + unitid + "', '" + borList[i][0]
+                    + "', '" + borList[i][1] + "', '" + i.ToString() + "')";
                 ahp5.ExecuteSql(sql, null);
             }
-            mapHelper1.ShowMap(int.Parse(checkedListBox1.Items[index].ToString()), "", false, map_type, null, borderDic, null, 1, -1);
+            mapHelper1.ShowMap(int.Parse(checkedListBox1.Items[index].ToString()), checkedListBox1.Items[index].ToString(), false, map_type, null, null, null, 1, -1);*/
+        }
+
+        private void mapHelper1_LevelChanged(int lastLevel, int currLevel, string showLevel)
+        {
+            if (borderDic != null)
+            {
+                Dictionary<string, List<double[]>> tmp_bor = (Dictionary<string, List<double[]>>)borderDic["path"];
+                foreach (var item in tmp_bor)
+                {
+                    Dictionary<string, object> bdic = new Dictionary<string, object>();
+                    bdic["type"] = borderDic["type"];
+                    bdic["width"] = borderDic["width"];
+                    bdic["color"] = borderDic["color"];
+                    bdic["opacity"] = borderDic["opacity"];
+                    bdic["path"] = item.Value;
+                    mapHelper1.DrawBorder(unitid, bdic);
+                }
+                
+            }
         }        
     }
 
