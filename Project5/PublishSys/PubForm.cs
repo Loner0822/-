@@ -121,7 +121,7 @@ namespace PublishSys
             }
             ahp.CloseConn();
             Add_Tree_Node(d_list);
-            treeView1.ExpandAll();
+            //treeView1.ExpandAll();
         }
 
         private void Add_Tree_Node(List<District> d_list)
@@ -135,6 +135,8 @@ namespace PublishSys
                     pNode.Text = d_list[i].name;
                     treeView1.Nodes.Add(pNode);
                     Add_Child_Node(d_list, pNode);
+                    if (d_list[i].level == "国" || d_list[i].level == "省" || d_list[i].level == "市" || d_list[i].level == "县")
+                        pNode.Expand();
                 }
             }
             if (treeView1.Nodes.Count > 0)
@@ -154,6 +156,8 @@ namespace PublishSys
                     if (d_list[i].level == Last_Level)
                         continue;
                     Add_Child_Node(d_list, cNode);
+                    if (d_list[i].level == "国" || d_list[i].level == "省" || d_list[i].level == "市" || d_list[i].level == "县")
+                        pNode.Expand();
                 }
             }
         }
@@ -338,22 +342,95 @@ namespace PublishSys
             inip.WriteString("packup", "registry_subkey", "区域经济大数据平台");
 
             ahp = new AccessHelper(WorkPath + "Publish\\data\\PASSWORD_H0001Z000E00.mdb");
-            sql = "update PASSWORD_H0001Z000E00 set S_UDTIME = '" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")
-                + "', UNITID = '" + pNode.Tag.ToString() + "' where PWNAME = '管理员密码'";
-            ahp.ExecuteSql(sql, null);
-            sql = "update PASSWORD_H0001Z000E00 set S_UDTIME = '" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")
-                + "', UNITID = '" + pNode.Tag.ToString() + "' where PWNAME = '编辑模式'";
-            ahp.ExecuteSql(sql, null);
-            sql = "update PASSWORD_H0001Z000E00 set S_UDTIME = '" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")
-                + "', UNITID = '" + pNode.Tag.ToString() + "' where PWNAME = '查看模式'";
-            ahp.ExecuteSql(sql, null);
+            sql = "select PGUID from PASSWORD_H0001Z000E00 where ISDELETE = 0 and PWNAME = '管理员密码' and UNITID = '" + pNode.Tag.ToString() + "'";
+            dt = ahp.ExecuteDataTable(sql, null);
+            if (dt.Rows.Count > 0)
+            {
+                sql = "update PASSWORD_H0001Z000E00 set S_UDTIME = '" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")
+                    + "', PWMD5 = '95d565ef66e7dff9' where PWNAME = '管理员密码' and UNITID = '" + pNode.Tag.ToString() + "'";
+                ahp.ExecuteSql(sql, null);
+            }
+            else
+            {
+                sql = "insert into PASSWORD_H0001Z000E00 (PGUID, S_UDTIME, PWNAME, PWMD5, UNITID) values ('"
+                    + Guid.NewGuid().ToString("B") + "', '" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")
+                    + "', '管理员密码', '95d565ef66e7dff9', '" + pNode.Tag.ToString() + "')";
+                ahp.ExecuteSql(sql, null);
+            }
+
+            sql = "select PGUID from PASSWORD_H0001Z000E00 where ISDELETE = 0 and PWNAME = '编辑模式' and UNITID = '" + pNode.Tag.ToString() + "'";
+            dt = ahp.ExecuteDataTable(sql, null);
+            if (dt.Rows.Count > 0)
+            {
+                sql = "update PASSWORD_H0001Z000E00 set S_UDTIME = '" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")
+                    + "', PWMD5 = 'a0b923820dcc509a' where PWNAME = '编辑模式' and UNITID = '" + pNode.Tag.ToString() + "'";
+                ahp.ExecuteSql(sql, null);
+            }
+            else
+            {
+                sql = "insert into PASSWORD_H0001Z000E00 (PGUID, S_UDTIME, PWNAME, PWMD5, UNITID) values ('"
+                    + Guid.NewGuid().ToString("B") + "', '" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")
+                    + "', '编辑模式', 'a0b923820dcc509a', '" + pNode.Tag.ToString() + "')";
+                ahp.ExecuteSql(sql, null);
+            }
+
+            sql = "select PGUID from PASSWORD_H0001Z000E00 where ISDELETE = 0 and PWNAME = '查看模式' and UNITID = '" + pNode.Tag.ToString() + "'";
+            dt = ahp.ExecuteDataTable(sql, null);
+            if (dt.Rows.Count > 0)
+            {
+                sql = "update PASSWORD_H0001Z000E00 set S_UDTIME = '" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")
+                    + "', PWMD5 = '9d4c2f636f067f89' where PWNAME = '查看模式' and UNITID = '" + pNode.Tag.ToString() + "'";
+                ahp.ExecuteSql(sql, null);
+            }
+            else
+            {
+                sql = "insert into PASSWORD_H0001Z000E00 (PGUID, S_UDTIME, PWNAME, PWMD5, UNITID) values ('"
+                    + Guid.NewGuid().ToString("B") + "', '" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")
+                    + "', '查看模式', '9d4c2f636f067f89', '" + pNode.Tag.ToString() + "')";
+                ahp.ExecuteSql(sql, null);
+            }
+            ahp.CloseConn();
+
+            ahp = new AccessHelper(WorkPath + "Publish\\data\\ENVIR_H0001Z000E00.mdb");
+            sql = "select PGUID from ENVIRGXFL_H0001Z000E00 where ISDELETE = 0 and UPGUID = '-1' and UNITID = '" + pNode.Tag.ToString() + "'";
+            dt = ahp.ExecuteDataTable(sql, null);
+            if (dt.Rows.Count > 0)
+            {
+                sql = "update ENVIRGXFL_H0001Z000E00 set S_UDTIME = '" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") +
+                    "', FLNAME = '管辖', SHOWINDEX = 0 where ISDELETE = 0 and UPGUID = '-1' and UNITID = '" + pNode.Tag.ToString() + "'";
+                ahp.ExecuteSql(sql, null);
+            }
+            else
+            {
+                sql = "insert into ENVIRGXFL_H0001Z000E00 (PGUID, S_UDTIME, FLNAME, UNITID) values ('" + Guid.NewGuid().ToString("B")
+                    + "', '" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "', '管辖', '" + pNode.Tag.ToString() + "')";
+                ahp.ExecuteSql(sql, null);
+            }
             ahp.CloseConn();
 
             ahp = new AccessHelper(WorkPath + "Publish\\data\\ZSK_AppInfo.mdb");
-            sql = "update APPINFO set S_UDTIME = '" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")+ "', UNITID = '"
+            sql = "update APPINFO set S_UDTIME = '" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "', UNITID = '"
                 + pNode.Tag.ToString() + "' where ISDELETE = 0 and PGUID = '{8C3B99C5-26D3-48B2-A676-250189FCEA2F}'";
             ahp.ExecuteSql(sql, null);
             ahp.CloseConn();
+
+            ahp = new AccessHelper(WorkPath + "Publish\\data\\ENVIRLIST_H0001Z000E00.mdb");
+            sql = "select PGUID from ENVIRLIST_H0001Z000E00 where ISDELETE = 0 and UNITID = '" + pNode.Tag.ToString()
+                + "' and MARKERID = 'all'";
+            dt = ahp.ExecuteDataTable(sql, null);
+            if (dt.Rows.Count <= 0)
+            {
+                sql = "insert into ENVIRLIST_H0001Z000E00 (PGUID, S_UDTIME, FUNCNAME, FUNCTION, SHOWINDEX, UNITID, MARKERID) values ('"
+                    + Guid.NewGuid().ToString("B") + "', '" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "', '基本信息', 'info', -2, '"
+                    + pNode.Tag.ToString() + "', 'all')";
+                ahp.ExecuteSql(sql, null);
+                sql = "insert into ENVIRLIST_H0001Z000E00 (PGUID, S_UDTIME, FUNCNAME, FUNCTION, SHOWINDEX, UNITID, MARKERID) values ('"
+                    + Guid.NewGuid().ToString("B") + "', '" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "', '照片', 'pic', -1, '"
+                    + pNode.Tag.ToString() + "', 'all')";
+                ahp.ExecuteSql(sql, null);
+            }
+            ahp.CloseConn();
+
 
             Process p = Process.Start(WorkPath + "PackUp.exe");
             p.WaitForExit();

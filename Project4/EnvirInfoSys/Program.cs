@@ -25,9 +25,10 @@ namespace EnvirInfoSys
                 DevExpress.Skins.SkinManager.EnableFormSkins();
                 DevExpress.Skins.SkinManager.EnableMdiFormSkins();
                 System.Threading.Thread.CurrentThread.CurrentUICulture = new System.Globalization.CultureInfo("zh-Hans");
+                System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("zh-Hans");
                 DevExpress.XtraEditors.Controls.Localizer.Active = new MessageboxClass();
                 DevExpress.Dialogs.Core.Localization.DialogsLocalizer.Active = new BrowserFolder();
-                //DevExpress.XtraGrid.Localization.GridLocalizer.Active = new GridViewer();
+                DevExpress.XtraGrid.Localization.GridLocalizer.Active = new GridViewer();
                 
                 IniOperator inip = new IniOperator(AppDomain.CurrentDomain.BaseDirectory + "RegInfo.ini");
                 string skinstyle = inip.ReadString("Individuation", "skin", "DevExpress Style");

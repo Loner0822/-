@@ -78,6 +78,7 @@ namespace EnvirInfoSys
         /// <summary>
         /// 发布单位信息
         /// </summary>
+        private string ProgName = "";
         private string UnitID = "-1";
         private string UnitReal = "-1";
 
@@ -177,7 +178,34 @@ namespace EnvirInfoSys
 
         private void MainForm_Load(object sender, EventArgs e)
         {
+            string FilePath = WorkPath + "ICONDER\\b_PNGICON_tmp\\";
+            string SendPath = WorkPath + "ICONDER\\b_PNGICON\\";
+            if (Directory.Exists(FilePath))
+            {
+                DirectoryInfo dir = new DirectoryInfo(FilePath);
+                FileInfo[] files = dir.GetFiles();
+                foreach (FileInfo file in files)
+                {
+                    File.Copy(FilePath + file.Name, SendPath + file.Name, true);
+                    File.Delete(FilePath + file.Name);
+                }
+                Directory.Delete(FilePath);
+            }
 
+
+            FilePath = WorkPath + "ICONDER\\s_PNGICON_tmp\\";
+            SendPath = WorkPath + "ICONDER\\s_PNGICON\\";
+            if (Directory.Exists(FilePath))
+            {
+                DirectoryInfo dir = new DirectoryInfo(FilePath);
+                FileInfo[] files = dir.GetFiles();
+                foreach (FileInfo file in files)
+                {
+                    File.Copy(FilePath + file.Name, SendPath + file.Name, true);
+                    File.Delete(FilePath + file.Name);
+                }
+                Directory.Delete(FilePath);
+            }
         }
 
         private void MainForm_Shown(object sender, EventArgs e)
@@ -201,7 +229,13 @@ namespace EnvirInfoSys
             dockPanel1.Width = ListWidth;
             MapPath = FileReader.inip.ReadString("Individuation", "mappath", "");
             MapPath = MapPath.Replace("\0", "");
-            
+
+            FileReader.inip = new IniOperator(WorkPath + "SyncInfo.ini");
+            string host = FileReader.inip.ReadString("Login", "host", "");
+            FileReader.inip = new IniOperator(WorkPath + "Loginconfig.ini");
+            string perid = FileReader.inip.ReadString("login", "perid", "");
+            ProgName = perid + ".7." + host;
+
 
             int DotWidth = TextRenderer.MeasureText("-", new Font("宋体", 6)).Width;
             int WordWidth = TextRenderer.MeasureText("管辖范围", new Font("宋体", 6)).Width;
@@ -396,7 +430,7 @@ namespace EnvirInfoSys
             Person_GUID = new Dictionary<string, Map_Person>();
 
             // 加载管辖类型
-            sql = "select PGUID, FLNAME from ENVIRGXFL_H0001Z000E00 where ISDELETE = 0 and UPGUID = '-1' order by SHOWINDEX";
+            sql = "select PGUID, FLNAME from ENVIRGXFL_H0001Z000E00 where ISDELETE = 0 and UPGUID = '-1' and UNITID = '" + UnitID + "' order by SHOWINDEX";
             dt = FileReader.often_ahp.ExecuteDataTable(sql, null);
             for (int i = 0; i < dt.Rows.Count; ++i)
             {
@@ -906,7 +940,7 @@ namespace EnvirInfoSys
             bar1.Offset = 0;
             bar1.ApplyDockRowCol();
 
-            string sql = "select PGUID, FLNAME from ENVIRGXFL_H0001Z000E00 where ISDELETE = 0 and UPGUID = '" + GXguid + "' order by SHOWINDEX";
+            string sql = "select PGUID, FLNAME from ENVIRGXFL_H0001Z000E00 where ISDELETE = 0 and UPGUID = '" + GXguid + "' and UNITID = '" + UnitID + "' order by SHOWINDEX";
             DataTable dt = FileReader.often_ahp.ExecuteDataTable(sql, null);
             for (int i = 0; i < dt.Rows.Count; ++i)
             {
@@ -1941,7 +1975,18 @@ namespace EnvirInfoSys
             
             if (iconPath == WorkPath + "icon\\人.png")
             {
-                SendMessage();
+                string pguid = null;
+                foreach (var item in Person_Marker)
+                {
+                    if (item.Value == markerguid)
+                    {
+                        pguid = item.Key;
+                        break;
+                    }
+                }
+
+                Map_Person tmpper = Person_GUID[pguid];
+                SendMessage(tmpper.id + "," + tmpper.name, 1111, ProgName);
                 return;
             }
             mapHelper1.deleteMarker(last_marker + "_line");
@@ -2039,7 +2084,7 @@ namespace EnvirInfoSys
             //  MessageBox.Show("移动：" + markerguid);
             //  数据库 update 坐标
 
-            // 判断是否在范围
+            //  判断是否在范围
             bool isIn = false;
             dPoint pnt = new dPoint(lat, lng);
             dPoint origin_pnt = pnt;
@@ -2182,8 +2227,7 @@ namespace EnvirInfoSys
                                 now_Level = cur_Level;
                                 if (ifm != null)
                                     ifm.Close();
-                                EraseBorder();
-                                borderlines = DrawBorder();
+                                
                                 string Icon_Path = WorkPath + "ICONDER\\b_PNGICON\\";
                                 foreach (PictureBox pb in flowLayoutPanel1.Controls)
                                 {
@@ -2198,6 +2242,8 @@ namespace EnvirInfoSys
                                 }
                                 mapHelper1.setMapLevel(cur_Level, "");
                                 mapHelper1.SetMapCenter(mapHelper1.centerlat, mapHelper1.centerlng);
+                                EraseBorder();
+                                borderlines = DrawBorder();
                             }
                         }
                         else
@@ -2736,8 +2782,7 @@ namespace EnvirInfoSys
                     now_Level = cur_Level;
                     if (ifm != null)
                         ifm.Close();
-                    EraseBorder();
-                    borderlines = DrawBorder();
+                    
                     string Icon_Path = WorkPath + "ICONDER\\b_PNGICON\\";
                     foreach (PictureBox pb in flowLayoutPanel1.Controls)
                     {
@@ -2752,6 +2797,8 @@ namespace EnvirInfoSys
                     }
                     mapHelper1.setMapLevel(cur_Level, "");
                     mapHelper1.SetMapCenter(mapHelper1.centerlat, mapHelper1.centerlng);
+                    EraseBorder();
+                    borderlines = DrawBorder();
                 }
             }
             else
@@ -2828,10 +2875,12 @@ namespace EnvirInfoSys
 
         private void DeletePerson(string personid)
         {
+            if (!Person_Marker.ContainsKey(personid))
+                return;
             string markerguid = Person_Marker[personid];
             if (Person_GUID[personid] != null && Person_GUID[personid].timeclock != null)
                 Person_GUID[personid].timeclock.Enabled = false;
-            mapHelper1.deleteMarker(markerguid + "_circle");
+            mapHelper1.deleteMarker(Person_GUID[personid].id + "_circle");
             mapHelper1.deleteMarker(markerguid);
             Person_GUID.Remove(personid);
             Person_Marker.Remove(personid);
@@ -2861,11 +2910,15 @@ namespace EnvirInfoSys
             string pid = ((System.Windows.Forms.Timer)sender).Tag.ToString();
             if (!Person_GUID.ContainsKey(pid))
                 return;
-            if ((DateTime.Now - Person_GUID[pid].time).TotalSeconds > 20)
+            if ((DateTime.Now - Person_GUID[pid].time).TotalSeconds > 10)
             {
+                if (Person_GUID[pid].timeclock != null)
+                    Person_GUID[pid].timeclock.Enabled = false;
                 DeletePerson(pid);
                 return;
             }
+            if (!Person_Marker.ContainsKey(pid))
+                return;
             mapHelper1.deleteMarker(Person_Marker[pid]);
             now_person_id = Person_GUID[pid].id;
             mapHelper1.addMarker("" + Person_GUID[pid].lat, "" + Person_GUID[pid].lng, Person_GUID[pid].name, false, iconpath, null);

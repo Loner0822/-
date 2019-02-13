@@ -38,6 +38,7 @@
             this.数据备份ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.数据恢复ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.数据同步ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.数据上传ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.系统设置ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.iP设置ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.退出ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -60,7 +61,6 @@
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.删除ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.数据上传ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -137,6 +137,13 @@
             this.数据同步ToolStripMenuItem.Size = new System.Drawing.Size(152, 28);
             this.数据同步ToolStripMenuItem.Text = "数据同步";
             this.数据同步ToolStripMenuItem.Click += new System.EventHandler(this.数据同步ToolStripMenuItem_Click);
+            // 
+            // 数据上传ToolStripMenuItem
+            // 
+            this.数据上传ToolStripMenuItem.Name = "数据上传ToolStripMenuItem";
+            this.数据上传ToolStripMenuItem.Size = new System.Drawing.Size(152, 28);
+            this.数据上传ToolStripMenuItem.Text = "数据上传";
+            this.数据上传ToolStripMenuItem.Click += new System.EventHandler(this.数据上传ToolStripMenuItem_Click);
             // 
             // 系统设置ToolStripMenuItem
             // 
@@ -362,13 +369,6 @@
             this.删除ToolStripMenuItem.Text = "删除";
             this.删除ToolStripMenuItem.Click += new System.EventHandler(this.删除ToolStripMenuItem_Click);
             // 
-            // 数据上传ToolStripMenuItem
-            // 
-            this.数据上传ToolStripMenuItem.Name = "数据上传ToolStripMenuItem";
-            this.数据上传ToolStripMenuItem.Size = new System.Drawing.Size(152, 28);
-            this.数据上传ToolStripMenuItem.Text = "数据上传";
-            this.数据上传ToolStripMenuItem.Click += new System.EventHandler(this.数据上传ToolStripMenuItem_Click);
-            // 
             // PubForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 18F);
@@ -382,7 +382,7 @@
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "PubForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "环境信息化发布";
+            this.Text = "环境信息化发布系统";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.Load += new System.EventHandler(this.PubForm_Load);
             this.menuStrip1.ResumeLayout(false);

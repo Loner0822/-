@@ -138,7 +138,11 @@ namespace EnvirInfoSys
 
                 string sql = "select PGUID, PROPNAME, FDNAME, SOURCEGUID, PROPVALUE from ZSK_PROP_" + database
                     + " where ISDELETE = 0 and UPGUID = '" + Icon_GUID + "' and PROTYPEGUID = '" + _type[i]
-                    + "' order by SHOWINDEX";
+                    + "'";
+                if (i == 2)
+                    sql += " and UNITID = '" + unitid + "'";
+                sql += " order by SHOWINDEX";
+
                 DataTable dt = ahp.ExecuteDataTable(sql, null);
                 for (int j = 0; j < dt.Rows.Count; ++j)
                 {
